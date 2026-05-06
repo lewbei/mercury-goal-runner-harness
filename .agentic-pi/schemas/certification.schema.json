@@ -16,7 +16,16 @@
     "run_id": { "type": "string" },
     "status": {
       "type": "string",
-      "enum": ["DONE_PASS", "DONE_FAIL", "BLOCKED", "NEED_USER", "MAX_STEPS_REACHED"]
+      "enum": [
+        "DONE_PASS",
+        "DONE_FAIL",
+        "NOT_DONE",
+        "PROVISIONAL_DONE",
+        "CERTIFIED_DONE",
+        "BLOCKED",
+        "NEED_USER",
+        "MAX_STEPS_REACHED"
+      ]
     },
     "passed_checks": {
       "type": "array",

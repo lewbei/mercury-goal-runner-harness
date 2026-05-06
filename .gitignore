@@ -8,6 +8,23 @@ __pycache__/
 build/
 *.egg
 
+# Generated harness run outputs
+.agentic-runs/benchmark_*/
+.agentic-runs/smoke_v01_latest/
+.agentic-runs/test_*/
+.agentic-runs/hard_test_001/
+artifacts/
+.pi/tasks/
+
+# Deferred v0.4/v0.5 prototypes; v0.3 is PlanGraph only.
+.agentic-pi/runtime/branch_selector.py
+.agentic-pi/runtime/evidence_selector.py
+.agentic-pi/runtime/goal_pipeline.py
+.agentic-pi/runtime/pi_cli.py
+.agentic-pi/schemas/branch.schema.json
+.agentic-pi/schemas/evidence.schema.json
+.pi/supervisor-config.json
+
 # IDE / editor files
 .vscode/
 .idea/

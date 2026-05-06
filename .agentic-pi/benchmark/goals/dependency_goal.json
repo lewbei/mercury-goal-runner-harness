@@ -1,0 +1,24 @@
+{
+  "run_id": "benchmark_dependency",
+  "raw_user_prompt": "Create a two-step artifact dependency proof for the harness.",
+  "intent": "Verify artifact dependency handoff between two planned tasks.",
+  "cleaned_goal": "Create dependency_report.md after T2 consumes the exact artifact ID produced by T1.",
+  "final_outputs": ["dependency_report.md"],
+  "explicit_constraints": ["T2 must require the exact artifact ID produced by T1."],
+  "inferred_constraints": [],
+  "forbidden_actions": ["Do not write benchmark outputs to the repo root."],
+  "ambiguities": [],
+  "risk_level": "LOW",
+  "complexity_level": "MEDIUM",
+  "done_criteria": [
+    "dependency_report.md exists.",
+    "dependency_report.md contains the word 'A.SOURCE'."
+  ],
+  "failure_criteria": [
+    "dependency_report.md missing.",
+    "T2 does not require the exact T1 artifact ID."
+  ],
+  "ask_user_conditions": [],
+  "max_steps": 5,
+  "execution_prompt": "Create dependency_report.md only after consuming artifact dependency A.SOURCE from T1."
+}

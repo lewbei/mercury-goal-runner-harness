@@ -4,13 +4,16 @@ import sys
 from pathlib import Path
 from datetime import datetime, timezone
 import hashlib
+import shutil
 
 root = Path.cwd()
-run_id = "sample_run_001"
+run_id = "smoke_v01_latest"
 run_dir = root / ".agentic-runs" / run_id
 step_dir = run_dir / "step_logs"
 artifact_dir = run_dir / "artifacts"
 
+if run_dir.exists():
+    shutil.rmtree(run_dir)
 step_dir.mkdir(parents=True, exist_ok=True)
 artifact_dir.mkdir(parents=True, exist_ok=True)
 
@@ -24,10 +27,10 @@ with sample_goal.open("r", encoding="utf-8-sig") as f:
     encoding="utf-8"
 )
 
-# Create final artifact
-readme = root / "README.md"
+# Create final artifact inside the run folder.
+readme = run_dir / "README.md"
 readme.write_text(
-"""# Mercury Goal Runner Harness v0.1
+"""# Mercury Goal Runner Harness v0.1.1
 
 This harness controls Mercury V2 as a fast worker inside a verified goal-execution system.
 

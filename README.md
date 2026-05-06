@@ -1,4 +1,4 @@
-# Mercury Goal Runner Harness v0.1
+# Mercury Goal Runner Harness
 
 This harness controls Mercury V2 as a fast worker inside a verified goal-execution system.
 
@@ -6,23 +6,53 @@ The goal is not to make Mercury V2 magically smarter by looping. The goal is to 
 
 ## Current status
 
-v0.1 is validated.
+v0.3.2 is a Provenance Runtime Gate built on the v0.3 Artifact-Linked PlanGraph prototype.
 
-See [`PROJECT_STATUS.md`](PROJECT_STATUS.md) for the proof summary and current limitations.
-
-The main proof run is:
+The current research direction is:
 
 ```text
-.agentic-runs/real_goal_001/
+Verifier-Provenance Goal Runner Harness
+```
+
+The new core question is:
+
+```text
+Who is allowed to certify DONE?
+```
+
+The latest local benchmark report is:
+
+```text
+benchmark_outputs/benchmark_report.md
+```
+
+Current benchmark scoring checks the expected verdict for each goal, not just whether the model says `DONE_PASS`. The impossible goal is expected to fail honestly.
+
+See [`PROJECT_STATUS.md`](PROJECT_STATUS.md) for the proof summary and current limitations.
+See [`PROBLEM_AND_GAP.md`](PROBLEM_AND_GAP.md) for the current research problem statement.
+See [`VERIFIER_PROVENANCE_DESIGN.md`](VERIFIER_PROVENANCE_DESIGN.md) for the verifier provenance model.
+See [`docs/V0_2_1_FREEZE.md`](docs/V0_2_1_FREEZE.md) for the exact freeze boundary.
+See [`docs/V0_3_PLANGRAPH.md`](docs/V0_3_PLANGRAPH.md) for the PlanGraph prototype boundary.
+
+The current proof path is:
+
+```text
+python -m unittest discover tests -v
+python .agentic-pi\benchmark\run_benchmark.py
 ```
 
 It demonstrates:
 
 1. a Goal Contract was created,
-2. a Guarded Worker created the requested documentation artifact,
-3. an empty-evidence Worker log was rejected,
-4. the step log was repaired with evidence,
-5. and the certifier issued `DONE_PASS`.
+2. the planner writes plans only,
+3. the Guarded Worker writes artifacts inside the active run folder,
+4. false pass evidence is rejected,
+5. final output paths must match the contract exactly,
+6. `artifact_tests` run executable checks for behavior claims,
+7. `plan_graph.json`, `artifact_registry.json`, and `task_graph.json` are generated for normal runs,
+8. downstream tasks require exact artifact IDs from upstream tasks,
+9. provenance-mode runs can return `NOT_DONE`, `PROVISIONAL_DONE`, or `CERTIFIED_DONE`,
+10. and the benchmark reports false-PASS status explicitly.
 
 ## Core parts
 
@@ -39,13 +69,25 @@ Executes one approved step at a time and reports evidence.
 Records what happened during the run.
 
 5. Certifier  
-Checks evidence, required files, logs, and done criteria before marking `DONE_PASS`.
+Checks evidence, required files, logs, done criteria, artifact tests, PlanGraph links, and verifier provenance before certification. Legacy runs without `verifier_contract.json` still use `DONE_PASS` / `DONE_FAIL`.
+
+6. Artifact-Linked PlanGraph
+Links task outputs to exact artifact IDs and validates downstream artifact consumption when graph files exist.
+
+7. Verifier Provenance Gate
+When `verifier_contract.json` exists, separates weak/self-generated evidence from certifying evidence.
 
 ## Core rule
 
 Mercury may propose, plan, execute, and report, but it cannot certify final success.
 
 Evidence beats confidence.
+
+Next provenance rule:
+
+```text
+Self-generated post-solution tests cannot certify DONE alone.
+```
 
 ## Quick validation commands
 
@@ -64,7 +106,7 @@ python .agentic-pi\validators\validate_schema.py .agentic-pi\schemas\step_result
 Run certification:
 
 ```cmd
-python .agentic-pi\validators\certify_run.py .agentic-runs\real_goal_001
+python .agentic-pi\validators\certify_run.py .agentic-runs\<run_id>
 ```
 
 Run the deterministic smoke test:
@@ -73,6 +115,27 @@ Run the deterministic smoke test:
 python smoke_v01.py
 ```
 
+## Artifact tests
+
+Run the artifact and harness regression tests:
+
+```cmd
+python -m unittest discover tests -v
+```
+
 ## Next milestone
 
-v0.2 should add automatic run creation and a small command-line runner so the harness no longer needs manual run-folder setup.
+The first provenance runtime gate is implemented:
+
+```text
+verifier_artifact.schema.json
+verifier_contract.schema.json
+certification_policy.yaml
+verifier_provenance.py
+```
+
+The next milestone is smell scanning and verifier strength scoring. Full oracle governance, Pi integration, and diagnostic evaluation remain deferred.
+
+## Planner Stub
+
+The current `plan_router.py` is a deterministic stub for testing. See [PLAN_ROUTER.md](PLAN_ROUTER.md) for details. Real planner agents will replace this stub in future versions.

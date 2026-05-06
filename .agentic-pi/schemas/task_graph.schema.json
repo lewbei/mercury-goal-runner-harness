@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TaskGraph",
+  "type": "object",
+  "required": ["tasks", "dependencies"],
+  "properties": {
+    "tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["task_id", "title", "requires", "produces", "pass_condition"],
+        "properties": {
+          "task_id": { "type": "string", "minLength": 1 },
+          "title": { "type": "string" },
+          "requires": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "produces": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "pass_condition": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "description": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["from", "to", "type"],
+        "properties": {
+          "from": { "type": "string", "minLength": 1 },
+          "to": { "type": "string", "minLength": 1 },
+          "type": { "type": "string", "enum": ["requires", "produces"] }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

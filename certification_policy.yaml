@@ -1,0 +1,68 @@
+# Static policy draft for Verifier-Provenance Goal Runner Harness.
+# This file is declarative only in this slice. It is not yet consumed by certify_run.py.
+
+version: v0.3.1-provenance-design
+status: draft
+
+status_model:
+  current_runtime_statuses:
+    - DONE_PASS
+    - DONE_FAIL
+    - BLOCKED
+    - NEED_USER
+  target_runtime_statuses:
+    - NOT_DONE
+    - PROVISIONAL_DONE
+    - CERTIFIED_DONE
+    - BLOCKED
+    - NEED_USER
+
+authority_levels:
+  P0:
+    label: self-authored verifier
+    authority: advisory
+    can_certify_done_alone: false
+    default_status_when_passing: PROVISIONAL_DONE
+  P1:
+    label: local public verifier
+    authority: gating
+    can_certify_done_alone: false
+    default_status_when_passing: PROVISIONAL_DONE
+  P2:
+    label: independent audited verifier
+    authority: certifying
+    can_certify_done_alone: true
+    default_status_when_passing: CERTIFIED_DONE
+  P3:
+    label: authoritative hidden verifier
+    authority: certifying
+    can_certify_done_alone: true
+    default_status_when_passing: CERTIFIED_DONE
+
+minimums:
+  certified_done:
+    required_verifier_levels:
+      - P2
+      - P3
+    required_strength_level: certifying
+    artifact_tests_must_pass: true
+    disqualifying_smells_allowed: false
+  provisional_done:
+    allowed_verifier_levels:
+      - P0
+      - P1
+    artifact_tests_must_pass: true
+
+hard_rules:
+  - id: P0_CANNOT_CERTIFY_DONE
+    description: P0 alone cannot certify DONE.
+  - id: SELF_GENERATED_POST_SOLUTION_IS_ADVISORY
+    description: Self-generated post-solution verifier artifacts are advisory unless corroborated by P2 or P3 evidence.
+  - id: P1_VISIBLE_TESTS_ARE_PROVISIONAL_BY_DEFAULT
+    description: Local public or visible benchmark tests can gate progress but normally yield PROVISIONAL_DONE.
+  - id: P2_P3_CAN_CERTIFY_WITH_STRENGTH_AND_NO_DISQUALIFYING_SMELL
+    description: P2 or P3 verifier artifacts can certify only when artifact tests pass, strength is certifying, and no disqualifying smell is present.
+
+policy_engine_deferred_rules:
+  - id: P2_P3_REQUIRE_NOT_SELF_GENERATED_ONLY
+    description: If required_verifier_level is P2 or P3, allow_self_generated_only must be false.

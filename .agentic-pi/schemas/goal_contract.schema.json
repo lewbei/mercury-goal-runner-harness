@@ -66,7 +66,30 @@
       "items": { "type": "string" }
     },
     "max_steps": { "type": "integer" },
-    "execution_prompt": { "type": "string" }
+    "execution_prompt": { "type": "string" },
+    "artifact_tests": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["test_id", "type"],
+        "properties": {
+          "test_id": { "type": "string" },
+          "type": {
+            "type": "string",
+            "enum": ["command"]
+          },
+          "cmd": { "type": "string" },
+          "expect_exit_code": { "type": "integer" },
+          "expect_stdout_contains": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "expect_stdout_lines_min": { "type": "integer" },
+          "expect_file_exists": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    }
   },
   "additionalProperties": false
 }

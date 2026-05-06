@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VerifierArtifact",
+  "type": "object",
+  "required": [
+    "artifact_id",
+    "run_id",
+    "target_artifact",
+    "kind",
+    "source",
+    "created_at",
+    "created_at_phase",
+    "author_agent",
+    "author_model",
+    "provenance_level",
+    "depends_on_solution",
+    "same_worker_as_solution",
+    "executes_code",
+    "assertion_count",
+    "mock_ratio_percent",
+    "smell_flags",
+    "authority",
+    "solution_exists_at_creation"
+  ],
+  "properties": {
+    "artifact_id": { "type": "string", "minLength": 1 },
+    "run_id": { "type": "string", "minLength": 1 },
+    "target_artifact": { "type": "string", "minLength": 1 },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "command_test",
+        "unit_test",
+        "integration_test",
+        "metamorphic_test",
+        "differential_test",
+        "static_check",
+        "human_signoff",
+        "hidden_test",
+        "benchmark_oracle"
+      ]
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "same_run_worker",
+        "same_run_verifier_agent",
+        "independent_verifier_agent",
+        "existing_repo_test",
+        "user_provided",
+        "hidden_oracle",
+        "external_benchmark",
+        "human_review"
+      ]
+    },
+    "created_at": { "type": "string", "minLength": 1 },
+    "created_at_phase": {
+      "type": "string",
+      "enum": [
+        "pre_solution",
+        "during_solution",
+        "post_solution",
+        "external_preexisting",
+        "human_review"
+      ]
+    },
+    "author_agent": { "type": "string", "minLength": 1 },
+    "author_model": { "type": "string", "minLength": 1 },
+    "provenance_level": {
+      "type": "string",
+      "enum": ["P0", "P1", "P2", "P3"]
+    },
+    "depends_on_solution": { "type": "boolean" },
+    "same_worker_as_solution": { "type": "boolean" },
+    "executes_code": { "type": "boolean" },
+    "assertion_count": { "type": "integer" },
+    "mock_ratio_percent": { "type": "integer" },
+    "smell_flags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "authority": {
+      "type": "string",
+      "enum": ["advisory", "gating", "certifying", "disqualified"]
+    },
+    "solution_exists_at_creation": { "type": "boolean" }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VerifierContract",
+  "type": "object",
+  "required": [
+    "run_id",
+    "target_goal",
+    "target_artifacts",
+    "required_verifier_level",
+    "allow_self_generated_only",
+    "required_behaviors",
+    "forbidden_verifier_patterns",
+    "minimum_strength_level",
+    "certifying_authority_levels",
+    "provisional_authority_levels"
+  ],
+  "properties": {
+    "run_id": { "type": "string", "minLength": 1 },
+    "target_goal": { "type": "string", "minLength": 1 },
+    "target_artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "required_verifier_level": {
+      "type": "string",
+      "enum": ["P0", "P1", "P2", "P3"]
+    },
+    "allow_self_generated_only": { "type": "boolean" },
+    "required_behaviors": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "forbidden_verifier_patterns": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "minimum_strength_level": {
+      "type": "string",
+      "enum": ["weak", "advisory", "gating", "certifying"]
+    },
+    "certifying_authority_levels": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "enum": ["P2", "P3"]
+      }
+    },
+    "provisional_authority_levels": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["P0", "P1"]
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -14,5 +14,15 @@
   "failure_criteria": ["cli_tool.py missing.", "Does not produce expected output."],
   "ask_user_conditions": [],
   "max_steps": 20,
-  "execution_prompt": "Create cli_tool.py that processes data.csv and prints a summary. Do not touch protected files."
+  "execution_prompt": "Create cli_tool.py that processes data.csv and prints a summary. Do not touch protected files.",
+  "artifact_tests": [
+    {
+      "test_id": "CLI_SUMMARY_TEST",
+      "type": "command",
+      "cmd": "python cli_tool.py data.csv",
+      "expect_exit_code": 0,
+      "expect_stdout_contains": ["Rows", "Columns"],
+      "expect_stdout_lines_min": 2
+    }
+  ]
 }

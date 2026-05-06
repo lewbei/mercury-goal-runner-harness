@@ -19,6 +19,11 @@ def main():
     parser = argparse.ArgumentParser(description="Run a goal based on its contract")
     parser.add_argument("command", help="Command describing the goal")
     parser.add_argument("--run-id", required=True, help="Run identifier")
+    parser.add_argument(
+        "--skip-memory-update",
+        action="store_true",
+        help="Do not update memory files after the run",
+    )
     args = parser.parse_args()
     run_dir = Path(".agentic-runs") / args.run_id
     if not run_dir.is_dir():
@@ -43,18 +48,29 @@ def main():
     print("Running plan_merger...")
     run_subprocess(["python", ".agentic-pi/runtime/plan_merger.py", "--run-id", args.run_id])
 
-    # 4. Execute steps via Guarded Worker
+    # 4. Build the v0.3 PlanGraph from the merged plan before execution.
+    print("Running plan_graph_builder...")
+    run_subprocess(["python", ".agentic-pi/runtime/plan_graph_builder.py", args.run_id])
+
+    # 5. Execute steps via Guarded Worker
     print("Running guarded_worker...")
     run_subprocess(["python", ".agentic-pi/runtime/guarded_worker.py", "--run-id", args.run_id])
 
-    # 5. Certify run
+    # 6. Build post-worker artifact and task graph views.
+    print("Running artifact_linker...")
+    run_subprocess(["python", ".agentic-pi/runtime/artifact_linker.py", args.run_id])
+
+    print("Running task_graph_builder...")
+    run_subprocess(["python", ".agentic-pi/runtime/task_graph_builder.py", args.run_id])
+
+    # 7. Certify run
     print("Running certifier...")
     run_subprocess(["python", ".agentic-pi/validators/certify_run.py", str(run_dir)])
 
     print("Run completed.")
-    # Update memory from all runs
-    print("Updating memory from runs...")
-    run_subprocess(["python", ".agentic-pi/runtime/update_memory_from_runs.py"], cwd=BASE_DIR)
+    if not args.skip_memory_update:
+        print("Updating memory from runs...")
+        run_subprocess(["python", ".agentic-pi/runtime/update_memory_from_runs.py"], cwd=BASE_DIR)
 
 if __name__ == "__main__":
     main()

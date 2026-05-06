@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PlanGraph",
+  "type": "object",
+  "required": ["nodes", "edges"],
+  "properties": {
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["node_id", "type"],
+        "properties": {
+          "node_id": { "type": "string", "minLength": 1 },
+          "type": { "type": "string", "enum": ["task", "artifact"] },
+          "task_id": { "type": "string", "minLength": 1 },
+          "artifact_id": { "type": "string", "minLength": 1 },
+          "description": { "type": "string" },
+          "path": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source", "target", "type"],
+        "properties": {
+          "source": { "type": "string", "minLength": 1 },
+          "target": { "type": "string", "minLength": 1 },
+          "type": { "type": "string", "enum": ["produces", "requires"] }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
