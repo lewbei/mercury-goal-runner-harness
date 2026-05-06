@@ -1,0 +1,33 @@
+﻿{
+  "project_name": "mercury-goal-runner-harness",
+  "version": "0.1.0",
+  "default_runtime_model": "inception/mercury-2",
+  "strong_review_model": "gpt-5.5",
+  "status_values": [
+    "INIT_READY",
+    "CONTRACT_READY",
+    "PLANNING",
+    "PLAN_READY",
+    "EXECUTING",
+    "OBSERVING",
+    "CERTIFYING",
+    "DONE_PASS",
+    "DONE_FAIL",
+    "BLOCKED",
+    "NEED_USER",
+    "MAX_STEPS_REACHED"
+  ],
+  "protected_paths": [
+    ".agentic-pi/state.json",
+    ".agentic-runs/**/trace.jsonl",
+    ".agentic-runs/**/certification.json",
+    ".agentic-runs/**/final_status.md"
+  ],
+  "rules": [
+    "Mercury may propose, but cannot certify final PASS.",
+    "Worker agents cannot edit protected files.",
+    "Every goal must become a Goal Contract before execution.",
+    "Every DONE requires evidence.",
+    "Repeated failure becomes BLOCKED, not infinite retry."
+  ]
+}

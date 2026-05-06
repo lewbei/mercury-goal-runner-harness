@@ -1,0 +1,51 @@
+﻿{
+  "version": "0.1.0",
+  "default_policy": "deny_risky_without_approval",
+  "safe_commands": [
+    "dir",
+    "tree",
+    "type",
+    "more",
+    "findstr",
+    "python",
+    "git status",
+    "git diff"
+  ],
+  "medium_risk_commands": [
+    "pip install",
+    "npm install",
+    "pytest",
+    "python -m pytest",
+    "git add",
+    "git commit"
+  ],
+  "high_risk_commands_require_approval": [
+    "del",
+    "rmdir",
+    "move",
+    "ren",
+    "git reset",
+    "git clean",
+    "curl",
+    "powershell -Command",
+    "Invoke-WebRequest",
+    "iwr"
+  ],
+  "forbidden_patterns": [
+    "rm -rf",
+    "curl | bash",
+    "iwr .* | iex",
+    "Invoke-Expression",
+    "setx .*KEY",
+    "echo .*API_KEY",
+    "git push",
+    "format ",
+    "cipher /w"
+  ],
+  "protected_paths": [
+    ".agentic-pi/state.json",
+    ".agentic-runs/**/trace.jsonl",
+    ".agentic-runs/**/certification.json",
+    ".agentic-runs/**/final_status.md"
+  ]
+}

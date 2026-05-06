@@ -1,0 +1,72 @@
+﻿{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GoalContract",
+  "type": "object",
+  "required": [
+    "run_id",
+    "raw_user_prompt",
+    "intent",
+    "cleaned_goal",
+    "final_outputs",
+    "explicit_constraints",
+    "inferred_constraints",
+    "forbidden_actions",
+    "ambiguities",
+    "risk_level",
+    "complexity_level",
+    "done_criteria",
+    "failure_criteria",
+    "ask_user_conditions",
+    "max_steps",
+    "execution_prompt"
+  ],
+  "properties": {
+    "run_id": { "type": "string" },
+    "raw_user_prompt": { "type": "string" },
+    "intent": { "type": "string" },
+    "cleaned_goal": { "type": "string" },
+    "final_outputs": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "explicit_constraints": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "inferred_constraints": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "forbidden_actions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "ambiguities": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": ["LOW", "MEDIUM", "HIGH"]
+    },
+    "complexity_level": {
+      "type": "string",
+      "enum": ["SIMPLE", "MEDIUM", "HARD", "RISKY"]
+    },
+    "done_criteria": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "failure_criteria": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "ask_user_conditions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "max_steps": { "type": "integer" },
+    "execution_prompt": { "type": "string" }
+  },
+  "additionalProperties": false
+}

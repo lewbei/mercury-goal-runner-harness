@@ -1,0 +1,43 @@
+﻿{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "StepResult",
+  "type": "object",
+  "required": [
+    "run_id",
+    "step_id",
+    "status",
+    "action_taken",
+    "files_touched",
+    "commands_run",
+    "evidence",
+    "pass_condition_satisfied",
+    "remaining_work"
+  ],
+  "properties": {
+    "run_id": { "type": "string" },
+    "step_id": { "type": "integer" },
+    "status": {
+      "type": "string",
+      "enum": ["PASSED", "FAILED_REPAIRABLE", "BLOCKED", "NEED_USER"]
+    },
+    "action_taken": { "type": "string" },
+    "files_touched": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "commands_run": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "evidence": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "pass_condition_satisfied": { "type": "boolean" },
+    "remaining_work": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false
+}

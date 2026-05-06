@@ -1,0 +1,22 @@
+{
+  "run_id": "sample_run_001",
+  "status": "DONE_PASS",
+  "passed_checks": [
+    "goal_contract.json exists",
+    "goal_contract.json parses as JSON",
+    "trace.jsonl exists",
+    "trace.jsonl lines parse as JSON",
+    "step_logs contain at least one step result",
+    "001.json contains evidence",
+    "done_criteria is non-empty",
+    "final_outputs is non-empty",
+    "final output exists: README.md"
+  ],
+  "failed_checks": [],
+  "artifact_hashes": {
+    "README.md": "ef691073239e381df2908cc663f7e8ca5ac82553e2c98efb9cf5fdeba425654a"
+  },
+  "audit_chain_valid": true,
+  "generated_by": "agentic-pi-certifier-v0.1",
+  "timestamp": "2026-05-06T07:15:38.745512+00:00"
+}

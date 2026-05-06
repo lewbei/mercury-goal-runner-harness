@@ -1,0 +1,6 @@
+﻿__pycache__/
+*.pyc
+.agentic-runs/*/backups/
+.agentic-runs/*/diffs/
+.env
+.env.*
