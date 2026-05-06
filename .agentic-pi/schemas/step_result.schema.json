@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "StepResult",
   "type": "object",
@@ -14,29 +14,55 @@
     "remaining_work"
   ],
   "properties": {
-    "run_id": { "type": "string" },
-    "step_id": { "type": "integer" },
+    "run_id": {
+      "type": "string"
+    },
+    "step_id": {
+      "type": "integer"
+    },
     "status": {
       "type": "string",
-      "enum": ["PASSED", "FAILED_REPAIRABLE", "BLOCKED", "NEED_USER"]
+      "enum": [
+        "PASSED",
+        "FAILED_REPAIRABLE",
+        "BLOCKED",
+        "NEED_USER"
+      ]
     },
-    "action_taken": { "type": "string" },
+    "action_taken": {
+      "type": "string",
+      "minLength": 1
+    },
     "files_touched": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
     },
     "commands_run": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "evidence": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
     },
-    "pass_condition_satisfied": { "type": "boolean" },
+    "pass_condition_satisfied": {
+      "type": "boolean"
+    },
     "remaining_work": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     }
   },
   "additionalProperties": false

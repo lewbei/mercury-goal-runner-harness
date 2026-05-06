@@ -1,4 +1,24 @@
+from pathlib import Path
 import json
+
+# 1. Harden step_result schema
+schema_path = Path(".agentic-pi/schemas/step_result.schema.json")
+schema = json.loads(schema_path.read_text(encoding="utf-8-sig"))
+
+schema["properties"]["action_taken"]["minLength"] = 1
+schema["properties"]["files_touched"]["minItems"] = 1
+schema["properties"]["files_touched"]["items"]["minLength"] = 1
+schema["properties"]["evidence"]["minItems"] = 1
+schema["properties"]["evidence"]["items"]["minLength"] = 1
+
+schema_path.write_text(
+    json.dumps(schema, indent=2, ensure_ascii=False),
+    encoding="utf-8"
+)
+
+# 2. Rewrite validator with minLength/minItems support
+validator_path = Path(".agentic-pi/validators/validate_schema.py")
+validator_code = r'''import json
 import sys
 from pathlib import Path
 
@@ -82,3 +102,30 @@ def main():
 
 if __name__ == "__main__":
     main()
+'''
+
+validator_path.write_text(validator_code, encoding="utf-8")
+
+# 3. Strengthen Worker prompt
+worker_prompt = Path(".agentic-pi/prompts/guarded_worker.md")
+text = worker_prompt.read_text(encoding="utf-8-sig")
+
+addition = """
+Strict evidence rules:
+- action_taken must not be empty.
+- files_touched must list every file changed.
+- evidence must not be empty.
+- evidence must mention the created or modified artifact.
+- If no file was changed, status must not be PASSED.
+- Do not output placeholder empty arrays for files_touched or evidence.
+"""
+
+if "Strict evidence rules:" not in text:
+    text = text.rstrip() + "\n\n" + addition.strip() + "\n"
+
+worker_prompt.write_text(text, encoding="utf-8")
+
+print("Hardened v0.1.1")
+print("- step_result.schema.json rejects empty action_taken/files_touched/evidence")
+print("- validate_schema.py supports minLength and minItems")
+print("- guarded_worker.md has strict evidence rules")

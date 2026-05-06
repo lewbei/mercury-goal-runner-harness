@@ -1,0 +1,24 @@
+{
+  "run_id": "real_goal_001",
+  "step_id": 1,
+  "status": "PASSED",
+  "action_taken": "Created docs/V0_1_USAGE.md explaining how to use the Mercury Goal Runner Harness v0.1 on Windows.",
+  "files_touched": [
+    "docs/V0_1_USAGE.md"
+  ],
+  "commands_run": [
+    "Agent tool: guarded-worker created docs/V0_1_USAGE.md",
+    "python quick_repair_real_goal_001.py"
+  ],
+  "evidence": [
+    "docs/V0_1_USAGE.md exists.",
+    "The document explains what the harness is.",
+    "The document explains how to validate goal_contract.json.",
+    "The document explains how to run the smoke test.",
+    "The document explains how certification works.",
+    "The document explains why Mercury cannot mark DONE by itself.",
+    "The document explains DONE_PASS, DONE_FAIL, BLOCKED, and NEED_USER."
+  ],
+  "pass_condition_satisfied": true,
+  "remaining_work": []
+}
