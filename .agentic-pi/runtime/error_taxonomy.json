@@ -1,0 +1,13 @@
+[
+  "BAD_GOAL",
+  "BAD_CONTRACT",
+  "BAD_PLAN",
+  "BAD_CONTEXT",
+  "BAD_TOOL",
+  "BAD_HANDOFF",
+  "BAD_VERIFY",
+  "FAKE_DONE",
+  "LOOPING",
+  "NEED_USER",
+  "BLOCKED"
+]

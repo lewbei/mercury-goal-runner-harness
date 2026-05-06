@@ -9,6 +9,7 @@ Run ID: `sample_run_001`
 - trace.jsonl lines parse as JSON
 - step_logs contain at least one step result
 - 001.json contains evidence
+- 1.json contains evidence
 - done_criteria is non-empty
 - final_outputs is non-empty
 - final output exists: README.md
@@ -17,4 +18,4 @@ Run ID: `sample_run_001`
 - none
 
 ## Artifact hashes
-- `README.md`: `ef691073239e381df2908cc663f7e8ca5ac82553e2c98efb9cf5fdeba425654a`
+- `README.md`: `e5f2c4836889aaadc4c67b4cb7d608abf8a37af5bdee7d97ef98477ac50448e9`

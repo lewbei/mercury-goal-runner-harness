@@ -1,21 +1,12 @@
-{
+﻿{
   "run_id": "sample_run_001",
   "raw_user_prompt": "Create a README explaining the Mercury Goal Runner v0.1 architecture.",
   "intent": "Create a short documentation artifact for the harness.",
   "cleaned_goal": "Create README.md explaining the v0.1 Mercury Goal Runner Harness architecture.",
-  "final_outputs": [
-    "README.md"
-  ],
-  "explicit_constraints": [
-    "Keep v0.1 small."
-  ],
-  "inferred_constraints": [
-    "Do not add memory or multi-agent mode yet."
-  ],
-  "forbidden_actions": [
-    "Do not mark DONE without evidence.",
-    "Do not touch protected files."
-  ],
+  "final_outputs": ["README.md"],
+  "explicit_constraints": ["Keep v0.1 small."],
+  "inferred_constraints": ["Do not add memory or multi-agent mode yet."],
+  "forbidden_actions": ["Do not mark DONE without evidence.", "Do not touch protected files."],
   "ambiguities": [],
   "risk_level": "LOW",
   "complexity_level": "SIMPLE",

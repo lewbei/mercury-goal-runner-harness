@@ -1,0 +1,18 @@
+{
+  "run_id": "benchmark_hard",
+  "raw_user_prompt": "Implement a small CLI tool that processes a CSV and outputs a summary.",
+  "intent": "Create a Python script that reads a CSV and prints summary statistics.",
+  "cleaned_goal": "Create cli_tool.py that reads data.csv and prints a summary.",
+  "final_outputs": ["cli_tool.py"],
+  "explicit_constraints": ["Use only standard library.", "No external dependencies."],
+  "inferred_constraints": [],
+  "forbidden_actions": ["Do not write to system files."],
+  "ambiguities": [],
+  "risk_level": "HIGH",
+  "complexity_level": "HARD",
+  "done_criteria": ["cli_tool.py exists.", "When run with a sample CSV, it prints at least two lines of summary."],
+  "failure_criteria": ["cli_tool.py missing.", "Does not produce expected output."],
+  "ask_user_conditions": [],
+  "max_steps": 20,
+  "execution_prompt": "Create cli_tool.py that processes data.csv and prints a summary. Do not touch protected files."
+}

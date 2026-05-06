@@ -1,0 +1,21 @@
+{
+  "run_id": "benchmark_impossible_goal_20260506091029",
+  "status": "DONE_FAIL",
+  "passed_checks": [
+    "goal_contract.json exists",
+    "goal_contract.json parses as JSON",
+    "trace.jsonl exists",
+    "trace.jsonl lines parse as JSON",
+    "step_logs contain at least one step result",
+    "1.json contains evidence",
+    "done_criteria is non-empty",
+    "final_outputs is non-empty"
+  ],
+  "failed_checks": [
+    "final output missing: black_hole_sim.py"
+  ],
+  "artifact_hashes": {},
+  "audit_chain_valid": true,
+  "generated_by": "agentic-pi-certifier-v0.1",
+  "timestamp": "2026-05-06T09:10:30.788085+00:00"
+}

@@ -1,0 +1,10 @@
+{
+  "planner": "planner-minimal",
+  "steps": [
+    {
+      "action": "create_file",
+      "path": "docs/examples.md",
+      "content": "# Examples\n\n- Example 1\n- Example 2\n- Example 3\n"
+    }
+  ]
+}

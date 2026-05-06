@@ -1,6 +1,21 @@
-﻿__pycache__/
-*.pyc
-.agentic-runs/*/backups/
-.agentic-runs/*/diffs/
-.env
-.env.*
+# Python artefacts
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+/
+build/
+*.egg
+
+# IDE / editor files
+.vscode/
+.idea/
+*.swp
+*~
+*.sublime-workspace
+*.sublime-project
+
+# OS junk
+.DS_Store
+Thumbs.db

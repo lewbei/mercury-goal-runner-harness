@@ -1,0 +1,715 @@
+{"run_id": "benchmark_hard_goal_20260506090741", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:07:43.358043+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090741", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:07:43.358043+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090741", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:07:43.358043+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090741", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:07:43.358043+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090741", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:07:43.358043+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090741", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:07:43.358043+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090741", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:07:43.358043+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090741", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:07:43.358043+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090800", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:08:01.506463+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090800", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:08:01.506463+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090800", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:08:01.506463+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090800", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:08:01.506463+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090800", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:08:01.506463+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090800", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:08:01.506463+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090800", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:08:01.506463+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090800", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:08:01.506463+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090836", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:08:37.479317+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090836", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:08:37.479317+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090836", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:08:37.479317+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090836", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:08:37.479317+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090836", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:08:37.479317+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090836", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:08:37.479317+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090836", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:08:37.479317+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090836", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:08:37.479317+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091012", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:10:13.625361+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091012", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:10:13.625361+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091012", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:10:13.625361+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091012", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:10:13.625361+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091012", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:10:13.625361+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091012", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:10:13.625361+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091012", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:10:13.625361+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091012", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:10:13.625361+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091027", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:10:29.277857+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091027", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:10:29.277857+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091027", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:10:29.277857+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091027", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:10:29.277857+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091027", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:10:29.277857+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091027", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:10:29.277857+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091027", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:10:29.277857+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091027", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:10:29.277857+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091027", "passed": "final output exists: cli_tool.py", "timestamp": "2026-05-06T09:10:29.277857+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091144", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:11:46.263575+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091144", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:11:46.263575+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091144", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:11:46.263575+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091144", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:11:46.263575+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091144", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:11:46.263575+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091144", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:11:46.263575+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091144", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:11:46.263575+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091144", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:11:46.263575+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091144", "passed": "final output exists: cli_tool.py", "timestamp": "2026-05-06T09:11:46.263575+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091158", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:12:00.045581+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091158", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:12:00.045581+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091158", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:12:00.045581+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091158", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:12:00.045581+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091158", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:12:00.045581+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091158", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:12:00.045581+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091158", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:12:00.045581+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091158", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:12:00.045581+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091158", "passed": "final output exists: cli_tool.py", "timestamp": "2026-05-06T09:12:00.045581+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091209", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:12:10.886750+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091209", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:12:10.886750+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091209", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:12:10.886750+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091209", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:12:10.886750+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091209", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:12:10.886750+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091209", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:12:10.886750+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091209", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:12:10.886750+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091209", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:12:10.886750+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091209", "passed": "final output exists: cli_tool.py", "timestamp": "2026-05-06T09:12:10.886750+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506090837", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:08:38.983297+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506090837", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:08:38.983297+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506090837", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:08:38.983297+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506090837", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:08:38.983297+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506090837", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:08:38.983297+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506090837", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:08:38.983297+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506090837", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:08:38.983297+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506090837", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:08:38.983297+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091013", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:10:15.152371+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091013", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:10:15.152371+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091013", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:10:15.152371+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091013", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:10:15.152371+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091013", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:10:15.152371+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091013", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:10:15.152371+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091013", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:10:15.152371+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091013", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:10:15.152371+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091029", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:10:30.788085+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091029", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:10:30.788085+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091029", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:10:30.788085+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091029", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:10:30.788085+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091029", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:10:30.788085+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091029", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:10:30.788085+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091029", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:10:30.788085+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091029", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:10:30.788085+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091146", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:11:47.713737+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091146", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:11:47.713737+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091146", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:11:47.713737+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091146", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:11:47.713737+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091146", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:11:47.713737+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091146", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:11:47.713737+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091146", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:11:47.713737+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091146", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:11:47.713737+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091200", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:12:01.619423+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091200", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:12:01.619423+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091200", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:12:01.619423+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091200", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:12:01.619423+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091200", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:12:01.619423+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091200", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:12:01.619423+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091200", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:12:01.619423+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091200", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:12:01.619423+00:00"}
+{"run_id": "benchmark_medium_goal_20260506090839", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:08:40.450458+00:00"}
+{"run_id": "benchmark_medium_goal_20260506090839", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:08:40.450458+00:00"}
+{"run_id": "benchmark_medium_goal_20260506090839", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:08:40.450458+00:00"}
+{"run_id": "benchmark_medium_goal_20260506090839", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:08:40.450458+00:00"}
+{"run_id": "benchmark_medium_goal_20260506090839", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:08:40.450458+00:00"}
+{"run_id": "benchmark_medium_goal_20260506090839", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:08:40.450458+00:00"}
+{"run_id": "benchmark_medium_goal_20260506090839", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:08:40.450458+00:00"}
+{"run_id": "benchmark_medium_goal_20260506090839", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:08:40.450458+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091015", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:10:16.629469+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091015", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:10:16.629469+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091015", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:10:16.629469+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091015", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:10:16.629469+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091015", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:10:16.629469+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091015", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:10:16.629469+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091015", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:10:16.629469+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091015", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:10:16.629469+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091030", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:10:32.307112+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091030", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:10:32.307112+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091030", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:10:32.307112+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091030", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:10:32.307112+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091030", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:10:32.307112+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091030", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:10:32.307112+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091030", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:10:32.307112+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091030", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:10:32.307112+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091030", "passed": "final output exists: docs/examples.md", "timestamp": "2026-05-06T09:10:32.307112+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091147", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:11:49.194050+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091147", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:11:49.194050+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091147", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:11:49.194050+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091147", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:11:49.194050+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091147", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:11:49.194050+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091147", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:11:49.194050+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091147", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:11:49.194050+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091147", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:11:49.194050+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091147", "passed": "final output exists: docs/examples.md", "timestamp": "2026-05-06T09:11:49.194050+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091201", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:12:03.086818+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091201", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:12:03.086818+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091201", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:12:03.086818+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091201", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:12:03.086818+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091201", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:12:03.086818+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091201", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:12:03.086818+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091201", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:12:03.086818+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091201", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:12:03.086818+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091201", "passed": "final output exists: docs/examples.md", "timestamp": "2026-05-06T09:12:03.086818+00:00"}
+{"run_id": "benchmark_simple_goal_20260506090840", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:08:41.929916+00:00"}
+{"run_id": "benchmark_simple_goal_20260506090840", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:08:41.929916+00:00"}
+{"run_id": "benchmark_simple_goal_20260506090840", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:08:41.929916+00:00"}
+{"run_id": "benchmark_simple_goal_20260506090840", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:08:41.929916+00:00"}
+{"run_id": "benchmark_simple_goal_20260506090840", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:08:41.929916+00:00"}
+{"run_id": "benchmark_simple_goal_20260506090840", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:08:41.929916+00:00"}
+{"run_id": "benchmark_simple_goal_20260506090840", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:08:41.929916+00:00"}
+{"run_id": "benchmark_simple_goal_20260506090840", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:08:41.929916+00:00"}
+{"run_id": "benchmark_simple_goal_20260506090840", "passed": "final output exists: README.md", "timestamp": "2026-05-06T09:08:41.929916+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091016", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:10:18.170962+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091016", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:10:18.170962+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091016", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:10:18.170962+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091016", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:10:18.170962+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091016", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:10:18.170962+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091016", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:10:18.170962+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091016", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:10:18.170962+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091016", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:10:18.170962+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091016", "passed": "final output exists: README.md", "timestamp": "2026-05-06T09:10:18.170962+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091032", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:10:33.787349+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091032", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:10:33.787349+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091032", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:10:33.787349+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091032", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:10:33.787349+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091032", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:10:33.787349+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091032", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:10:33.787349+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091032", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:10:33.787349+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091032", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:10:33.787349+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091032", "passed": "final output exists: README.md", "timestamp": "2026-05-06T09:10:33.787349+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091149", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:11:50.654097+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091149", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:11:50.654097+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091149", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:11:50.654097+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091149", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:11:50.654097+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091149", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:11:50.654097+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091149", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:11:50.654097+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091149", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:11:50.654097+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091149", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:11:50.654097+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091149", "passed": "final output exists: README.md", "timestamp": "2026-05-06T09:11:50.654097+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091203", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:12:04.698555+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091203", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:12:04.698555+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091203", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:12:04.698555+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091203", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:12:04.698555+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091203", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:12:04.698555+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091203", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:12:04.698555+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091203", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:12:04.698555+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091203", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:12:04.698555+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091203", "passed": "final output exists: README.md", "timestamp": "2026-05-06T09:12:04.698555+00:00"}
+{"run_id": "bench_simple", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:07:56.459288+00:00"}
+{"run_id": "bench_simple", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:07:56.459288+00:00"}
+{"run_id": "bench_simple", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:07:56.459288+00:00"}
+{"run_id": "bench_simple", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:07:56.459288+00:00"}
+{"run_id": "bench_simple", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:07:56.459288+00:00"}
+{"run_id": "bench_simple", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:07:56.459288+00:00"}
+{"run_id": "bench_simple", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:07:56.459288+00:00"}
+{"run_id": "bench_simple", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:07:56.459288+00:00"}
+{"run_id": "bench_simple", "passed": "final output exists: README.md", "timestamp": "2026-05-06T09:07:56.459288+00:00"}
+{"run_id": "real_goal_001", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T07:57:14.954676+00:00"}
+{"run_id": "real_goal_001", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T07:57:14.954676+00:00"}
+{"run_id": "real_goal_001", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T07:57:14.954676+00:00"}
+{"run_id": "real_goal_001", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T07:57:14.954676+00:00"}
+{"run_id": "real_goal_001", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T07:57:14.954676+00:00"}
+{"run_id": "real_goal_001", "passed": "001.json contains evidence", "timestamp": "2026-05-06T07:57:14.954676+00:00"}
+{"run_id": "real_goal_001", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T07:57:14.954676+00:00"}
+{"run_id": "real_goal_001", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T07:57:14.954676+00:00"}
+{"run_id": "real_goal_001", "passed": "final output exists: docs/V0_1_USAGE.md", "timestamp": "2026-05-06T07:57:14.954676+00:00"}
+{"run_id": "sample_run_001", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
+{"run_id": "sample_run_001", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
+{"run_id": "sample_run_001", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
+{"run_id": "sample_run_001", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
+{"run_id": "sample_run_001", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
+{"run_id": "sample_run_001", "passed": "001.json contains evidence", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
+{"run_id": "sample_run_001", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
+{"run_id": "sample_run_001", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
+{"run_id": "sample_run_001", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
+{"run_id": "sample_run_001", "passed": "final output exists: README.md", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090741", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:07:43.358043+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090741", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:07:43.358043+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090741", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:07:43.358043+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090741", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:07:43.358043+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090741", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:07:43.358043+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090741", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:07:43.358043+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090741", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:07:43.358043+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090741", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:07:43.358043+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090800", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:08:01.506463+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090800", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:08:01.506463+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090800", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:08:01.506463+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090800", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:08:01.506463+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090800", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:08:01.506463+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090800", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:08:01.506463+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090800", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:08:01.506463+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090800", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:08:01.506463+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090836", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:08:37.479317+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090836", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:08:37.479317+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090836", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:08:37.479317+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090836", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:08:37.479317+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090836", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:08:37.479317+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090836", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:08:37.479317+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090836", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:08:37.479317+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090836", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:08:37.479317+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091012", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:10:13.625361+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091012", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:10:13.625361+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091012", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:10:13.625361+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091012", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:10:13.625361+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091012", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:10:13.625361+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091012", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:10:13.625361+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091012", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:10:13.625361+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091012", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:10:13.625361+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091027", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:10:29.277857+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091027", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:10:29.277857+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091027", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:10:29.277857+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091027", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:10:29.277857+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091027", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:10:29.277857+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091027", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:10:29.277857+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091027", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:10:29.277857+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091027", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:10:29.277857+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091027", "passed": "final output exists: cli_tool.py", "timestamp": "2026-05-06T09:10:29.277857+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091144", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:11:46.263575+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091144", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:11:46.263575+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091144", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:11:46.263575+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091144", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:11:46.263575+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091144", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:11:46.263575+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091144", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:11:46.263575+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091144", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:11:46.263575+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091144", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:11:46.263575+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091144", "passed": "final output exists: cli_tool.py", "timestamp": "2026-05-06T09:11:46.263575+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091158", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:12:00.045581+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091158", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:12:00.045581+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091158", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:12:00.045581+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091158", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:12:00.045581+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091158", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:12:00.045581+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091158", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:12:00.045581+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091158", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:12:00.045581+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091158", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:12:00.045581+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091158", "passed": "final output exists: cli_tool.py", "timestamp": "2026-05-06T09:12:00.045581+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091209", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:12:10.886750+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091209", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:12:10.886750+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091209", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:12:10.886750+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091209", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:12:10.886750+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091209", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:12:10.886750+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091209", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:12:10.886750+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091209", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:12:10.886750+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091209", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:12:10.886750+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091209", "passed": "final output exists: cli_tool.py", "timestamp": "2026-05-06T09:12:10.886750+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506090837", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:08:38.983297+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506090837", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:08:38.983297+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506090837", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:08:38.983297+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506090837", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:08:38.983297+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506090837", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:08:38.983297+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506090837", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:08:38.983297+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506090837", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:08:38.983297+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506090837", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:08:38.983297+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091013", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:10:15.152371+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091013", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:10:15.152371+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091013", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:10:15.152371+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091013", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:10:15.152371+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091013", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:10:15.152371+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091013", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:10:15.152371+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091013", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:10:15.152371+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091013", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:10:15.152371+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091029", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:10:30.788085+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091029", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:10:30.788085+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091029", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:10:30.788085+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091029", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:10:30.788085+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091029", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:10:30.788085+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091029", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:10:30.788085+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091029", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:10:30.788085+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091029", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:10:30.788085+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091146", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:11:47.713737+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091146", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:11:47.713737+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091146", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:11:47.713737+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091146", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:11:47.713737+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091146", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:11:47.713737+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091146", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:11:47.713737+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091146", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:11:47.713737+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091146", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:11:47.713737+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091200", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:12:01.619423+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091200", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:12:01.619423+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091200", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:12:01.619423+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091200", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:12:01.619423+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091200", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:12:01.619423+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091200", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:12:01.619423+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091200", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:12:01.619423+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091200", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:12:01.619423+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091211", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:12:12.745624+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091211", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:12:12.745624+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091211", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:12:12.745624+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091211", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:12:12.745624+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091211", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:12:12.745624+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091211", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:12:12.745624+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091211", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:12:12.745624+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091211", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:12:12.745624+00:00"}
+{"run_id": "benchmark_medium_goal_20260506090839", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:08:40.450458+00:00"}
+{"run_id": "benchmark_medium_goal_20260506090839", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:08:40.450458+00:00"}
+{"run_id": "benchmark_medium_goal_20260506090839", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:08:40.450458+00:00"}
+{"run_id": "benchmark_medium_goal_20260506090839", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:08:40.450458+00:00"}
+{"run_id": "benchmark_medium_goal_20260506090839", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:08:40.450458+00:00"}
+{"run_id": "benchmark_medium_goal_20260506090839", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:08:40.450458+00:00"}
+{"run_id": "benchmark_medium_goal_20260506090839", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:08:40.450458+00:00"}
+{"run_id": "benchmark_medium_goal_20260506090839", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:08:40.450458+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091015", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:10:16.629469+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091015", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:10:16.629469+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091015", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:10:16.629469+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091015", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:10:16.629469+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091015", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:10:16.629469+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091015", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:10:16.629469+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091015", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:10:16.629469+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091015", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:10:16.629469+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091030", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:10:32.307112+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091030", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:10:32.307112+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091030", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:10:32.307112+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091030", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:10:32.307112+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091030", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:10:32.307112+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091030", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:10:32.307112+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091030", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:10:32.307112+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091030", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:10:32.307112+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091030", "passed": "final output exists: docs/examples.md", "timestamp": "2026-05-06T09:10:32.307112+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091147", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:11:49.194050+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091147", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:11:49.194050+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091147", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:11:49.194050+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091147", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:11:49.194050+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091147", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:11:49.194050+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091147", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:11:49.194050+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091147", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:11:49.194050+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091147", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:11:49.194050+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091147", "passed": "final output exists: docs/examples.md", "timestamp": "2026-05-06T09:11:49.194050+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091201", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:12:03.086818+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091201", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:12:03.086818+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091201", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:12:03.086818+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091201", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:12:03.086818+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091201", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:12:03.086818+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091201", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:12:03.086818+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091201", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:12:03.086818+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091201", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:12:03.086818+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091201", "passed": "final output exists: docs/examples.md", "timestamp": "2026-05-06T09:12:03.086818+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091212", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:12:14.216598+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091212", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:12:14.216598+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091212", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:12:14.216598+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091212", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:12:14.216598+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091212", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:12:14.216598+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091212", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:12:14.216598+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091212", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:12:14.216598+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091212", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:12:14.216598+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091212", "passed": "final output exists: docs/examples.md", "timestamp": "2026-05-06T09:12:14.216598+00:00"}
+{"run_id": "benchmark_simple_goal_20260506090840", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:08:41.929916+00:00"}
+{"run_id": "benchmark_simple_goal_20260506090840", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:08:41.929916+00:00"}
+{"run_id": "benchmark_simple_goal_20260506090840", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:08:41.929916+00:00"}
+{"run_id": "benchmark_simple_goal_20260506090840", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:08:41.929916+00:00"}
+{"run_id": "benchmark_simple_goal_20260506090840", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:08:41.929916+00:00"}
+{"run_id": "benchmark_simple_goal_20260506090840", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:08:41.929916+00:00"}
+{"run_id": "benchmark_simple_goal_20260506090840", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:08:41.929916+00:00"}
+{"run_id": "benchmark_simple_goal_20260506090840", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:08:41.929916+00:00"}
+{"run_id": "benchmark_simple_goal_20260506090840", "passed": "final output exists: README.md", "timestamp": "2026-05-06T09:08:41.929916+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091016", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:10:18.170962+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091016", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:10:18.170962+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091016", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:10:18.170962+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091016", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:10:18.170962+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091016", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:10:18.170962+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091016", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:10:18.170962+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091016", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:10:18.170962+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091016", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:10:18.170962+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091016", "passed": "final output exists: README.md", "timestamp": "2026-05-06T09:10:18.170962+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091032", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:10:33.787349+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091032", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:10:33.787349+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091032", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:10:33.787349+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091032", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:10:33.787349+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091032", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:10:33.787349+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091032", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:10:33.787349+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091032", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:10:33.787349+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091032", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:10:33.787349+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091032", "passed": "final output exists: README.md", "timestamp": "2026-05-06T09:10:33.787349+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091149", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:11:50.654097+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091149", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:11:50.654097+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091149", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:11:50.654097+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091149", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:11:50.654097+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091149", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:11:50.654097+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091149", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:11:50.654097+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091149", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:11:50.654097+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091149", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:11:50.654097+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091149", "passed": "final output exists: README.md", "timestamp": "2026-05-06T09:11:50.654097+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091203", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:12:04.698555+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091203", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:12:04.698555+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091203", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:12:04.698555+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091203", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:12:04.698555+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091203", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:12:04.698555+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091203", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:12:04.698555+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091203", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:12:04.698555+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091203", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:12:04.698555+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091203", "passed": "final output exists: README.md", "timestamp": "2026-05-06T09:12:04.698555+00:00"}
+{"run_id": "bench_simple", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:07:56.459288+00:00"}
+{"run_id": "bench_simple", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:07:56.459288+00:00"}
+{"run_id": "bench_simple", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:07:56.459288+00:00"}
+{"run_id": "bench_simple", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:07:56.459288+00:00"}
+{"run_id": "bench_simple", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:07:56.459288+00:00"}
+{"run_id": "bench_simple", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:07:56.459288+00:00"}
+{"run_id": "bench_simple", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:07:56.459288+00:00"}
+{"run_id": "bench_simple", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:07:56.459288+00:00"}
+{"run_id": "bench_simple", "passed": "final output exists: README.md", "timestamp": "2026-05-06T09:07:56.459288+00:00"}
+{"run_id": "real_goal_001", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T07:57:14.954676+00:00"}
+{"run_id": "real_goal_001", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T07:57:14.954676+00:00"}
+{"run_id": "real_goal_001", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T07:57:14.954676+00:00"}
+{"run_id": "real_goal_001", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T07:57:14.954676+00:00"}
+{"run_id": "real_goal_001", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T07:57:14.954676+00:00"}
+{"run_id": "real_goal_001", "passed": "001.json contains evidence", "timestamp": "2026-05-06T07:57:14.954676+00:00"}
+{"run_id": "real_goal_001", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T07:57:14.954676+00:00"}
+{"run_id": "real_goal_001", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T07:57:14.954676+00:00"}
+{"run_id": "real_goal_001", "passed": "final output exists: docs/V0_1_USAGE.md", "timestamp": "2026-05-06T07:57:14.954676+00:00"}
+{"run_id": "sample_run_001", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
+{"run_id": "sample_run_001", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
+{"run_id": "sample_run_001", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
+{"run_id": "sample_run_001", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
+{"run_id": "sample_run_001", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
+{"run_id": "sample_run_001", "passed": "001.json contains evidence", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
+{"run_id": "sample_run_001", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
+{"run_id": "sample_run_001", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
+{"run_id": "sample_run_001", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
+{"run_id": "sample_run_001", "passed": "final output exists: README.md", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090741", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:07:43.358043+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090741", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:07:43.358043+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090741", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:07:43.358043+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090741", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:07:43.358043+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090741", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:07:43.358043+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090741", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:07:43.358043+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090741", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:07:43.358043+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090741", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:07:43.358043+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090800", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:08:01.506463+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090800", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:08:01.506463+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090800", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:08:01.506463+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090800", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:08:01.506463+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090800", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:08:01.506463+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090800", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:08:01.506463+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090800", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:08:01.506463+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090800", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:08:01.506463+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090836", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:08:37.479317+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090836", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:08:37.479317+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090836", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:08:37.479317+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090836", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:08:37.479317+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090836", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:08:37.479317+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090836", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:08:37.479317+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090836", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:08:37.479317+00:00"}
+{"run_id": "benchmark_hard_goal_20260506090836", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:08:37.479317+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091012", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:10:13.625361+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091012", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:10:13.625361+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091012", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:10:13.625361+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091012", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:10:13.625361+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091012", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:10:13.625361+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091012", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:10:13.625361+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091012", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:10:13.625361+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091012", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:10:13.625361+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091027", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:10:29.277857+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091027", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:10:29.277857+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091027", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:10:29.277857+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091027", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:10:29.277857+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091027", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:10:29.277857+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091027", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:10:29.277857+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091027", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:10:29.277857+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091027", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:10:29.277857+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091027", "passed": "final output exists: cli_tool.py", "timestamp": "2026-05-06T09:10:29.277857+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091144", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:11:46.263575+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091144", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:11:46.263575+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091144", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:11:46.263575+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091144", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:11:46.263575+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091144", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:11:46.263575+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091144", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:11:46.263575+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091144", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:11:46.263575+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091144", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:11:46.263575+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091144", "passed": "final output exists: cli_tool.py", "timestamp": "2026-05-06T09:11:46.263575+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091158", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:12:00.045581+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091158", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:12:00.045581+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091158", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:12:00.045581+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091158", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:12:00.045581+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091158", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:12:00.045581+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091158", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:12:00.045581+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091158", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:12:00.045581+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091158", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:12:00.045581+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091158", "passed": "final output exists: cli_tool.py", "timestamp": "2026-05-06T09:12:00.045581+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091209", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:12:10.886750+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091209", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:12:10.886750+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091209", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:12:10.886750+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091209", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:12:10.886750+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091209", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:12:10.886750+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091209", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:12:10.886750+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091209", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:12:10.886750+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091209", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:12:10.886750+00:00"}
+{"run_id": "benchmark_hard_goal_20260506091209", "passed": "final output exists: cli_tool.py", "timestamp": "2026-05-06T09:12:10.886750+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506090837", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:08:38.983297+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506090837", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:08:38.983297+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506090837", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:08:38.983297+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506090837", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:08:38.983297+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506090837", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:08:38.983297+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506090837", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:08:38.983297+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506090837", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:08:38.983297+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506090837", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:08:38.983297+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091013", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:10:15.152371+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091013", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:10:15.152371+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091013", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:10:15.152371+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091013", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:10:15.152371+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091013", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:10:15.152371+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091013", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:10:15.152371+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091013", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:10:15.152371+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091013", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:10:15.152371+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091029", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:10:30.788085+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091029", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:10:30.788085+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091029", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:10:30.788085+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091029", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:10:30.788085+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091029", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:10:30.788085+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091029", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:10:30.788085+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091029", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:10:30.788085+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091029", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:10:30.788085+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091146", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:11:47.713737+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091146", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:11:47.713737+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091146", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:11:47.713737+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091146", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:11:47.713737+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091146", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:11:47.713737+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091146", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:11:47.713737+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091146", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:11:47.713737+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091146", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:11:47.713737+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091200", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:12:01.619423+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091200", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:12:01.619423+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091200", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:12:01.619423+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091200", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:12:01.619423+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091200", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:12:01.619423+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091200", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:12:01.619423+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091200", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:12:01.619423+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091200", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:12:01.619423+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091211", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:12:12.745624+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091211", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:12:12.745624+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091211", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:12:12.745624+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091211", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:12:12.745624+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091211", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:12:12.745624+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091211", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:12:12.745624+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091211", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:12:12.745624+00:00"}
+{"run_id": "benchmark_impossible_goal_20260506091211", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:12:12.745624+00:00"}
+{"run_id": "benchmark_medium_goal_20260506090839", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:08:40.450458+00:00"}
+{"run_id": "benchmark_medium_goal_20260506090839", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:08:40.450458+00:00"}
+{"run_id": "benchmark_medium_goal_20260506090839", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:08:40.450458+00:00"}
+{"run_id": "benchmark_medium_goal_20260506090839", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:08:40.450458+00:00"}
+{"run_id": "benchmark_medium_goal_20260506090839", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:08:40.450458+00:00"}
+{"run_id": "benchmark_medium_goal_20260506090839", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:08:40.450458+00:00"}
+{"run_id": "benchmark_medium_goal_20260506090839", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:08:40.450458+00:00"}
+{"run_id": "benchmark_medium_goal_20260506090839", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:08:40.450458+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091015", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:10:16.629469+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091015", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:10:16.629469+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091015", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:10:16.629469+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091015", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:10:16.629469+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091015", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:10:16.629469+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091015", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:10:16.629469+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091015", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:10:16.629469+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091015", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:10:16.629469+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091030", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:10:32.307112+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091030", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:10:32.307112+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091030", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:10:32.307112+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091030", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:10:32.307112+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091030", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:10:32.307112+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091030", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:10:32.307112+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091030", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:10:32.307112+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091030", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:10:32.307112+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091030", "passed": "final output exists: docs/examples.md", "timestamp": "2026-05-06T09:10:32.307112+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091147", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:11:49.194050+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091147", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:11:49.194050+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091147", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:11:49.194050+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091147", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:11:49.194050+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091147", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:11:49.194050+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091147", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:11:49.194050+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091147", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:11:49.194050+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091147", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:11:49.194050+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091147", "passed": "final output exists: docs/examples.md", "timestamp": "2026-05-06T09:11:49.194050+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091201", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:12:03.086818+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091201", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:12:03.086818+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091201", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:12:03.086818+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091201", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:12:03.086818+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091201", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:12:03.086818+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091201", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:12:03.086818+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091201", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:12:03.086818+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091201", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:12:03.086818+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091201", "passed": "final output exists: docs/examples.md", "timestamp": "2026-05-06T09:12:03.086818+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091212", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:12:14.216598+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091212", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:12:14.216598+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091212", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:12:14.216598+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091212", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:12:14.216598+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091212", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:12:14.216598+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091212", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:12:14.216598+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091212", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:12:14.216598+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091212", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:12:14.216598+00:00"}
+{"run_id": "benchmark_medium_goal_20260506091212", "passed": "final output exists: docs/examples.md", "timestamp": "2026-05-06T09:12:14.216598+00:00"}
+{"run_id": "benchmark_simple_goal_20260506090840", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:08:41.929916+00:00"}
+{"run_id": "benchmark_simple_goal_20260506090840", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:08:41.929916+00:00"}
+{"run_id": "benchmark_simple_goal_20260506090840", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:08:41.929916+00:00"}
+{"run_id": "benchmark_simple_goal_20260506090840", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:08:41.929916+00:00"}
+{"run_id": "benchmark_simple_goal_20260506090840", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:08:41.929916+00:00"}
+{"run_id": "benchmark_simple_goal_20260506090840", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:08:41.929916+00:00"}
+{"run_id": "benchmark_simple_goal_20260506090840", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:08:41.929916+00:00"}
+{"run_id": "benchmark_simple_goal_20260506090840", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:08:41.929916+00:00"}
+{"run_id": "benchmark_simple_goal_20260506090840", "passed": "final output exists: README.md", "timestamp": "2026-05-06T09:08:41.929916+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091016", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:10:18.170962+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091016", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:10:18.170962+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091016", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:10:18.170962+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091016", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:10:18.170962+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091016", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:10:18.170962+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091016", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:10:18.170962+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091016", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:10:18.170962+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091016", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:10:18.170962+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091016", "passed": "final output exists: README.md", "timestamp": "2026-05-06T09:10:18.170962+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091032", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:10:33.787349+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091032", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:10:33.787349+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091032", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:10:33.787349+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091032", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:10:33.787349+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091032", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:10:33.787349+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091032", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:10:33.787349+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091032", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:10:33.787349+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091032", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:10:33.787349+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091032", "passed": "final output exists: README.md", "timestamp": "2026-05-06T09:10:33.787349+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091149", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:11:50.654097+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091149", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:11:50.654097+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091149", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:11:50.654097+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091149", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:11:50.654097+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091149", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:11:50.654097+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091149", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:11:50.654097+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091149", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:11:50.654097+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091149", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:11:50.654097+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091149", "passed": "final output exists: README.md", "timestamp": "2026-05-06T09:11:50.654097+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091203", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:12:04.698555+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091203", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:12:04.698555+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091203", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:12:04.698555+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091203", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:12:04.698555+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091203", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:12:04.698555+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091203", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:12:04.698555+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091203", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:12:04.698555+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091203", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:12:04.698555+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091203", "passed": "final output exists: README.md", "timestamp": "2026-05-06T09:12:04.698555+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091214", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:12:15.885736+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091214", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:12:15.885736+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091214", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:12:15.885736+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091214", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:12:15.885736+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091214", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:12:15.885736+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091214", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:12:15.885736+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091214", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:12:15.885736+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091214", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:12:15.885736+00:00"}
+{"run_id": "benchmark_simple_goal_20260506091214", "passed": "final output exists: README.md", "timestamp": "2026-05-06T09:12:15.885736+00:00"}
+{"run_id": "bench_simple", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:07:56.459288+00:00"}
+{"run_id": "bench_simple", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:07:56.459288+00:00"}
+{"run_id": "bench_simple", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:07:56.459288+00:00"}
+{"run_id": "bench_simple", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:07:56.459288+00:00"}
+{"run_id": "bench_simple", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:07:56.459288+00:00"}
+{"run_id": "bench_simple", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:07:56.459288+00:00"}
+{"run_id": "bench_simple", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:07:56.459288+00:00"}
+{"run_id": "bench_simple", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:07:56.459288+00:00"}
+{"run_id": "bench_simple", "passed": "final output exists: README.md", "timestamp": "2026-05-06T09:07:56.459288+00:00"}
+{"run_id": "real_goal_001", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T07:57:14.954676+00:00"}
+{"run_id": "real_goal_001", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T07:57:14.954676+00:00"}
+{"run_id": "real_goal_001", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T07:57:14.954676+00:00"}
+{"run_id": "real_goal_001", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T07:57:14.954676+00:00"}
+{"run_id": "real_goal_001", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T07:57:14.954676+00:00"}
+{"run_id": "real_goal_001", "passed": "001.json contains evidence", "timestamp": "2026-05-06T07:57:14.954676+00:00"}
+{"run_id": "real_goal_001", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T07:57:14.954676+00:00"}
+{"run_id": "real_goal_001", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T07:57:14.954676+00:00"}
+{"run_id": "real_goal_001", "passed": "final output exists: docs/V0_1_USAGE.md", "timestamp": "2026-05-06T07:57:14.954676+00:00"}
+{"run_id": "sample_run_001", "passed": "goal_contract.json exists", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
+{"run_id": "sample_run_001", "passed": "goal_contract.json parses as JSON", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
+{"run_id": "sample_run_001", "passed": "trace.jsonl exists", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
+{"run_id": "sample_run_001", "passed": "trace.jsonl lines parse as JSON", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
+{"run_id": "sample_run_001", "passed": "step_logs contain at least one step result", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
+{"run_id": "sample_run_001", "passed": "001.json contains evidence", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
+{"run_id": "sample_run_001", "passed": "1.json contains evidence", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
+{"run_id": "sample_run_001", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
+{"run_id": "sample_run_001", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
+{"run_id": "sample_run_001", "passed": "final output exists: README.md", "timestamp": "2026-05-06T09:05:16.750212+00:00"}

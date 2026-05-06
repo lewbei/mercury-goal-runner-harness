@@ -1,0 +1,22 @@
+{
+  "run_id": "benchmark_simple_goal_20260506091016",
+  "status": "DONE_PASS",
+  "passed_checks": [
+    "goal_contract.json exists",
+    "goal_contract.json parses as JSON",
+    "trace.jsonl exists",
+    "trace.jsonl lines parse as JSON",
+    "step_logs contain at least one step result",
+    "1.json contains evidence",
+    "done_criteria is non-empty",
+    "final_outputs is non-empty",
+    "final output exists: README.md"
+  ],
+  "failed_checks": [],
+  "artifact_hashes": {
+    "README.md": "64ebd4b6e1e254b853d033275c93d890e8e7159106ddd21b53b8c258c894b0b2"
+  },
+  "audit_chain_valid": true,
+  "generated_by": "agentic-pi-certifier-v0.1",
+  "timestamp": "2026-05-06T09:10:18.170962+00:00"
+}

@@ -35,7 +35,7 @@ Important files:
 .agentic-runs/real_goal_001/trace.jsonl
 .agentic-runs/real_goal_001/certification.json
 .agentic-runs/real_goal_001/final_status.md
-docs/V0_1_USAGE.md
+/V0_1_USAGE.md
 ```
 
 The final certified status is:
