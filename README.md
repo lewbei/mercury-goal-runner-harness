@@ -1,4 +1,4 @@
-# Simple Goal
+# Mercury Goal Runner Harness v0.1
 
 This harness controls Mercury V2 as a fast worker inside a verified goal-execution system.
 

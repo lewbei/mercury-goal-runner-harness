@@ -9,7 +9,7 @@
   "forbidden_actions": ["Do not use external physics libraries."],
   "ambiguities": [],
   "risk_level": "HIGH",
-  "complexity_level": "IMPOSSIBLE",
+  "complexity_level": "RISKY",
   "done_criteria": ["black_hole_sim.py exists.", "Runs without errors and prints a simulation result."],
   "failure_criteria": ["File missing.", "Runtime errors."],
   "ask_user_conditions": [],

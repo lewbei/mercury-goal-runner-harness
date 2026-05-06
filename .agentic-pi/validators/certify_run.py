@@ -1,6 +1,7 @@
 ﻿import hashlib
 import json
 import sys
+import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -113,6 +114,19 @@ def main():
                     passed.append(f"final output exists: {output}")
                     if output_path.is_file():
                         artifact_hashes[output] = sha256_file(output_path)
+                        # Additional test for Python scripts: run and check stdout lines >= 2
+                        if output_path.suffix == ".py":
+                            try:
+                                result = subprocess.run([sys.executable, str(output_path)], cwd=project_root,
+                                                        stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                                                        text=True, timeout=5)
+                                line_count = len([l for l in result.stdout.splitlines() if l.strip()])
+                                if line_count >= 2:
+                                    passed.append(f"Python script {output} produced >=2 lines of output")
+                                else:
+                                    failed.append(f"Python script {output} produced <2 lines of output")
+                            except Exception as e:
+                                failed.append(f"Running Python script {output} failed: {e}")
                 else:
                     failed.append(f"final output missing: {output}")
         else:
