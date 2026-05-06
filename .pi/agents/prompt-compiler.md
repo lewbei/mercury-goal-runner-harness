@@ -1,11 +1,11 @@
-﻿---
+---
 name: prompt-compiler
 description: Converts rough user goals into executable goal contracts
 model: inception/mercury-2
 thinking: high
-systemPromptMode: replace
-inheritProjectContext: true
-inheritSkills: false
+prompt_mode: replace
+inherit_context: false
+skills: false
 tools: read, ls
 ---
 

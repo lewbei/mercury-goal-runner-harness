@@ -1,0 +1,38 @@
+{
+  "run_id": "real_goal_001",
+  "raw_user_prompt": "Create docs\\V0_1_USAGE.md explaining how to use the Mercury Goal Runner Harness v0.1 on Windows.",
+  "intent": "Create a usage documentation artifact for the harness.",
+  "cleaned_goal": "Create docs/V0_1_USAGE.md explaining how to use the Mercury Goal Runner Harness v0.1 on Windows.",
+  "final_outputs": [
+    "docs/V0_1_USAGE.md"
+  ],
+  "explicit_constraints": [
+    "Document must be in Markdown format."
+  ],
+  "inferred_constraints": [
+    "Do not modify any files other than the target documentation file."
+  ],
+  "forbidden_actions": [
+    "Do not mark DONE without evidence.",
+    "Do not touch protected files."
+  ],
+  "ambiguities": [],
+  "risk_level": "LOW",
+  "complexity_level": "SIMPLE",
+  "done_criteria": [
+    "docs/V0_1_USAGE.md exists.",
+    "docs/V0_1_USAGE.md explains what the harness is.",
+    "docs/V0_1_USAGE.md explains how to validate goal_contract.json.",
+    "docs/V0_1_USAGE.md explains how to run the smoke test.",
+    "docs/V0_1_USAGE.md explains how certification works.",
+    "docs/V0_1_USAGE.md explains why Mercury cannot mark DONE by itself.",
+    "docs/V0_1_USAGE.md explains the meaning of DONE_PASS, DONE_FAIL, BLOCKED, and NEED_USER."
+  ],
+  "failure_criteria": [
+    "docs/V0_1_USAGE.md is missing.",
+    "Document does not cover one or more of the required sections."
+  ],
+  "ask_user_conditions": [],
+  "max_steps": 5,
+  "execution_prompt": "Create docs/V0_1_USAGE.md explaining how to use the Mercury Goal Runner Harness v0.1 on Windows. Do not touch protected files."
+}

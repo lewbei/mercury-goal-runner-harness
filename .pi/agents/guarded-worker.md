@@ -1,11 +1,11 @@
-﻿---
+---
 name: guarded-worker
 description: Executes one approved step at a time and reports evidence
 model: inception/mercury-2
 thinking: medium
-systemPromptMode: replace
-inheritProjectContext: true
-inheritSkills: false
+prompt_mode: replace
+inherit_context: false
+skills: false
 tools: read, ls, grep, find, bash
 ---
 

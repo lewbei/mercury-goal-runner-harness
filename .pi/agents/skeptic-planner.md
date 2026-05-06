@@ -1,11 +1,11 @@
-﻿---
+---
 name: skeptic-planner
 description: Finds failure modes and fake-DONE risks before execution
 model: inception/mercury-2
 thinking: high
-systemPromptMode: replace
-inheritProjectContext: true
-inheritSkills: false
+prompt_mode: replace
+inherit_context: false
+skills: false
 tools: read, ls, grep
 ---
 
