@@ -41,6 +41,7 @@ See [`docs/V0_3_6_POLICY_ENGINE.md`](docs/V0_3_6_POLICY_ENGINE.md) for the deter
 See [`docs/V0_4_DIAGNOSTIC_EVALUATION.md`](docs/V0_4_DIAGNOSTIC_EVALUATION.md) for the small diagnostic evaluation boundary.
 See [`docs/V0_5_PI_INTEGRATION.md`](docs/V0_5_PI_INTEGRATION.md) for the Pi integration contract boundary.
 See [`docs/V0_5_RUNTIME_SMOKES.md`](docs/V0_5_RUNTIME_SMOKES.md) for the local Pi runtime smoke boundary.
+See [`docs/V0_5_7_CONTROLLED_MINI_CHAIN_SMOKE.md`](docs/V0_5_7_CONTROLLED_MINI_CHAIN_SMOKE.md) for the controlled mini-chain smoke boundary.
 See [`docs/PI_PROMPT_CONTRACTS.md`](docs/PI_PROMPT_CONTRACTS.md) for safe Pi prompt patterns.
 See [`docs/PI_BASH_ALLOWLIST.md`](docs/PI_BASH_ALLOWLIST.md) for the current documented bash safety boundary.
 
@@ -70,7 +71,8 @@ It demonstrates:
 14. the v0.4 diagnostic evaluation compares weak certifier modes with the policy engine,
 15. v0.5 adds Pi orchestration contracts where agents cannot certify DONE,
 16. local v0.5.1-v0.5.3 Pi smokes validate read-only review/status and disposable certifier invocation,
-17. and the benchmark reports false-PASS status explicitly.
+17. local v0.5.7 validates a controlled verifier-review + certifier-invocation path with a Pi extension exit caveat,
+18. and the benchmark reports false-PASS status explicitly.
 
 ## Core parts
 
@@ -170,6 +172,7 @@ Local smoke-tested state:
 v0.5.1 = verifier-reviewer read-only smoke PASS
 v0.5.2 = goal-orchestrator read-only status-report smoke PASS
 v0.5.3 = goal-orchestrator disposable certifier-invocation smoke PASS
+v0.5.7 = controlled mini-chain smoke FUNCTIONAL PASS WITH PI EXIT CAVEAT
 ```
 
 The v0.5 Pi chain lives at:
@@ -186,7 +189,7 @@ The new v0.5 Pi agents are:
 .pi/agents/verifier-reviewer.md
 ```
 
-The full `goal-runner.chain.md` runtime remains unverified. The next runtime milestone is v0.5.7 controlled mini-chain smoke, then v0.6 local coding-agent host integration.
+The full `goal-runner.chain.md` runtime remains unverified. The next milestone is v0.6 local coding-agent host integration, but the Pi extension stale-context exit issue should be tracked before claiming clean Pi process-level runtime.
 
 ## Planner Stub
 

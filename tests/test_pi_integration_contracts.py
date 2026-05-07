@@ -97,6 +97,20 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("Short strict one-action prompts work better", doc)
         self.assertIn("goal-orchestrator bash remains risk", doc)
 
+    def test_v057_doc_records_controlled_mini_chain_boundary(self):
+        doc = read(ROOT / "docs" / "V0_5_7_CONTROLLED_MINI_CHAIN_SMOKE.md")
+
+        self.assertIn("FUNCTIONAL PASS WITH PI EXIT CAVEAT", doc)
+        self.assertIn(".agentic-runs/pi_smoke_mini_chain_p2_strong", doc)
+        self.assertIn("verifier-reviewer read the disposable run artifacts with read-only tools", doc)
+        self.assertIn("goal-orchestrator invoked the deterministic certifier through the Agent tool", doc)
+        self.assertIn("final_status.md status: CERTIFIED_DONE", doc)
+        self.assertIn("certification.json status: CERTIFIED_DONE", doc)
+        self.assertIn("policy_decision.json status: CERTIFIED_DONE", doc)
+        self.assertIn("stale extension context", doc)
+        self.assertIn("full goal-runner.chain.md runtime", doc)
+        self.assertIn("Final status still comes only from", doc)
+
     def test_pi_prompt_contract_doc_locks_safe_prompt_patterns(self):
         doc = read(ROOT / "docs" / "PI_PROMPT_CONTRACTS.md")
 
