@@ -14,6 +14,7 @@ if str(RUNTIME_DIR) not in sys.path:
 from validate_schema import validate as validate_schema_instance
 from verifier_provenance import create_verifier_artifact
 from smell_scanner import safe_report_filename, scan_verifier_artifact
+from strength_scorer import safe_strength_report_filename, score_verifier_artifact
 
 
 PROTECTED_NAMES = {
@@ -25,6 +26,7 @@ PROTECTED_NAMES = {
 PROTECTED_PREFIXES = {
     "verifier_artifacts/",
     "verifier_smell_reports/",
+    "verifier_strength_reports/",
 }
 
 PROVENANCE_ORDER = {"P0": 0, "P1": 1, "P2": 2, "P3": 3}
@@ -441,10 +443,11 @@ def load_verifier_artifacts(run_dir: Path, passed: list, failed: list):
 
 def record_verifier_smell_reports(run_dir: Path, artifacts: list, passed: list, failed: list):
     if not artifacts:
-        return
+        return {}
 
     report_dir = run_dir / "verifier_smell_reports"
     report_dir.mkdir(parents=True, exist_ok=True)
+    reports_by_artifact_id = {}
 
     for artifact in artifacts:
         artifact_id = str(artifact.get("artifact_id") or "UNKNOWN")
@@ -457,9 +460,46 @@ def record_verifier_smell_reports(run_dir: Path, artifacts: list, passed: list, 
                 failed,
             )
             write_json(report_dir / safe_report_filename(artifact_id), report)
+            reports_by_artifact_id[artifact_id] = report
             passed.append(f"verifier smell scan recorded: {artifact_id}")
         except Exception as exc:
             failed.append(f"verifier smell scan failed for {artifact_id}: {exc}")
+
+    return reports_by_artifact_id
+
+
+def record_verifier_strength_reports(
+    run_dir: Path,
+    artifacts: list,
+    smell_reports_by_artifact_id: dict,
+    passed: list,
+    failed: list,
+):
+    if not artifacts:
+        return
+
+    report_dir = run_dir / "verifier_strength_reports"
+    report_dir.mkdir(parents=True, exist_ok=True)
+
+    for artifact in artifacts:
+        artifact_id = str(artifact.get("artifact_id") or "UNKNOWN")
+        try:
+            report = score_verifier_artifact(
+                artifact,
+                smell_reports_by_artifact_id.get(artifact_id),
+            )
+            validate_with_schema(
+                report,
+                "verifier_strength_report.schema.json",
+                f"verifier_strength_reports/{safe_strength_report_filename(artifact_id)}",
+                failed,
+            )
+            write_json(report_dir / safe_strength_report_filename(artifact_id), report)
+            passed.append(
+                f"verifier strength score recorded: {artifact_id}={report['strength_level']}"
+            )
+        except Exception as exc:
+            failed.append(f"verifier strength scoring failed for {artifact_id}: {exc}")
 
 
 def check_contract_target_artifacts(run_dir: Path, contract: dict, passed: list, failed: list):
@@ -745,7 +785,8 @@ def main():
         if verifier_contract:
             check_contract_target_artifacts(run_dir, verifier_contract, passed, failed)
             verifier_artifacts = load_verifier_artifacts(run_dir, passed, failed)
-            record_verifier_smell_reports(run_dir, verifier_artifacts, passed, failed)
+            smell_reports = record_verifier_smell_reports(run_dir, verifier_artifacts, passed, failed)
+            record_verifier_strength_reports(run_dir, verifier_artifacts, smell_reports, passed, failed)
             status = decide_provenance_status(verifier_contract, verifier_artifacts, failed, passed)
         else:
             failed.append("verifier_contract.json required for provenance mode but did not load")

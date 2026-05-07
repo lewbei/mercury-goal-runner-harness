@@ -131,7 +131,7 @@ The current certifier implements the first hard rule directly:
 P0 alone cannot certify DONE.
 ```
 
-It now records metadata-level smell scanner reports, but it does not yet implement verifier strength scoring or the full policy engine.
+It now records metadata-level smell scanner reports and verifier strength reports, but it does not yet implement the full policy engine.
 
 ## Relationship To v0.3 PlanGraph
 
@@ -154,7 +154,6 @@ PlanGraph says what artifact was handed off. Verifier provenance says who is all
 
 Do not build these in the current v0.3.4 slice:
 
-- strength scorer,
 - full policy engine backed by certification_policy.yaml,
 - Pi integration,
 - diagnostic task suite,

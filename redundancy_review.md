@@ -18,6 +18,7 @@ The workspace is clean enough to proceed with the verifier-provenance direction,
 | Verifier provenance design | `VERIFIER_PROVENANCE_DESIGN.md` | `certification_policy.yaml` | Current |
 | Provenance diagnostic evidence | `.agentic-pi/diagnostics/provenance_gate/diagnostic_report.md` | `docs/V0_3_3_PROVENANCE_GATE_DIAGNOSTICS.md`, `tests/test_provenance_gate.py` | Current |
 | Smell scanner evidence | `docs/V0_3_4_SMELL_SCANNER.md` | `.agentic-pi/validators/smell_scanner.py`, `tests/test_smell_scanner.py` | Current |
+| Strength scorer evidence | `docs/V0_3_5_STRENGTH_SCORER.md` | `.agentic-pi/validators/strength_scorer.py`, `tests/test_strength_scorer.py` | Current |
 | Navigation | `workspace_index.md` | this file | Current |
 
 ## Outdated Or Superseded Direction
@@ -32,7 +33,9 @@ The current code still uses `DONE_PASS` / `DONE_FAIL` for legacy runs, while pro
 
 The current diagnostic set covers only four deterministic provenance-gate cases. It is evidence for the first gate, not evidence for full oracle governance.
 
-The current smell scanner records metadata-level smell reports only. It is evidence for smell detection, not evidence for verifier strength scoring or final policy enforcement.
+The current smell scanner records metadata-level smell reports. It is evidence for smell detection and input to strength scoring, not evidence for final policy enforcement.
+
+The current strength scorer records strength reports only. It is evidence for strength scoring, not evidence for final policy enforcement.
 
 ## Decision
 

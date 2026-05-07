@@ -2,7 +2,7 @@
 
 ## Current version
 
-Mercury Goal Runner Harness v0.3.4 is Smell Scanner on top of the v0.3.3 Provenance Gate Diagnostic Tests.
+Mercury Goal Runner Harness v0.3.5 is Strength Scorer on top of the v0.3.4 Smell Scanner.
 
 The purpose of this repository is not to claim that Mercury V2 becomes smarter by looping. The purpose is to place Mercury V2 inside a controlled goal-execution harness where outputs are checked through contracts, logs, evidence, and certification.
 
@@ -52,7 +52,9 @@ The provenance gate diagnostic set includes four deterministic cases:
 - `case_p2_independent_test` -> `CERTIFIED_DONE`,
 - `case_missing_verifier` -> `NOT_DONE`.
 
-The v0.3.4 smell scanner records metadata-level verifier smell reports. It does not yet score verifier strength or enforce smell policy.
+The v0.3.4 smell scanner records metadata-level verifier smell reports.
+
+The v0.3.5 strength scorer converts verifier metadata and smell reports into `weak`, `advisory`, `gating`, or `certifying` strength reports. It does not yet enforce policy or change final status.
 
 ## What v0.3 proves
 
@@ -90,6 +92,7 @@ The harness now requires:
 - consistent `plan_graph.json`, `artifact_registry.json`, and `task_graph.json`,
 - verifier provenance artifacts when `verifier_contract.json` exists,
 - verifier smell reports recorded when verifier artifacts exist,
+- verifier strength reports recorded when verifier artifacts exist,
 - `P0` and `P1` verifier evidence treated as `PROVISIONAL_DONE`,
 - `P2` or `P3` certifying verifier evidence required for `CERTIFIED_DONE`,
 - and certifier-issued final status.
@@ -119,6 +122,8 @@ In provenance mode, the certifier now returns:
 
 In v0.3.4, smell reports are recorded under `verifier_smell_reports/`. These reports are evidence for later policy work; they do not change certification status yet.
 
+In v0.3.5, strength reports are recorded under `verifier_strength_reports/`. These reports are evidence for later policy work; they do not change certification status yet.
+
 The benchmark now records:
 
 - actual status,
@@ -131,6 +136,7 @@ See `docs/V0_3_PLANGRAPH.md` for the PlanGraph prototype boundary.
 See `docs/V0_3_2_PROVENANCE_GATE_FREEZE.md` for the provenance runtime gate boundary.
 See `docs/V0_3_3_PROVENANCE_GATE_DIAGNOSTICS.md` for the copy-ready provenance diagnostic fixture boundary.
 See `docs/V0_3_4_SMELL_SCANNER.md` for the metadata-level smell scanner boundary.
+See `docs/V0_3_5_STRENGTH_SCORER.md` for the verifier strength scoring boundary.
 See `PROBLEM_AND_GAP.md` and `VERIFIER_PROVENANCE_DESIGN.md` for the current research direction.
 
 ## Known limitations
@@ -142,7 +148,6 @@ It does not yet include:
 - real Mercury/Pi planner invocation,
 - automatic rough-goal to contract compilation from the user-facing command,
 - adaptive multi-plan generation,
-- verifier strength scoring,
 - full certification policy engine backed by `certification_policy.yaml`,
 - broad diagnostic evaluation beyond the four-case provenance gate check,
 - rollback validation,
@@ -154,9 +159,9 @@ The current `run_goal.py` is still a prepared-run orchestrator. It expects an ex
 
 ## Next milestone
 
-The next milestone should add verifier strength scoring after the v0.3.4 smell scanner remains stable:
+The next milestone should add the policy engine after the v0.3.5 strength scorer remains stable:
 
-1. add verifier strength scoring,
-2. connect the static policy draft to a deterministic policy engine,
+1. connect the static policy draft to a deterministic policy engine,
+2. consume verifier artifacts, smell reports, strength reports, and verifier contracts,
 3. add a small diagnostic suite,
 4. and keep false PASS as the main hard-fail metric.

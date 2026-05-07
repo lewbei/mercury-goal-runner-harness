@@ -1,6 +1,6 @@
 [
   {
-    "run_id": "benchmark_dependency_goal_20260507011947",
+    "run_id": "benchmark_dependency_goal_20260507014408",
     "goal_file": "C:\\Users\\lewka\\deep_learning\\mercury-goal-runner-harness\\.agentic-pi\\benchmark\\goals\\dependency_goal.json",
     "final_status": "DONE_PASS",
     "actual_status": "DONE_PASS",
@@ -12,7 +12,7 @@
     "execution_error": null
   },
   {
-    "run_id": "benchmark_hard_goal_20260507011951",
+    "run_id": "benchmark_hard_goal_20260507014410",
     "goal_file": "C:\\Users\\lewka\\deep_learning\\mercury-goal-runner-harness\\.agentic-pi\\benchmark\\goals\\hard_goal.json",
     "final_status": "DONE_PASS",
     "actual_status": "DONE_PASS",
@@ -24,7 +24,7 @@
     "execution_error": null
   },
   {
-    "run_id": "benchmark_impossible_goal_20260507011954",
+    "run_id": "benchmark_impossible_goal_20260507014412",
     "goal_file": "C:\\Users\\lewka\\deep_learning\\mercury-goal-runner-harness\\.agentic-pi\\benchmark\\goals\\impossible_goal.json",
     "final_status": "DONE_FAIL",
     "actual_status": "DONE_FAIL",
@@ -36,7 +36,7 @@
     "execution_error": null
   },
   {
-    "run_id": "benchmark_medium_goal_20260507011957",
+    "run_id": "benchmark_medium_goal_20260507014415",
     "goal_file": "C:\\Users\\lewka\\deep_learning\\mercury-goal-runner-harness\\.agentic-pi\\benchmark\\goals\\medium_goal.json",
     "final_status": "DONE_PASS",
     "actual_status": "DONE_PASS",
@@ -48,7 +48,7 @@
     "execution_error": null
   },
   {
-    "run_id": "benchmark_simple_goal_20260507012000",
+    "run_id": "benchmark_simple_goal_20260507014417",
     "goal_file": "C:\\Users\\lewka\\deep_learning\\mercury-goal-runner-harness\\.agentic-pi\\benchmark\\goals\\simple_goal.json",
     "final_status": "DONE_PASS",
     "actual_status": "DONE_PASS",

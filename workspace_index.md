@@ -6,7 +6,7 @@ Last verified: 2026-05-07
 
 ## Current Direction
 
-The implemented local layer is v0.3.4 Smell Scanner on top of v0.3.3 Provenance Gate Diagnostic Tests, v0.3.2 Provenance Runtime Gate, and v0.3 Artifact-Linked PlanGraph. The research direction is Verifier-Provenance Goal Runner Harness, centered on:
+The implemented local layer is v0.3.5 Strength Scorer on top of v0.3.4 Smell Scanner, v0.3.3 Provenance Gate Diagnostic Tests, v0.3.2 Provenance Runtime Gate, and v0.3 Artifact-Linked PlanGraph. The research direction is Verifier-Provenance Goal Runner Harness, centered on:
 
 ```text
 Who is allowed to certify DONE?
@@ -27,6 +27,7 @@ Who is allowed to certify DONE?
 - `docs/V0_3_2_PROVENANCE_GATE_FREEZE.md` - current provenance runtime gate boundary.
 - `docs/V0_3_3_PROVENANCE_GATE_DIAGNOSTICS.md` - copy-ready provenance diagnostic fixture boundary.
 - `docs/V0_3_4_SMELL_SCANNER.md` - metadata-level verifier smell scanner boundary.
+- `docs/V0_3_5_STRENGTH_SCORER.md` - verifier strength scoring boundary.
 - `.agentic-pi/diagnostics/provenance_gate/` - four-case copy-ready provenance diagnostic set.
 - `PLAN_ROUTER.md` - deterministic planner stub note.
 
@@ -35,4 +36,5 @@ Who is allowed to certify DONE?
 - The certifier still emits `DONE_PASS` / `DONE_FAIL` for legacy runs without `verifier_contract.json`.
 - Provenance-mode runs can emit `NOT_DONE`, `PROVISIONAL_DONE`, or `CERTIFIED_DONE`.
 - The current provenance diagnostic set is intentionally four deterministic cases, not a broad benchmark.
-- Smell reports are recorded for verifier artifacts but are not yet consumed as strength scores or policy decisions.
+- Smell reports are recorded for verifier artifacts and consumed by the strength scorer, but not yet consumed as policy decisions.
+- Strength reports are recorded for verifier artifacts but are not yet consumed as policy decisions.

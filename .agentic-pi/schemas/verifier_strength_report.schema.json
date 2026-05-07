@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VerifierStrengthReport",
+  "type": "object",
+  "required": [
+    "artifact_id",
+    "run_id",
+    "score",
+    "strength_level",
+    "positive_factors",
+    "penalties",
+    "smell_flags_used"
+  ],
+  "properties": {
+    "artifact_id": { "type": "string", "minLength": 1 },
+    "run_id": { "type": "string", "minLength": 1 },
+    "score": { "type": "integer" },
+    "strength_level": {
+      "type": "string",
+      "enum": ["weak", "advisory", "gating", "certifying"]
+    },
+    "positive_factors": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "executes_target_artifact",
+          "has_assertions",
+          "multiple_assertions",
+          "p2_or_p3_authority",
+          "independent_authority",
+          "pre_solution_or_preexisting"
+        ]
+      }
+    },
+    "penalties": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "same_worker_self_test",
+          "p0_self_authored",
+          "post_solution_test",
+          "depends_on_solution",
+          "does_not_execute_code",
+          "zero_assertions",
+          "file_existence_only",
+          "exit_code_only",
+          "print_only_observation",
+          "mock_heavy",
+          "implementation_coupled_oracle"
+        ]
+      }
+    },
+    "smell_flags_used": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "same_worker_self_test",
+          "post_solution_test",
+          "depends_on_solution",
+          "does_not_execute_code",
+          "zero_assertions",
+          "mock_heavy",
+          "p0_self_authored",
+          "advisory_only",
+          "local_visible_verifier",
+          "gating_only",
+          "file_existence_only",
+          "exit_code_only",
+          "print_only_observation",
+          "grep_or_source_text_check",
+          "no_negative_case",
+          "implementation_coupled_oracle",
+          "placeholder_text_check"
+        ]
+      }
+    }
+  },
+  "additionalProperties": false
+}
