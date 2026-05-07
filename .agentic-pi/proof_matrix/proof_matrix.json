@@ -1,6 +1,6 @@
 {
-  "proof_matrix_id": "verifier_provenance_harness_v2_1",
-  "version": "v2.1",
+  "proof_matrix_id": "verifier_provenance_harness_v2_2",
+  "version": "v2.2",
   "entries": [
     {
       "claim_id": "domain_packs",
@@ -61,6 +61,14 @@
       "command": ["python", "tests/test_pi_chain_runtime_proof.py", "-v"],
       "expected_evidence": ["tests pass", "pi_chain_runtime_result can_certify_done remains false"],
       "claim_boundary": "Dry-run contract proof plus optional live smoke; not arbitrary Pi chain autonomy."
+    },
+    {
+      "claim_id": "direct_pi_mercury_behavior",
+      "claim": "Direct Pi/Mercury session traces can be audited for verifier evidence first, certifier invocation second, and status-artifact reporting third.",
+      "mode": "quick",
+      "command": ["python", "tests/test_pi_direct_behavior_audit.py", "-v"],
+      "expected_evidence": ["tests pass", "direct behavior audit can_certify_done remains false"],
+      "claim_boundary": "Synthetic session trace audit only; not proof of arbitrary live Pi autonomy or Mercury semantic quality."
     },
     {
       "claim_id": "full_unittest",

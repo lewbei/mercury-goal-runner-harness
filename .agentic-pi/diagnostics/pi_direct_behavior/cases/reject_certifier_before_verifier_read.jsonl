@@ -1,0 +1,8 @@
+{"type":"tool_call","agent":"goal-orchestrator","tool":"bash","cmd":"python .agentic-pi/validators/certify_run.py .agentic-runs/pi_smoke_direct_p2_strong"}
+{"type":"tool_call","agent":"goal-orchestrator","tool":"read","path":".agentic-runs/pi_smoke_direct_p2_strong/goal_contract.json","content":"{\"run_id\":\"pi_smoke_direct_p2_strong\"}"}
+{"type":"tool_call","agent":"goal-orchestrator","tool":"read","path":".agentic-runs/pi_smoke_direct_p2_strong/verifier_contract.json","content":"{\"required_verifier_level\":\"P2\"}"}
+{"type":"tool_call","agent":"goal-orchestrator","tool":"read","path":".agentic-runs/pi_smoke_direct_p2_strong/verifier_artifacts/V.P2_STRONG.json","content":"{\"provenance_level\":\"P2\",\"authority\":\"certifying\"}"}
+{"type":"tool_call","agent":"goal-orchestrator","tool":"read","path":".agentic-runs/pi_smoke_direct_p2_strong/final_status.md","content":"# Final Status: CERTIFIED_DONE\n"}
+{"type":"tool_call","agent":"goal-orchestrator","tool":"read","path":".agentic-runs/pi_smoke_direct_p2_strong/certification.json","content":"{\"status\":\"CERTIFIED_DONE\"}"}
+{"type":"tool_call","agent":"goal-orchestrator","tool":"read","path":".agentic-runs/pi_smoke_direct_p2_strong/policy_decision.json","content":"{\"status\":\"CERTIFIED_DONE\"}"}
+{"type":"assistant_message","agent":"goal-orchestrator","content":"final_status.md: CERTIFIED_DONE\ncertification.json: CERTIFIED_DONE\npolicy_decision.json: CERTIFIED_DONE\nI cannot certify DONE. Final status comes only from certify_run.py and policy_engine.py."}

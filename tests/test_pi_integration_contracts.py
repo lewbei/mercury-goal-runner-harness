@@ -368,6 +368,18 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("v2.1 Controlled Pi Chain Runtime Proof", roadmap)
         self.assertIn("IMPLEMENTED", roadmap)
 
+    def test_v22_doc_records_direct_pi_mercury_boundary(self):
+        doc = read(ROOT / "docs" / "V2_2_DIRECT_PI_MERCURY_BEHAVIOR_AUDIT.md")
+
+        self.assertIn("DIRECT PI / MERCURY BEHAVIOR AUDIT IMPLEMENTED", doc)
+        self.assertIn("Pi is the CLI/harness surface", doc)
+        self.assertIn("Mercury is the LLM behavior inside Pi", doc)
+        self.assertIn("verifier evidence before certifier invocation", doc)
+        self.assertIn("status artifacts after certifier invocation", doc)
+        self.assertIn("can_certify_done = false", doc)
+        self.assertIn("does not prove arbitrary live Pi autonomy", doc)
+        self.assertIn("v2.2 Direct Pi/Mercury Behavior Audit", read(ROOT / "docs" / "V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md"))
+
     def test_framework_doc_is_linked_from_status_docs(self):
         readme = read(ROOT / "README.md")
         status = read(ROOT / "PROJECT_STATUS.md")
@@ -396,6 +408,8 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("V2_0_EXAMPLES.md", status)
         self.assertIn("V2_1_CONTROLLED_PI_CHAIN_RUNTIME_PROOF.md", readme)
         self.assertIn("V2_1_CONTROLLED_PI_CHAIN_RUNTIME_PROOF.md", status)
+        self.assertIn("V2_2_DIRECT_PI_MERCURY_BEHAVIOR_AUDIT.md", readme)
+        self.assertIn("V2_2_DIRECT_PI_MERCURY_BEHAVIOR_AUDIT.md", status)
         self.assertIn("V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md", readme)
         self.assertIn("V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md", status)
 

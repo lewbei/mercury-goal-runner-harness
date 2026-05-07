@@ -389,6 +389,55 @@ Implemented proof command:
 python .agentic-pi\runtime\run_pi_chain_smoke.py --target-run-id pi_smoke_chain_p2_strong
 ```
 
+## v2.2 Direct Pi/Mercury Behavior Audit
+
+Status:
+
+```text
+IMPLEMENTED
+```
+
+Purpose:
+
+```text
+Pi is the CLI/harness surface.
+Mercury is the LLM behavior inside Pi.
+```
+
+This slice audits whether a Pi/Mercury session follows verifier-provenance
+order:
+
+```text
+verifier evidence
+-> certifier invocation
+-> certifier-owned status artifacts
+```
+
+Macro steps:
+
+1. Add direct behavior session fixtures.
+2. Require `goal_contract.json`, `verifier_contract.json`, and `verifier_artifacts/*` reads before certification.
+3. Require exactly one `certify_run.py` invocation.
+4. Require `final_status.md`, `certification.json`, and `policy_decision.json` reads after certification.
+5. Reject self-certifying assistant language.
+6. Keep `final_status_authority = certifier_only`.
+7. Keep `can_certify_done = false`.
+
+Acceptance:
+
+```text
+verifier evidence before certifier invocation
+status artifacts after certifier invocation
+Pi/Mercury cannot certify DONE by itself
+arbitrary live Pi autonomy remains unclaimed
+```
+
+Implemented proof command:
+
+```cmd
+python tests\test_pi_direct_behavior_audit.py -v
+```
+
 ## Research Anchor Mapping
 
 ```text

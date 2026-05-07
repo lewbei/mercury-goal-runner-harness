@@ -15,10 +15,10 @@ class FrameworkDocTests(unittest.TestCase):
         self.assertIn("Certifier writes the final status.", doc)
         self.assertIn("Pi only reports what the certifier wrote.", doc)
 
-    def test_framework_doc_records_current_v21_state(self):
+    def test_framework_doc_records_current_v22_state(self):
         doc = (ROOT / "FRAMEWORK.md").read_text(encoding="utf-8")
 
-        self.assertIn("v2.1 = Controlled Pi Chain Runtime Proof", doc)
+        self.assertIn("v2.2 = Direct Pi/Mercury Behavior Audit", doc)
         self.assertIn("raw_simple_legacy -> DONE_PASS", doc)
         self.assertIn("raw_p2_provenance -> CERTIFIED_DONE", doc)
         self.assertIn("raw_missing_verifier -> NOT_DONE", doc)
@@ -32,6 +32,7 @@ class FrameworkDocTests(unittest.TestCase):
         self.assertIn("domain / memory / trajectory / drift evidence -> workflow_candidates.json -> workflow_search_trace.json", doc)
         self.assertIn("proof_matrix.json -> run_proof_matrix.py -> proof_matrix_result.json", doc)
         self.assertIn("verifier-generator -> verifier-reviewer -> goal-orchestrator", doc)
+        self.assertIn("Pi/Mercury session -> verifier evidence -> certifier -> status artifacts", doc)
 
     def test_framework_doc_uses_actual_current_paths(self):
         doc = (ROOT / "FRAMEWORK.md").read_text(encoding="utf-8")
@@ -44,6 +45,7 @@ class FrameworkDocTests(unittest.TestCase):
             ".agentic-pi/runtime/workflow_search.py",
             ".agentic-pi/runtime/run_proof_matrix.py",
             ".agentic-pi/runtime/run_pi_chain_smoke.py",
+            ".agentic-pi/runtime/pi_direct_behavior_audit.py",
             ".agentic-pi/runtime/capability_inventory.py",
             ".agentic-pi/runtime/strategy_generator.py",
             ".agentic-pi/runtime/strategy_applicability_gate.py",

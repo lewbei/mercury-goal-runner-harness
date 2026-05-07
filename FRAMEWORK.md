@@ -34,7 +34,7 @@ Pi only reports what the certifier wrote.
 Current pushed state:
 
 ```text
-v2.1 = Controlled Pi Chain Runtime Proof
+v2.2 = Direct Pi/Mercury Behavior Audit
 ```
 
 The deterministic raw-goal proof cases are:
@@ -113,6 +113,15 @@ verifier-generator -> verifier-reviewer -> goal-orchestrator -> certifier-owned 
 
 It does not prove arbitrary natural-language autonomy or full Pi chain autonomy.
 
+v2.2 adds a direct Pi/Mercury behavior audit:
+
+```text
+Pi/Mercury session -> verifier evidence -> certifier -> status artifacts
+```
+
+This proves the session order can be audited. It does not prove Mercury semantic
+quality or arbitrary live Pi autonomy.
+
 ## Conceptual Architecture
 
 ```text
@@ -146,6 +155,7 @@ Raw Goal
   -> Workflow Search
   -> Proof Matrix
   -> Controlled Pi Chain Smoke
+  -> Direct Pi/Mercury Behavior Audit
   -> Audit / Replay
   -> Final Status
   -> Pi Reports Status Only
@@ -239,6 +249,12 @@ Raw Goal
     Runs or plans a bounded verifier-generator -> verifier-reviewer ->
     goal-orchestrator smoke on disposable `pi_smoke_*` runs. The smoke runner
     can report Pi-process evidence, but cannot certify DONE.
+
+21. Direct Pi/Mercury Behavior Audit Layer
+    Audits synthetic Pi/Mercury session traces for verifier evidence reads
+    before certifier invocation, status reads after certifier invocation, and
+    no self-certifying assistant language. The audit can fail unsafe behavior,
+    but cannot certify DONE.
 ```
 
 ## Authority Model
@@ -324,6 +340,7 @@ top-level folders. The implemented files are:
 .agentic-pi/runtime/rollback_run.py
 .agentic-pi/runtime/setup_pi_smoke.py
 .agentic-pi/runtime/pi_session_audit.py
+.agentic-pi/runtime/pi_direct_behavior_audit.py
 
 .agentic-pi/evaluation/trajectory_metrics.py
 .agentic-pi/evaluation/tool_use_audit.py
@@ -340,6 +357,7 @@ top-level folders. The implemented files are:
 .agentic-pi/diagnostics/evaluation/
 .agentic-pi/diagnostics/host_integration/
 .agentic-pi/diagnostics/pi_command_discipline/
+.agentic-pi/diagnostics/pi_direct_behavior/
 .agentic-pi/diagnostics/trajectory_evaluation/
 
 .agentic-pi/evaluation/trajectory_metrics.py
@@ -454,6 +472,7 @@ deterministic domain packs -> task type selects pack -> strategy candidates rece
 deterministic workflow search -> unsafe/high-risk workflows rejected -> selected workflow preserves certifier authority
 integrated proof matrix -> bounded proof commands -> proof_matrix_result.json
 controlled Pi chain smoke -> verifier-generator -> verifier-reviewer -> goal-orchestrator
+direct Pi/Mercury behavior audit -> verifier evidence before certifier -> status reads after certifier
 P0/P1/P2/missing verifier policy behavior
 smell report recording
 strength report recording
@@ -473,6 +492,7 @@ Not proven yet:
 arbitrary raw natural-language autonomy
 full goal-runner.chain.md autonomous runtime
 strict internal Pi tool-call audit for live Pi chain smoke
+live direct Pi/Mercury behavior audit from exported real sessions
 global Pi extension compatibility during Pi chain smoke
 live Mercury planning quality
 semantic optimality of selected branches
@@ -506,6 +526,7 @@ python tests\test_domain_packs.py -v
 python tests\test_workflow_search.py -v
 python tests\test_v2_proof_package.py -v
 python tests\test_pi_chain_runtime_proof.py -v
+python tests\test_pi_direct_behavior_audit.py -v
 python .agentic-pi\runtime\run_proof_matrix.py --mode quick
 python .agentic-pi\runtime\run_pi_chain_smoke.py --target-run-id pi_smoke_chain_p2_strong
 python -m unittest discover tests -v

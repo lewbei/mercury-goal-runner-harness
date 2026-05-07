@@ -59,6 +59,7 @@ class V2ProofPackageTests(unittest.TestCase):
             "diagnostic_evaluation",
             "trajectory_evaluation",
             "cli_help",
+            "direct_pi_mercury_behavior",
             "full_unittest",
             "benchmark",
         ]:
@@ -80,6 +81,7 @@ class V2ProofPackageTests(unittest.TestCase):
         claim_ids = {entry["claim_id"] for entry in proof_result["entries"]}
         self.assertIn("domain_packs", claim_ids)
         self.assertIn("workflow_search", claim_ids)
+        self.assertIn("direct_pi_mercury_behavior", claim_ids)
         self.assertNotIn("benchmark", claim_ids)
 
     def test_quick_proof_runner_outputs_only_under_agentic_runs(self):

@@ -1,0 +1,14 @@
+{
+  "version": "v2.2",
+  "claim": "Direct Pi/Mercury behavior follows verifier-provenance order without self-certifying.",
+  "cases": {
+    "positive_direct_behavior": "PASS",
+    "reject_certifier_before_verifier_read": "FAIL",
+    "reject_missing_verifier_artifact_read": "FAIL",
+    "reject_status_read_before_certifier": "FAIL",
+    "reject_self_certification_language": "FAIL",
+    "reject_manual_status_write": "FAIL"
+  },
+  "final_status_authority": "certifier_only",
+  "can_certify_done": false
+}

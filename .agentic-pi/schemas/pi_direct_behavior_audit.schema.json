@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PiDirectBehaviorAudit",
+  "type": "object",
+  "required": [
+    "direct_behavior_status",
+    "run_id",
+    "agent",
+    "session_path",
+    "generated_by",
+    "generated_at",
+    "final_status_authority",
+    "can_certify_done",
+    "command_audit_status",
+    "bash_call_count",
+    "bash_commands",
+    "status_values",
+    "verifier_read_before_certifier",
+    "status_read_after_certifier",
+    "verifier_read_indices",
+    "status_read_indices",
+    "self_certification_claims",
+    "violations",
+    "policy_checks"
+  ],
+  "properties": {
+    "direct_behavior_status": { "type": "string", "enum": ["PASS", "FAIL"] },
+    "run_id": { "type": "string", "minLength": 1 },
+    "agent": { "type": "string", "minLength": 1 },
+    "session_path": { "type": "string", "minLength": 1 },
+    "generated_by": { "type": "string", "minLength": 1 },
+    "generated_at": { "type": "string", "minLength": 1 },
+    "final_status_authority": { "type": "string", "enum": ["certifier_only"] },
+    "can_certify_done": { "type": "boolean" },
+    "command_audit_status": { "type": "string", "enum": ["PASS", "FAIL"] },
+    "bash_call_count": { "type": "integer" },
+    "bash_commands": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "status_values": {
+      "type": "object",
+      "properties": {
+        "final_status.md": { "type": "string" },
+        "certification.json": { "type": "string" },
+        "policy_decision.json": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "verifier_read_before_certifier": { "type": "boolean" },
+    "status_read_after_certifier": { "type": "boolean" },
+    "verifier_read_indices": {
+      "type": "object",
+      "required": ["goal_contract", "verifier_contract", "verifier_artifact"],
+      "properties": {
+        "goal_contract": {
+          "type": "array",
+          "items": { "type": "integer" }
+        },
+        "verifier_contract": {
+          "type": "array",
+          "items": { "type": "integer" }
+        },
+        "verifier_artifact": {
+          "type": "array",
+          "items": { "type": "integer" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "status_read_indices": {
+      "type": "object",
+      "properties": {
+        "final_status.md": {
+          "type": "array",
+          "items": { "type": "integer" }
+        },
+        "certification.json": {
+          "type": "array",
+          "items": { "type": "integer" }
+        },
+        "policy_decision.json": {
+          "type": "array",
+          "items": { "type": "integer" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "self_certification_claims": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "violations": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "policy_checks": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false
+}
