@@ -2,7 +2,7 @@
 
 ## Current version
 
-Mercury Goal Runner Harness v0.4 is Small Diagnostic Evaluation on top of the v0.3.6 Policy Engine.
+Mercury Goal Runner Harness v0.5 is Pi Integration on top of the v0.4 Small Diagnostic Evaluation.
 
 The purpose of this repository is not to claim that Mercury V2 becomes smarter by looping. The purpose is to place Mercury V2 inside a controlled goal-execution harness where outputs are checked through contracts, logs, evidence, and certification.
 
@@ -70,6 +70,22 @@ The main diagnostic metric is:
 
 ```text
 false CERTIFIED_DONE rate
+```
+
+The v0.5 Pi integration adds prompt/chain contracts for:
+
+- `goal-orchestrator`,
+- `verifier-generator`,
+- `verifier-reviewer`,
+- and `goal-runner.chain.md`.
+
+The v0.5 rule remains:
+
+```text
+Pi can orchestrate.
+Mercury can compile/execute/report.
+Verifier agents can propose evidence.
+certify_run.py + policy_engine.py decide final status.
 ```
 
 ## What v0.3 proves
@@ -158,15 +174,16 @@ See `docs/V0_3_4_SMELL_SCANNER.md` for the metadata-level smell scanner boundary
 See `docs/V0_3_5_STRENGTH_SCORER.md` for the verifier strength scoring boundary.
 See `docs/V0_3_6_POLICY_ENGINE.md` for the policy engine boundary.
 See `docs/V0_4_DIAGNOSTIC_EVALUATION.md` for the small diagnostic evaluation boundary.
+See `docs/V0_5_PI_INTEGRATION.md` for the Pi integration contract boundary.
 See `PROBLEM_AND_GAP.md` and `VERIFIER_PROVENANCE_DESIGN.md` for the current research direction.
 
 ## Known limitations
 
-v0.3 is still intentionally small.
+v0.5 is still intentionally small.
 
 It does not yet include:
 
-- real Mercury/Pi planner invocation,
+- real Mercury/Pi runtime invocation beyond prompt/chain contracts,
 - automatic rough-goal to contract compilation from the user-facing command,
 - adaptive multi-plan generation,
 - fully parsed YAML policy configuration,
@@ -180,9 +197,9 @@ The current `run_goal.py` is still a prepared-run orchestrator. It expects an ex
 
 ## Next milestone
 
-The next milestone should be Pi integration after the v0.4 diagnostic evaluation remains stable:
+The next milestone should be real coding-agent host integration after the v0.5 Pi contract remains stable:
 
-1. keep Pi as orchestration only,
-2. keep the deterministic certifier as the final authority,
-3. do not add new planning features while integration is being tested,
+1. keep the host integration narrow,
+2. compare baseline completion with provenance-gated certification,
+3. do not add new planner mechanisms while integration is being tested,
 4. and keep false PASS / false `CERTIFIED_DONE` as hard-fail metrics.

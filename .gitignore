@@ -21,7 +21,7 @@ artifacts/
 !.agentic-pi/diagnostics/evaluation/**/artifacts/**
 .pi/tasks/
 
-# Deferred v0.4/v0.5 prototypes; v0.3 is PlanGraph only.
+# Deferred planner/runtime prototypes; v0.5 Pi integration is prompt contracts only.
 .agentic-pi/runtime/branch_selector.py
 .agentic-pi/runtime/evidence_selector.py
 .agentic-pi/runtime/goal_pipeline.py

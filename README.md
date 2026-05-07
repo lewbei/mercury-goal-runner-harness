@@ -6,7 +6,7 @@ The goal is not to make Mercury V2 magically smarter by looping. The goal is to 
 
 ## Current status
 
-v0.4 is a Small Diagnostic Evaluation on top of the v0.3.6 Policy Engine.
+v0.5 is Pi Integration on top of the v0.4 Small Diagnostic Evaluation.
 
 The current research direction is:
 
@@ -39,6 +39,7 @@ See [`docs/V0_3_4_SMELL_SCANNER.md`](docs/V0_3_4_SMELL_SCANNER.md) for the metad
 See [`docs/V0_3_5_STRENGTH_SCORER.md`](docs/V0_3_5_STRENGTH_SCORER.md) for the verifier strength scoring boundary.
 See [`docs/V0_3_6_POLICY_ENGINE.md`](docs/V0_3_6_POLICY_ENGINE.md) for the deterministic policy engine boundary.
 See [`docs/V0_4_DIAGNOSTIC_EVALUATION.md`](docs/V0_4_DIAGNOSTIC_EVALUATION.md) for the small diagnostic evaluation boundary.
+See [`docs/V0_5_PI_INTEGRATION.md`](docs/V0_5_PI_INTEGRATION.md) for the Pi integration contract boundary.
 
 The current proof path is:
 
@@ -64,7 +65,8 @@ It demonstrates:
 12. verifier strength reports are recorded,
 13. `policy_decision.json` decides provenance-mode final status,
 14. the v0.4 diagnostic evaluation compares weak certifier modes with the policy engine,
-15. and the benchmark reports false-PASS status explicitly.
+15. v0.5 adds Pi orchestration contracts where agents cannot certify DONE,
+16. and the benchmark reports false-PASS status explicitly.
 
 ## Core parts
 
@@ -100,6 +102,9 @@ Consumes verifier artifacts, smell reports, strength reports, and the verifier c
 
 11. Small Diagnostic Evaluation
 Compares file-existence, artifact-test, provenance-gate, and policy-engine certification on six deterministic cases.
+
+12. Pi Integration Contract
+Adds Pi agent and chain prompts for orchestration while preserving `certify_run.py` as final authority.
 
 ## Core rule
 
@@ -166,7 +171,7 @@ The v0.3.3 diagnostic set lives at:
 
 Each v0.3.3 case is a copy-ready run fixture. The regression test copies it into `.agentic-runs/test_<case_name>/`, runs the certifier, and reads `final_status.md`.
 
-The certification policy engine is implemented for the current provenance mode. Full oracle governance, Pi integration, and larger diagnostic evaluation remain deferred.
+The certification policy engine is implemented for the current provenance mode. The v0.5 Pi integration is a prompt/chain contract only; full Pi runtime behavior remains deferred.
 
 The v0.4 diagnostic runner lives at:
 
@@ -179,6 +184,20 @@ It writes:
 ```text
 diagnostic_outputs/diagnostic_metrics.json
 diagnostic_outputs/diagnostic_report.md
+```
+
+The v0.5 Pi chain lives at:
+
+```text
+.pi/chains/goal-runner.chain.md
+```
+
+The new v0.5 Pi agents are:
+
+```text
+.pi/agents/goal-orchestrator.md
+.pi/agents/verifier-generator.md
+.pi/agents/verifier-reviewer.md
 ```
 
 ## Planner Stub
