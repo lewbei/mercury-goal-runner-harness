@@ -240,7 +240,7 @@ class MilestonePlanningTests(unittest.TestCase):
         self.assertIn("does not prove", doc.lower())
         self.assertIn("v1.4 Milestone Planning", roadmap)
         self.assertIn("IMPLEMENTED", roadmap)
-        self.assertIn("v1.6 Trajectory-Level Evaluation", roadmap)
+        self.assertIn("v1.7 Experience Memory", roadmap)
         self.assertIn("DEFERRED", roadmap)
 
 

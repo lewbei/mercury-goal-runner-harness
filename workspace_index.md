@@ -6,7 +6,7 @@ Last verified: 2026-05-07
 
 ## Current Direction
 
-The implemented local layer is v0.3.5 Strength Scorer on top of v0.3.4 Smell Scanner, v0.3.3 Provenance Gate Diagnostic Tests, v0.3.2 Provenance Runtime Gate, and v0.3 Artifact-Linked PlanGraph. The research direction is Verifier-Provenance Goal Runner Harness, centered on:
+The implemented local layer is v1.6 Trajectory-Level Evaluation on top of v1.5 Drift-Aware Replanning, v1.4 Milestone Planning, v1.3 Strategy Planner, v1.2 Planning Proof Hardening, and the verifier-provenance certification stack. The research direction is Verifier-Provenance Goal Runner Harness, centered on:
 
 ```text
 Who is allowed to certify DONE?
@@ -16,9 +16,11 @@ Who is allowed to certify DONE?
 
 - `README.md` - repository overview and current commands.
 - `PROJECT_STATUS.md` - implementation status and limitations.
+- `FRAMEWORK.md` - conceptual architecture and actual current file map.
 - `PROBLEM_AND_GAP.md` - current research problem and gap.
 - `VERIFIER_PROVENANCE_DESIGN.md` - verifier authority model and deferred implementation boundary.
-- `certification_policy.yaml` - draft static policy vocabulary for later policy-engine implementation.
+- `docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md` - v1.7-v2.0 roadmap after trajectory evaluation.
+- `certification_policy.yaml` - draft static policy vocabulary.
 
 ## Active Supporting Files
 
@@ -28,7 +30,20 @@ Who is allowed to certify DONE?
 - `docs/V0_3_3_PROVENANCE_GATE_DIAGNOSTICS.md` - copy-ready provenance diagnostic fixture boundary.
 - `docs/V0_3_4_SMELL_SCANNER.md` - metadata-level verifier smell scanner boundary.
 - `docs/V0_3_5_STRENGTH_SCORER.md` - verifier strength scoring boundary.
+- `docs/V0_3_6_POLICY_ENGINE.md` - deterministic policy engine boundary.
+- `docs/V0_4_DIAGNOSTIC_EVALUATION.md` - small diagnostic evaluation boundary.
+- `docs/V0_5_9_PI_COMMAND_DISCIPLINE_GATE.md` - deterministic Pi command-discipline audit boundary.
+- `docs/V0_6_LOCAL_CODING_AGENT_HOST_INTEGRATION.md` - local host-task certification boundary.
+- `docs/V0_9_REPLAY_ROLLBACK_AUDIT.md` - replay, rollback, and audit boundary.
+- `docs/V1_0_PRACTICAL_PACKAGE_FREEZE.md` - thin local command surface boundary.
+- `docs/V1_1_RAW_GOAL_CHAIN_PROOF.md` - deterministic raw-goal chain proof.
+- `docs/V1_2_PLANNING_PROOF_HARDENING.md` - deterministic planning handoff proof.
+- `docs/V1_3_STRATEGY_PLANNER.md` - deterministic strategy planner proof.
+- `docs/V1_4_MILESTONE_PLANNING.md` - deterministic milestone planning proof.
+- `docs/V1_5_DRIFT_AWARE_REPLANNING.md` - deterministic drift-aware replanning proof.
+- `docs/V1_6_TRAJECTORY_LEVEL_EVALUATION.md` - deterministic trajectory-level evaluation proof.
 - `.agentic-pi/diagnostics/provenance_gate/` - four-case copy-ready provenance diagnostic set.
+- `.agentic-pi/diagnostics/trajectory_evaluation/` - six-case trajectory-level diagnostic set.
 - `PLAN_ROUTER.md` - deterministic planner stub note.
 
 ## Known Cleanup Debt
@@ -36,5 +51,7 @@ Who is allowed to certify DONE?
 - The certifier still emits `DONE_PASS` / `DONE_FAIL` for legacy runs without `verifier_contract.json`.
 - Provenance-mode runs can emit `NOT_DONE`, `PROVISIONAL_DONE`, or `CERTIFIED_DONE`.
 - The current provenance diagnostic set is intentionally four deterministic cases, not a broad benchmark.
-- Smell reports are recorded for verifier artifacts and consumed by the strength scorer, but not yet consumed as policy decisions.
-- Strength reports are recorded for verifier artifacts but are not yet consumed as policy decisions.
+- The trajectory diagnostic set is intentionally six deterministic session fixtures, not a proof of full autonomous Pi runtime.
+- The policy engine consumes verifier provenance, smell reports, strength reports, and verifier contracts.
+- Drift reports can block certification; trajectory evaluators can fail unsafe behavior. Neither can certify DONE.
+- v1.7 Experience Memory, v1.8 Domain Packs, v1.9 Strategy Search, and v2.0 Integrated Proof Package remain deferred.

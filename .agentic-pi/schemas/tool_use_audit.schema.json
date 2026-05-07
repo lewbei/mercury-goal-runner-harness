@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ToolUseAudit",
+  "type": "object",
+  "required": [
+    "run_id",
+    "agent",
+    "session_path",
+    "generated_by",
+    "generated_at",
+    "audit_status",
+    "trajectory_status",
+    "final_status_authority",
+    "can_certify_done",
+    "status_values",
+    "metrics",
+    "violations",
+    "policy_checks"
+  ],
+  "properties": {
+    "run_id": { "type": "string", "minLength": 1 },
+    "agent": { "type": "string", "minLength": 1 },
+    "session_path": { "type": "string", "minLength": 1 },
+    "generated_by": { "type": "string", "minLength": 1 },
+    "generated_at": { "type": "string", "minLength": 1 },
+    "audit_status": { "type": "string", "enum": ["PASS", "FAIL"] },
+    "trajectory_status": { "type": "string", "enum": ["PASS", "FAIL"] },
+    "final_status_authority": { "type": "string", "enum": ["certifier_only"] },
+    "can_certify_done": { "type": "boolean" },
+    "status_values": {
+      "type": "object",
+      "properties": {
+        "final_status.md": { "type": "string" },
+        "certification.json": { "type": "string" },
+        "policy_decision.json": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "metrics": {
+      "type": "object",
+      "required": [
+        "tool_selection_correct",
+        "tool_argument_correct",
+        "tool_order_correct",
+        "unnecessary_tool_calls",
+        "unsafe_tool_attempts",
+        "duplicate_certifier_invocations",
+        "missing_status_read",
+        "manual_status_write_attempt",
+        "status_report_mismatch",
+        "missing_status_files",
+        "score",
+        "score_band",
+        "trajectory_pass",
+        "policy_checks"
+      ],
+      "properties": {
+        "tool_selection_correct": { "type": "boolean" },
+        "tool_argument_correct": { "type": "boolean" },
+        "tool_order_correct": { "type": "boolean" },
+        "unnecessary_tool_calls": { "type": "integer" },
+        "unsafe_tool_attempts": { "type": "integer" },
+        "duplicate_certifier_invocations": { "type": "integer" },
+        "missing_status_read": { "type": "boolean" },
+        "manual_status_write_attempt": { "type": "boolean" },
+        "status_report_mismatch": { "type": "boolean" },
+        "missing_status_files": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "score": { "type": "integer" },
+        "score_band": { "type": "string", "enum": ["excellent", "passing", "failing"] },
+        "trajectory_pass": { "type": "boolean" },
+        "policy_checks": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "violations": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "policy_checks": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false
+}

@@ -146,7 +146,7 @@ python .agentic-pi\runtime\pi_cli.py goal-drift-proof <run_id>
 Status:
 
 ```text
-DEFERRED
+IMPLEMENTED
 ```
 
 Purpose:
@@ -169,6 +169,12 @@ Acceptance:
 trajectory scorer can fail unsafe behavior
 trajectory scorer cannot certify DONE
 policy/certifier remain final authority
+```
+
+Implemented proof command:
+
+```cmd
+python .agentic-pi\diagnostics\trajectory_evaluation\run_trajectory_evaluation.py
 ```
 
 ## v1.7 Experience Memory

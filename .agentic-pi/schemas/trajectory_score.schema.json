@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TrajectoryScore",
+  "type": "object",
+  "required": [
+    "generated_by",
+    "generated_at",
+    "final_status_authority",
+    "can_certify_done",
+    "trajectory_status",
+    "score",
+    "score_band",
+    "case_count",
+    "passed_count",
+    "failed_count",
+    "cases"
+  ],
+  "properties": {
+    "generated_by": { "type": "string", "minLength": 1 },
+    "generated_at": { "type": "string", "minLength": 1 },
+    "final_status_authority": { "type": "string", "enum": ["certifier_only"] },
+    "can_certify_done": { "type": "boolean" },
+    "trajectory_status": { "type": "string", "enum": ["PASS", "FAIL"] },
+    "score": { "type": "integer" },
+    "score_band": { "type": "string", "enum": ["excellent", "passing", "failing"] },
+    "case_count": { "type": "integer" },
+    "passed_count": { "type": "integer" },
+    "failed_count": { "type": "integer" },
+    "cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "run_id",
+          "trajectory_status",
+          "score",
+          "score_band",
+          "violations"
+        ],
+        "properties": {
+          "run_id": { "type": "string", "minLength": 1 },
+          "trajectory_status": { "type": "string", "enum": ["PASS", "FAIL"] },
+          "score": { "type": "integer" },
+          "score_band": { "type": "string", "enum": ["excellent", "passing", "failing"] },
+          "violations": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

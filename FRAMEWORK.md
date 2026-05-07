@@ -34,7 +34,7 @@ Pi only reports what the certifier wrote.
 Current pushed state:
 
 ```text
-v1.5 = Drift-Aware Replanning
+v1.6 = Trajectory-Level Evaluation
 ```
 
 The deterministic raw-goal proof cases are:
@@ -75,6 +75,12 @@ v1.5 adds drift detection after worker execution and before certification:
 raw goal -> worker -> checkpoints -> drift_report.json -> delta_plan.json -> certifier status
 ```
 
+v1.6 adds trajectory-level tool-use evaluation:
+
+```text
+Pi/tool session -> tool_use_audit.json -> trajectory_score.json -> diagnostic report
+```
+
 It does not prove arbitrary natural-language autonomy.
 
 ## Conceptual Architecture
@@ -103,6 +109,7 @@ Raw Goal
   -> Strength Scorer
   -> Policy Engine
   -> Certifier
+  -> Trajectory Evaluation
   -> Audit / Replay
   -> Final Status
   -> Pi Reports Status Only
@@ -162,7 +169,13 @@ Raw Goal
 13. Certifier Layer
     Certifier writes certification.json and final_status.md.
 
-14. Pi Report Layer
+14. Trajectory Evaluation Layer
+    Scores tool selection, tool arguments, tool order, duplicate certifier
+    invocations, missing status reads, manual status writes, and unsafe tool
+    attempts. Trajectory evaluators can fail unsafe behavior, but cannot
+    certify DONE.
+
+15. Pi Report Layer
     Pi can orchestrate and report, but cannot certify DONE by itself.
 ```
 
@@ -242,6 +255,10 @@ top-level folders. The implemented files are:
 .agentic-pi/runtime/setup_pi_smoke.py
 .agentic-pi/runtime/pi_session_audit.py
 
+.agentic-pi/evaluation/trajectory_metrics.py
+.agentic-pi/evaluation/tool_use_audit.py
+.agentic-pi/evaluation/session_trace_scorer.py
+
 .agentic-pi/validators/certify_run.py
 .agentic-pi/validators/smell_scanner.py
 .agentic-pi/validators/strength_scorer.py
@@ -253,6 +270,7 @@ top-level folders. The implemented files are:
 .agentic-pi/diagnostics/evaluation/
 .agentic-pi/diagnostics/host_integration/
 .agentic-pi/diagnostics/pi_command_discipline/
+.agentic-pi/diagnostics/trajectory_evaluation/
 
 .pi/agents/goal-orchestrator.md
 .pi/agents/verifier-generator.md
@@ -351,6 +369,7 @@ deterministic planning proof fixture -> selected branch -> merged_plan.json -> C
 deterministic strategy proof fixture -> selected strategy -> merged_plan.json -> CERTIFIED_DONE
 deterministic milestone proof fixture -> milestone_plan.json -> local_step_plan.json -> merged_plan.json -> CERTIFIED_DONE
 deterministic drift proof fixture -> drift_report.json none -> CERTIFIED_DONE
+deterministic trajectory evaluation -> duplicate/manual/missing/unsafe/wrong-order cases fail
 P0/P1/P2/missing verifier policy behavior
 smell report recording
 strength report recording
@@ -374,7 +393,6 @@ semantic optimality of selected branches
 semantic optimality of selected strategies
 semantic quality of milestones
 automatic repair application
-trajectory-level evaluation
 experience memory
 domain pack quality
 strategy search / workflow optimization
@@ -395,8 +413,10 @@ python tests\test_planning_proof_hardening.py -v
 python tests\test_strategy_planner.py -v
 python tests\test_milestone_planning.py -v
 python tests\test_drift_replanning.py -v
+python tests\test_trajectory_evaluation.py -v
 python -m unittest discover tests -v
 python .agentic-pi\diagnostics\evaluation\run_diagnostic_evaluation.py
+python .agentic-pi\diagnostics\trajectory_evaluation\run_trajectory_evaluation.py
 python .agentic-pi\benchmark\run_benchmark.py
 python .agentic-pi\runtime\pi_cli.py --help
 python .agentic-pi\runtime\pi_cli.py goal-compile pi_smoke_planning_proof_p2 --goal "Create README.md explaining the harness" --mode planning_p2
@@ -430,6 +450,7 @@ Raw Goal
   -> Strength Scorer
   -> Policy Engine
   -> Certifier
+  -> Trajectory Evaluation
   -> Audit / Replay
   -> Final Status
   -> Pi Reports Status Only

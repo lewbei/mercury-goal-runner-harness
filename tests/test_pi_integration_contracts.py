@@ -279,6 +279,20 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("v1.5 Drift-Aware Replanning", roadmap)
         self.assertIn("IMPLEMENTED", roadmap)
 
+    def test_v16_doc_records_trajectory_evaluation_boundary(self):
+        doc = read(ROOT / "docs" / "V1_6_TRAJECTORY_LEVEL_EVALUATION.md")
+        roadmap = read(ROOT / "docs" / "V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md")
+
+        self.assertIn("TRAJECTORY-LEVEL EVALUATION IMPLEMENTED", doc)
+        self.assertIn("tool_selection_correct", doc)
+        self.assertIn("tool_argument_correct", doc)
+        self.assertIn("tool_order_correct", doc)
+        self.assertIn("duplicate_certifier_call -> FAIL", doc)
+        self.assertIn("wrong_command_order -> FAIL", doc)
+        self.assertIn("cannot certify DONE", doc)
+        self.assertIn("v1.6 Trajectory-Level Evaluation", roadmap)
+        self.assertIn("IMPLEMENTED", roadmap)
+
     def test_framework_doc_is_linked_from_status_docs(self):
         readme = read(ROOT / "README.md")
         status = read(ROOT / "PROJECT_STATUS.md")
@@ -293,6 +307,8 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("V1_4_MILESTONE_PLANNING.md", status)
         self.assertIn("V1_5_DRIFT_AWARE_REPLANNING.md", readme)
         self.assertIn("V1_5_DRIFT_AWARE_REPLANNING.md", status)
+        self.assertIn("V1_6_TRAJECTORY_LEVEL_EVALUATION.md", readme)
+        self.assertIn("V1_6_TRAJECTORY_LEVEL_EVALUATION.md", status)
         self.assertIn("V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md", readme)
         self.assertIn("V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md", status)
 

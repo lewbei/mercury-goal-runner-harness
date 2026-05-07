@@ -13,19 +13,22 @@ The workspace is clean enough to proceed with the verifier-provenance direction,
 | Layer | Source of truth | Supporting files | Status |
 |---|---|---|---|
 | Repository overview | `README.md` | `PROJECT_STATUS.md` | Current |
-| Implementation status | `PROJECT_STATUS.md` | `docs/V0_2_1_FREEZE.md`, `docs/V0_3_PLANGRAPH.md` | Current |
+| Implementation status | `PROJECT_STATUS.md` | `FRAMEWORK.md`, `docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md` | Current |
 | Research gap | `PROBLEM_AND_GAP.md` | `VERIFIER_PROVENANCE_DESIGN.md` | Current |
 | Verifier provenance design | `VERIFIER_PROVENANCE_DESIGN.md` | `certification_policy.yaml` | Current |
 | Provenance diagnostic evidence | `.agentic-pi/diagnostics/provenance_gate/diagnostic_report.md` | `docs/V0_3_3_PROVENANCE_GATE_DIAGNOSTICS.md`, `tests/test_provenance_gate.py` | Current |
 | Smell scanner evidence | `docs/V0_3_4_SMELL_SCANNER.md` | `.agentic-pi/validators/smell_scanner.py`, `tests/test_smell_scanner.py` | Current |
 | Strength scorer evidence | `docs/V0_3_5_STRENGTH_SCORER.md` | `.agentic-pi/validators/strength_scorer.py`, `tests/test_strength_scorer.py` | Current |
+| Policy and certification evidence | `docs/V0_3_6_POLICY_ENGINE.md` | `.agentic-pi/runtime/policy_engine.py`, `.agentic-pi/validators/certify_run.py`, `tests/test_policy_engine.py` | Current |
+| Drift-aware replanning evidence | `docs/V1_5_DRIFT_AWARE_REPLANNING.md` | `.agentic-pi/runtime/drift_detector.py`, `.agentic-pi/runtime/drift_proof_runner.py`, `tests/test_drift_replanning.py` | Current |
+| Trajectory-level evaluation evidence | `docs/V1_6_TRAJECTORY_LEVEL_EVALUATION.md` | `.agentic-pi/evaluation/`, `.agentic-pi/diagnostics/trajectory_evaluation/`, `tests/test_trajectory_evaluation.py` | Current |
 | Navigation | `workspace_index.md` | this file | Current |
 
 ## Outdated Or Superseded Direction
 
-The previous immediate milestone was evidence-seeking branch selection after PlanGraph. That is no longer the active next step.
+The previous immediate milestone was trajectory-level evaluation after drift-aware replanning. That is now implemented.
 
-Branch selection is deferred. The active next step is verifier provenance governance.
+The active next step is v1.7 Experience Memory. Memory must stay advisory only and cannot certify DONE.
 
 ## Remaining Risk
 
@@ -33,9 +36,9 @@ The current code still uses `DONE_PASS` / `DONE_FAIL` for legacy runs, while pro
 
 The current diagnostic set covers only four deterministic provenance-gate cases. It is evidence for the first gate, not evidence for full oracle governance.
 
-The current smell scanner records metadata-level smell reports. It is evidence for smell detection and input to strength scoring, not evidence for final policy enforcement.
+The current smell scanner records metadata-level smell reports. They are consumed downstream by strength scoring and policy decisions.
 
-The current strength scorer records strength reports only. It is evidence for strength scoring, not evidence for final policy enforcement.
+The current trajectory evaluator records and scores tool-use behavior. It is evidence for trajectory discipline, not evidence that the final artifact is semantically correct.
 
 ## Decision
 
