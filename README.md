@@ -42,6 +42,7 @@ See [`docs/V0_4_DIAGNOSTIC_EVALUATION.md`](docs/V0_4_DIAGNOSTIC_EVALUATION.md) f
 See [`docs/V0_5_PI_INTEGRATION.md`](docs/V0_5_PI_INTEGRATION.md) for the Pi integration contract boundary.
 See [`docs/V0_5_RUNTIME_SMOKES.md`](docs/V0_5_RUNTIME_SMOKES.md) for the local Pi runtime smoke boundary.
 See [`docs/V0_5_7_CONTROLLED_MINI_CHAIN_SMOKE.md`](docs/V0_5_7_CONTROLLED_MINI_CHAIN_SMOKE.md) for the controlled mini-chain smoke boundary.
+See [`docs/V0_5_8_PI_CLEAN_EXIT_SMOKE.md`](docs/V0_5_8_PI_CLEAN_EXIT_SMOKE.md) for the Pi clean-exit isolation boundary.
 See [`docs/PI_PROMPT_CONTRACTS.md`](docs/PI_PROMPT_CONTRACTS.md) for safe Pi prompt patterns.
 See [`docs/PI_BASH_ALLOWLIST.md`](docs/PI_BASH_ALLOWLIST.md) for the current documented bash safety boundary.
 
@@ -72,7 +73,8 @@ It demonstrates:
 15. v0.5 adds Pi orchestration contracts where agents cannot certify DONE,
 16. local v0.5.1-v0.5.3 Pi smokes validate read-only review/status and disposable certifier invocation,
 17. local v0.5.7 validates a controlled verifier-review + certifier-invocation path with a Pi extension exit caveat,
-18. and the benchmark reports false-PASS status explicitly.
+18. local v0.5.8 isolates the stale Pi exit to the broader extension surface,
+19. and the benchmark reports false-PASS status explicitly.
 
 ## Core parts
 
@@ -173,6 +175,7 @@ v0.5.1 = verifier-reviewer read-only smoke PASS
 v0.5.2 = goal-orchestrator read-only status-report smoke PASS
 v0.5.3 = goal-orchestrator disposable certifier-invocation smoke PASS
 v0.5.7 = controlled mini-chain smoke FUNCTIONAL PASS WITH PI EXIT CAVEAT
+v0.5.8 = Pi clean-exit isolation CLEAN EXIT PASS WITH COMMAND-COUNT CAVEAT
 ```
 
 The v0.5 Pi chain lives at:
@@ -189,7 +192,7 @@ The new v0.5 Pi agents are:
 .pi/agents/verifier-reviewer.md
 ```
 
-The full `goal-runner.chain.md` runtime remains unverified. The next milestone is v0.6 local coding-agent host integration, but the Pi extension stale-context exit issue should be tracked before claiming clean Pi process-level runtime.
+The full `goal-runner.chain.md` runtime remains unverified. The next milestone is v0.6 local coding-agent host integration. v0.5.8 shows the stale Pi exit disappears under a subagents-only Pi config, but strict one-bash-call orchestration is still not proven.
 
 ## Planner Stub
 

@@ -111,6 +111,19 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("full goal-runner.chain.md runtime", doc)
         self.assertIn("Final status still comes only from", doc)
 
+    def test_v058_doc_records_pi_clean_exit_isolation_boundary(self):
+        doc = read(ROOT / "docs" / "V0_5_8_PI_CLEAN_EXIT_SMOKE.md")
+
+        self.assertIn("CLEAN EXIT PASS WITH COMMAND-COUNT CAVEAT", doc)
+        self.assertIn("PI_CODING_AGENT_DIR=.agentic-runs/pi_smoke_clean_exit_config", doc)
+        self.assertIn("packages=[npm:pi-subagents]", doc)
+        self.assertIn("Pi process exit: 1", doc)
+        self.assertIn("Pi process exit: 0", doc)
+        self.assertIn("@tmustier/pi-agent-teams stale extension context", doc)
+        self.assertIn("goal-orchestrator ran certify_run.py twice", doc)
+        self.assertIn("strict one-command orchestration", doc)
+        self.assertIn("Final status still comes only from", doc)
+
     def test_pi_prompt_contract_doc_locks_safe_prompt_patterns(self):
         doc = read(ROOT / "docs" / "PI_PROMPT_CONTRACTS.md")
 

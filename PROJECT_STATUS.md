@@ -95,9 +95,10 @@ v0.5.1 = verifier-reviewer read-only smoke PASS
 v0.5.2 = goal-orchestrator read-only status-report smoke PASS
 v0.5.3 = goal-orchestrator disposable certifier-invocation smoke PASS
 v0.5.7 = controlled mini-chain smoke FUNCTIONAL PASS WITH PI EXIT CAVEAT
+v0.5.8 = Pi clean-exit isolation CLEAN EXIT PASS WITH COMMAND-COUNT CAVEAT
 ```
 
-These smokes are local evidence, not automated CI evidence. The full `goal-runner.chain.md` runtime remains unverified. The v0.5.7 smoke produced the expected certifier artifacts, but Pi exited with a stale extension-context error from the installed `@tmustier/pi-agent-teams` extension after output.
+These smokes are local evidence, not automated CI evidence. The full `goal-runner.chain.md` runtime remains unverified. The v0.5.7 smoke produced the expected certifier artifacts, but Pi exited with a stale extension-context error from the installed `@tmustier/pi-agent-teams` extension after output. The v0.5.8 smoke reproduced that failure with the global extension set and then showed a clean exit under a temporary subagents-only Pi config.
 
 ## What v0.3 proves
 
@@ -188,6 +189,7 @@ See `docs/V0_4_DIAGNOSTIC_EVALUATION.md` for the small diagnostic evaluation bou
 See `docs/V0_5_PI_INTEGRATION.md` for the Pi integration contract boundary.
 See `docs/V0_5_RUNTIME_SMOKES.md` for the local Pi runtime smoke boundary.
 See `docs/V0_5_7_CONTROLLED_MINI_CHAIN_SMOKE.md` for the controlled mini-chain smoke boundary.
+See `docs/V0_5_8_PI_CLEAN_EXIT_SMOKE.md` for the Pi clean-exit isolation boundary.
 See `docs/PI_PROMPT_CONTRACTS.md` for safe Pi prompt patterns.
 See `docs/PI_BASH_ALLOWLIST.md` for the current documented bash safety boundary.
 See `PROBLEM_AND_GAP.md` and `VERIFIER_PROVENANCE_DESIGN.md` for the current research direction.
@@ -199,7 +201,8 @@ v0.5 is still intentionally small.
 It does not yet include:
 
 - full `goal-runner.chain.md` runtime beyond local read-only, disposable certifier-invocation, and controlled mini-chain smokes,
-- clean Pi process-level runtime with all installed extensions enabled,
+- clean Pi process-level runtime with all globally installed extensions enabled,
+- strict one-bash-call enforcement for goal-orchestrator,
 - automatic rough-goal to contract compilation from the user-facing command,
 - adaptive multi-plan generation,
 - fully parsed YAML policy configuration,
@@ -215,8 +218,8 @@ The current `run_goal.py` is still a prepared-run orchestrator. It expects an ex
 
 The next milestone should first stabilize the Pi runtime smoke path:
 
-1. track the Pi stale extension-context exit issue as a runtime caveat,
-2. move to v0.6 local coding-agent host integration only through disposable/local task runs,
+1. move to v0.6 local coding-agent host integration only through disposable/local task runs,
+2. use the isolated subagents-only Pi config for runtime smoke paths until the global extension issue is fixed,
 3. keep final status from `certify_run.py` / `policy_engine.py`,
 4. do not add new planner mechanisms while host/certification integration is being tested,
 5. and keep false PASS / false `CERTIFIED_DONE` as hard-fail metrics.
