@@ -2,7 +2,7 @@
 
 ## Current version
 
-Mercury Goal Runner Harness v0.5 is Pi Integration on top of the v0.4 Small Diagnostic Evaluation.
+Mercury Goal Runner Harness v1.0 is Practical Package Freeze on top of the v0.9 replay / rollback / audit slice.
 
 The purpose of this repository is not to claim that Mercury V2 becomes smarter by looping. The purpose is to place Mercury V2 inside a controlled goal-execution harness where outputs are checked through contracts, logs, evidence, and certification.
 
@@ -28,6 +28,7 @@ The current harness passes its local regression tests and the current benchmark 
 python -m unittest discover tests -v
 python .agentic-pi\diagnostics\evaluation\run_diagnostic_evaluation.py
 python .agentic-pi\benchmark\run_benchmark.py
+python .agentic-pi\runtime\pi_cli.py --help
 ```
 
 Latest benchmark summary:
@@ -96,9 +97,17 @@ v0.5.2 = goal-orchestrator read-only status-report smoke PASS
 v0.5.3 = goal-orchestrator disposable certifier-invocation smoke PASS
 v0.5.7 = controlled mini-chain smoke FUNCTIONAL PASS WITH PI EXIT CAVEAT
 v0.5.8 = Pi clean-exit isolation CLEAN EXIT PASS WITH COMMAND-COUNT CAVEAT
+v0.5.9 = Pi command-discipline audit IMPLEMENTED
+v0.5.10 = Disposable Pi smoke setup IMPLEMENTED
+v0.5.11 = Negative-status safety audit IMPLEMENTED
+v0.6 = Local coding-agent host integration IMPLEMENTED
+v0.7 = Branch contract and deterministic branch generation IMPLEMENTED
+v0.8 = Evidence-seeking branch selection IMPLEMENTED
+v0.9 = Replay / rollback / audit IMPLEMENTED
+v1.0 = Practical package freeze IMPLEMENTED
 ```
 
-These smokes are local evidence, not automated CI evidence. The full `goal-runner.chain.md` runtime remains unverified. The v0.5.7 smoke produced the expected certifier artifacts, but Pi exited with a stale extension-context error from the installed `@tmustier/pi-agent-teams` extension after output. The v0.5.8 smoke reproduced that failure with the global extension set and then showed a clean exit under a temporary subagents-only Pi config.
+These smokes are local evidence, not automated CI evidence. The full `goal-runner.chain.md` runtime remains unverified. The v0.5.7 smoke produced the expected certifier artifacts, but Pi exited with a stale extension-context error from the installed `@tmustier/pi-agent-teams` extension after output. The v0.5.8 smoke reproduced that failure with the global extension set and then showed a clean exit under a temporary subagents-only Pi config. The v0.5.9 slice adds deterministic session-audit fixtures so duplicate certifier invocations, manual status writes, unsafe deletion, and inferred status after missing reads fail audit. The v0.5.10 slice adds deterministic disposable smoke setup so Pi prompts no longer need to mix copy/setup/certify/report. The v0.5.11 slice adds weak/failing status preservation checks so Pi does not repair or upgrade `NOT_DONE`, `PROVISIONAL_DONE`, or `DONE_FAIL`. The v0.6 slice adds deterministic local host-task certification against disposable runs. The v0.7 slice adds deterministic branch candidates with explicit verifier requirements. The v0.8 slice selects branches by verifier-provenance certifiability while leaving final certification to the certifier. The v0.9 slice adds read-only replay, dry-run rollback, and audit reports that can block certification. The v1.0 slice freezes a thin local command surface and practical examples.
 
 ## What v0.3 proves
 
@@ -190,6 +199,15 @@ See `docs/V0_5_PI_INTEGRATION.md` for the Pi integration contract boundary.
 See `docs/V0_5_RUNTIME_SMOKES.md` for the local Pi runtime smoke boundary.
 See `docs/V0_5_7_CONTROLLED_MINI_CHAIN_SMOKE.md` for the controlled mini-chain smoke boundary.
 See `docs/V0_5_8_PI_CLEAN_EXIT_SMOKE.md` for the Pi clean-exit isolation boundary.
+See `docs/V0_5_9_PI_COMMAND_DISCIPLINE_GATE.md` for the Pi command-discipline audit boundary.
+See `docs/V0_5_10_DISPOSABLE_SMOKE_HARNESS.md` for the disposable Pi smoke setup boundary.
+See `docs/V0_5_11_NEGATIVE_STATUS_SAFETY_SMOKE.md` for the negative-status Pi safety boundary.
+See `docs/V0_6_LOCAL_CODING_AGENT_HOST_INTEGRATION.md` for the local host integration boundary.
+See `docs/V0_7_BRANCH_GENERATION.md` for the branch-generation boundary.
+See `docs/V0_8_EVIDENCE_BRANCH_SELECTION.md` for the evidence-seeking branch selection boundary.
+See `docs/V0_9_REPLAY_ROLLBACK_AUDIT.md` for the replay / rollback / audit boundary.
+See `docs/V1_0_PRACTICAL_PACKAGE_FREEZE.md` for the practical package freeze boundary.
+See `docs/V1_0_EXAMPLES.md` for the frozen example set.
 See `docs/PI_PROMPT_CONTRACTS.md` for safe Pi prompt patterns.
 See `docs/PI_BASH_ALLOWLIST.md` for the current documented bash safety boundary.
 See `PROBLEM_AND_GAP.md` and `VERIFIER_PROVENANCE_DESIGN.md` for the current research direction.
@@ -202,13 +220,13 @@ It does not yet include:
 
 - full `goal-runner.chain.md` runtime beyond local read-only, disposable certifier-invocation, and controlled mini-chain smokes,
 - clean Pi process-level runtime with all globally installed extensions enabled,
-- strict one-bash-call enforcement for goal-orchestrator,
+- strict live one-bash-call Pi runtime proof for goal-orchestrator,
 - automatic rough-goal to contract compilation from the user-facing command,
 - adaptive multi-plan generation,
 - fully parsed YAML policy configuration,
 - broad diagnostic evaluation beyond the small v0.4 deterministic diagnostic set,
-- rollback validation,
-- replay validation,
+- workspace-level rollback outside run-folder-owned artifacts,
+- replay of live Pi or Mercury execution, beyond deterministic run-folder reports,
 - cost budgets,
 - or long-term memory quality checks.
 
@@ -216,10 +234,10 @@ The current `run_goal.py` is still a prepared-run orchestrator. It expects an ex
 
 ## Next milestone
 
-The next milestone should first stabilize the Pi runtime smoke path:
+The next milestone should harden release readiness without overclaiming full Pi autonomy:
 
-1. move to v0.6 local coding-agent host integration only through disposable/local task runs,
-2. use the isolated subagents-only Pi config for runtime smoke paths until the global extension issue is fixed,
+1. run the full proof path from a clean workspace,
+2. keep the stable command surface thin,
 3. keep final status from `certify_run.py` / `policy_engine.py`,
-4. do not add new planner mechanisms while host/certification integration is being tested,
+4. keep audit/replay/rollback unable to certify DONE by themselves,
 5. and keep false PASS / false `CERTIFIED_DONE` as hard-fail metrics.

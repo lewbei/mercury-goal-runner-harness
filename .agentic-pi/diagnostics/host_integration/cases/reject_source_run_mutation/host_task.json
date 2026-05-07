@@ -1,0 +1,10 @@
+{
+  "task_id": "reject_source_run_mutation",
+  "mode": "reject_source_run_mutation",
+  "source_case": "p2_strong",
+  "target_run_id": "pi_smoke_host_reject_source_mutation",
+  "expected_status": "CERTIFIED_DONE",
+  "expected_result": "FAIL",
+  "max_command_count": 1,
+  "description": "Host evaluation rejects source diagnostic run mutation attempts."
+}

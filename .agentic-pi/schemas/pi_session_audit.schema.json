@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PiSessionAudit",
+  "type": "object",
+  "required": [
+    "audit_status",
+    "run_id",
+    "agent",
+    "session_path",
+    "allowed_command",
+    "bash_call_count",
+    "bash_commands",
+    "read_paths",
+    "status_values",
+    "violations",
+    "policy_checks"
+  ],
+  "properties": {
+    "audit_status": {
+      "type": "string",
+      "enum": ["PASS", "FAIL"]
+    },
+    "run_id": { "type": "string", "minLength": 1 },
+    "agent": { "type": "string", "minLength": 1 },
+    "session_path": { "type": "string", "minLength": 1 },
+    "allowed_command": { "type": "string", "minLength": 1 },
+    "bash_call_count": { "type": "integer" },
+    "bash_commands": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "read_paths": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "status_values": {
+      "type": "object",
+      "properties": {
+        "final_status.md": { "type": "string" },
+        "certification.json": { "type": "string" },
+        "policy_decision.json": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "violations": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "policy_checks": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false
+}

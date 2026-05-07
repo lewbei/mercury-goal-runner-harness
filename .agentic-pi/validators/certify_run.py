@@ -588,6 +588,26 @@ def run_policy_engine(run_dir: Path, failed: list, passed: list) -> str:
     return written_decision["status"]
 
 
+def apply_audit_report_gate(run_dir: Path, provenance_mode: bool, failed: list, passed: list, current_status: str) -> str:
+    audit_path = run_dir / "audit_report.json"
+    if not audit_path.is_file():
+        return current_status
+    try:
+        audit = load_json(audit_path)
+    except Exception as exc:
+        failed.append(f"audit_report.json invalid: {exc}")
+        return "NOT_DONE" if provenance_mode else "DONE_FAIL"
+
+    if audit.get("valid") is False:
+        failed.append("audit_report.json invalid blocks certification")
+        for violation in audit.get("violations", []):
+            failed.append(f"audit violation: {violation}")
+        return "NOT_DONE" if provenance_mode else "DONE_FAIL"
+
+    passed.append("audit_report.json valid")
+    return current_status
+
+
 def evaluate_done_criteria(
     run_dir,
     done_criteria,
@@ -828,6 +848,8 @@ def main():
             status = "NOT_DONE"
     else:
         status = "DONE_PASS" if not failed else "DONE_FAIL"
+
+    status = apply_audit_report_gate(run_dir, provenance_mode, failed, passed, status)
 
     certification = {
         "run_id": run_id,

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BackupManifest",
+  "type": "object",
+  "required": [
+    "run_id",
+    "target_path",
+    "backup_path",
+    "original_hash",
+    "backup_hash",
+    "creator",
+    "timestamp",
+    "phase",
+    "reason"
+  ],
+  "properties": {
+    "run_id": { "type": "string", "minLength": 1 },
+    "target_path": { "type": "string", "minLength": 1 },
+    "backup_path": { "type": "string", "minLength": 1 },
+    "original_hash": { "type": "string", "minLength": 1 },
+    "backup_hash": { "type": "string", "minLength": 1 },
+    "creator": { "type": "string", "minLength": 1 },
+    "timestamp": { "type": "string", "minLength": 1 },
+    "phase": { "type": "string", "minLength": 1 },
+    "reason": { "type": "string", "minLength": 1 }
+  },
+  "additionalProperties": false
+}

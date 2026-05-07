@@ -26,7 +26,6 @@ artifacts/
 .agentic-pi/runtime/branch_selector.py
 .agentic-pi/runtime/evidence_selector.py
 .agentic-pi/runtime/goal_pipeline.py
-.agentic-pi/runtime/pi_cli.py
 .agentic-pi/schemas/branch.schema.json
 .agentic-pi/schemas/evidence.schema.json
 .pi/supervisor-config.json

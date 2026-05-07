@@ -9,7 +9,15 @@ allowlist implementation.
 
 The default safe command surface is read/list plus deterministic certification.
 
+For Pi bash, use forward slashes.
+
 Allowed:
+
+```text
+python .agentic-pi/validators/certify_run.py .agentic-runs/<run_id>
+```
+
+For PowerShell examples outside Pi, backslashes are still acceptable:
 
 ```text
 python .agentic-pi\validators\certify_run.py .agentic-runs\<run_id>
@@ -67,6 +75,7 @@ manual edit of verifier_artifacts/
 manual edit of verifier_smell_reports/
 manual edit of verifier_strength_reports/
 deletion outside explicitly named .agentic-runs/pi_smoke_* folders
+path-normalization retry that invokes certify_run.py a second time
 repair after NOT_DONE unless the user explicitly requests repair mode
 git reset
 git clean
@@ -88,7 +97,8 @@ The current safe claim is:
 
 ```text
 goal-orchestrator may invoke the deterministic certifier on an existing or
-explicitly disposable run folder.
+explicitly disposable run folder, and that session can be audited for strict
+one-command discipline.
 ```
 
 The current unsafe claim is:
@@ -96,4 +106,3 @@ The current unsafe claim is:
 ```text
 goal-orchestrator may freely use bash to repair or certify runs.
 ```
-

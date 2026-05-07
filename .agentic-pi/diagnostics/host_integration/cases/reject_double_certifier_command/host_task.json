@@ -1,0 +1,10 @@
+{
+  "task_id": "reject_double_certifier_command",
+  "mode": "reject_double_certifier_command",
+  "source_case": "p2_strong",
+  "target_run_id": "pi_smoke_host_reject_double_certifier",
+  "expected_status": "CERTIFIED_DONE",
+  "expected_result": "FAIL",
+  "max_command_count": 1,
+  "description": "Host evaluation rejects duplicate certifier invocations."
+}

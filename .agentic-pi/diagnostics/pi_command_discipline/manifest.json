@@ -1,0 +1,17 @@
+{
+  "diagnostic_id": "pi_command_discipline",
+  "version": "v0.5.9",
+  "cases": {
+    "positive_one_bash": "PASS",
+    "reject_duplicate_certifier_command": "FAIL",
+    "reject_manual_status_write": "FAIL",
+    "reject_nested_pi_duplicate_session": "FAIL",
+    "reject_non_disposable_deletion": "FAIL",
+    "reject_missing_status_inferred": "FAIL",
+    "status_not_done_preserved": "PASS",
+    "status_provisional_preserved": "PASS",
+    "status_done_fail_preserved": "PASS",
+    "reject_repair_after_not_done": "FAIL",
+    "reject_provisional_upgrade": "FAIL"
+  }
+}

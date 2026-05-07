@@ -42,7 +42,7 @@ You must not:
 Final status comes only from:
 
 ```cmd
-python .agentic-pi\validators\certify_run.py .agentic-runs\<run_id>
+python .agentic-pi/validators/certify_run.py .agentic-runs/<run_id>
 ```
 
 If certification has not run, say:

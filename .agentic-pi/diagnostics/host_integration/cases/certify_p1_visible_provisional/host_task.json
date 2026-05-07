@@ -1,0 +1,10 @@
+{
+  "task_id": "certify_p1_visible_provisional",
+  "mode": "certify_once",
+  "source_case": "p1_visible_only",
+  "target_run_id": "pi_smoke_host_certify_p1_visible",
+  "expected_status": "PROVISIONAL_DONE",
+  "expected_result": "PASS",
+  "max_command_count": 1,
+  "description": "Host certifies visible P1 evidence and preserves PROVISIONAL_DONE."
+}

@@ -1,0 +1,10 @@
+{
+  "task_id": "read_status_p2_strong",
+  "mode": "read_status",
+  "source_case": "p2_strong",
+  "target_run_id": "pi_smoke_host_read_p2_strong",
+  "expected_status": "CERTIFIED_DONE",
+  "expected_result": "PASS",
+  "max_command_count": 1,
+  "description": "Host prepares a disposable P2 strong run, certifies it once, and reads status artifacts."
+}

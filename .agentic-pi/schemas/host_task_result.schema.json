@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HostTaskResult",
+  "type": "object",
+  "required": [
+    "task_id",
+    "status",
+    "mode",
+    "target_run_id",
+    "expected_status",
+    "observed_status",
+    "command_count",
+    "commands",
+    "source_unchanged",
+    "violations",
+    "status_values"
+  ],
+  "properties": {
+    "task_id": { "type": "string", "minLength": 1 },
+    "status": {
+      "type": "string",
+      "enum": ["PASS", "FAIL"]
+    },
+    "mode": { "type": "string", "minLength": 1 },
+    "target_run_id": { "type": "string", "minLength": 1 },
+    "expected_status": { "type": "string", "minLength": 1 },
+    "observed_status": { "type": "string" },
+    "command_count": { "type": "integer" },
+    "commands": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "source_unchanged": { "type": "boolean" },
+    "violations": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "status_values": {
+      "type": "object",
+      "properties": {
+        "final_status.md": { "type": "string" },
+        "certification.json": { "type": "string" },
+        "policy_decision.json": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

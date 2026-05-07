@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ReplayReport",
+  "type": "object",
+  "required": [
+    "run_id",
+    "valid",
+    "goal_contract_present",
+    "trace_event_count",
+    "step_log_count",
+    "provenance_mode",
+    "manifest_present",
+    "manifest_hash_checks",
+    "certification_status",
+    "policy_status",
+    "violations"
+  ],
+  "properties": {
+    "run_id": { "type": "string", "minLength": 1 },
+    "valid": { "type": "boolean" },
+    "goal_contract_present": { "type": "boolean" },
+    "trace_event_count": { "type": "integer" },
+    "step_log_count": { "type": "integer" },
+    "provenance_mode": { "type": "boolean" },
+    "manifest_present": { "type": "boolean" },
+    "manifest_hash_checks": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "certification_status": { "type": "string" },
+    "policy_status": { "type": "string" },
+    "violations": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false
+}

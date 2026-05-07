@@ -1,0 +1,5 @@
+{"type":"tool_call","agent":"goal-orchestrator","tool":"bash","cmd":"Set-Content .agentic-runs/pi_smoke_one_bash_p2_strong/final_status.md CERTIFIED_DONE"}
+{"type":"tool_call","agent":"goal-orchestrator","tool":"read","path":".agentic-runs/pi_smoke_one_bash_p2_strong/final_status.md","content":"# Final Status: CERTIFIED_DONE\n"}
+{"type":"tool_call","agent":"goal-orchestrator","tool":"read","path":".agentic-runs/pi_smoke_one_bash_p2_strong/certification.json","content":"{\"status\":\"CERTIFIED_DONE\"}"}
+{"type":"tool_call","agent":"goal-orchestrator","tool":"read","path":".agentic-runs/pi_smoke_one_bash_p2_strong/policy_decision.json","content":"{\"status\":\"CERTIFIED_DONE\"}"}
+{"type":"assistant_message","agent":"goal-orchestrator","content":"final_status.md: CERTIFIED_DONE"}

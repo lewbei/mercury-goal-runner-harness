@@ -25,7 +25,7 @@ No Pi agent may certify DONE.
 6. `goal-orchestrator` invokes the deterministic certifier:
 
 ```cmd
-python .agentic-pi\validators\certify_run.py .agentic-runs\<run_id>
+python .agentic-pi/validators/certify_run.py .agentic-runs/<run_id>
 ```
 
 7. `goal-orchestrator` reports only the status written by the certifier:

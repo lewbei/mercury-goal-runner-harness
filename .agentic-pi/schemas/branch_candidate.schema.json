@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BranchCandidate",
+  "type": "object",
+  "required": [
+    "branch_id",
+    "planner_id",
+    "planner_role",
+    "goal_contract_hash",
+    "plan_graph_path",
+    "artifact_registry_path",
+    "task_graph_path",
+    "verifier_requirements",
+    "known_risks",
+    "selection_state"
+  ],
+  "properties": {
+    "branch_id": { "type": "string", "minLength": 1 },
+    "planner_id": { "type": "string", "minLength": 1 },
+    "planner_role": {
+      "type": "string",
+      "enum": ["minimal", "robust", "skeptic"]
+    },
+    "goal_contract_hash": { "type": "string", "minLength": 1 },
+    "plan_graph_path": { "type": "string", "minLength": 1 },
+    "artifact_registry_path": { "type": "string", "minLength": 1 },
+    "task_graph_path": { "type": "string", "minLength": 1 },
+    "verifier_requirements": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "known_risks": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "selection_state": {
+      "type": "string",
+      "enum": ["candidate", "rejected", "selected_for_execution"]
+    }
+  },
+  "additionalProperties": false
+}

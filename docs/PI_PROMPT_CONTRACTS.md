@@ -56,11 +56,15 @@ Good:
 ```text
 Run only this command, then read final_status.md, certification.json, and
 policy_decision.json from the same run folder:
-python .agentic-pi\validators\certify_run.py .agentic-runs\<run_id>
+python .agentic-pi/validators/certify_run.py .agentic-runs/<run_id>
 
 Do not edit any files manually. Do not certify DONE yourself.
 Final status comes only from certify_run.py.
 ```
+
+For Pi bash prompts, use forward slashes. Backslash-to-forward-slash retry
+behavior counts as more than one certifier command and fails v0.5.9 command
+discipline audit.
 
 Bad:
 
@@ -110,4 +114,3 @@ The short version is:
 ```text
 Do one action. Report certifier artifacts. Do not certify DONE yourself.
 ```
-

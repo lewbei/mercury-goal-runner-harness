@@ -1,0 +1,11 @@
+{"type":"message","message":{"role":"assistant","content":[{"type":"toolCall","id":"tool-1","name":"bash","arguments":{"command":"python .agentic-pi\\validators\\certify_run.py .agentic-runs\\pi_smoke_one_bash_p2_strong","timeout":60}}]}}
+{"type":"message","message":{"role":"toolResult","toolCallId":"tool-1","toolName":"bash","content":[{"type":"text","text":"path error\nCommand exited with code 2"}]}}
+{"type":"message","message":{"role":"assistant","content":[{"type":"toolCall","id":"tool-2","name":"bash","arguments":{"command":"python .agentic-pi/validators/certify_run.py .agentic-runs/pi_smoke_one_bash_p2_strong","timeout":60}}]}}
+{"type":"message","message":{"role":"toolResult","toolCallId":"tool-2","toolName":"bash","content":[{"type":"text","text":"CERTIFIED_DONE\nWrote certification.json\n"}]}}
+{"type":"message","message":{"role":"assistant","content":[{"type":"toolCall","id":"tool-3","name":"read","arguments":{"path":".agentic-runs/pi_smoke_one_bash_p2_strong/final_status.md"}}]}}
+{"type":"message","message":{"role":"toolResult","toolCallId":"tool-3","toolName":"read","content":[{"type":"text","text":"# Final Status: CERTIFIED_DONE\n"}]}}
+{"type":"message","message":{"role":"assistant","content":[{"type":"toolCall","id":"tool-4","name":"read","arguments":{"path":".agentic-runs/pi_smoke_one_bash_p2_strong/certification.json"}}]}}
+{"type":"message","message":{"role":"toolResult","toolCallId":"tool-4","toolName":"read","content":[{"type":"text","text":"{\"status\":\"CERTIFIED_DONE\"}"}]}}
+{"type":"message","message":{"role":"assistant","content":[{"type":"toolCall","id":"tool-5","name":"read","arguments":{"path":".agentic-runs/pi_smoke_one_bash_p2_strong/policy_decision.json"}}]}}
+{"type":"message","message":{"role":"toolResult","toolCallId":"tool-5","toolName":"read","content":[{"type":"text","text":"{\"status\":\"CERTIFIED_DONE\"}"}]}}
+{"type":"message","message":{"role":"assistant","content":[{"type":"text","text":"final_status.md: CERTIFIED_DONE\ncertification.json: CERTIFIED_DONE\npolicy_decision.json: CERTIFIED_DONE"}]}}

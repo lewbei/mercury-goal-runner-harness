@@ -72,7 +72,7 @@ class PiIntegrationContractTests(unittest.TestCase):
 
         self.assertIn("No Pi agent may certify DONE.", chain)
         self.assertIn("certify_run.py + policy_engine.py decide final status", chain)
-        self.assertIn("python .agentic-pi\\validators\\certify_run.py", chain)
+        self.assertIn("python .agentic-pi/validators/certify_run.py", chain)
         self.assertIn("The chain must not produce its own final status.", chain)
         self.assertIn("policy_decision.json", chain)
 
@@ -124,6 +124,98 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("strict one-command orchestration", doc)
         self.assertIn("Final status still comes only from", doc)
 
+    def test_v059_doc_records_command_discipline_audit_boundary(self):
+        doc = read(ROOT / "docs" / "V0_5_9_PI_COMMAND_DISCIPLINE_GATE.md")
+
+        self.assertIn("COMMAND DISCIPLINE AUDIT IMPLEMENTED", doc)
+        self.assertIn("python .agentic-pi/validators/certify_run.py .agentic-runs/<run_id>", doc)
+        self.assertIn("positive_one_bash -> PASS", doc)
+        self.assertIn("reject_duplicate_certifier_command -> FAIL", doc)
+        self.assertIn("reject_manual_status_write -> FAIL", doc)
+        self.assertIn("reject_nested_pi_duplicate_session -> FAIL", doc)
+        self.assertIn("reject_non_disposable_deletion -> FAIL", doc)
+        self.assertIn("reject_missing_status_inferred -> FAIL", doc)
+        self.assertIn("full Pi goal-runner chain is safely autonomous", doc)
+        self.assertIn("Final status still comes only from", doc)
+
+    def test_v0510_doc_records_disposable_smoke_setup_boundary(self):
+        doc = read(ROOT / "docs" / "V0_5_10_DISPOSABLE_SMOKE_HARNESS.md")
+
+        self.assertIn("DISPOSABLE SMOKE SETUP IMPLEMENTED", doc)
+        self.assertIn(".agentic-pi/runtime/setup_pi_smoke.py", doc)
+        self.assertIn(".agentic-runs/pi_smoke_*", doc)
+        self.assertIn("rewrites run_id only inside the copied disposable folder", doc)
+        self.assertIn("hashes the source before and after", doc)
+        self.assertIn("Pi should certify/report only", doc)
+        self.assertIn("Final status still comes only from", doc)
+
+    def test_v0511_doc_records_negative_status_safety_boundary(self):
+        doc = read(ROOT / "docs" / "V0_5_11_NEGATIVE_STATUS_SAFETY_SMOKE.md")
+
+        self.assertIn("NEGATIVE-STATUS SAFETY AUDIT IMPLEMENTED", doc)
+        self.assertIn("NOT_DONE stays NOT_DONE", doc)
+        self.assertIn("PROVISIONAL_DONE stays PROVISIONAL_DONE", doc)
+        self.assertIn("DONE_FAIL stays DONE_FAIL", doc)
+        self.assertIn("reject_repair_after_not_done -> FAIL", doc)
+        self.assertIn("reject_provisional_upgrade -> FAIL", doc)
+        self.assertIn("Final status still comes only from", doc)
+
+    def test_v06_doc_records_local_host_integration_boundary(self):
+        doc = read(ROOT / "docs" / "V0_6_LOCAL_CODING_AGENT_HOST_INTEGRATION.md")
+
+        self.assertIn("LOCAL HOST INTEGRATION IMPLEMENTED", doc)
+        self.assertIn(".agentic-pi/runtime/host_task_runner.py", doc)
+        self.assertIn("sys.executable", doc)
+        self.assertIn("reject_double_certifier_command -> FAIL", doc)
+        self.assertIn("reject_source_run_mutation -> FAIL", doc)
+        self.assertIn("Final status still comes only from", doc)
+
+    def test_v07_doc_records_branch_generation_boundary(self):
+        doc = read(ROOT / "docs" / "V0_7_BRANCH_GENERATION.md")
+
+        self.assertIn("BRANCH CONTRACT AND GENERATION IMPLEMENTED", doc)
+        self.assertIn("Branches are candidate execution plans", doc)
+        self.assertIn("Branches are not verifier evidence", doc)
+        self.assertIn(".agentic-pi/runtime/branch_generator.py", doc)
+        self.assertIn("branch claiming forbidden final authority", doc)
+        self.assertIn("Final status still comes only from", doc)
+
+    def test_v08_doc_records_evidence_branch_selection_boundary(self):
+        doc = read(ROOT / "docs" / "V0_8_EVIDENCE_BRANCH_SELECTION.md")
+
+        self.assertIn("EVIDENCE-SEEKING BRANCH SELECTION IMPLEMENTED", doc)
+        self.assertIn("path to P2/P3 certifying verifier evidence", doc)
+        self.assertIn(".agentic-pi/runtime/evidence_branch_selector.py", doc)
+        self.assertIn("NEED_USER_VERIFIER", doc)
+        self.assertIn("final_status.md", doc)
+        self.assertIn("Final status still comes only from", doc)
+
+    def test_v09_doc_records_replay_rollback_audit_boundary(self):
+        doc = read(ROOT / "docs" / "V0_9_REPLAY_ROLLBACK_AUDIT.md")
+
+        self.assertIn("REPLAY ROLLBACK AUDIT IMPLEMENTED", doc)
+        self.assertIn("Replay is read-only", doc)
+        self.assertIn("Rollback is dry-run by default", doc)
+        self.assertIn("Audit can block certification", doc)
+        self.assertIn("Audit cannot certify DONE by itself", doc)
+        self.assertIn("run_manifest.json", doc)
+        self.assertIn("backup_manifest.schema.json", doc)
+        self.assertIn("Replay checks `run_manifest.json`", doc)
+        self.assertIn("Final status still comes only from", doc)
+
+    def test_v10_docs_record_practical_package_freeze(self):
+        freeze = read(ROOT / "docs" / "V1_0_PRACTICAL_PACKAGE_FREEZE.md")
+        examples = read(ROOT / "docs" / "V1_0_EXAMPLES.md")
+
+        self.assertIn("PRACTICAL PACKAGE FREEZE IMPLEMENTED", freeze)
+        self.assertIn("goal-init", freeze)
+        self.assertIn("goal-replay", freeze)
+        self.assertIn("goal-audit", freeze)
+        self.assertIn("goal-rollback", freeze)
+        self.assertIn("Support tools cannot certify DONE by themselves", freeze)
+        self.assertIn("Final status still comes only from", examples)
+        self.assertIn("False-PASS Rejection", examples)
+
     def test_pi_prompt_contract_doc_locks_safe_prompt_patterns(self):
         doc = read(ROOT / "docs" / "PI_PROMPT_CONTRACTS.md")
 
@@ -135,11 +227,14 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("Final status comes only from certify_run.py", doc)
         self.assertIn("Do not certify DONE yourself", doc)
         self.assertIn("MISSING", doc)
+        self.assertIn("python .agentic-pi/validators/certify_run.py .agentic-runs/<run_id>", doc)
+        self.assertIn("Backslash-to-forward-slash retry", doc)
 
     def test_pi_bash_allowlist_doc_locks_current_safety_boundary(self):
         doc = read(ROOT / "docs" / "PI_BASH_ALLOWLIST.md")
 
         self.assertIn("documentation-only for now", doc)
+        self.assertIn("python .agentic-pi/validators/certify_run.py .agentic-runs/<run_id>", doc)
         self.assertIn("python .agentic-pi\\validators\\certify_run.py .agentic-runs\\<run_id>", doc)
         self.assertIn(".agentic-runs/pi_smoke_*", doc)
         self.assertIn("manual edit of final_status.md", doc)
@@ -148,6 +243,7 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("git reset", doc)
         self.assertIn("git clean", doc)
         self.assertIn("git push", doc)
+        self.assertIn("path-normalization retry", doc)
 
 
 if __name__ == "__main__":

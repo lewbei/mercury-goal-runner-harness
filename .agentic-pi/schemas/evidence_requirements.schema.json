@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EvidenceRequirements",
+  "type": "object",
+  "required": ["run_id", "requirements"],
+  "properties": {
+    "run_id": { "type": "string", "minLength": 1 },
+    "requirements": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["requirement_id", "target_artifact", "minimum_provenance_level", "minimum_strength_level"],
+        "properties": {
+          "requirement_id": { "type": "string", "minLength": 1 },
+          "target_artifact": { "type": "string", "minLength": 1 },
+          "minimum_provenance_level": {
+            "type": "string",
+            "enum": ["P0", "P1", "P2", "P3"]
+          },
+          "minimum_strength_level": {
+            "type": "string",
+            "enum": ["weak", "advisory", "gating", "certifying"]
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

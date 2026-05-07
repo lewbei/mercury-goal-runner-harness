@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mercury-goal-runner-harness"
+version = "1.0.0"
+description = "Verifier-Provenance Goal Runner Harness"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+mercury-goal = "agentic_pi_cli:main"
+
+[tool.setuptools]
+py-modules = ["agentic_pi_cli"]

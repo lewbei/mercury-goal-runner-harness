@@ -1,0 +1,5 @@
+{"type":"tool_call","agent":"goal-orchestrator","tool":"bash","cmd":"python .agentic-pi/validators/certify_run.py .agentic-runs/pi_smoke_done_fail"}
+{"type":"tool_call","agent":"goal-orchestrator","tool":"read","path":".agentic-runs/pi_smoke_done_fail/final_status.md","content":"# Final Status: DONE_FAIL\n"}
+{"type":"tool_call","agent":"goal-orchestrator","tool":"read","path":".agentic-runs/pi_smoke_done_fail/certification.json","content":"{\"status\":\"DONE_FAIL\"}"}
+{"type":"tool_call","agent":"goal-orchestrator","tool":"read","path":".agentic-runs/pi_smoke_done_fail/policy_decision.json","content":"{\"status\":\"DONE_FAIL\"}"}
+{"type":"assistant_message","agent":"goal-orchestrator","content":"final_status.md: DONE_FAIL\ncertification.json: DONE_FAIL\npolicy_decision.json: DONE_FAIL\nI cannot certify DONE. Final status comes only from certify_run.py."}

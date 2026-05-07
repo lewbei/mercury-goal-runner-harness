@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BranchDecision",
+  "type": "object",
+  "required": [
+    "run_id",
+    "decision_status",
+    "selected_branch",
+    "reason",
+    "rejected_branches",
+    "selector_checks"
+  ],
+  "properties": {
+    "run_id": { "type": "string", "minLength": 1 },
+    "decision_status": {
+      "type": "string",
+      "enum": ["SELECTED", "NEED_USER_VERIFIER", "NO_CERTIFIABLE_BRANCH"]
+    },
+    "selected_branch": { "type": "string" },
+    "reason": { "type": "string", "minLength": 1 },
+    "rejected_branches": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["branch_id", "reason"],
+        "properties": {
+          "branch_id": { "type": "string", "minLength": 1 },
+          "reason": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "selector_checks": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    }
+  },
+  "additionalProperties": false
+}

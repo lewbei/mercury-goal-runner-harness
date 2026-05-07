@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HostTask",
+  "type": "object",
+  "required": [
+    "task_id",
+    "mode",
+    "source_case",
+    "target_run_id",
+    "expected_status",
+    "expected_result"
+  ],
+  "properties": {
+    "task_id": { "type": "string", "minLength": 1 },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "certify_once",
+        "read_status",
+        "reject_manual_status_write",
+        "reject_double_certifier_command",
+        "reject_source_run_mutation"
+      ]
+    },
+    "source_case": { "type": "string", "minLength": 1 },
+    "target_run_id": { "type": "string", "minLength": 1 },
+    "expected_status": { "type": "string", "minLength": 1 },
+    "expected_result": {
+      "type": "string",
+      "enum": ["PASS", "FAIL"]
+    },
+    "max_command_count": { "type": "integer" },
+    "description": { "type": "string" }
+  },
+  "additionalProperties": false
+}

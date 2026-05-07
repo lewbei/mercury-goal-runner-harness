@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RunManifest",
+  "type": "object",
+  "required": [
+    "run_id",
+    "provenance_mode",
+    "goal_contract_present",
+    "trace_event_count",
+    "step_log_count",
+    "status_artifacts",
+    "artifact_hashes"
+  ],
+  "properties": {
+    "run_id": { "type": "string", "minLength": 1 },
+    "provenance_mode": { "type": "boolean" },
+    "goal_contract_present": { "type": "boolean" },
+    "trace_event_count": { "type": "integer" },
+    "step_log_count": { "type": "integer" },
+    "status_artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "status"],
+        "properties": {
+          "path": { "type": "string", "minLength": 1 },
+          "status": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "artifact_hashes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "sha256"],
+        "properties": {
+          "path": { "type": "string", "minLength": 1 },
+          "sha256": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

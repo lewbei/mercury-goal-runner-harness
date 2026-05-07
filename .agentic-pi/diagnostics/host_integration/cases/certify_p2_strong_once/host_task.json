@@ -1,0 +1,10 @@
+{
+  "task_id": "certify_p2_strong_once",
+  "mode": "certify_once",
+  "source_case": "p2_strong",
+  "target_run_id": "pi_smoke_host_certify_p2_strong_once",
+  "expected_status": "CERTIFIED_DONE",
+  "expected_result": "PASS",
+  "max_command_count": 1,
+  "description": "Host invokes the deterministic certifier exactly once on a disposable P2 strong run."
+}

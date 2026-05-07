@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BranchManifest",
+  "type": "object",
+  "required": [
+    "run_id",
+    "goal_contract_hash",
+    "branches",
+    "generated_by"
+  ],
+  "properties": {
+    "run_id": { "type": "string", "minLength": 1 },
+    "goal_contract_hash": { "type": "string", "minLength": 1 },
+    "branches": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["branch_id", "branch_candidate_path"],
+        "properties": {
+          "branch_id": { "type": "string", "minLength": 1 },
+          "branch_candidate_path": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "generated_by": { "type": "string", "minLength": 1 }
+  },
+  "additionalProperties": false
+}

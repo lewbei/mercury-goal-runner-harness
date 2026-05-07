@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RollbackReport",
+  "type": "object",
+  "required": ["run_id", "target", "mode", "applied", "valid", "violations"],
+  "properties": {
+    "run_id": { "type": "string", "minLength": 1 },
+    "target": { "type": "string", "minLength": 1 },
+    "mode": { "type": "string", "enum": ["dry-run", "apply"] },
+    "applied": { "type": "boolean" },
+    "valid": { "type": "boolean" },
+    "violations": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false
+}

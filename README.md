@@ -6,7 +6,7 @@ The goal is not to make Mercury V2 magically smarter by looping. The goal is to 
 
 ## Current status
 
-v0.5 is Pi Integration on top of the v0.4 Small Diagnostic Evaluation.
+v1.0 is Practical Package Freeze on top of the v0.9 replay / rollback / audit slice.
 
 The current research direction is:
 
@@ -43,6 +43,15 @@ See [`docs/V0_5_PI_INTEGRATION.md`](docs/V0_5_PI_INTEGRATION.md) for the Pi inte
 See [`docs/V0_5_RUNTIME_SMOKES.md`](docs/V0_5_RUNTIME_SMOKES.md) for the local Pi runtime smoke boundary.
 See [`docs/V0_5_7_CONTROLLED_MINI_CHAIN_SMOKE.md`](docs/V0_5_7_CONTROLLED_MINI_CHAIN_SMOKE.md) for the controlled mini-chain smoke boundary.
 See [`docs/V0_5_8_PI_CLEAN_EXIT_SMOKE.md`](docs/V0_5_8_PI_CLEAN_EXIT_SMOKE.md) for the Pi clean-exit isolation boundary.
+See [`docs/V0_5_9_PI_COMMAND_DISCIPLINE_GATE.md`](docs/V0_5_9_PI_COMMAND_DISCIPLINE_GATE.md) for the Pi command-discipline audit boundary.
+See [`docs/V0_5_10_DISPOSABLE_SMOKE_HARNESS.md`](docs/V0_5_10_DISPOSABLE_SMOKE_HARNESS.md) for the disposable Pi smoke setup boundary.
+See [`docs/V0_5_11_NEGATIVE_STATUS_SAFETY_SMOKE.md`](docs/V0_5_11_NEGATIVE_STATUS_SAFETY_SMOKE.md) for the negative-status Pi safety boundary.
+See [`docs/V0_6_LOCAL_CODING_AGENT_HOST_INTEGRATION.md`](docs/V0_6_LOCAL_CODING_AGENT_HOST_INTEGRATION.md) for the local host integration boundary.
+See [`docs/V0_7_BRANCH_GENERATION.md`](docs/V0_7_BRANCH_GENERATION.md) for the branch-generation boundary.
+See [`docs/V0_8_EVIDENCE_BRANCH_SELECTION.md`](docs/V0_8_EVIDENCE_BRANCH_SELECTION.md) for the evidence-seeking branch selection boundary.
+See [`docs/V0_9_REPLAY_ROLLBACK_AUDIT.md`](docs/V0_9_REPLAY_ROLLBACK_AUDIT.md) for the replay / rollback / audit boundary.
+See [`docs/V1_0_PRACTICAL_PACKAGE_FREEZE.md`](docs/V1_0_PRACTICAL_PACKAGE_FREEZE.md) for the practical package freeze boundary.
+See [`docs/V1_0_EXAMPLES.md`](docs/V1_0_EXAMPLES.md) for the frozen example set.
 See [`docs/PI_PROMPT_CONTRACTS.md`](docs/PI_PROMPT_CONTRACTS.md) for safe Pi prompt patterns.
 See [`docs/PI_BASH_ALLOWLIST.md`](docs/PI_BASH_ALLOWLIST.md) for the current documented bash safety boundary.
 
@@ -52,6 +61,7 @@ The current proof path is:
 python -m unittest discover tests -v
 python .agentic-pi\diagnostics\evaluation\run_diagnostic_evaluation.py
 python .agentic-pi\benchmark\run_benchmark.py
+python .agentic-pi\runtime\pi_cli.py --help
 ```
 
 It demonstrates:
@@ -74,7 +84,15 @@ It demonstrates:
 16. local v0.5.1-v0.5.3 Pi smokes validate read-only review/status and disposable certifier invocation,
 17. local v0.5.7 validates a controlled verifier-review + certifier-invocation path with a Pi extension exit caveat,
 18. local v0.5.8 isolates the stale Pi exit to the broader extension surface,
-19. and the benchmark reports false-PASS status explicitly.
+19. v0.5.9 adds deterministic Pi command-discipline audit fixtures,
+20. v0.5.10 adds deterministic disposable Pi smoke setup,
+21. v0.5.11 verifies weak/failing statuses are not repaired or upgraded by Pi,
+22. v0.6 adds deterministic local host-task certification against disposable runs,
+23. v0.7 adds deterministic branch candidates with verifier requirements,
+24. v0.8 selects branches by verifier-provenance certifiability,
+25. v0.9 adds read-only replay, dry-run rollback, and audit blocking,
+26. v1.0 freezes a thin local command surface and practical examples,
+27. and the benchmark reports false-PASS status explicitly.
 
 ## Core parts
 
@@ -146,6 +164,40 @@ Run certification:
 python .agentic-pi\validators\certify_run.py .agentic-runs\<run_id>
 ```
 
+Run the Pi command-discipline audit on a deterministic fixture:
+
+```cmd
+python .agentic-pi\runtime\pi_session_audit.py .agentic-pi\diagnostics\pi_command_discipline\cases\positive_one_bash.jsonl --run-id pi_smoke_one_bash_p2_strong
+```
+
+Prepare a disposable Pi smoke run:
+
+```cmd
+python .agentic-pi\runtime\setup_pi_smoke.py --target-run-id pi_smoke_one_bash_p2_strong --clean
+```
+
+Run the local host integration diagnostic:
+
+```cmd
+python .agentic-pi\diagnostics\host_integration\run_host_integration_evaluation.py
+```
+
+Show the stable local command surface:
+
+```cmd
+python .agentic-pi\runtime\pi_cli.py --help
+```
+
+Run a disposable sample:
+
+```cmd
+python .agentic-pi\runtime\setup_pi_smoke.py --target-run-id pi_smoke_v1_sample --clean
+python .agentic-pi\runtime\pi_cli.py goal-certify pi_smoke_v1_sample
+python .agentic-pi\runtime\pi_cli.py goal-status pi_smoke_v1_sample
+python .agentic-pi\runtime\pi_cli.py goal-audit pi_smoke_v1_sample
+python .agentic-pi\runtime\pi_cli.py goal-replay pi_smoke_v1_sample
+```
+
 Run the deterministic smoke test:
 
 ```cmd
@@ -165,7 +217,7 @@ python -m unittest discover tests -v
 Committed repo state:
 
 ```text
-v0.5 = Pi Integration Contracts
+v1.0 = Practical Package Freeze
 ```
 
 Local smoke-tested state:
@@ -176,6 +228,14 @@ v0.5.2 = goal-orchestrator read-only status-report smoke PASS
 v0.5.3 = goal-orchestrator disposable certifier-invocation smoke PASS
 v0.5.7 = controlled mini-chain smoke FUNCTIONAL PASS WITH PI EXIT CAVEAT
 v0.5.8 = Pi clean-exit isolation CLEAN EXIT PASS WITH COMMAND-COUNT CAVEAT
+v0.5.9 = Pi command-discipline audit IMPLEMENTED
+v0.5.10 = Disposable Pi smoke setup IMPLEMENTED
+v0.5.11 = Negative-status safety audit IMPLEMENTED
+v0.6 = Local coding-agent host integration IMPLEMENTED
+v0.7 = Branch contract and deterministic branch generation IMPLEMENTED
+v0.8 = Evidence-seeking branch selection IMPLEMENTED
+v0.9 = Replay / rollback / audit IMPLEMENTED
+v1.0 = Practical package freeze IMPLEMENTED
 ```
 
 The v0.5 Pi chain lives at:
@@ -192,7 +252,7 @@ The new v0.5 Pi agents are:
 .pi/agents/verifier-reviewer.md
 ```
 
-The full `goal-runner.chain.md` runtime remains unverified. The next milestone is v0.6 local coding-agent host integration. v0.5.8 shows the stale Pi exit disappears under a subagents-only Pi config, but strict one-bash-call orchestration is still not proven.
+The full `goal-runner.chain.md` runtime remains unverified. v0.5.8 shows the stale Pi exit disappears under a subagents-only Pi config. v0.5.9 adds deterministic auditing for one-bash-call discipline, including a failing fixture for the duplicate certifier invocation pattern. v0.5.10 adds deterministic disposable smoke setup so Pi prompts can stay single-action. v0.5.11 verifies that weak/failing statuses are reported, not repaired or upgraded. v0.6 adds local host-task certification against disposable runs. v0.7 adds deterministic branch candidates with explicit verifier requirements. v0.8 selects branches by path to verifier-provenance certification. v0.9 adds read-only replay, dry-run rollback, and audit blocking. v1.0 freezes a thin local command surface and practical examples without claiming full Pi autonomy. The next milestone is v1.1 proof-path hardening and release readiness.
 
 ## Planner Stub
 
