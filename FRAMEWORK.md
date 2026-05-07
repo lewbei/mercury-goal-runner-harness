@@ -34,7 +34,7 @@ Pi only reports what the certifier wrote.
 Current pushed state:
 
 ```text
-v2.4 = Real Pi Run Monitor
+v2.5 = Real Pi Negative-Status Smoke Monitor
 ```
 
 The deterministic raw-goal proof cases are:
@@ -139,6 +139,15 @@ captured real Pi transcript -> pi_real_session_monitor.py -> command/read trajec
 
 This checks how Pi ran the smoke, not only what final result it reported.
 
+v2.5 extends the real Pi transcript monitor to weak and failing statuses:
+
+```text
+captured real Pi negative-status transcript -> pi_real_session_monitor.py -> status-upgrade verdict
+```
+
+This checks that `PROVISIONAL_DONE` and `NOT_DONE` are reported from
+certifier-owned artifacts and not upgraded by Mercury.
+
 ## Conceptual Architecture
 
 ```text
@@ -175,6 +184,7 @@ Raw Goal
   -> Direct Pi/Mercury Behavior Audit
   -> Real Pi Interactive Smoke
   -> Real Pi Run Monitor
+  -> Real Pi Negative-Status Smoke Monitor
   -> Audit / Replay
   -> Final Status
   -> Pi Reports Status Only
@@ -290,6 +300,12 @@ Raw Goal
     write/edit/apply_patch use, no protected status writes, and no
     self-certifying assistant language. The monitor can fail unsafe behavior,
     but cannot certify DONE.
+
+24. Real Pi Negative-Status Smoke Monitor Layer
+    Uses the same real Pi transcript monitor for `PROVISIONAL_DONE` and
+    `NOT_DONE` cases. It accepts weak or failing statuses when all
+    certifier-owned artifacts agree, and rejects assistant-side upgrades such
+    as `PROVISIONAL_DONE` to `CERTIFIED_DONE`.
 ```
 
 ## Authority Model
@@ -512,6 +528,7 @@ controlled Pi chain smoke -> verifier-generator -> verifier-reviewer -> goal-orc
 direct Pi/Mercury behavior audit -> verifier evidence before certifier -> status reads after certifier
 real Pi interactive smoke -> controlled prompt -> pi_chain_runtime_result.json -> artifact-only report
 real Pi run monitor -> captured transcript -> command/read trajectory verdict
+real Pi negative-status monitor -> PROVISIONAL_DONE/NOT_DONE transcript fixtures -> no status upgrade
 P0/P1/P2/missing verifier policy behavior
 smell report recording
 strength report recording
@@ -531,7 +548,7 @@ Not proven yet:
 arbitrary raw natural-language autonomy
 full goal-runner.chain.md autonomous runtime
 strict internal Pi tool-call audit for arbitrary live Pi chain smoke
-multiple real Pi interactive smoke cases, including weak/failing statuses
+additional live real Pi weak/failing transcript captures beyond fixtures
 global Pi extension compatibility during Pi chain smoke
 live Mercury planning quality
 semantic optimality of selected branches

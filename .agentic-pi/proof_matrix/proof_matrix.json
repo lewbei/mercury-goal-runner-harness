@@ -1,6 +1,6 @@
 {
-  "proof_matrix_id": "verifier_provenance_harness_v2_4",
-  "version": "v2.4",
+  "proof_matrix_id": "verifier_provenance_harness_v2_5",
+  "version": "v2.5",
   "entries": [
     {
       "claim_id": "domain_packs",
@@ -80,11 +80,11 @@
     },
     {
       "claim_id": "real_pi_session_monitor",
-      "claim": "Captured real Pi interactive smoke transcripts can be monitored for allowed command/read discipline.",
+      "claim": "Captured real Pi interactive smoke transcripts can be monitored for allowed command/read discipline and weak/failing status preservation.",
       "mode": "quick",
       "command": ["python", "tests/test_pi_real_session_monitor.py", "-v"],
-      "expected_evidence": ["tests pass", "monitor_status PASS for positive fixture", "negative fixtures fail"],
-      "claim_boundary": "Transcript monitor only; not proof of arbitrary live Pi autonomy or full goal-runner.chain.md runtime."
+      "expected_evidence": ["tests pass", "monitor_status PASS for positive fixtures", "negative fixtures fail", "assistant-side status upgrade fails"],
+      "claim_boundary": "Transcript monitor only; not proof of arbitrary live Pi autonomy, live repair behavior, or full goal-runner.chain.md runtime."
     },
     {
       "claim_id": "full_unittest",

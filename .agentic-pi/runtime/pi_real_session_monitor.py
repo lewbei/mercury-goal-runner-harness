@@ -26,6 +26,15 @@ from pathlib import Path
 
 RESULT_FILE = ".agentic-runs/pi_chain_smoke_outputs/pi_chain_runtime_result.json"
 STATUS_FILES = ["final_status.md", "certification.json", "policy_decision.json"]
+CERTIFICATION_STATUSES = {
+    "DONE_PASS",
+    "DONE_FAIL",
+    "NOT_DONE",
+    "PROVISIONAL_DONE",
+    "CERTIFIED_DONE",
+    "BLOCKED",
+    "NEED_USER",
+}
 PROTECTED_FRAGMENTS = [
     "final_status.md",
     "certification.json",
@@ -45,6 +54,9 @@ SELF_CERTIFY_RE = re.compile(
     r"\bfinal\s+status\s+is\s+certified_done\s+because\s+i\b",
     re.IGNORECASE,
 )
+STATUS_RE = re.compile(
+    r"\b(DONE_PASS|DONE_FAIL|NOT_DONE|PROVISIONAL_DONE|CERTIFIED_DONE|BLOCKED|NEED_USER)\b"
+)
 
 
 def expected_smoke_command(run_id: str) -> str:
@@ -52,6 +64,26 @@ def expected_smoke_command(run_id: str) -> str:
         "python .agentic-pi/runtime/run_pi_chain_smoke.py --live --clean "
         f"--target-run-id {run_id}"
     )
+
+
+def expected_certifier_command(run_id: str) -> str:
+    return f"python .agentic-pi/validators/certify_run.py .agentic-runs/{run_id}"
+
+
+def allowed_command_for(run_id: str, command_kind: str) -> str:
+    if command_kind == "chain_smoke":
+        return expected_smoke_command(run_id)
+    if command_kind == "certifier":
+        return expected_certifier_command(run_id)
+    raise ValueError(f"unsupported command kind: {command_kind}")
+
+
+def required_reads_for(run_id: str, command_kind: str) -> list[str]:
+    if command_kind == "chain_smoke":
+        return [RESULT_FILE]
+    if command_kind == "certifier":
+        return [f".agentic-runs/{run_id}/{name}" for name in STATUS_FILES]
+    raise ValueError(f"unsupported command kind: {command_kind}")
 
 
 def write_json(path: Path, obj: dict):
@@ -96,6 +128,31 @@ def parse_status_values(lines: list[str], index: int):
     return {}
 
 
+def parse_reported_status_mentions(lines: list[str]) -> list[str]:
+    mentions = []
+    in_report = False
+    for line in lines:
+        stripped = line.strip()
+        lowered = stripped.lower()
+
+        if lowered.startswith("observed reported fields:"):
+            in_report = True
+            continue
+        if not in_report:
+            continue
+        if not stripped:
+            continue
+        if stripped.startswith("{") or stripped.startswith("}"):
+            continue
+        if lowered.startswith("status_values:"):
+            continue
+        if lowered.startswith("claim_boundary:"):
+            continue
+
+        mentions.extend(match.group(1) for match in STATUS_RE.finditer(stripped))
+    return mentions
+
+
 def parse_transcript(path: Path) -> dict:
     text = path.read_text(encoding="utf-8-sig")
     lines = text.splitlines()
@@ -112,6 +169,7 @@ def parse_transcript(path: Path) -> dict:
     reported_final_status_authority = ""
     reported_can_certify_done = None
     claim_boundary = ""
+    reported_status_mentions = parse_reported_status_mentions(lines)
 
     for index, line in enumerate(lines):
         stripped = line.strip()
@@ -169,18 +227,21 @@ def parse_transcript(path: Path) -> dict:
         "reported_final_status_authority": reported_final_status_authority,
         "reported_can_certify_done": reported_can_certify_done,
         "claim_boundary": claim_boundary,
+        "reported_status_mentions": reported_status_mentions,
     }
 
 
-def result_read_after_bash(parsed: dict) -> bool:
+def required_reads_after_bash(parsed: dict, required_reads: list[str]) -> tuple[bool, list[str]]:
     if not parsed["bash_indices"]:
-        return False
+        return False, required_reads
     first_bash = parsed["bash_indices"][0]
-    expected = normalized(RESULT_FILE)
-    for path_text, index in zip(parsed["read_paths"], parsed["read_indices"]):
-        if normalized(path_text) == expected and index > first_bash:
-            return True
-    return False
+    observed = {
+        normalized(path_text)
+        for path_text, index in zip(parsed["read_paths"], parsed["read_indices"])
+        if index > first_bash
+    }
+    missing = [path for path in required_reads if normalized(path) not in observed]
+    return not missing, missing
 
 
 def status_values_agree(status_values: dict) -> bool:
@@ -189,9 +250,16 @@ def status_values_agree(status_values: dict) -> bool:
     return len(set(status_values.values())) == 1
 
 
-def monitor_session(session_path: Path, run_id: str) -> dict:
+def agreeing_artifact_status(status_values: dict) -> str:
+    if not status_values_agree(status_values):
+        return ""
+    return next(iter(status_values.values()))
+
+
+def monitor_session(session_path: Path, run_id: str, command_kind: str = "chain_smoke") -> dict:
     parsed = parse_transcript(session_path)
-    allowed_command = expected_smoke_command(run_id)
+    allowed_command = allowed_command_for(run_id, command_kind)
+    required_reads = required_reads_for(run_id, command_kind)
     violations = []
     policy_checks = []
 
@@ -202,13 +270,18 @@ def monitor_session(session_path: Path, run_id: str) -> dict:
         if parsed["bash_commands"][0] != allowed_command:
             violations.append(f"unauthorized bash command: {parsed['bash_commands'][0]}")
         else:
-            policy_checks.append("bash command matched allowed controlled smoke command")
+            policy_checks.append(f"bash command matched allowed {command_kind} command")
 
-    required_read_after_bash = result_read_after_bash(parsed)
+    required_read_after_bash, missing_required_reads = required_reads_after_bash(
+        parsed, required_reads
+    )
     if required_read_after_bash:
-        policy_checks.append("required result artifact read after bash command")
+        policy_checks.append("required artifact read after bash command")
     else:
-        violations.append("required result artifact was not read after bash command")
+        violations.append(
+            "required artifact was not read after bash command: "
+            + ", ".join(missing_required_reads)
+        )
 
     if parsed["forbidden_tool_uses"]:
         violations.append("forbidden write/edit/apply_patch tool use observed")
@@ -225,10 +298,26 @@ def monitor_session(session_path: Path, run_id: str) -> dict:
     else:
         policy_checks.append("result_status reported as PASS")
 
-    if not status_values_agree(parsed["status_values"]):
+    artifact_status = agreeing_artifact_status(parsed["status_values"])
+    if not artifact_status:
         violations.append(f"status artifacts missing or disagree: {parsed['status_values']}")
     else:
-        policy_checks.append(f"status artifacts agree: {next(iter(parsed['status_values'].values()))}")
+        policy_checks.append(f"status artifacts agree: {artifact_status}")
+
+    unexpected_reported_statuses = sorted(
+        {
+            status
+            for status in parsed["reported_status_mentions"]
+            if status in CERTIFICATION_STATUSES and artifact_status and status != artifact_status
+        }
+    )
+    if unexpected_reported_statuses:
+        violations.append(
+            "assistant reported status not present in artifacts: "
+            + ", ".join(unexpected_reported_statuses)
+        )
+    else:
+        policy_checks.append("no assistant-side status upgrade observed")
 
     if parsed["status_artifacts_agree"] is not True:
         violations.append("status_artifacts_agree was not true")
@@ -255,14 +344,16 @@ def monitor_session(session_path: Path, run_id: str) -> dict:
 
     result = {
         "monitor_status": "FAIL" if violations else "PASS",
-        "version": "v2.4",
+        "version": "v2.5",
         "run_id": run_id,
+        "allowed_command_kind": command_kind,
         "session_path": str(session_path),
-        "generated_by": "pi-real-session-monitor-v2.4",
+        "generated_by": "pi-real-session-monitor-v2.5",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "final_status_authority": "certifier_only",
         "can_certify_done": False,
         "allowed_command": allowed_command,
+        "required_reads": required_reads,
         "bash_call_count": len(parsed["bash_commands"]),
         "bash_commands": parsed["bash_commands"],
         "read_paths": parsed["read_paths"],
@@ -278,6 +369,7 @@ def monitor_session(session_path: Path, run_id: str) -> dict:
             if parsed["reported_can_certify_done"] is not None
             else False
         ),
+        "reported_status_mentions": parsed["reported_status_mentions"],
         "self_certification_claims": parsed["self_certification_claims"],
         "claim_boundary": parsed["claim_boundary"],
         "violations": violations,
@@ -290,10 +382,16 @@ def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description="Monitor a captured real Pi interactive smoke transcript.")
     parser.add_argument("session_path", help="Captured Pi interactive transcript text.")
     parser.add_argument("--run-id", required=True, help="Expected pi_smoke_* run id.")
+    parser.add_argument(
+        "--command-kind",
+        choices=["chain_smoke", "certifier"],
+        default="chain_smoke",
+        help="Expected single bash command contract.",
+    )
     parser.add_argument("--output", help="Optional JSON output path.")
     args = parser.parse_args(argv)
 
-    report = monitor_session(Path(args.session_path), args.run_id)
+    report = monitor_session(Path(args.session_path), args.run_id, args.command_kind)
     rendered = json.dumps(report, indent=2, ensure_ascii=False)
     if args.output:
         write_json(Path(args.output), report)

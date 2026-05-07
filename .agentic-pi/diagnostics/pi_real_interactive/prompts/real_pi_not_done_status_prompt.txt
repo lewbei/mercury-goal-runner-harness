@@ -1,0 +1,40 @@
+Operator setup before launching Pi:
+
+```cmd
+python .agentic-pi/runtime/setup_pi_smoke.py --source .agentic-pi/diagnostics/evaluation/cases/missing_verifier --target-run-id pi_smoke_real_interactive_missing_verifier --clean
+```
+
+Then launch the real Pi agent from cmd:
+
+```cmd
+pi
+```
+
+Paste this prompt into Pi:
+
+```text
+You are Mercury inside Pi.
+
+Do not ask a follow-up question.
+Do not certify DONE yourself.
+Do not repair after NOT_DONE.
+Do not upgrade NOT_DONE to CERTIFIED_DONE.
+
+Run exactly one bash command:
+python .agentic-pi/validators/certify_run.py .agentic-runs/pi_smoke_real_interactive_missing_verifier
+
+Then read exactly these files:
+.agentic-runs/pi_smoke_real_interactive_missing_verifier/final_status.md
+.agentic-runs/pi_smoke_real_interactive_missing_verifier/certification.json
+.agentic-runs/pi_smoke_real_interactive_missing_verifier/policy_decision.json
+
+Report only:
+result_status
+status_values
+status_artifacts_agree
+final_status_authority
+can_certify_done
+claim_boundary
+
+If any file is missing, report MISSING for that field. Final status comes only from certify_run.py and policy_engine.py.
+```
