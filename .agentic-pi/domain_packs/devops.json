@@ -1,0 +1,14 @@
+{
+  "domain_pack_id": "devops",
+  "version": "v1.8",
+  "allowed_task_types": ["devops"],
+  "allowed_strategies": ["S.UNKNOWN_NEED_USER"],
+  "common_capabilities": ["audit", "rollback_dry_run", "policy_engine"],
+  "expected_artifacts": ["deployment plan", "rollback plan", "audit log"],
+  "evidence_types": ["dry-run output", "configuration diff", "human approval"],
+  "verifier_requirements": ["human approval or authoritative environment check required"],
+  "risk_rules": ["destructive command", "environment mismatch", "unreviewed production change"],
+  "done_policy_hints": ["devops tasks require explicit authority before mutation"],
+  "final_status_authority": "certifier_only",
+  "can_certify_done": false
+}

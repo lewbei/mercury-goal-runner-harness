@@ -1,0 +1,14 @@
+{
+  "domain_pack_id": "experiment",
+  "version": "v1.8",
+  "allowed_task_types": ["experiment"],
+  "allowed_strategies": ["S.UNKNOWN_NEED_USER"],
+  "common_capabilities": ["audit", "policy_engine"],
+  "expected_artifacts": ["protocol", "result table", "run log"],
+  "evidence_types": ["protocol", "seed log", "expected-vs-actual metrics"],
+  "verifier_requirements": ["experiment claims require run artifacts or human review"],
+  "risk_rules": ["partial run", "seed cherry-picking", "stale report"],
+  "done_policy_hints": ["experiment summaries require artifact-backed evidence"],
+  "final_status_authority": "certifier_only",
+  "can_certify_done": false
+}

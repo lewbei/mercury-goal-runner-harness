@@ -1,0 +1,14 @@
+{
+  "domain_pack_id": "writing",
+  "version": "v1.8",
+  "allowed_task_types": ["writing"],
+  "allowed_strategies": ["S.WRITE_SIMPLE"],
+  "common_capabilities": ["file_write_run_folder", "plan_graph", "policy_engine"],
+  "expected_artifacts": ["document artifact"],
+  "evidence_types": ["required sections present", "constraints satisfied"],
+  "verifier_requirements": ["independent review required for high-stakes factual claims"],
+  "risk_rules": ["polished but wrong", "unsupported claims"],
+  "done_policy_hints": ["style quality is not certification authority"],
+  "final_status_authority": "certifier_only",
+  "can_certify_done": false
+}

@@ -7,6 +7,7 @@ Who is allowed to certify DONE?
 Strategy can suggest.
 Planner can select.
 Memory can suggest.
+Domain packs can suggest.
 Policy decides.
 Certifier writes final status.
 Pi only reports what the certifier wrote.
@@ -224,7 +225,7 @@ python tests\test_experience_memory.py -v
 Status:
 
 ```text
-DEFERRED
+IMPLEMENTED
 ```
 
 Purpose:
@@ -252,8 +253,10 @@ Macro steps:
 3. Add research pack.
 4. Add writing pack.
 5. Add benchmark pack.
-6. Add domain pack selector.
-7. Leave unknown domains as `NEED_USER`.
+6. Add debugging, experiment, and devops packs.
+7. Add domain pack selector.
+8. Let selected packs shape strategy candidates.
+9. Leave unknown domains as `NEED_USER_DOMAIN`.
 
 Acceptance:
 
@@ -261,6 +264,12 @@ Acceptance:
 domain packs affect strategy candidates
 domain packs cannot certify DONE
 unknown goals do not guess unsafe packs
+```
+
+Implemented proof command:
+
+```cmd
+python tests\test_domain_packs.py -v
 ```
 
 ## v1.9 Strategy Search / Workflow Optimization

@@ -1,0 +1,14 @@
+{
+  "domain_pack_id": "benchmark",
+  "version": "v1.8",
+  "allowed_task_types": ["benchmark"],
+  "allowed_strategies": ["S.BENCHMARK_DIAGNOSTIC"],
+  "common_capabilities": ["artifact_test", "plan_graph", "policy_engine"],
+  "expected_artifacts": ["diagnostic report", "metrics JSON"],
+  "evidence_types": ["expected-vs-actual metrics", "false-pass detection"],
+  "verifier_requirements": ["benchmark reports must include false-pass accounting"],
+  "risk_rules": ["stale report", "partial baseline pool", "cherry-picked metrics"],
+  "done_policy_hints": ["benchmark PASS must come from validator evidence"],
+  "final_status_authority": "certifier_only",
+  "can_certify_done": false
+}

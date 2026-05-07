@@ -21,7 +21,7 @@
     "strategy_id": { "type": "string", "minLength": 1 },
     "task_type": {
       "type": "string",
-      "enum": ["coding", "research", "writing", "debugging", "experiment", "benchmark", "unknown"]
+      "enum": ["coding", "research", "writing", "debugging", "experiment", "benchmark", "devops", "unknown"]
     },
     "required_capabilities": {
       "type": "array",

@@ -1,0 +1,14 @@
+{
+  "domain_pack_id": "debugging",
+  "version": "v1.8",
+  "allowed_task_types": ["debugging"],
+  "allowed_strategies": ["S.DEBUG_REPRO_THEN_PATCH"],
+  "common_capabilities": ["python_command", "artifact_test", "plan_graph", "policy_engine"],
+  "expected_artifacts": ["reproduction evidence", "patch artifact", "regression check"],
+  "evidence_types": ["reproduction", "regression test", "behavior verifier"],
+  "verifier_requirements": ["reproduction and regression evidence required"],
+  "risk_rules": ["patch without reproduction", "test hides failure"],
+  "done_policy_hints": ["debug fixes require behavior evidence, not only patch existence"],
+  "final_status_authority": "certifier_only",
+  "can_certify_done": false
+}

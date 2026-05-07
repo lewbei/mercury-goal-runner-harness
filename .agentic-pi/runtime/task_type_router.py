@@ -6,10 +6,11 @@ import sys
 from pathlib import Path
 
 
-TASK_PRIORITY = ["debugging", "coding", "benchmark", "experiment", "research", "writing", "unknown"]
+TASK_PRIORITY = ["debugging", "coding", "devops", "benchmark", "experiment", "research", "writing", "unknown"]
 TASK_KEYWORDS = {
     "debugging": ["fix", "bug", "error", "failing", "failure", "traceback", "repair"],
     "coding": ["cli", "script", "code", "python", "csv", "json validator", ".py"],
+    "devops": ["deploy", "deployment", "docker", "kubernetes", "ci pipeline", "cd pipeline", "secret", "production"],
     "benchmark": ["benchmark", "diagnostic", "false pass", "false-pass", "metric"],
     "experiment": ["experiment", "ablation", "seed", "protocol"],
     "research": ["paper", "source", "novelty", "literature", "citation", "claim"],

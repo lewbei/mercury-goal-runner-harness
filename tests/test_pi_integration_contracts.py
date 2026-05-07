@@ -307,6 +307,21 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("v1.7 Experience Memory", roadmap)
         self.assertIn("IMPLEMENTED", roadmap)
 
+    def test_v18_doc_records_domain_pack_boundary(self):
+        doc = read(ROOT / "docs" / "V1_8_DOMAIN_PACKS.md")
+        roadmap = read(ROOT / "docs" / "V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md")
+
+        self.assertIn("DOMAIN PACKS IMPLEMENTED", doc)
+        self.assertIn("domain_pack_selection.json", doc)
+        self.assertIn("coding", doc)
+        self.assertIn("research", doc)
+        self.assertIn("benchmark", doc)
+        self.assertIn("domain packs can suggest", doc)
+        self.assertIn("domain packs cannot certify DONE", doc)
+        self.assertIn("unknown goals do not guess unsafe packs", doc)
+        self.assertIn("v1.8 Domain Packs", roadmap)
+        self.assertIn("IMPLEMENTED", roadmap)
+
     def test_framework_doc_is_linked_from_status_docs(self):
         readme = read(ROOT / "README.md")
         status = read(ROOT / "PROJECT_STATUS.md")
@@ -325,6 +340,8 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("V1_6_TRAJECTORY_LEVEL_EVALUATION.md", status)
         self.assertIn("V1_7_EXPERIENCE_MEMORY.md", readme)
         self.assertIn("V1_7_EXPERIENCE_MEMORY.md", status)
+        self.assertIn("V1_8_DOMAIN_PACKS.md", readme)
+        self.assertIn("V1_8_DOMAIN_PACKS.md", status)
         self.assertIn("V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md", readme)
         self.assertIn("V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md", status)
 

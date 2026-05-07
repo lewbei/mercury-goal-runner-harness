@@ -1,0 +1,14 @@
+{
+  "domain_pack_id": "coding",
+  "version": "v1.8",
+  "allowed_task_types": ["coding"],
+  "allowed_strategies": ["S.CODE_ARTIFACT_TEST"],
+  "common_capabilities": ["python_command", "artifact_test", "plan_graph", "policy_engine"],
+  "expected_artifacts": ["code artifact", "behavior test output"],
+  "evidence_types": ["unit tests", "command tests", "behavior verifier"],
+  "verifier_requirements": ["P2/P3 behavior verifier required for certification"],
+  "risk_rules": ["false pass", "placeholder code", "test written by same worker"],
+  "done_policy_hints": ["P0/P1 tests are advisory unless corroborated"],
+  "final_status_authority": "certifier_only",
+  "can_certify_done": false
+}

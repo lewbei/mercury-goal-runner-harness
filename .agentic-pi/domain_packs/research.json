@@ -1,0 +1,14 @@
+{
+  "domain_pack_id": "research",
+  "version": "v1.8",
+  "allowed_task_types": ["research"],
+  "allowed_strategies": ["S.RESEARCH_SOURCE_AUDIT"],
+  "common_capabilities": ["audit", "policy_engine"],
+  "expected_artifacts": ["source list", "claim audit", "novelty matrix"],
+  "evidence_types": ["source-backed claims", "quote-limited summaries", "human review for strong claims"],
+  "verifier_requirements": ["source audit or human review required for strong claims"],
+  "risk_rules": ["hallucinated source", "overclaimed novelty", "stale facts"],
+  "done_policy_hints": ["research claims should not be certified by self-authored evidence alone"],
+  "final_status_authority": "certifier_only",
+  "can_certify_done": false
+}

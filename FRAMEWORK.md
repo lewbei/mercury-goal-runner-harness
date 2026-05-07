@@ -34,7 +34,7 @@ Pi only reports what the certifier wrote.
 Current pushed state:
 
 ```text
-v1.7 = Experience Memory
+v1.8 = Domain Packs
 ```
 
 The deterministic raw-goal proof cases are:
@@ -87,6 +87,12 @@ v1.7 adds advisory experience memory:
 completed run -> experience_extract.json -> learning record -> retrieved_experience.json -> strategy score adjustment
 ```
 
+v1.8 adds deterministic domain packs:
+
+```text
+task_type_decision.json -> domain_pack_selection.json -> domain-aware strategy_candidates.json
+```
+
 It does not prove arbitrary natural-language autonomy.
 
 ## Conceptual Architecture
@@ -96,6 +102,7 @@ Raw Goal
   -> Goal Contract
   -> Verifier Contract
   -> Task Type Router
+  -> Domain Pack Selector
   -> Capability Inventory
   -> Strategy Candidates
   -> Applicability Gate
@@ -117,6 +124,7 @@ Raw Goal
   -> Certifier
   -> Trajectory Evaluation
   -> Experience Memory
+  -> Domain Packs
   -> Audit / Replay
   -> Final Status
   -> Pi Reports Status Only
@@ -189,6 +197,12 @@ Raw Goal
     Extracts reusable strategy lessons, writes append-only learning records,
     retrieves matching principles, and adjusts strategy scores. Memory can
     suggest, but cannot certify DONE or bypass applicability gates.
+
+17. Domain Pack Layer
+    Selects deterministic task-domain packs for coding, research, writing,
+    debugging, experiment, benchmark, and devops tasks. Domain packs can shape
+    strategy candidates and verifier hints, but cannot certify DONE or bypass
+    the policy engine.
 ```
 
 ## Authority Model
@@ -233,6 +247,7 @@ top-level folders. The implemented files are:
 .agentic-pi/runtime/compile_raw_goal.py
 .agentic-pi/runtime/planning_proof_runner.py
 .agentic-pi/runtime/task_type_router.py
+.agentic-pi/runtime/domain_pack_selector.py
 .agentic-pi/runtime/capability_inventory.py
 .agentic-pi/runtime/strategy_generator.py
 .agentic-pi/runtime/strategy_applicability_gate.py
@@ -293,6 +308,8 @@ top-level folders. The implemented files are:
 .agentic-pi/evaluation/session_trace_scorer.py
 
 .agentic-pi/memory/learning_records/
+
+.agentic-pi/domain_packs/
 
 .pi/agents/goal-orchestrator.md
 .pi/agents/verifier-generator.md
@@ -393,6 +410,7 @@ deterministic milestone proof fixture -> milestone_plan.json -> local_step_plan.
 deterministic drift proof fixture -> drift_report.json none -> CERTIFIED_DONE
 deterministic trajectory evaluation -> duplicate/manual/missing/unsafe/wrong-order cases fail
 deterministic experience memory -> success/failure/provisional lessons affect strategy score but do not certify
+deterministic domain packs -> task type selects pack -> strategy candidates receive advisory domain hints
 P0/P1/P2/missing verifier policy behavior
 smell report recording
 strength report recording
@@ -416,7 +434,6 @@ semantic optimality of selected branches
 semantic optimality of selected strategies
 semantic quality of milestones
 automatic repair application
-experience memory
 domain pack quality
 strategy search / workflow optimization
 automatic verifier generation
@@ -438,6 +455,7 @@ python tests\test_milestone_planning.py -v
 python tests\test_drift_replanning.py -v
 python tests\test_trajectory_evaluation.py -v
 python tests\test_experience_memory.py -v
+python tests\test_domain_packs.py -v
 python -m unittest discover tests -v
 python .agentic-pi\diagnostics\evaluation\run_diagnostic_evaluation.py
 python .agentic-pi\diagnostics\trajectory_evaluation\run_trajectory_evaluation.py
@@ -459,6 +477,7 @@ python .agentic-pi\runtime\pi_cli.py goal-drift-proof pi_smoke_drift_proof_p2
 Raw Goal
   -> Goal Contract
   -> Task Type Router
+  -> Domain Pack Selector
   -> Capability Inventory
   -> Strategy Selector
   -> Milestone Plan

@@ -2,7 +2,7 @@
 
 ## Current version
 
-Mercury Goal Runner Harness v1.7 is Experience Memory on top of the v1.6 Trajectory-Level Evaluation proof.
+Mercury Goal Runner Harness v1.8 is Domain Packs on top of the v1.7 Experience Memory proof.
 
 The purpose of this repository is not to claim that Mercury V2 becomes smarter by looping. The purpose is to place Mercury V2 inside a controlled goal-execution harness where outputs are checked through contracts, logs, evidence, and certification.
 
@@ -113,9 +113,10 @@ v1.4 = Milestone planning IMPLEMENTED
 v1.5 = Drift-aware replanning IMPLEMENTED
 v1.6 = Trajectory-level evaluation IMPLEMENTED
 v1.7 = Experience memory IMPLEMENTED
+v1.8 = Domain packs IMPLEMENTED
 ```
 
-These smokes are local evidence, not automated CI evidence. The full `goal-runner.chain.md` runtime remains unverified. The v0.5.7 smoke produced the expected certifier artifacts, but Pi exited with a stale extension-context error from the installed `@tmustier/pi-agent-teams` extension after output. The v0.5.8 smoke reproduced that failure with the global extension set and then showed a clean exit under a temporary subagents-only Pi config. The v0.5.9 slice adds deterministic session-audit fixtures so duplicate certifier invocations, manual status writes, unsafe deletion, and inferred status after missing reads fail audit. The v0.5.10 slice adds deterministic disposable smoke setup so Pi prompts no longer need to mix copy/setup/certify/report. The v0.5.11 slice adds weak/failing status preservation checks so Pi does not repair or upgrade `NOT_DONE`, `PROVISIONAL_DONE`, or `DONE_FAIL`. The v0.6 slice adds deterministic local host-task certification against disposable runs. The v0.7 slice adds deterministic branch candidates with explicit verifier requirements. The v0.8 slice selects branches by verifier-provenance certifiability while leaving final certification to the certifier. The v0.9 slice adds read-only replay, dry-run rollback, and audit reports that can block certification. The v1.0 slice freezes a thin local command surface and practical examples. The v1.1 slice adds deterministic raw-goal compilation fixtures. The v1.2 slice proves the selected branch handoff into `merged_plan.json` before worker execution and certification. The v1.3 slice adds deterministic task-type routing, capability inventory, strategy candidates, applicability gating, scoring, selection, and step compilation. The v1.4 slice adds deterministic milestone planning and local step planning between selected strategy and `merged_plan.json`. The v1.5 slice adds checkpoints, plan monitoring, drift reports, bounded delta plans, and certifier blocking for unresolved drift. The v1.6 slice adds trajectory-level tool-use evaluation for tool choice, arguments, order, duplicate certifier calls, manual writes, missing reads, and unsafe deletion. The v1.7 slice adds advisory experience memory that can extract lessons, write append-only records, retrieve relevant principles, and adjust strategy scores without certifying DONE.
+These smokes are local evidence, not automated CI evidence. The full `goal-runner.chain.md` runtime remains unverified. The v0.5.7 smoke produced the expected certifier artifacts, but Pi exited with a stale extension-context error from the installed `@tmustier/pi-agent-teams` extension after output. The v0.5.8 smoke reproduced that failure with the global extension set and then showed a clean exit under a temporary subagents-only Pi config. The v0.5.9 slice adds deterministic session-audit fixtures so duplicate certifier invocations, manual status writes, unsafe deletion, and inferred status after missing reads fail audit. The v0.5.10 slice adds deterministic disposable smoke setup so Pi prompts no longer need to mix copy/setup/certify/report. The v0.5.11 slice adds weak/failing status preservation checks so Pi does not repair or upgrade `NOT_DONE`, `PROVISIONAL_DONE`, or `DONE_FAIL`. The v0.6 slice adds deterministic local host-task certification against disposable runs. The v0.7 slice adds deterministic branch candidates with explicit verifier requirements. The v0.8 slice selects branches by verifier-provenance certifiability while leaving final certification to the certifier. The v0.9 slice adds read-only replay, dry-run rollback, and audit reports that can block certification. The v1.0 slice freezes a thin local command surface and practical examples. The v1.1 slice adds deterministic raw-goal compilation fixtures. The v1.2 slice proves the selected branch handoff into `merged_plan.json` before worker execution and certification. The v1.3 slice adds deterministic task-type routing, capability inventory, strategy candidates, applicability gating, scoring, selection, and step compilation. The v1.4 slice adds deterministic milestone planning and local step planning between selected strategy and `merged_plan.json`. The v1.5 slice adds checkpoints, plan monitoring, drift reports, bounded delta plans, and certifier blocking for unresolved drift. The v1.6 slice adds trajectory-level tool-use evaluation for tool choice, arguments, order, duplicate certifier calls, manual writes, missing reads, and unsafe deletion. The v1.7 slice adds advisory experience memory that can extract lessons, write append-only records, retrieve relevant principles, and adjust strategy scores without certifying DONE. The v1.8 slice adds deterministic domain packs that shape strategy candidates and verifier hints without certifying DONE.
 
 ## What v0.3 proves
 
@@ -223,7 +224,8 @@ See `docs/V1_4_MILESTONE_PLANNING.md` for the deterministic milestone-planning p
 See `docs/V1_5_DRIFT_AWARE_REPLANNING.md` for the deterministic drift-aware replanning proof.
 See `docs/V1_6_TRAJECTORY_LEVEL_EVALUATION.md` for the trajectory-level evaluation proof.
 See `docs/V1_7_EXPERIENCE_MEMORY.md` for the advisory experience-memory proof.
-See `docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md` for the v1.8-v2.0 roadmap.
+See `docs/V1_8_DOMAIN_PACKS.md` for the domain-pack proof.
+See `docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md` for the v1.9-v2.0 roadmap.
 See `FRAMEWORK.md` for the conceptual architecture and actual current file map.
 See `docs/PI_PROMPT_CONTRACTS.md` for safe Pi prompt patterns.
 See `docs/PI_BASH_ALLOWLIST.md` for the current documented bash safety boundary.
@@ -247,20 +249,19 @@ It does not yet include:
 - cost budgets,
 - or long-term memory quality checks.
 
-The current `run_goal.py` is still a prepared-run orchestrator. It expects an existing run folder and `goal_contract.json`. The v1.5 drift proof runner, v1.6 trajectory evaluator, and v1.7 experience memory tools are deterministic proof glue, not a live autonomous planner.
+The current `run_goal.py` is still a prepared-run orchestrator. It expects an existing run folder and `goal_contract.json`. The v1.5 drift proof runner, v1.6 trajectory evaluator, v1.7 experience memory tools, and v1.8 domain-pack tools are deterministic proof glue, not a live autonomous planner.
 
-The v1.8-v2.0 roadmap remains unimplemented beyond documented sequencing:
+The v1.9-v2.0 roadmap remains unimplemented beyond documented sequencing:
 
-- domain packs,
 - strategy search / workflow optimization,
 - and integrated proof packaging.
 
 ## Next milestone
 
-The next milestone should add v1.8 domain packs without overclaiming full Pi autonomy:
+The next milestone should add v1.9 strategy search without overclaiming full Pi autonomy:
 
-1. define domain pack schema,
-2. add coding, research, writing, benchmark, debugging, experiment, and devops packs,
-3. let domain packs affect strategy candidates,
-4. keep domain packs advisory only,
-5. and preserve the v1.7 experience-memory proof.
+1. define workflow candidate schema,
+2. compare fixed and alternative deterministic workflows,
+3. score workflow candidates with trajectory, drift, memory, and domain-pack evidence,
+4. reject any workflow that bypasses the certifier,
+5. and preserve the v1.8 domain-pack proof.

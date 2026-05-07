@@ -6,7 +6,7 @@ Last verified: 2026-05-07
 
 ## Current Direction
 
-The implemented local layer is v1.7 Experience Memory on top of v1.6 Trajectory-Level Evaluation, v1.5 Drift-Aware Replanning, v1.4 Milestone Planning, v1.3 Strategy Planner, v1.2 Planning Proof Hardening, and the verifier-provenance certification stack. The research direction is Verifier-Provenance Goal Runner Harness, centered on:
+The implemented local layer is v1.8 Domain Packs on top of v1.7 Experience Memory, v1.6 Trajectory-Level Evaluation, v1.5 Drift-Aware Replanning, v1.4 Milestone Planning, v1.3 Strategy Planner, v1.2 Planning Proof Hardening, and the verifier-provenance certification stack. The research direction is Verifier-Provenance Goal Runner Harness, centered on:
 
 ```text
 Who is allowed to certify DONE?
@@ -19,7 +19,7 @@ Who is allowed to certify DONE?
 - `FRAMEWORK.md` - conceptual architecture and actual current file map.
 - `PROBLEM_AND_GAP.md` - current research problem and gap.
 - `VERIFIER_PROVENANCE_DESIGN.md` - verifier authority model and deferred implementation boundary.
-- `docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md` - v1.8-v2.0 roadmap after experience memory.
+- `docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md` - v1.9-v2.0 roadmap after domain packs.
 - `certification_policy.yaml` - draft static policy vocabulary.
 
 ## Active Supporting Files
@@ -43,6 +43,7 @@ Who is allowed to certify DONE?
 - `docs/V1_5_DRIFT_AWARE_REPLANNING.md` - deterministic drift-aware replanning proof.
 - `docs/V1_6_TRAJECTORY_LEVEL_EVALUATION.md` - deterministic trajectory-level evaluation proof.
 - `docs/V1_7_EXPERIENCE_MEMORY.md` - advisory experience-memory proof.
+- `docs/V1_8_DOMAIN_PACKS.md` - deterministic domain-pack proof.
 - `.agentic-pi/diagnostics/provenance_gate/` - four-case copy-ready provenance diagnostic set.
 - `.agentic-pi/diagnostics/trajectory_evaluation/` - six-case trajectory-level diagnostic set.
 - `PLAN_ROUTER.md` - deterministic planner stub note.
@@ -56,4 +57,5 @@ Who is allowed to certify DONE?
 - The policy engine consumes verifier provenance, smell reports, strength reports, and verifier contracts.
 - Drift reports can block certification; trajectory evaluators can fail unsafe behavior. Neither can certify DONE.
 - Experience memory can adjust strategy scores but cannot bypass applicability gates or certify DONE.
-- v1.8 Domain Packs, v1.9 Strategy Search, and v2.0 Integrated Proof Package remain deferred.
+- Domain packs can shape strategy candidates and verifier hints, but cannot certify DONE.
+- v1.9 Strategy Search and v2.0 Integrated Proof Package remain deferred.

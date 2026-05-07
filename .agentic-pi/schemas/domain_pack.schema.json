@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DomainPack",
+  "type": "object",
+  "required": [
+    "domain_pack_id",
+    "version",
+    "allowed_task_types",
+    "allowed_strategies",
+    "common_capabilities",
+    "expected_artifacts",
+    "evidence_types",
+    "verifier_requirements",
+    "risk_rules",
+    "done_policy_hints",
+    "final_status_authority",
+    "can_certify_done"
+  ],
+  "properties": {
+    "domain_pack_id": { "type": "string", "minLength": 1 },
+    "version": { "type": "string", "minLength": 1 },
+    "allowed_task_types": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "allowed_strategies": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "common_capabilities": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "expected_artifacts": { "type": "array", "items": { "type": "string" } },
+    "evidence_types": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "verifier_requirements": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "risk_rules": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "done_policy_hints": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "final_status_authority": { "type": "string", "enum": ["certifier_only"] },
+    "can_certify_done": { "type": "boolean", "enum": [false] }
+  },
+  "additionalProperties": false
+}

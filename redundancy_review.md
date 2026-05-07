@@ -23,13 +23,14 @@ The workspace is clean enough to proceed with the verifier-provenance direction,
 | Drift-aware replanning evidence | `docs/V1_5_DRIFT_AWARE_REPLANNING.md` | `.agentic-pi/runtime/drift_detector.py`, `.agentic-pi/runtime/drift_proof_runner.py`, `tests/test_drift_replanning.py` | Current |
 | Trajectory-level evaluation evidence | `docs/V1_6_TRAJECTORY_LEVEL_EVALUATION.md` | `.agentic-pi/evaluation/`, `.agentic-pi/diagnostics/trajectory_evaluation/`, `tests/test_trajectory_evaluation.py` | Current |
 | Experience memory evidence | `docs/V1_7_EXPERIENCE_MEMORY.md` | `.agentic-pi/runtime/experience_extractor.py`, `.agentic-pi/runtime/experience_retriever.py`, `tests/test_experience_memory.py` | Current |
+| Domain pack evidence | `docs/V1_8_DOMAIN_PACKS.md` | `.agentic-pi/domain_packs/`, `.agentic-pi/runtime/domain_pack_selector.py`, `tests/test_domain_packs.py` | Current |
 | Navigation | `workspace_index.md` | this file | Current |
 
 ## Outdated Or Superseded Direction
 
-The previous immediate milestone was experience memory after trajectory-level evaluation. That is now implemented.
+The previous immediate milestone was domain packs after experience memory. That is now implemented.
 
-The active next step is v1.8 Domain Packs. Domain packs must stay advisory only and cannot certify DONE.
+The active next step is v1.9 Strategy Search / Workflow Optimization. Strategy search must stay advisory to execution planning and cannot certify DONE.
 
 ## Remaining Risk
 
@@ -42,6 +43,8 @@ The current smell scanner records metadata-level smell reports. They are consume
 The current trajectory evaluator records and scores tool-use behavior. It is evidence for trajectory discipline, not evidence that the final artifact is semantically correct.
 
 The current experience memory stores reusable strategy lessons. It is evidence for advisory strategy scoring, not evidence that memory can certify or bypass policy.
+
+The current domain-pack layer stores deterministic task-domain hints. It is evidence for domain-aware strategy generation, not evidence that domain packs are semantically optimal or can certify DONE.
 
 ## Decision
 

@@ -6,6 +6,9 @@ import sys
 from pathlib import Path
 
 
+ROOT = Path(__file__).resolve().parents[2]
+
+
 def load_json(path: Path):
     with path.open("r", encoding="utf-8-sig") as f:
         return json.load(f)
@@ -31,6 +34,18 @@ def base_candidate(strategy_id, task_type, required, expected, verifier, risk, c
         "status_authority": "none",
         "risk_level": "LOW" if certifying else "MEDIUM",
     }
+
+
+def need_user_candidate(task_type: str) -> dict:
+    return base_candidate(
+        "S.UNKNOWN_NEED_USER",
+        task_type,
+        [],
+        [],
+        ["user must classify the task or provide verifier direction"],
+        ["unknown or high-risk tasks should not be executed speculatively"],
+        False,
+    )
 
 
 def candidates_for_task_type(task_type: str, goal: dict) -> list[dict]:
@@ -99,26 +114,79 @@ def candidates_for_task_type(task_type: str, goal: dict) -> list[dict]:
                 executable=True,
             )
         ]
-    return [
-        base_candidate(
-            "S.UNKNOWN_NEED_USER",
-            "unknown",
-            [],
-            [],
-            ["user must classify the task or provide verifier direction"],
-            ["unknown tasks should not be executed speculatively"],
-            False,
-        )
+    if task_type in {"experiment", "devops"}:
+        return [need_user_candidate(task_type)]
+    return [need_user_candidate("unknown")]
+
+
+def unique_preserve_order(items: list[str]) -> list[str]:
+    seen = set()
+    output = []
+    for item in items:
+        if item not in seen:
+            seen.add(item)
+            output.append(item)
+    return output
+
+
+def load_domain_pack(run_dir: Path) -> tuple[dict | None, dict | None]:
+    selection_path = run_dir / "domain_pack_selection.json"
+    if not selection_path.is_file():
+        return None, None
+    selection = load_json(selection_path)
+    if selection.get("selection_status") != "SELECTED":
+        return selection, None
+    pack_path_value = selection.get("domain_pack_path", "")
+    if not pack_path_value:
+        return selection, None
+    pack_path = ROOT / pack_path_value
+    pack = load_json(pack_path)
+    return selection, pack
+
+
+def apply_domain_pack(candidates: list[dict], pack: dict | None) -> tuple[list[dict], list[str]]:
+    if not pack:
+        return candidates, []
+
+    allowed = set(pack.get("allowed_strategies", []))
+    filtered = [
+        candidate
+        for candidate in candidates
+        if candidate.get("strategy_id") in allowed
     ]
+    selected = filtered or candidates
+    notes = []
+    if not filtered:
+        notes.append("selected domain pack did not match base strategy ids; base candidates retained")
+
+    enriched = []
+    for candidate in selected:
+        candidate = dict(candidate)
+        candidate["required_capabilities"] = unique_preserve_order(
+            candidate.get("required_capabilities", []) + pack.get("common_capabilities", [])
+        )
+        candidate["verifier_requirements"] = unique_preserve_order(
+            candidate.get("verifier_requirements", []) + pack.get("verifier_requirements", [])
+        )
+        candidate["risk_notes"] = unique_preserve_order(
+            candidate.get("risk_notes", []) + pack.get("risk_rules", [])
+        )
+        enriched.append(candidate)
+    return enriched, notes
 
 
 def generate_for_run(run_dir: Path) -> dict:
     task_decision = load_json(run_dir / "task_type_decision.json")
     goal = load_json(run_dir / "goal_contract.json")
     candidates = candidates_for_task_type(task_decision["task_type"], goal)
+    selection, pack = load_domain_pack(run_dir)
+    candidates, domain_notes = apply_domain_pack(candidates, pack)
     output = {
         "run_id": task_decision["run_id"],
         "task_type": task_decision["task_type"],
+        "domain_pack_applied": pack.get("domain_pack_id", "") if pack else "",
+        "domain_pack_selection_status": selection.get("selection_status", "NOT_RUN") if selection else "NOT_RUN",
+        "domain_pack_notes": domain_notes,
         "candidates": candidates,
     }
     write_json(run_dir / "strategy_candidates.json", output)
