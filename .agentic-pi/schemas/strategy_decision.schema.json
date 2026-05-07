@@ -9,7 +9,11 @@
     "reason",
     "rejected_strategies",
     "selector_checks",
-    "status_artifacts_absent_before_selection"
+    "status_artifacts_absent_before_selection",
+    "advisory_memory_used",
+    "advisory_memory_learning_ids",
+    "advisory_memory_authority",
+    "advisory_memory_can_certify_done"
   ],
   "properties": {
     "run_id": { "type": "string", "minLength": 1 },
@@ -35,7 +39,14 @@
       "type": "array",
       "items": { "type": "string", "minLength": 1 }
     },
-    "status_artifacts_absent_before_selection": { "type": "boolean" }
+    "status_artifacts_absent_before_selection": { "type": "boolean" },
+    "advisory_memory_used": { "type": "boolean" },
+    "advisory_memory_learning_ids": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "advisory_memory_authority": { "type": "string", "enum": ["advisory_only"] },
+    "advisory_memory_can_certify_done": { "type": "boolean", "enum": [false] }
   },
   "additionalProperties": false
 }

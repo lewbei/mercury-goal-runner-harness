@@ -293,6 +293,20 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("v1.6 Trajectory-Level Evaluation", roadmap)
         self.assertIn("IMPLEMENTED", roadmap)
 
+    def test_v17_doc_records_experience_memory_boundary(self):
+        doc = read(ROOT / "docs" / "V1_7_EXPERIENCE_MEMORY.md")
+        roadmap = read(ROOT / "docs" / "V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md")
+
+        self.assertIn("EXPERIENCE MEMORY IMPLEMENTED", doc)
+        self.assertIn("experience_extract.json", doc)
+        self.assertIn("learning record", doc)
+        self.assertIn("retrieved_experience.json", doc)
+        self.assertIn("memory can suggest", doc)
+        self.assertIn("memory cannot certify DONE", doc)
+        self.assertIn("memory cannot bypass the applicability gate", doc)
+        self.assertIn("v1.7 Experience Memory", roadmap)
+        self.assertIn("IMPLEMENTED", roadmap)
+
     def test_framework_doc_is_linked_from_status_docs(self):
         readme = read(ROOT / "README.md")
         status = read(ROOT / "PROJECT_STATUS.md")
@@ -309,6 +323,8 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("V1_5_DRIFT_AWARE_REPLANNING.md", status)
         self.assertIn("V1_6_TRAJECTORY_LEVEL_EVALUATION.md", readme)
         self.assertIn("V1_6_TRAJECTORY_LEVEL_EVALUATION.md", status)
+        self.assertIn("V1_7_EXPERIENCE_MEMORY.md", readme)
+        self.assertIn("V1_7_EXPERIENCE_MEMORY.md", status)
         self.assertIn("V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md", readme)
         self.assertIn("V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md", status)
 

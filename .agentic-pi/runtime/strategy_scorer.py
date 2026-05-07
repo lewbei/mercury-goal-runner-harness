@@ -6,6 +6,9 @@ import sys
 from pathlib import Path
 
 
+ROOT = Path(__file__).resolve().parents[2]
+
+
 def load_json(path: Path):
     with path.open("r", encoding="utf-8-sig") as f:
         return json.load(f)
@@ -13,6 +16,19 @@ def load_json(path: Path):
 
 def write_json(path: Path, obj):
     path.write_text(json.dumps(obj, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
+def validate_retrieved_experience(retrieved: dict) -> None:
+    schema = load_json(ROOT / ".agentic-pi" / "schemas" / "retrieved_experience.schema.json")
+    validator_path = ROOT / ".agentic-pi" / "validators" / "validate_schema.py"
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location("validate_schema_for_strategy_scorer", validator_path)
+    validator = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(validator)
+    errors = validator.validate(retrieved, schema)
+    if errors:
+        raise ValueError("retrieved_experience.json schema invalid: " + "; ".join(errors))
 
 
 def score_level(score: int) -> str:
@@ -23,7 +39,25 @@ def score_level(score: int) -> str:
     return "weak"
 
 
-def score_candidate(candidate: dict, provenance_mode: bool) -> dict:
+def adjustments_by_strategy(run_dir: Path) -> dict[str, list[dict]]:
+    path = run_dir / "retrieved_experience.json"
+    if not path.is_file():
+        return {}
+    retrieved = load_json(path)
+    validate_retrieved_experience(retrieved)
+    if retrieved.get("final_status_authority") != "certifier_only" or retrieved.get("can_certify_done") is not False:
+        raise ValueError("retrieved_experience.json must be advisory and certifier_only")
+    output = {}
+    for adjustment in retrieved.get("strategy_adjustments", []):
+        strategy_id = adjustment.get("strategy_id", "")
+        if strategy_id:
+            adjustment = dict(adjustment)
+            adjustment["score_delta"] = max(-2, min(1, int(adjustment.get("score_delta", 0))))
+            output.setdefault(strategy_id, []).append(adjustment)
+    return output
+
+
+def score_candidate(candidate: dict, provenance_mode: bool, experience_adjustments: list[dict] | None = None) -> dict:
     score = 0
     positives = []
     penalties = []
@@ -51,6 +85,16 @@ def score_candidate(candidate: dict, provenance_mode: bool) -> dict:
         score += 1
         positives.append("small_capability_surface")
 
+    for adjustment in experience_adjustments or []:
+        delta = adjustment.get("score_delta", 0)
+        reason = adjustment.get("reason", "experience memory")
+        if delta > 0:
+            score += delta
+            positives.append(reason)
+        elif delta < 0:
+            score += delta
+            penalties.append(reason)
+
     return {
         "strategy_id": candidate.get("strategy_id", ""),
         "score": score,
@@ -63,8 +107,9 @@ def score_candidate(candidate: dict, provenance_mode: bool) -> dict:
 def score_run(run_dir: Path) -> dict:
     applicability = load_json(run_dir / "strategy_applicability.json")
     provenance_mode = (run_dir / "verifier_contract.json").is_file()
+    memory_adjustments = adjustments_by_strategy(run_dir)
     scores = [
-        score_candidate(candidate, provenance_mode)
+        score_candidate(candidate, provenance_mode, memory_adjustments.get(candidate.get("strategy_id", ""), []))
         for candidate in applicability.get("applicable_strategies", [])
     ]
     for blocked in applicability.get("blocked_strategies", []):
@@ -79,6 +124,7 @@ def score_run(run_dir: Path) -> dict:
     output = {
         "run_id": applicability.get("run_id", ""),
         "task_type": applicability.get("task_type", "unknown"),
+        "experience_memory_used": bool(memory_adjustments),
         "scores": scores,
     }
     write_json(run_dir / "strategy_scores.json", output)

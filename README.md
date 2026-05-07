@@ -6,7 +6,7 @@ The goal is not to make Mercury V2 magically smarter by looping. The goal is to 
 
 ## Current status
 
-v1.6 is Trajectory-Level Evaluation on top of the v1.5 Drift-Aware Replanning proof.
+v1.7 is Experience Memory on top of the v1.6 Trajectory-Level Evaluation proof.
 
 The current research direction is:
 
@@ -59,7 +59,8 @@ See [`docs/V1_3_STRATEGY_PLANNER.md`](docs/V1_3_STRATEGY_PLANNER.md) for the det
 See [`docs/V1_4_MILESTONE_PLANNING.md`](docs/V1_4_MILESTONE_PLANNING.md) for the deterministic milestone-planning proof.
 See [`docs/V1_5_DRIFT_AWARE_REPLANNING.md`](docs/V1_5_DRIFT_AWARE_REPLANNING.md) for the deterministic drift-aware replanning proof.
 See [`docs/V1_6_TRAJECTORY_LEVEL_EVALUATION.md`](docs/V1_6_TRAJECTORY_LEVEL_EVALUATION.md) for the trajectory-level evaluation proof.
-See [`docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md`](docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md) for the v1.7-v2.0 roadmap.
+See [`docs/V1_7_EXPERIENCE_MEMORY.md`](docs/V1_7_EXPERIENCE_MEMORY.md) for the advisory experience-memory proof.
+See [`docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md`](docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md) for the v1.8-v2.0 roadmap.
 See [`docs/PI_PROMPT_CONTRACTS.md`](docs/PI_PROMPT_CONTRACTS.md) for safe Pi prompt patterns.
 See [`docs/PI_BASH_ALLOWLIST.md`](docs/PI_BASH_ALLOWLIST.md) for the current documented bash safety boundary.
 
@@ -107,7 +108,8 @@ It demonstrates:
 30. v1.4 proves selected strategy -> milestone plan -> local step plan -> `merged_plan.json`,
 31. v1.5 proves checkpoints, drift reports, delta plans, and certifier blocking for unresolved drift,
 32. v1.6 proves trajectory-level tool-use evaluation for duplicate calls, manual writes, missing reads, unsafe deletion, and wrong command order,
-33. and the benchmark reports false-PASS status explicitly.
+33. v1.7 proves advisory experience extraction, append-only learning records, retrieval, and score adjustment without bypassing the applicability gate,
+34. and the benchmark reports false-PASS status explicitly.
 
 ## Core parts
 
@@ -264,7 +266,7 @@ python -m unittest discover tests -v
 Committed repo state:
 
 ```text
-v1.6 = Trajectory-Level Evaluation
+v1.7 = Experience Memory
 ```
 
 Local smoke-tested state:
@@ -289,6 +291,7 @@ v1.3 = Strategy planner IMPLEMENTED
 v1.4 = Milestone planning IMPLEMENTED
 v1.5 = Drift-aware replanning IMPLEMENTED
 v1.6 = Trajectory-level evaluation IMPLEMENTED
+v1.7 = Experience memory IMPLEMENTED
 ```
 
 The v0.5 Pi chain lives at:
@@ -305,7 +308,7 @@ The new v0.5 Pi agents are:
 .pi/agents/verifier-reviewer.md
 ```
 
-The full `goal-runner.chain.md` runtime remains unverified. v0.5.8 shows the stale Pi exit disappears under a subagents-only Pi config. v0.5.9 adds deterministic auditing for one-bash-call discipline, including a failing fixture for the duplicate certifier invocation pattern. v0.5.10 adds deterministic disposable smoke setup so Pi prompts can stay single-action. v0.5.11 verifies that weak/failing statuses are reported, not repaired or upgraded. v0.6 adds local host-task certification against disposable runs. v0.7 adds deterministic branch candidates with explicit verifier requirements. v0.8 selects branches by path to verifier-provenance certification. v0.9 adds read-only replay, dry-run rollback, and audit blocking. v1.0 freezes a thin local command surface and practical examples without claiming full Pi autonomy. v1.1 adds deterministic raw-goal compilation fixtures. v1.2 proves that the selected branch can be materialized into `merged_plan.json` before worker execution and certification. v1.3 adds deterministic strategy selection before step compilation. v1.4 adds deterministic milestone planning between selected strategy and local executable steps. v1.5 adds drift detection, bounded delta plans, and certifier blocking for unresolved drift. v1.6 adds trajectory-level tool-use evaluation for command choice, arguments, order, duplicate certifier calls, manual writes, missing reads, and unsafe deletion. The next milestone is v1.7 experience memory, then domain packs and strategy search without claiming full Pi autonomy.
+The full `goal-runner.chain.md` runtime remains unverified. v0.5.8 shows the stale Pi exit disappears under a subagents-only Pi config. v0.5.9 adds deterministic auditing for one-bash-call discipline, including a failing fixture for the duplicate certifier invocation pattern. v0.5.10 adds deterministic disposable smoke setup so Pi prompts can stay single-action. v0.5.11 verifies that weak/failing statuses are reported, not repaired or upgraded. v0.6 adds local host-task certification against disposable runs. v0.7 adds deterministic branch candidates with explicit verifier requirements. v0.8 selects branches by path to verifier-provenance certification. v0.9 adds read-only replay, dry-run rollback, and audit blocking. v1.0 freezes a thin local command surface and practical examples without claiming full Pi autonomy. v1.1 adds deterministic raw-goal compilation fixtures. v1.2 proves that the selected branch can be materialized into `merged_plan.json` before worker execution and certification. v1.3 adds deterministic strategy selection before step compilation. v1.4 adds deterministic milestone planning between selected strategy and local executable steps. v1.5 adds drift detection, bounded delta plans, and certifier blocking for unresolved drift. v1.6 adds trajectory-level tool-use evaluation for command choice, arguments, order, duplicate certifier calls, manual writes, missing reads, and unsafe deletion. v1.7 adds advisory experience memory that can adjust strategy scores but cannot bypass applicability gates or certify DONE. The next milestone is v1.8 domain packs, then strategy search without claiming full Pi autonomy.
 
 ## Planner Stub
 

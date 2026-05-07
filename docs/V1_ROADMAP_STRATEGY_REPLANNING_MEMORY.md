@@ -182,7 +182,7 @@ python .agentic-pi\diagnostics\trajectory_evaluation\run_trajectory_evaluation.p
 Status:
 
 ```text
-DEFERRED
+IMPLEMENTED
 ```
 
 Purpose:
@@ -211,6 +211,12 @@ memory can suggest
 memory cannot write final_status.md
 memory cannot certify DONE
 memory cannot bypass applicability gate
+```
+
+Implemented proof command:
+
+```cmd
+python tests\test_experience_memory.py -v
 ```
 
 ## v1.8 Domain Packs

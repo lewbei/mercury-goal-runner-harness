@@ -20,6 +20,7 @@ artifacts/
 !.agentic-pi/diagnostics/provenance_gate/**/artifacts/**
 !.agentic-pi/diagnostics/evaluation/**/artifacts/
 !.agentic-pi/diagnostics/evaluation/**/artifacts/**
+.agentic-pi/memory/learning_records/*.json
 .pi/tasks/
 
 # Deferred planner/runtime prototypes; v0.5 Pi integration is prompt contracts only.

@@ -57,6 +57,7 @@ def run_drift_proof(run_id: str) -> dict:
         ([".agentic-pi/runtime/capability_inventory.py", str(run_dir)], "capability inventory written"),
         ([".agentic-pi/runtime/strategy_generator.py", str(run_dir)], "strategy candidates generated"),
         ([".agentic-pi/runtime/strategy_applicability_gate.py", str(run_dir)], "strategy applicability gated"),
+        ([".agentic-pi/runtime/experience_retriever.py", str(run_dir)], "advisory experience retrieved"),
         ([".agentic-pi/runtime/strategy_scorer.py", str(run_dir)], "strategy scores recorded"),
     ]:
         run_tool(args)

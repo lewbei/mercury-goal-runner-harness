@@ -15,10 +15,10 @@ class FrameworkDocTests(unittest.TestCase):
         self.assertIn("Certifier writes the final status.", doc)
         self.assertIn("Pi only reports what the certifier wrote.", doc)
 
-    def test_framework_doc_records_current_v16_state(self):
+    def test_framework_doc_records_current_v17_state(self):
         doc = (ROOT / "FRAMEWORK.md").read_text(encoding="utf-8")
 
-        self.assertIn("v1.6 = Trajectory-Level Evaluation", doc)
+        self.assertIn("v1.7 = Experience Memory", doc)
         self.assertIn("raw_simple_legacy -> DONE_PASS", doc)
         self.assertIn("raw_p2_provenance -> CERTIFIED_DONE", doc)
         self.assertIn("raw_missing_verifier -> NOT_DONE", doc)
@@ -27,6 +27,7 @@ class FrameworkDocTests(unittest.TestCase):
         self.assertIn("raw goal -> selected strategy -> milestone_plan.json -> local_step_plan.json", doc)
         self.assertIn("raw goal -> worker -> checkpoints -> drift_report.json -> delta_plan.json", doc)
         self.assertIn("Pi/tool session -> tool_use_audit.json -> trajectory_score.json", doc)
+        self.assertIn("completed run -> experience_extract.json -> learning record -> retrieved_experience.json", doc)
 
     def test_framework_doc_uses_actual_current_paths(self):
         doc = (ROOT / "FRAMEWORK.md").read_text(encoding="utf-8")
@@ -51,6 +52,10 @@ class FrameworkDocTests(unittest.TestCase):
             ".agentic-pi/runtime/drift_detector.py",
             ".agentic-pi/runtime/replan_controller.py",
             ".agentic-pi/runtime/drift_proof_runner.py",
+            ".agentic-pi/runtime/experience_extractor.py",
+            ".agentic-pi/runtime/learning_record_writer.py",
+            ".agentic-pi/runtime/strategy_memory.py",
+            ".agentic-pi/runtime/experience_retriever.py",
             ".agentic-pi/runtime/pi_cli.py",
             ".agentic-pi/evaluation/trajectory_metrics.py",
             ".agentic-pi/evaluation/tool_use_audit.py",
@@ -81,7 +86,7 @@ class FrameworkDocTests(unittest.TestCase):
         self.assertIn("semantic quality of milestones", doc)
         self.assertIn("automatic repair application", doc)
         self.assertIn("deterministic trajectory evaluation", doc)
-        self.assertIn("experience memory", doc)
+        self.assertIn("domain pack quality", doc)
         self.assertNotIn("Pi can safely solve arbitrary raw goals autonomously.", doc)
 
 

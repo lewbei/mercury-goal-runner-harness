@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ExperienceExtract",
+  "type": "object",
+  "required": [
+    "run_id",
+    "generated_by",
+    "generated_at",
+    "task_type",
+    "strategy_id",
+    "outcome_status",
+    "outcome_kind",
+    "principle",
+    "do_not_use_when",
+    "weak_verifier_patterns",
+    "drift_causes",
+    "tool_use_issues",
+    "evidence_files",
+    "final_status_authority",
+    "can_certify_done"
+  ],
+  "properties": {
+    "run_id": { "type": "string", "minLength": 1 },
+    "generated_by": { "type": "string", "minLength": 1 },
+    "generated_at": { "type": "string", "minLength": 1 },
+    "task_type": { "type": "string", "minLength": 1 },
+    "strategy_id": { "type": "string" },
+    "outcome_status": { "type": "string" },
+    "outcome_kind": { "type": "string", "enum": ["success", "provisional", "failure", "unknown"] },
+    "principle": { "type": "string", "minLength": 1 },
+    "do_not_use_when": { "type": "array", "items": { "type": "string" } },
+    "weak_verifier_patterns": { "type": "array", "items": { "type": "string" } },
+    "drift_causes": { "type": "array", "items": { "type": "string" } },
+    "tool_use_issues": { "type": "array", "items": { "type": "string" } },
+    "evidence_files": { "type": "array", "items": { "type": "string" } },
+    "final_status_authority": { "type": "string", "enum": ["certifier_only"] },
+    "can_certify_done": { "type": "boolean", "enum": [false] }
+  },
+  "additionalProperties": false
+}

@@ -265,6 +265,9 @@ class StrategyPlannerTests(unittest.TestCase):
         self.assertEqual(decision["decision_status"], "SELECTED")
         self.assertEqual(decision["selected_strategy"], "S.WRITE_SIMPLE")
         self.assertTrue(decision["status_artifacts_absent_before_selection"])
+        self.assertFalse(decision["advisory_memory_used"])
+        self.assertEqual(decision["advisory_memory_authority"], "advisory_only")
+        self.assertFalse(decision["advisory_memory_can_certify_done"])
         for status_name in ["final_status.md", "certification.json", "policy_decision.json"]:
             self.assertFalse((run_dir / status_name).exists(), status_name)
         schema = run_python(

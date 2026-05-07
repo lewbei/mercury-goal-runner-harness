@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RetrievedExperience",
+  "type": "object",
+  "required": [
+    "run_id",
+    "generated_by",
+    "generated_at",
+    "task_type",
+    "matched_learning_ids",
+    "ignored_learning_ids",
+    "strategy_adjustments",
+    "final_status_authority",
+    "can_certify_done"
+  ],
+  "properties": {
+    "run_id": { "type": "string", "minLength": 1 },
+    "generated_by": { "type": "string", "minLength": 1 },
+    "generated_at": { "type": "string", "minLength": 1 },
+    "task_type": { "type": "string", "minLength": 1 },
+    "matched_learning_ids": { "type": "array", "items": { "type": "string" } },
+    "ignored_learning_ids": { "type": "array", "items": { "type": "string" } },
+    "strategy_adjustments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["strategy_id", "score_delta", "reason", "learning_id"],
+        "properties": {
+          "strategy_id": { "type": "string" },
+          "score_delta": { "type": "integer", "enum": [-2, -1, 0, 1] },
+          "reason": { "type": "string", "minLength": 1 },
+          "learning_id": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "final_status_authority": { "type": "string", "enum": ["certifier_only"] },
+    "can_certify_done": { "type": "boolean", "enum": [false] }
+  },
+  "additionalProperties": false
+}

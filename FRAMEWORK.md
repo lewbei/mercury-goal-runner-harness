@@ -34,7 +34,7 @@ Pi only reports what the certifier wrote.
 Current pushed state:
 
 ```text
-v1.6 = Trajectory-Level Evaluation
+v1.7 = Experience Memory
 ```
 
 The deterministic raw-goal proof cases are:
@@ -81,6 +81,12 @@ v1.6 adds trajectory-level tool-use evaluation:
 Pi/tool session -> tool_use_audit.json -> trajectory_score.json -> diagnostic report
 ```
 
+v1.7 adds advisory experience memory:
+
+```text
+completed run -> experience_extract.json -> learning record -> retrieved_experience.json -> strategy score adjustment
+```
+
 It does not prove arbitrary natural-language autonomy.
 
 ## Conceptual Architecture
@@ -110,6 +116,7 @@ Raw Goal
   -> Policy Engine
   -> Certifier
   -> Trajectory Evaluation
+  -> Experience Memory
   -> Audit / Replay
   -> Final Status
   -> Pi Reports Status Only
@@ -177,6 +184,11 @@ Raw Goal
 
 15. Pi Report Layer
     Pi can orchestrate and report, but cannot certify DONE by itself.
+
+16. Experience Memory Layer
+    Extracts reusable strategy lessons, writes append-only learning records,
+    retrieves matching principles, and adjusts strategy scores. Memory can
+    suggest, but cannot certify DONE or bypass applicability gates.
 ```
 
 ## Authority Model
@@ -237,6 +249,10 @@ top-level folders. The implemented files are:
 .agentic-pi/runtime/drift_detector.py
 .agentic-pi/runtime/replan_controller.py
 .agentic-pi/runtime/drift_proof_runner.py
+.agentic-pi/runtime/experience_extractor.py
+.agentic-pi/runtime/learning_record_writer.py
+.agentic-pi/runtime/strategy_memory.py
+.agentic-pi/runtime/experience_retriever.py
 .agentic-pi/runtime/pi_cli.py
 .agentic-pi/runtime/run_goal.py
 .agentic-pi/runtime/write_goal_contract.py
@@ -271,6 +287,12 @@ top-level folders. The implemented files are:
 .agentic-pi/diagnostics/host_integration/
 .agentic-pi/diagnostics/pi_command_discipline/
 .agentic-pi/diagnostics/trajectory_evaluation/
+
+.agentic-pi/evaluation/trajectory_metrics.py
+.agentic-pi/evaluation/tool_use_audit.py
+.agentic-pi/evaluation/session_trace_scorer.py
+
+.agentic-pi/memory/learning_records/
 
 .pi/agents/goal-orchestrator.md
 .pi/agents/verifier-generator.md
@@ -370,6 +392,7 @@ deterministic strategy proof fixture -> selected strategy -> merged_plan.json ->
 deterministic milestone proof fixture -> milestone_plan.json -> local_step_plan.json -> merged_plan.json -> CERTIFIED_DONE
 deterministic drift proof fixture -> drift_report.json none -> CERTIFIED_DONE
 deterministic trajectory evaluation -> duplicate/manual/missing/unsafe/wrong-order cases fail
+deterministic experience memory -> success/failure/provisional lessons affect strategy score but do not certify
 P0/P1/P2/missing verifier policy behavior
 smell report recording
 strength report recording
@@ -414,6 +437,7 @@ python tests\test_strategy_planner.py -v
 python tests\test_milestone_planning.py -v
 python tests\test_drift_replanning.py -v
 python tests\test_trajectory_evaluation.py -v
+python tests\test_experience_memory.py -v
 python -m unittest discover tests -v
 python .agentic-pi\diagnostics\evaluation\run_diagnostic_evaluation.py
 python .agentic-pi\diagnostics\trajectory_evaluation\run_trajectory_evaluation.py
@@ -451,6 +475,7 @@ Raw Goal
   -> Policy Engine
   -> Certifier
   -> Trajectory Evaluation
+  -> Experience Memory
   -> Audit / Replay
   -> Final Status
   -> Pi Reports Status Only

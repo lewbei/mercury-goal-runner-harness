@@ -23,6 +23,24 @@ def status_artifacts_absent(run_dir: Path) -> bool:
     return not any((run_dir / name).exists() for name in STATUS_FILES)
 
 
+def advisory_memory_summary(run_dir: Path) -> dict:
+    path = run_dir / "retrieved_experience.json"
+    if not path.is_file():
+        return {
+            "advisory_memory_used": False,
+            "advisory_memory_learning_ids": [],
+            "advisory_memory_authority": "advisory_only",
+            "advisory_memory_can_certify_done": False,
+        }
+    retrieved = load_json(path)
+    return {
+        "advisory_memory_used": bool(retrieved.get("matched_learning_ids")),
+        "advisory_memory_learning_ids": retrieved.get("matched_learning_ids", []),
+        "advisory_memory_authority": "advisory_only",
+        "advisory_memory_can_certify_done": False,
+    }
+
+
 def select_run(run_dir: Path) -> dict:
     scores_doc = load_json(run_dir / "strategy_scores.json")
     candidates_doc = load_json(run_dir / "strategy_candidates.json")
@@ -50,6 +68,7 @@ def select_run(run_dir: Path) -> dict:
             "rejected_strategies": rejected,
             "selector_checks": ["strategy selector did not write certification status artifacts"],
             "status_artifacts_absent_before_selection": status_artifacts_absent(run_dir),
+            **advisory_memory_summary(run_dir),
         }
         write_decision_files(run_dir, decision)
         return decision
@@ -81,6 +100,7 @@ def select_run(run_dir: Path) -> dict:
             "strategy selector did not write certification status artifacts",
         ],
         "status_artifacts_absent_before_selection": status_artifacts_absent(run_dir),
+        **advisory_memory_summary(run_dir),
     }
     write_decision_files(run_dir, decision, candidate_by_id.get(selected_id))
     return decision

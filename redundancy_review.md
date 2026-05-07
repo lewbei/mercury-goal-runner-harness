@@ -22,13 +22,14 @@ The workspace is clean enough to proceed with the verifier-provenance direction,
 | Policy and certification evidence | `docs/V0_3_6_POLICY_ENGINE.md` | `.agentic-pi/runtime/policy_engine.py`, `.agentic-pi/validators/certify_run.py`, `tests/test_policy_engine.py` | Current |
 | Drift-aware replanning evidence | `docs/V1_5_DRIFT_AWARE_REPLANNING.md` | `.agentic-pi/runtime/drift_detector.py`, `.agentic-pi/runtime/drift_proof_runner.py`, `tests/test_drift_replanning.py` | Current |
 | Trajectory-level evaluation evidence | `docs/V1_6_TRAJECTORY_LEVEL_EVALUATION.md` | `.agentic-pi/evaluation/`, `.agentic-pi/diagnostics/trajectory_evaluation/`, `tests/test_trajectory_evaluation.py` | Current |
+| Experience memory evidence | `docs/V1_7_EXPERIENCE_MEMORY.md` | `.agentic-pi/runtime/experience_extractor.py`, `.agentic-pi/runtime/experience_retriever.py`, `tests/test_experience_memory.py` | Current |
 | Navigation | `workspace_index.md` | this file | Current |
 
 ## Outdated Or Superseded Direction
 
-The previous immediate milestone was trajectory-level evaluation after drift-aware replanning. That is now implemented.
+The previous immediate milestone was experience memory after trajectory-level evaluation. That is now implemented.
 
-The active next step is v1.7 Experience Memory. Memory must stay advisory only and cannot certify DONE.
+The active next step is v1.8 Domain Packs. Domain packs must stay advisory only and cannot certify DONE.
 
 ## Remaining Risk
 
@@ -39,6 +40,8 @@ The current diagnostic set covers only four deterministic provenance-gate cases.
 The current smell scanner records metadata-level smell reports. They are consumed downstream by strength scoring and policy decisions.
 
 The current trajectory evaluator records and scores tool-use behavior. It is evidence for trajectory discipline, not evidence that the final artifact is semantically correct.
+
+The current experience memory stores reusable strategy lessons. It is evidence for advisory strategy scoring, not evidence that memory can certify or bypass policy.
 
 ## Decision
 
