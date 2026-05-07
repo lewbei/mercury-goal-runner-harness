@@ -2,7 +2,7 @@
 
 ## Current version
 
-Mercury Goal Runner Harness v0.3.2 is a Provenance Runtime Gate on top of the Artifact-Linked PlanGraph prototype.
+Mercury Goal Runner Harness v0.3.3 is Provenance Gate Diagnostic Tests on top of the v0.3.2 Provenance Runtime Gate.
 
 The purpose of this repository is not to claim that Mercury V2 becomes smarter by looping. The purpose is to place Mercury V2 inside a controlled goal-execution harness where outputs are checked through contracts, logs, evidence, and certification.
 
@@ -45,6 +45,13 @@ The latest benchmark includes five cases:
 - impossible/risky,
 - and long-range artifact dependency.
 
+The provenance gate diagnostic set includes four deterministic cases:
+
+- `case_p0_self_test` -> `PROVISIONAL_DONE`,
+- `case_p1_existing_test` -> `PROVISIONAL_DONE`,
+- `case_p2_independent_test` -> `CERTIFIED_DONE`,
+- `case_missing_verifier` -> `NOT_DONE`.
+
 ## What v0.3 proves
 
 v0.3 proves a narrower control principle:
@@ -62,6 +69,8 @@ planned tasks produce named artifacts, downstream tasks require exact artifact I
 ```
 
 The first verifier-provenance runtime gate is now implemented. It activates only when a run contains `verifier_contract.json`; legacy runs without that contract still use `DONE_PASS` / `DONE_FAIL`.
+
+The v0.3.3 diagnostic slice verifies this behavior using deterministic fixtures only. It is not a broad benchmark.
 
 The harness now requires:
 
@@ -114,6 +123,8 @@ The benchmark now records:
 
 See `docs/V0_2_1_FREEZE.md` for the fake-DONE freeze boundary.
 See `docs/V0_3_PLANGRAPH.md` for the PlanGraph prototype boundary.
+See `docs/V0_3_2_PROVENANCE_GATE_FREEZE.md` for the provenance runtime gate boundary.
+See `docs/V0_3_3_PROVENANCE_GATE_DIAGNOSTICS.md` for the copy-ready provenance diagnostic fixture boundary.
 See `PROBLEM_AND_GAP.md` and `VERIFIER_PROVENANCE_DESIGN.md` for the current research direction.
 
 ## Known limitations
@@ -128,6 +139,7 @@ It does not yet include:
 - smell scanning,
 - verifier strength scoring,
 - full certification policy engine backed by `certification_policy.yaml`,
+- broad diagnostic evaluation beyond the four-case provenance gate check,
 - rollback validation,
 - replay validation,
 - cost budgets,
@@ -137,7 +149,7 @@ The current `run_goal.py` is still a prepared-run orchestrator. It expects an ex
 
 ## Next milestone
 
-The next milestone should add verifier quality checks after the v0.3.2 provenance gate remains stable:
+The next milestone should add verifier quality checks after the v0.3.3 diagnostic set remains stable:
 
 1. add smell scanning,
 2. add verifier strength scoring,

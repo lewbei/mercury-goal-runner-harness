@@ -2,11 +2,11 @@
 
 Owner: Mercury Goal Runner Harness
 Status: source-of-truth
-Last verified: 2026-05-06
+Last verified: 2026-05-07
 
 ## Current Direction
 
-The implemented local layer is v0.3.2 Provenance Runtime Gate on top of v0.3 Artifact-Linked PlanGraph. The research direction is Verifier-Provenance Goal Runner Harness, centered on:
+The implemented local layer is v0.3.3 Provenance Gate Diagnostic Tests on top of v0.3.2 Provenance Runtime Gate and v0.3 Artifact-Linked PlanGraph. The research direction is Verifier-Provenance Goal Runner Harness, centered on:
 
 ```text
 Who is allowed to certify DONE?
@@ -24,11 +24,13 @@ Who is allowed to certify DONE?
 
 - `docs/V0_2_1_FREEZE.md` - fake-DONE baseline boundary.
 - `docs/V0_3_PLANGRAPH.md` - current PlanGraph prototype boundary.
+- `docs/V0_3_2_PROVENANCE_GATE_FREEZE.md` - current provenance runtime gate boundary.
+- `docs/V0_3_3_PROVENANCE_GATE_DIAGNOSTICS.md` - copy-ready provenance diagnostic fixture boundary.
+- `.agentic-pi/diagnostics/provenance_gate/` - four-case copy-ready provenance diagnostic set.
 - `PLAN_ROUTER.md` - deterministic planner stub note.
 
 ## Known Cleanup Debt
 
-- The working tree contains uncommitted v0.3 PlanGraph changes plus the new verifier-provenance docs/schemas.
 - The certifier still emits `DONE_PASS` / `DONE_FAIL` for legacy runs without `verifier_contract.json`.
 - Provenance-mode runs can emit `NOT_DONE`, `PROVISIONAL_DONE`, or `CERTIFIED_DONE`.
-- No diagnostic verifier-provenance benchmark should be added until the model and policy engine are locked.
+- The current provenance diagnostic set is intentionally four deterministic cases, not a broad benchmark.

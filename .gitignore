@@ -14,6 +14,8 @@ build/
 .agentic-runs/test_*/
 .agentic-runs/hard_test_001/
 artifacts/
+!.agentic-pi/diagnostics/provenance_gate/**/artifacts/
+!.agentic-pi/diagnostics/provenance_gate/**/artifacts/**
 .pi/tasks/
 
 # Deferred v0.4/v0.5 prototypes; v0.3 is PlanGraph only.

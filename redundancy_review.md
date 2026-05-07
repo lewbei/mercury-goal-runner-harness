@@ -2,7 +2,7 @@
 
 Owner: Mercury Goal Runner Harness
 Status: active-supporting
-Last verified: 2026-05-06
+Last verified: 2026-05-07
 
 ## Review Result
 
@@ -16,6 +16,7 @@ The workspace is clean enough to proceed with the verifier-provenance direction,
 | Implementation status | `PROJECT_STATUS.md` | `docs/V0_2_1_FREEZE.md`, `docs/V0_3_PLANGRAPH.md` | Current |
 | Research gap | `PROBLEM_AND_GAP.md` | `VERIFIER_PROVENANCE_DESIGN.md` | Current |
 | Verifier provenance design | `VERIFIER_PROVENANCE_DESIGN.md` | `certification_policy.yaml` | Current |
+| Provenance diagnostic evidence | `.agentic-pi/diagnostics/provenance_gate/diagnostic_report.md` | `docs/V0_3_3_PROVENANCE_GATE_DIAGNOSTICS.md`, `tests/test_provenance_gate.py` | Current |
 | Navigation | `workspace_index.md` | this file | Current |
 
 ## Outdated Or Superseded Direction
@@ -27,6 +28,8 @@ Branch selection is deferred. The active next step is verifier provenance govern
 ## Remaining Risk
 
 The current code still uses `DONE_PASS` / `DONE_FAIL` for legacy runs, while provenance-mode runs with `verifier_contract.json` can return `NOT_DONE`, `PROVISIONAL_DONE`, or `CERTIFIED_DONE`. That split is intentional compatibility behavior, not a doc conflict.
+
+The current diagnostic set covers only four deterministic provenance-gate cases. It is evidence for the first gate, not evidence for full oracle governance.
 
 ## Decision
 

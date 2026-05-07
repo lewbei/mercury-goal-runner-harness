@@ -1,0 +1,26 @@
+{
+  "run_id": "test_case_p0_self_test",
+  "raw_user_prompt": "diagnose provenance gate with same-worker verifier evidence",
+  "intent": "diagnose provenance gate",
+  "cleaned_goal": "Create a deterministic output artifact.",
+  "final_outputs": [
+    "artifacts/output.txt"
+  ],
+  "explicit_constraints": [],
+  "inferred_constraints": [],
+  "forbidden_actions": [
+    "Do not touch verifier_artifacts from a Worker step."
+  ],
+  "ambiguities": [],
+  "risk_level": "LOW",
+  "complexity_level": "SIMPLE",
+  "done_criteria": [
+    "artifacts/output.txt exists."
+  ],
+  "failure_criteria": [
+    "artifacts/output.txt missing."
+  ],
+  "ask_user_conditions": [],
+  "max_steps": 1,
+  "execution_prompt": "Create artifacts/output.txt for provenance gate diagnostics."
+}

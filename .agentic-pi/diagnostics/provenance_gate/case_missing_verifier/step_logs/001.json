@@ -1,0 +1,17 @@
+{
+  "run_id": "test_case_missing_verifier",
+  "step_id": 1,
+  "status": "PASSED",
+  "action_taken": "create_file",
+  "files_touched": [
+    "artifacts/output.txt"
+  ],
+  "commands_run": [
+    "write artifacts/output.txt"
+  ],
+  "evidence": [
+    "artifacts/output.txt exists"
+  ],
+  "pass_condition_satisfied": true,
+  "remaining_work": []
+}
