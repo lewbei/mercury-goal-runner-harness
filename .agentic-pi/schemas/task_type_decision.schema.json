@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TaskTypeDecision",
+  "type": "object",
+  "required": ["run_id", "task_type", "confidence", "matched_signals", "notes"],
+  "properties": {
+    "run_id": { "type": "string", "minLength": 1 },
+    "task_type": {
+      "type": "string",
+      "enum": ["coding", "research", "writing", "debugging", "experiment", "benchmark", "unknown"]
+    },
+    "confidence": { "type": "string", "enum": ["deterministic"] },
+    "matched_signals": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "notes": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false
+}

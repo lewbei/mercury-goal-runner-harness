@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "StrategyDecision",
+  "type": "object",
+  "required": [
+    "run_id",
+    "decision_status",
+    "selected_strategy",
+    "reason",
+    "rejected_strategies",
+    "selector_checks",
+    "status_artifacts_absent_before_selection"
+  ],
+  "properties": {
+    "run_id": { "type": "string", "minLength": 1 },
+    "decision_status": {
+      "type": "string",
+      "enum": ["SELECTED", "NEED_USER_STRATEGY"]
+    },
+    "selected_strategy": { "type": "string" },
+    "reason": { "type": "string", "minLength": 1 },
+    "rejected_strategies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["strategy_id", "reason"],
+        "properties": {
+          "strategy_id": { "type": "string", "minLength": 1 },
+          "reason": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "selector_checks": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "status_artifacts_absent_before_selection": { "type": "boolean" }
+  },
+  "additionalProperties": false
+}

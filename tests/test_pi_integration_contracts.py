@@ -234,6 +234,22 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("The selected branch does not certify DONE", doc)
         self.assertIn("does not prove", doc)
 
+    def test_v13_doc_records_strategy_planner_boundary(self):
+        doc = read(ROOT / "docs" / "V1_3_STRATEGY_PLANNER.md")
+        roadmap = read(ROOT / "docs" / "V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md")
+
+        self.assertIn("STRATEGY PLANNER IMPLEMENTED", doc)
+        self.assertIn("task type", doc)
+        self.assertIn("capability inventory", doc)
+        self.assertIn("strategy candidates", doc)
+        self.assertIn("applicability gate", doc)
+        self.assertIn("selected strategy", doc)
+        self.assertIn("Certifier writes final status", doc)
+        self.assertIn("does not prove", doc.lower())
+        self.assertIn("v1.4 Milestone Planning", roadmap)
+        self.assertIn("v1.9 Strategy Search / Workflow Optimization", roadmap)
+        self.assertIn("DEFERRED", roadmap)
+
     def test_framework_doc_is_linked_from_status_docs(self):
         readme = read(ROOT / "README.md")
         status = read(ROOT / "PROJECT_STATUS.md")
@@ -242,6 +258,10 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("FRAMEWORK.md", status)
         self.assertIn("V1_2_PLANNING_PROOF_HARDENING.md", readme)
         self.assertIn("V1_2_PLANNING_PROOF_HARDENING.md", status)
+        self.assertIn("V1_3_STRATEGY_PLANNER.md", readme)
+        self.assertIn("V1_3_STRATEGY_PLANNER.md", status)
+        self.assertIn("V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md", readme)
+        self.assertIn("V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md", status)
 
     def test_pi_prompt_contract_doc_locks_safe_prompt_patterns(self):
         doc = read(ROOT / "docs" / "PI_PROMPT_CONTRACTS.md")

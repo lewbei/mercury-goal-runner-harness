@@ -58,6 +58,7 @@ class V1PackageFreezeTests(unittest.TestCase):
             "goal-compile",
             "goal-run",
             "goal-plan-proof",
+            "goal-strategy-proof",
             "goal-certify",
             "goal-status",
             "goal-replay",

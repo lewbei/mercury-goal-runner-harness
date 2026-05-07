@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "StrategyCandidate",
+  "type": "object",
+  "required": [
+    "strategy_id",
+    "task_type",
+    "required_capabilities",
+    "expected_artifacts",
+    "verifier_requirements",
+    "risk_notes",
+    "can_reach_certifying_evidence",
+    "uses_artifact_tests",
+    "needs_executable_behavior",
+    "attempts_status_write",
+    "attempts_verifier_forgery",
+    "status_authority",
+    "risk_level"
+  ],
+  "properties": {
+    "strategy_id": { "type": "string", "minLength": 1 },
+    "task_type": {
+      "type": "string",
+      "enum": ["coding", "research", "writing", "debugging", "experiment", "benchmark", "unknown"]
+    },
+    "required_capabilities": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "expected_artifacts": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "verifier_requirements": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "risk_notes": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "can_reach_certifying_evidence": { "type": "boolean" },
+    "uses_artifact_tests": { "type": "boolean" },
+    "needs_executable_behavior": { "type": "boolean" },
+    "attempts_status_write": { "type": "boolean" },
+    "attempts_verifier_forgery": { "type": "boolean" },
+    "status_authority": { "type": "string", "enum": ["none"] },
+    "risk_level": { "type": "string", "enum": ["LOW", "MEDIUM", "HIGH"] }
+  },
+  "additionalProperties": false
+}
