@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VerifierSmellReport",
+  "type": "object",
+  "required": [
+    "artifact_id",
+    "smell_flags",
+    "disqualifying",
+    "authority_penalty"
+  ],
+  "properties": {
+    "artifact_id": { "type": "string", "minLength": 1 },
+    "smell_flags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "same_worker_self_test",
+          "post_solution_test",
+          "depends_on_solution",
+          "does_not_execute_code",
+          "zero_assertions",
+          "mock_heavy",
+          "p0_self_authored",
+          "advisory_only",
+          "local_visible_verifier",
+          "gating_only",
+          "file_existence_only",
+          "exit_code_only",
+          "print_only_observation",
+          "grep_or_source_text_check",
+          "no_negative_case",
+          "implementation_coupled_oracle",
+          "placeholder_text_check"
+        ]
+      }
+    },
+    "disqualifying": { "type": "boolean" },
+    "authority_penalty": { "type": "integer" }
+  },
+  "additionalProperties": false
+}

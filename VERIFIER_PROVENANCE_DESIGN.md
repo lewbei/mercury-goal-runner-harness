@@ -2,7 +2,7 @@
 
 Owner: Mercury Goal Runner Harness
 Status: source-of-truth
-Last verified: 2026-05-06
+Last verified: 2026-05-07
 
 ## Direction
 
@@ -123,7 +123,7 @@ Static policy config:
 certification_policy.yaml
 ```
 
-This config is declarative only for this slice. It is not yet consumed by the certifier.
+This config is still declarative. It is not yet consumed by the certifier.
 
 The current certifier implements the first hard rule directly:
 
@@ -131,7 +131,7 @@ The current certifier implements the first hard rule directly:
 P0 alone cannot certify DONE.
 ```
 
-It does not yet implement the full smell scanner, strength scorer, or policy engine.
+It now records metadata-level smell scanner reports, but it does not yet implement verifier strength scoring or the full policy engine.
 
 ## Relationship To v0.3 PlanGraph
 
@@ -152,9 +152,8 @@ PlanGraph says what artifact was handed off. Verifier provenance says who is all
 
 ## Deferred
 
-Do not build these in this slice:
+Do not build these in the current v0.3.4 slice:
 
-- smell scanner,
 - strength scorer,
 - full policy engine backed by certification_policy.yaml,
 - Pi integration,

@@ -6,7 +6,7 @@ The goal is not to make Mercury V2 magically smarter by looping. The goal is to 
 
 ## Current status
 
-v0.3.3 is Provenance Gate Diagnostic Tests on top of the v0.3.2 Provenance Runtime Gate.
+v0.3.4 is Smell Scanner on top of the v0.3.3 Provenance Gate Diagnostic Tests.
 
 The current research direction is:
 
@@ -35,6 +35,7 @@ See [`docs/V0_2_1_FREEZE.md`](docs/V0_2_1_FREEZE.md) for the exact freeze bounda
 See [`docs/V0_3_PLANGRAPH.md`](docs/V0_3_PLANGRAPH.md) for the PlanGraph prototype boundary.
 See [`docs/V0_3_2_PROVENANCE_GATE_FREEZE.md`](docs/V0_3_2_PROVENANCE_GATE_FREEZE.md) for the provenance runtime gate boundary.
 See [`docs/V0_3_3_PROVENANCE_GATE_DIAGNOSTICS.md`](docs/V0_3_3_PROVENANCE_GATE_DIAGNOSTICS.md) for the provenance diagnostic fixture boundary.
+See [`docs/V0_3_4_SMELL_SCANNER.md`](docs/V0_3_4_SMELL_SCANNER.md) for the metadata-level verifier smell scanner boundary.
 
 The current proof path is:
 
@@ -55,7 +56,8 @@ It demonstrates:
 8. downstream tasks require exact artifact IDs from upstream tasks,
 9. provenance-mode runs can return `NOT_DONE`, `PROVISIONAL_DONE`, or `CERTIFIED_DONE`,
 10. the four-case provenance diagnostic set verifies P0/P1/P2/missing-verifier behavior,
-11. and the benchmark reports false-PASS status explicitly.
+11. verifier smell reports are recorded without changing final status yet,
+12. and the benchmark reports false-PASS status explicitly.
 
 ## Core parts
 
@@ -79,6 +81,9 @@ Links task outputs to exact artifact IDs and validates downstream artifact consu
 
 7. Verifier Provenance Gate
 When `verifier_contract.json` exists, separates weak/self-generated evidence from certifying evidence.
+
+8. Smell Scanner
+Records metadata-level verifier smell reports for later strength scoring and policy enforcement.
 
 ## Core rule
 
@@ -145,7 +150,7 @@ The v0.3.3 diagnostic set lives at:
 
 Each v0.3.3 case is a copy-ready run fixture. The regression test copies it into `.agentic-runs/test_<case_name>/`, runs the certifier, and reads `final_status.md`.
 
-The next milestone is smell scanning and verifier strength scoring. Full oracle governance, Pi integration, and larger diagnostic evaluation remain deferred.
+The next milestone is verifier strength scoring. Full oracle governance, Pi integration, and larger diagnostic evaluation remain deferred.
 
 ## Planner Stub
 
