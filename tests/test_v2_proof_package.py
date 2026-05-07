@@ -58,7 +58,7 @@ class V2ProofPackageTests(unittest.TestCase):
             "workflow_search",
             "diagnostic_evaluation",
             "trajectory_evaluation",
-            "cli_help",
+            "local_harness_helper_help",
             "direct_pi_mercury_behavior",
             "full_unittest",
             "benchmark",

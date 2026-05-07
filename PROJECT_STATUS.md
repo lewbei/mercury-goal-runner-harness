@@ -35,6 +35,16 @@ python .agentic-pi\runtime\run_pi_chain_smoke.py --target-run-id pi_smoke_chain_
 python tests\test_pi_direct_behavior_audit.py -v
 ```
 
+Naming boundary:
+
+```text
+pi = the real external Pi agent launched from cmd.
+.agentic-pi/runtime/pi_cli.py = repo-local deterministic harness helper.
+```
+
+`pi_cli.py` is not the Pi agent. It only dispatches this repo's deterministic
+harness commands.
+
 Latest benchmark summary:
 
 ```text

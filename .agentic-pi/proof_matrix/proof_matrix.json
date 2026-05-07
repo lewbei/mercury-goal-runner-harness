@@ -47,12 +47,12 @@
       "claim_boundary": "Evaluates tool trajectory only, not final artifact correctness."
     },
     {
-      "claim_id": "cli_help",
-      "claim": "The thin local CLI help is available and states certifier authority.",
+      "claim_id": "local_harness_helper_help",
+      "claim": "The repo-local harness helper help is available and states certifier authority.",
       "mode": "quick",
       "command": ["python", ".agentic-pi/runtime/pi_cli.py", "--help"],
       "expected_evidence": ["Final status comes only from certify_run.py / policy_engine.py"],
-      "claim_boundary": "CLI surface exists; full Pi autonomy remains unverified."
+      "claim_boundary": "This is not the external Pi agent launched with `pi`; full Pi autonomy remains unverified."
     },
     {
       "claim_id": "controlled_pi_chain_runtime",

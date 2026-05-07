@@ -223,6 +223,9 @@ Raw Goal
 
 15. Pi Report Layer
     Pi can orchestrate and report, but cannot certify DONE by itself.
+    The real Pi agent is launched by typing `pi` in a terminal. The repo-local
+    `.agentic-pi/runtime/pi_cli.py` file is only a deterministic harness helper,
+    not the Pi agent.
 
 16. Experience Memory Layer
     Extracts reusable strategy lessons, writes append-only learning records,
@@ -323,7 +326,7 @@ top-level folders. The implemented files are:
 .agentic-pi/runtime/learning_record_writer.py
 .agentic-pi/runtime/strategy_memory.py
 .agentic-pi/runtime/experience_retriever.py
-.agentic-pi/runtime/pi_cli.py
+.agentic-pi/runtime/pi_cli.py  # repo-local harness helper, not external Pi
 .agentic-pi/runtime/run_goal.py
 .agentic-pi/runtime/write_goal_contract.py
 .agentic-pi/runtime/plan_router.py

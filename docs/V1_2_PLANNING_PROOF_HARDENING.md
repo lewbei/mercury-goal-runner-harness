@@ -33,11 +33,14 @@ The proof runner is:
 .agentic-pi/runtime/planning_proof_runner.py
 ```
 
-The Pi CLI exposes it as:
+The repo-local harness helper exposes it as:
 
 ```text
 goal-plan-proof
 ```
+
+This helper is `.agentic-pi/runtime/pi_cli.py`; it is not the external Pi agent
+you launch by typing `pi`.
 
 The raw-goal compiler also supports a deterministic proof mode:
 

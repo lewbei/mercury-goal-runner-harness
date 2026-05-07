@@ -25,11 +25,19 @@ goal-audit
 goal-rollback
 ```
 
-The local command entrypoint is:
+The repo-local harness helper entrypoint is:
 
 ```cmd
 python .agentic-pi\runtime\pi_cli.py --help
 ```
+
+This is not the external Pi agent. The real Pi agent is launched by typing:
+
+```cmd
+pi
+```
+
+and then entering prompts in the interactive agent.
 
 The optional installed entrypoint is:
 
@@ -37,7 +45,7 @@ The optional installed entrypoint is:
 mercury-goal --help
 ```
 
-The console entrypoint is intentionally thin. It dispatches to deterministic
+The repo-local helper is intentionally thin. It dispatches to deterministic
 harness tools. It does not certify DONE itself.
 
 ## Examples

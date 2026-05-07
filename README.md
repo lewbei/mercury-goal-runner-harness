@@ -83,6 +83,16 @@ python .agentic-pi\runtime\run_pi_chain_smoke.py --target-run-id pi_smoke_chain_
 python tests\test_pi_direct_behavior_audit.py -v
 ```
 
+Important naming boundary:
+
+```text
+pi = the real external Pi agent you launch in cmd.
+.agentic-pi/runtime/pi_cli.py = repo-local deterministic harness helper.
+```
+
+So `pi_cli.py` is not how you start the Pi agent. It exists only to run this
+repo's deterministic proof/helper commands.
+
 It demonstrates:
 
 1. a Goal Contract was created,

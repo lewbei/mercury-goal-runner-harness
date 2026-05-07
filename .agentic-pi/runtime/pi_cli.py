@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Stable command surface for the Verifier-Provenance Goal Runner Harness.
+"""Repo-local helper command surface for the Verifier-Provenance harness.
 
-This CLI is intentionally thin. It dispatches to deterministic harness tools and
-does not certify DONE itself.
+This is not the external Pi agent. The real Pi agent is launched by typing
+`pi` in a terminal. This helper is intentionally thin: it dispatches to
+deterministic harness tools and does not certify DONE itself.
 """
 import argparse
 import re
@@ -156,8 +157,9 @@ def goal_rollback(args) -> int:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
-            "Verifier-Provenance Goal Runner CLI. Final status comes only from "
-            "certify_run.py / policy_engine.py."
+            "Repo-local Verifier-Provenance harness helper. This is not the "
+            "external Pi agent. Final status comes only from certify_run.py / "
+            "policy_engine.py."
         )
     )
     subparsers = parser.add_subparsers(dest="command", required=True)

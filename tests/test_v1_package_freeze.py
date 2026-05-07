@@ -49,10 +49,13 @@ class V1PackageFreezeTests(unittest.TestCase):
         if self.run_dir.exists():
             shutil.rmtree(self.run_dir)
 
-    def test_cli_help_exposes_stable_command_surface(self):
+    def test_local_harness_helper_help_exposes_stable_command_surface(self):
         result = run_python(".agentic-pi/runtime/pi_cli.py", "--help")
 
         self.assertEqual(result.returncode, 0, result.stdout)
+        self.assertIn("Repo-local Verifier-Provenance harness helper", result.stdout)
+        normalized_stdout = " ".join(result.stdout.split())
+        self.assertIn("not the external Pi agent", normalized_stdout)
         for command in [
             "goal-init",
             "goal-compile",
