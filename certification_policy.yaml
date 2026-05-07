@@ -1,8 +1,9 @@
 # Static policy draft for Verifier-Provenance Goal Runner Harness.
-# This file is declarative only in this slice. It is not yet consumed by certify_run.py.
+# v0.3.6 mirrors these rules in .agentic-pi/runtime/policy_engine.py.
+# This file is still not parsed as YAML by the runtime.
 
-version: v0.3.1-provenance-design
-status: draft
+version: v0.3.6-policy-engine
+status: runtime-mirrored
 
 status_model:
   current_runtime_statuses:

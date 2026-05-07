@@ -113,7 +113,7 @@ Important policy-engine validation that the current JSON schema validator cannot
 If required_verifier_level is P2 or P3, allow_self_generated_only must be false.
 ```
 
-That rule belongs in the later deterministic policy engine, not in this docs-and-schema slice.
+That rule is enforced by the deterministic policy engine added in v0.3.6, not by JSON schema alone.
 
 ## Policy Draft
 

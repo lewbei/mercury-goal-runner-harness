@@ -2,7 +2,7 @@
 
 ## Current version
 
-Mercury Goal Runner Harness v0.3.5 is Strength Scorer on top of the v0.3.4 Smell Scanner.
+Mercury Goal Runner Harness v0.3.6 is Policy Engine on top of the v0.3.5 Strength Scorer.
 
 The purpose of this repository is not to claim that Mercury V2 becomes smarter by looping. The purpose is to place Mercury V2 inside a controlled goal-execution harness where outputs are checked through contracts, logs, evidence, and certification.
 
@@ -54,7 +54,9 @@ The provenance gate diagnostic set includes four deterministic cases:
 
 The v0.3.4 smell scanner records metadata-level verifier smell reports.
 
-The v0.3.5 strength scorer converts verifier metadata and smell reports into `weak`, `advisory`, `gating`, or `certifying` strength reports. It does not yet enforce policy or change final status.
+The v0.3.5 strength scorer converts verifier metadata and smell reports into `weak`, `advisory`, `gating`, or `certifying` strength reports.
+
+The v0.3.6 policy engine consumes verifier artifacts, smell reports, strength reports, and verifier contracts to decide provenance-mode final status.
 
 ## What v0.3 proves
 
@@ -93,8 +95,9 @@ The harness now requires:
 - verifier provenance artifacts when `verifier_contract.json` exists,
 - verifier smell reports recorded when verifier artifacts exist,
 - verifier strength reports recorded when verifier artifacts exist,
+- a deterministic `policy_decision.json` when `verifier_contract.json` exists,
 - `P0` and `P1` verifier evidence treated as `PROVISIONAL_DONE`,
-- `P2` or `P3` certifying verifier evidence required for `CERTIFIED_DONE`,
+- `P2` or `P3` certifying verifier evidence with certifying strength required for `CERTIFIED_DONE`,
 - and certifier-issued final status.
 
 ## What was hardened
@@ -124,6 +127,8 @@ In v0.3.4, smell reports are recorded under `verifier_smell_reports/`. These rep
 
 In v0.3.5, strength reports are recorded under `verifier_strength_reports/`. These reports are evidence for later policy work; they do not change certification status yet.
 
+In v0.3.6, policy decisions are recorded under `policy_decision.json`. In provenance mode, the certifier uses that policy decision as the final status.
+
 The benchmark now records:
 
 - actual status,
@@ -137,6 +142,7 @@ See `docs/V0_3_2_PROVENANCE_GATE_FREEZE.md` for the provenance runtime gate boun
 See `docs/V0_3_3_PROVENANCE_GATE_DIAGNOSTICS.md` for the copy-ready provenance diagnostic fixture boundary.
 See `docs/V0_3_4_SMELL_SCANNER.md` for the metadata-level smell scanner boundary.
 See `docs/V0_3_5_STRENGTH_SCORER.md` for the verifier strength scoring boundary.
+See `docs/V0_3_6_POLICY_ENGINE.md` for the policy engine boundary.
 See `PROBLEM_AND_GAP.md` and `VERIFIER_PROVENANCE_DESIGN.md` for the current research direction.
 
 ## Known limitations
@@ -148,7 +154,7 @@ It does not yet include:
 - real Mercury/Pi planner invocation,
 - automatic rough-goal to contract compilation from the user-facing command,
 - adaptive multi-plan generation,
-- full certification policy engine backed by `certification_policy.yaml`,
+- fully parsed YAML policy configuration,
 - broad diagnostic evaluation beyond the four-case provenance gate check,
 - rollback validation,
 - replay validation,
@@ -159,9 +165,9 @@ The current `run_goal.py` is still a prepared-run orchestrator. It expects an ex
 
 ## Next milestone
 
-The next milestone should add the policy engine after the v0.3.5 strength scorer remains stable:
+The next milestone should be a small diagnostic evaluation after the v0.3.6 policy engine remains stable:
 
-1. connect the static policy draft to a deterministic policy engine,
-2. consume verifier artifacts, smell reports, strength reports, and verifier contracts,
-3. add a small diagnostic suite,
+1. compare file-existence, artifact-test, provenance-gated, and policy-engine certification,
+2. measure false `CERTIFIED_DONE` rate,
+3. keep diagnostic scope small and deterministic,
 4. and keep false PASS as the main hard-fail metric.

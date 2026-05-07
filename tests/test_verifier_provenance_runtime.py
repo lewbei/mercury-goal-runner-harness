@@ -112,8 +112,15 @@ class VerifierProvenanceRuntimeTests(unittest.TestCase):
     def add_verifier_contract(self):
         write_json(self.run_dir / "verifier_contract.json", verifier_contract(self.run_id))
 
-    def add_verifier_artifact(self, artifact_id, source):
-        result = run_python(
+    def add_verifier_artifact(
+        self,
+        artifact_id,
+        source,
+        phase="post_solution",
+        depends_on_solution=None,
+        solution_exists_at_creation=None,
+    ):
+        args = [
             ".agentic-pi/runtime/verifier_provenance.py",
             "--run-id",
             self.run_id,
@@ -124,12 +131,20 @@ class VerifierProvenanceRuntimeTests(unittest.TestCase):
             "--source",
             source,
             "--phase",
-            "post_solution",
+            phase,
             "--kind",
             "command_test",
             "--assertion-count",
             "2",
-        )
+        ]
+        if depends_on_solution is not None:
+            args.extend(["--depends-on-solution", str(depends_on_solution).lower()])
+        if solution_exists_at_creation is not None:
+            args.extend([
+                "--solution-exists-at-creation",
+                str(solution_exists_at_creation).lower(),
+            ])
+        result = run_python(*args)
         self.assertEqual(result.returncode, 0, result.stdout)
 
     def test_logger_records_solution_existence_before_and_after_target(self):
@@ -222,7 +237,13 @@ class VerifierProvenanceRuntimeTests(unittest.TestCase):
         write_json(self.run_dir / "goal_contract.json", base_contract(self.run_id))
         self.add_verifier_contract()
         self.write_successful_output_and_log()
-        self.add_verifier_artifact("V.P2", "independent_verifier_agent")
+        self.add_verifier_artifact(
+            "V.P2",
+            "independent_verifier_agent",
+            phase="pre_solution",
+            depends_on_solution=False,
+            solution_exists_at_creation=False,
+        )
 
         result = self.certify()
 

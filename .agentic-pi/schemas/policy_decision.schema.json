@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PolicyDecision",
+  "type": "object",
+  "required": [
+    "run_id",
+    "status",
+    "reason",
+    "required_verifier_level",
+    "certifying_artifacts",
+    "provisional_artifacts",
+    "rejected_artifacts",
+    "policy_checks",
+    "generated_at"
+  ],
+  "properties": {
+    "run_id": { "type": "string", "minLength": 1 },
+    "status": {
+      "type": "string",
+      "enum": ["NOT_DONE", "PROVISIONAL_DONE", "CERTIFIED_DONE"]
+    },
+    "reason": { "type": "string", "minLength": 1 },
+    "required_verifier_level": {
+      "type": "string",
+      "enum": ["P0", "P1", "P2", "P3"]
+    },
+    "certifying_artifacts": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "provisional_artifacts": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "rejected_artifacts": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "policy_checks": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "generated_at": { "type": "string", "minLength": 1 }
+  },
+  "additionalProperties": false
+}

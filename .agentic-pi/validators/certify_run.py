@@ -15,11 +15,13 @@ from validate_schema import validate as validate_schema_instance
 from verifier_provenance import create_verifier_artifact
 from smell_scanner import safe_report_filename, scan_verifier_artifact
 from strength_scorer import safe_strength_report_filename, score_verifier_artifact
+from policy_engine import decide_run_policy, write_policy_decision
 
 
 PROTECTED_NAMES = {
     "certification.json",
     "final_status.md",
+    "policy_decision.json",
     "trace.jsonl",
 }
 
@@ -476,10 +478,11 @@ def record_verifier_strength_reports(
     failed: list,
 ):
     if not artifacts:
-        return
+        return {}
 
     report_dir = run_dir / "verifier_strength_reports"
     report_dir.mkdir(parents=True, exist_ok=True)
+    reports_by_artifact_id = {}
 
     for artifact in artifacts:
         artifact_id = str(artifact.get("artifact_id") or "UNKNOWN")
@@ -495,11 +498,14 @@ def record_verifier_strength_reports(
                 failed,
             )
             write_json(report_dir / safe_strength_report_filename(artifact_id), report)
+            reports_by_artifact_id[artifact_id] = report
             passed.append(
                 f"verifier strength score recorded: {artifact_id}={report['strength_level']}"
             )
         except Exception as exc:
             failed.append(f"verifier strength scoring failed for {artifact_id}: {exc}")
+
+    return reports_by_artifact_id
 
 
 def check_contract_target_artifacts(run_dir: Path, contract: dict, passed: list, failed: list):
@@ -551,6 +557,35 @@ def decide_provenance_status(contract: dict, artifacts: list, failed: list, pass
     levels = sorted({artifact.get("provenance_level") for artifact in artifacts})
     passed.append(f"verifier provenance is insufficient for CERTIFIED_DONE: {levels}")
     return "PROVISIONAL_DONE"
+
+
+def run_policy_engine(run_dir: Path, failed: list, passed: list) -> str:
+    decision = decide_run_policy(run_dir, hard_failures=list(failed))
+    decision_path = write_policy_decision(run_dir, decision)
+    written_decision = load_json(decision_path)
+
+    schema_failures = []
+    validate_with_schema(
+        written_decision,
+        "policy_decision.schema.json",
+        "policy_decision.json",
+        schema_failures,
+    )
+    if schema_failures:
+        failed.extend(schema_failures)
+        return "NOT_DONE"
+
+    passed.append("policy_decision.json validates")
+    passed.append(f"policy engine status: {written_decision['status']}")
+
+    if written_decision["status"] == "NOT_DONE" and not failed:
+        reason = written_decision["reason"]
+        if "No verifier artifacts found" in reason:
+            failed.append(f"policy decision: verifier_artifacts missing: {reason}")
+        else:
+            failed.append(f"policy decision: {reason}")
+
+    return written_decision["status"]
 
 
 def evaluate_done_criteria(
@@ -787,7 +822,7 @@ def main():
             verifier_artifacts = load_verifier_artifacts(run_dir, passed, failed)
             smell_reports = record_verifier_smell_reports(run_dir, verifier_artifacts, passed, failed)
             record_verifier_strength_reports(run_dir, verifier_artifacts, smell_reports, passed, failed)
-            status = decide_provenance_status(verifier_contract, verifier_artifacts, failed, passed)
+            status = run_policy_engine(run_dir, failed, passed)
         else:
             failed.append("verifier_contract.json required for provenance mode but did not load")
             status = "NOT_DONE"
@@ -801,7 +836,7 @@ def main():
         "failed_checks": failed,
         "artifact_hashes": artifact_hashes,
         "audit_chain_valid": not failed,
-        "generated_by": "agentic-pi-certifier-v0.3.2",
+        "generated_by": "agentic-pi-certifier-v0.3.6",
         "timestamp": datetime.now(timezone.utc).isoformat(),
     }
 

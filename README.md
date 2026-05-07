@@ -6,7 +6,7 @@ The goal is not to make Mercury V2 magically smarter by looping. The goal is to 
 
 ## Current status
 
-v0.3.5 is Strength Scorer on top of the v0.3.4 Smell Scanner.
+v0.3.6 is the Policy Engine on top of the v0.3.5 Strength Scorer.
 
 The current research direction is:
 
@@ -37,6 +37,7 @@ See [`docs/V0_3_2_PROVENANCE_GATE_FREEZE.md`](docs/V0_3_2_PROVENANCE_GATE_FREEZE
 See [`docs/V0_3_3_PROVENANCE_GATE_DIAGNOSTICS.md`](docs/V0_3_3_PROVENANCE_GATE_DIAGNOSTICS.md) for the provenance diagnostic fixture boundary.
 See [`docs/V0_3_4_SMELL_SCANNER.md`](docs/V0_3_4_SMELL_SCANNER.md) for the metadata-level verifier smell scanner boundary.
 See [`docs/V0_3_5_STRENGTH_SCORER.md`](docs/V0_3_5_STRENGTH_SCORER.md) for the verifier strength scoring boundary.
+See [`docs/V0_3_6_POLICY_ENGINE.md`](docs/V0_3_6_POLICY_ENGINE.md) for the deterministic policy engine boundary.
 
 The current proof path is:
 
@@ -58,8 +59,9 @@ It demonstrates:
 9. provenance-mode runs can return `NOT_DONE`, `PROVISIONAL_DONE`, or `CERTIFIED_DONE`,
 10. the four-case provenance diagnostic set verifies P0/P1/P2/missing-verifier behavior,
 11. verifier smell reports are recorded without changing final status yet,
-12. verifier strength reports are recorded without changing final status yet,
-13. and the benchmark reports false-PASS status explicitly.
+12. verifier strength reports are recorded,
+13. `policy_decision.json` decides provenance-mode final status,
+14. and the benchmark reports false-PASS status explicitly.
 
 ## Core parts
 
@@ -89,6 +91,9 @@ Records metadata-level verifier smell reports for strength scoring and later pol
 
 9. Strength Scorer
 Scores verifier strength as `weak`, `advisory`, `gating`, or `certifying` for later policy enforcement.
+
+10. Policy Engine
+Consumes verifier artifacts, smell reports, strength reports, and the verifier contract to decide provenance-mode status.
 
 ## Core rule
 
@@ -155,7 +160,7 @@ The v0.3.3 diagnostic set lives at:
 
 Each v0.3.3 case is a copy-ready run fixture. The regression test copies it into `.agentic-runs/test_<case_name>/`, runs the certifier, and reads `final_status.md`.
 
-The next milestone is the certification policy engine. Full oracle governance, Pi integration, and larger diagnostic evaluation remain deferred.
+The certification policy engine is implemented for the current provenance mode. Full oracle governance, Pi integration, and larger diagnostic evaluation remain deferred.
 
 ## Planner Stub
 
