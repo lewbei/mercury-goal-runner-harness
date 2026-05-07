@@ -6,7 +6,10 @@ Last verified: 2026-05-07
 
 ## Current Direction
 
-The implemented local layer is v2.1 Controlled Pi Chain Runtime Proof on top of v2.0 Integrated Harness Proof Package, v1.9 Strategy Search / Workflow Optimization, v1.8 Domain Packs, v1.7 Experience Memory, v1.6 Trajectory-Level Evaluation, v1.5 Drift-Aware Replanning, v1.4 Milestone Planning, v1.3 Strategy Planner, v1.2 Planning Proof Hardening, and the verifier-provenance certification stack. The research direction is Verifier-Provenance Goal Runner Harness, centered on:
+The implemented local layer is v2.6 Real Pi Session Trace Capture on top of the
+verifier-provenance certification stack. The next planned layer is v2.7 Real
+Agentic Autonomy Proof Plan. The research direction is Verifier-Provenance Goal
+Runner Harness, centered on:
 
 ```text
 Who is allowed to certify DONE?
@@ -17,9 +20,13 @@ Who is allowed to certify DONE?
 - `README.md` - repository overview and current commands.
 - `PROJECT_STATUS.md` - implementation status and limitations.
 - `FRAMEWORK.md` - conceptual architecture and actual current file map.
+- `.agentic-pi/README.md` - local harness folder ownership map.
+- `.agentic-pi/runtime/README.md` - runtime module ownership map.
+- `.agentic-pi/diagnostics/README.md` - deterministic diagnostic fixture map.
 - `PROBLEM_AND_GAP.md` - current research problem and gap.
 - `VERIFIER_PROVENANCE_DESIGN.md` - verifier authority model and deferred implementation boundary.
 - `docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md` - completed v1.3-v2.1 roadmap.
+- `docs/V2_7_AGENTIC_AUTONOMY_PROOF_PLAN.md` - next proof plan for multi-step Pi/Mercury autonomy.
 - `certification_policy.yaml` - draft static policy vocabulary.
 
 ## Active Supporting Files
@@ -48,8 +55,15 @@ Who is allowed to certify DONE?
 - `docs/V2_0_INTEGRATED_HARNESS_PROOF_PACKAGE.md` - integrated proof-matrix package.
 - `docs/V2_0_EXAMPLES.md` - v2.0 example set.
 - `docs/V2_1_CONTROLLED_PI_CHAIN_RUNTIME_PROOF.md` - controlled Pi chain runtime proof.
+- `docs/V2_2_DIRECT_PI_MERCURY_BEHAVIOR_AUDIT.md` - direct Pi/Mercury behavior audit proof.
+- `docs/V2_3_REAL_PI_INTERACTIVE_SMOKE.md` - real Pi interactive smoke evidence boundary.
+- `docs/V2_4_REAL_PI_RUN_MONITOR.md` - captured real Pi run monitor boundary.
+- `docs/V2_5_REAL_PI_NEGATIVE_STATUS_SMOKE.md` - negative-status Pi monitor boundary.
+- `docs/V2_6_REAL_PI_SESSION_TRACE_CAPTURE.md` - real Pi session trace capture boundary.
+- `docs/V2_7_AGENTIC_AUTONOMY_PROOF_PLAN.md` - planned real agentic autonomy proof boundary.
 - `.agentic-pi/diagnostics/provenance_gate/` - four-case copy-ready provenance diagnostic set.
 - `.agentic-pi/diagnostics/trajectory_evaluation/` - six-case trajectory-level diagnostic set.
+- `.agentic-pi/prompts/agentic_autonomy_probe.md` - paste-ready real Pi probe prompt.
 - `PLAN_ROUTER.md` - deterministic planner stub note.
 
 ## Known Cleanup Debt
@@ -65,3 +79,5 @@ Who is allowed to certify DONE?
 - Workflow search can rank candidates and reject unsafe workflows, but cannot execute them or certify DONE.
 - The proof matrix can report bounded proof command results, but cannot certify DONE.
 - The controlled Pi chain smoke can report bounded Pi-process evidence, but cannot certify DONE or prove arbitrary Pi autonomy.
+- Real Pi trace capture can monitor JSON event streams, but cannot prove arbitrary Pi autonomy by itself.
+- The v2.7 autonomy probe is a planned monitored experiment. It should treat multi-step planning, repair, memory use, arbitrary chain following, and unbounded bash as behavior to audit, not as safety already proven.
