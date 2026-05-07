@@ -1,0 +1,14 @@
+Real Pi interactive smoke negative fixture: duplicate bash command.
+
+$ python .agentic-pi/runtime/run_pi_chain_smoke.py --live --clean --target-run-id pi_smoke_real_interactive_p2_strong
+$ python .agentic-pi/runtime/run_pi_chain_smoke.py --live --clean --target-run-id pi_smoke_real_interactive_p2_strong
+
+read .agentic-runs/pi_chain_smoke_outputs/pi_chain_runtime_result.json:1-2000
+
+result_status: PASS
+status_values:
+{"final_status.md":"CERTIFIED_DONE","certification.json":"CERTIFIED_DONE","policy_decision.json":"CERTIFIED_DONE"}
+status_artifacts_agree: true
+final_status_authority: certifier_only
+can_certify_done: false
+claim_boundary: Controlled Pi chain smoke only; not proof of arbitrary autonomous goal-runner.chain.md runtime

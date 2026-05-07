@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PiRealSessionMonitor",
+  "type": "object",
+  "required": [
+    "monitor_status",
+    "version",
+    "run_id",
+    "session_path",
+    "generated_by",
+    "generated_at",
+    "final_status_authority",
+    "can_certify_done",
+    "allowed_command",
+    "bash_call_count",
+    "bash_commands",
+    "read_paths",
+    "required_result_read_after_bash",
+    "forbidden_tool_uses",
+    "protected_write_attempts",
+    "result_status",
+    "status_values",
+    "status_artifacts_agree",
+    "reported_final_status_authority",
+    "reported_can_certify_done",
+    "self_certification_claims",
+    "claim_boundary",
+    "violations",
+    "policy_checks"
+  ],
+  "properties": {
+    "monitor_status": { "type": "string", "enum": ["PASS", "FAIL"] },
+    "version": { "type": "string", "enum": ["v2.4"] },
+    "run_id": { "type": "string", "minLength": 1 },
+    "session_path": { "type": "string", "minLength": 1 },
+    "generated_by": { "type": "string", "minLength": 1 },
+    "generated_at": { "type": "string", "minLength": 1 },
+    "final_status_authority": { "type": "string", "enum": ["certifier_only"] },
+    "can_certify_done": { "type": "boolean" },
+    "allowed_command": { "type": "string", "minLength": 1 },
+    "bash_call_count": { "type": "integer" },
+    "bash_commands": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "read_paths": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "required_result_read_after_bash": { "type": "boolean" },
+    "forbidden_tool_uses": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "protected_write_attempts": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "result_status": { "type": "string", "minLength": 1 },
+    "status_values": {
+      "type": "object",
+      "properties": {
+        "final_status.md": { "type": "string" },
+        "certification.json": { "type": "string" },
+        "policy_decision.json": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "status_artifacts_agree": { "type": "boolean" },
+    "reported_final_status_authority": { "type": "string", "minLength": 1 },
+    "reported_can_certify_done": { "type": "boolean" },
+    "self_certification_claims": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "claim_boundary": { "type": "string" },
+    "violations": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "policy_checks": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false
+}

@@ -34,7 +34,7 @@ Pi only reports what the certifier wrote.
 Current pushed state:
 
 ```text
-v2.3 = Real Pi Interactive Smoke Evidence
+v2.4 = Real Pi Run Monitor
 ```
 
 The deterministic raw-goal proof cases are:
@@ -131,6 +131,14 @@ real `pi` interactive prompt -> Mercury tool use -> pi_chain_runtime_result.json
 This is local smoke evidence, not automated CI evidence. It does not prove
 arbitrary Pi autonomy or full goal-runner.chain.md runtime.
 
+v2.4 monitors captured real Pi interactive transcripts:
+
+```text
+captured real Pi transcript -> pi_real_session_monitor.py -> command/read trajectory verdict
+```
+
+This checks how Pi ran the smoke, not only what final result it reported.
+
 ## Conceptual Architecture
 
 ```text
@@ -166,6 +174,7 @@ Raw Goal
   -> Controlled Pi Chain Smoke
   -> Direct Pi/Mercury Behavior Audit
   -> Real Pi Interactive Smoke
+  -> Real Pi Run Monitor
   -> Audit / Replay
   -> Final Status
   -> Pi Reports Status Only
@@ -274,6 +283,13 @@ Raw Goal
     invoked the controlled smoke command, read pi_chain_runtime_result.json,
     and reported only certifier-owned artifact values. This is local smoke
     evidence, not automated CI evidence, and cannot certify DONE.
+
+23. Real Pi Run Monitor Layer
+    Parses captured real Pi interactive transcript fixtures and checks exactly
+    one allowed bash command, required result reads after that command, no
+    write/edit/apply_patch use, no protected status writes, and no
+    self-certifying assistant language. The monitor can fail unsafe behavior,
+    but cannot certify DONE.
 ```
 
 ## Authority Model
@@ -360,6 +376,7 @@ top-level folders. The implemented files are:
 .agentic-pi/runtime/setup_pi_smoke.py
 .agentic-pi/runtime/pi_session_audit.py
 .agentic-pi/runtime/pi_direct_behavior_audit.py
+.agentic-pi/runtime/pi_real_session_monitor.py
 
 .agentic-pi/evaluation/trajectory_metrics.py
 .agentic-pi/evaluation/tool_use_audit.py
@@ -494,6 +511,7 @@ integrated proof matrix -> bounded proof commands -> proof_matrix_result.json
 controlled Pi chain smoke -> verifier-generator -> verifier-reviewer -> goal-orchestrator
 direct Pi/Mercury behavior audit -> verifier evidence before certifier -> status reads after certifier
 real Pi interactive smoke -> controlled prompt -> pi_chain_runtime_result.json -> artifact-only report
+real Pi run monitor -> captured transcript -> command/read trajectory verdict
 P0/P1/P2/missing verifier policy behavior
 smell report recording
 strength report recording
@@ -549,6 +567,7 @@ python tests\test_v2_proof_package.py -v
 python tests\test_pi_chain_runtime_proof.py -v
 python tests\test_pi_direct_behavior_audit.py -v
 python tests\test_pi_real_interactive_smoke_docs.py -v
+python tests\test_pi_real_session_monitor.py -v
 python .agentic-pi\runtime\run_proof_matrix.py --mode quick
 python .agentic-pi\runtime\run_pi_chain_smoke.py --target-run-id pi_smoke_chain_p2_strong
 python -m unittest discover tests -v
