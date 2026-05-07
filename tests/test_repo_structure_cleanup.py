@@ -36,7 +36,7 @@ class RepoStructureCleanupTests(unittest.TestCase):
             encoding="utf-8"
         )
 
-        self.assertIn("AGENTIC AUTONOMY PROOF PLANNED", doc)
+        self.assertIn("AGENTIC AUTONOMY PROBE IMPLEMENTED", doc)
         self.assertIn("multi-step autonomous planning", doc)
         self.assertIn("repair loop", doc)
         self.assertIn("memory", doc)
@@ -49,9 +49,9 @@ class RepoStructureCleanupTests(unittest.TestCase):
     def test_workspace_index_points_to_current_and_next_structure(self):
         index = (ROOT / "workspace_index.md").read_text(encoding="utf-8")
 
-        self.assertIn("v2.6 Real Pi Session Trace Capture", index)
-        self.assertIn("v2.7 Real", index)
-        self.assertIn("Agentic Autonomy Proof Plan", index)
+        self.assertIn("v2.7 Real Pi Agentic Autonomy Probe", index)
+        self.assertIn("Arbitrary Chain Negative-Probe Hardening", index)
+        self.assertIn("agentic autonomy probe boundary", index)
         self.assertIn(".agentic-pi/README.md", index)
 
 

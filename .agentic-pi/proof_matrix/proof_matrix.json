@@ -1,6 +1,6 @@
 {
-  "proof_matrix_id": "verifier_provenance_harness_v2_6",
-  "version": "v2.6",
+  "proof_matrix_id": "verifier_provenance_harness_v2_7",
+  "version": "v2.7",
   "entries": [
     {
       "claim_id": "domain_packs",
@@ -93,6 +93,14 @@
       "command": ["python", "tests/test_pi_session_trace_capture.py", "-v"],
       "expected_evidence": ["tests pass", "trace monitor PASS for positive fixtures", "assistant-side status upgrade fails"],
       "claim_boundary": "Trace capture and monitor proof only; not proof of arbitrary live Pi autonomy or full goal-runner.chain.md runtime."
+    },
+    {
+      "claim_id": "agentic_autonomy_probe",
+      "claim": "A real Pi/Mercury agentic autonomy probe can be monitored for chain read, advisory memory read, bounded repair, certifier-only final authority, and unsafe-action rejection.",
+      "mode": "quick",
+      "command": ["python", "tests/test_agentic_autonomy_probe.py", "-v"],
+      "expected_evidence": ["tests pass", "positive repair trace passes", "protected writes and memory-as-authority fail"],
+      "claim_boundary": "Fixture and optional live probe monitor only; not proof that arbitrary unbounded bash or arbitrary goal-runner.chain.md autonomy is safe."
     },
     {
       "claim_id": "full_unittest",

@@ -18,6 +18,7 @@ build/
 .agentic-runs/proof_matrix_*/
 .agentic-runs/proof_matrix_outputs/
 .agentic-runs/pi_chain_smoke_outputs/
+.agentic-runs/agentic_autonomy_outputs/
 artifacts/
 !.agentic-pi/diagnostics/provenance_gate/**/artifacts/
 !.agentic-pi/diagnostics/provenance_gate/**/artifacts/**

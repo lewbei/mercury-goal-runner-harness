@@ -34,7 +34,7 @@ Pi only reports what the certifier wrote.
 Current pushed state:
 
 ```text
-v2.6 = Real Pi Session Trace Capture
+v2.7 = Real Pi Agentic Autonomy Probe
 ```
 
 The deterministic raw-goal proof cases are:
@@ -154,8 +154,15 @@ v2.6 normalizes captured Pi output into a session trace:
 real Pi stdout/transcript -> pi_session_trace.jsonl -> pi_session_trace_monitor.py
 ```
 
-This makes the trace log the auditable source of truth for command/read/report
-discipline.
+This makes the trace log the auditable source of truth for command/read/report discipline.
+
+v2.7 runs and monitors a real Pi/Mercury agentic autonomy probe:
+
+```text
+real Pi -> chain read -> advisory memory read -> first certifier NOT_DONE -> run-local repair -> second certifier CERTIFIED_DONE -> status artifact report -> agentic_autonomy_monitor.py
+```
+
+This proves a bounded monitored repair path on a disposable run. It does not prove that arbitrary unbounded bash or arbitrary goal-runner.chain.md autonomy is safe.
 
 ## Conceptual Architecture
 
@@ -195,6 +202,7 @@ Raw Goal
   -> Real Pi Run Monitor
   -> Real Pi Negative-Status Smoke Monitor
   -> Real Pi Session Trace Capture
+  -> Real Pi Agentic Autonomy Probe
   -> Audit / Replay
   -> Final Status
   -> Pi Reports Status Only
@@ -322,6 +330,13 @@ Raw Goal
     normalized trace for exactly-one-command discipline, required reads,
     certifier-only status authority, and no assistant-side status upgrades.
     The trace monitor can fail unsafe behavior, but cannot certify DONE.
+
+26. Real Pi Agentic Autonomy Probe Layer
+    Runs a real Pi/Mercury probe on a disposable run, requires the chain
+    contract and advisory memory to be read, starts from an initial certifier
+    failure, allows one run-local artifact repair, reruns the certifier, and
+    monitors the resulting trace. It proves a bounded repair path only; it
+    cannot prove arbitrary unbounded bash or arbitrary chain autonomy is safe.
 ```
 
 ## Authority Model
@@ -548,6 +563,7 @@ real Pi interactive smoke -> controlled prompt -> pi_chain_runtime_result.json -
 real Pi run monitor -> captured transcript -> command/read trajectory verdict
 real Pi negative-status monitor -> PROVISIONAL_DONE/NOT_DONE transcript fixtures -> no status upgrade
 real Pi session trace capture -> pi_session_trace.jsonl -> trace monitor verdict
+real Pi agentic autonomy probe -> chain/memory read -> repair loop -> certifier-only status verdict
 P0/P1/P2/missing verifier policy behavior
 smell report recording
 strength report recording
