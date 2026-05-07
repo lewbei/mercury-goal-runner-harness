@@ -40,6 +40,9 @@ See [`docs/V0_3_5_STRENGTH_SCORER.md`](docs/V0_3_5_STRENGTH_SCORER.md) for the v
 See [`docs/V0_3_6_POLICY_ENGINE.md`](docs/V0_3_6_POLICY_ENGINE.md) for the deterministic policy engine boundary.
 See [`docs/V0_4_DIAGNOSTIC_EVALUATION.md`](docs/V0_4_DIAGNOSTIC_EVALUATION.md) for the small diagnostic evaluation boundary.
 See [`docs/V0_5_PI_INTEGRATION.md`](docs/V0_5_PI_INTEGRATION.md) for the Pi integration contract boundary.
+See [`docs/V0_5_RUNTIME_SMOKES.md`](docs/V0_5_RUNTIME_SMOKES.md) for the local Pi runtime smoke boundary.
+See [`docs/PI_PROMPT_CONTRACTS.md`](docs/PI_PROMPT_CONTRACTS.md) for safe Pi prompt patterns.
+See [`docs/PI_BASH_ALLOWLIST.md`](docs/PI_BASH_ALLOWLIST.md) for the current documented bash safety boundary.
 
 The current proof path is:
 
@@ -66,7 +69,8 @@ It demonstrates:
 13. `policy_decision.json` decides provenance-mode final status,
 14. the v0.4 diagnostic evaluation compares weak certifier modes with the policy engine,
 15. v0.5 adds Pi orchestration contracts where agents cannot certify DONE,
-16. and the benchmark reports false-PASS status explicitly.
+16. local v0.5.1-v0.5.3 Pi smokes validate read-only review/status and disposable certifier invocation,
+17. and the benchmark reports false-PASS status explicitly.
 
 ## Core parts
 
@@ -154,36 +158,18 @@ python -m unittest discover tests -v
 
 ## Next milestone
 
-The first provenance runtime gate is implemented:
+Committed repo state:
 
 ```text
-verifier_artifact.schema.json
-verifier_contract.schema.json
-certification_policy.yaml
-verifier_provenance.py
+v0.5 = Pi Integration Contracts
 ```
 
-The v0.3.3 diagnostic set lives at:
+Local smoke-tested state:
 
 ```text
-.agentic-pi/diagnostics/provenance_gate/
-```
-
-Each v0.3.3 case is a copy-ready run fixture. The regression test copies it into `.agentic-runs/test_<case_name>/`, runs the certifier, and reads `final_status.md`.
-
-The certification policy engine is implemented for the current provenance mode. The v0.5 Pi integration is a prompt/chain contract only; full Pi runtime behavior remains deferred.
-
-The v0.4 diagnostic runner lives at:
-
-```text
-.agentic-pi/diagnostics/evaluation/run_diagnostic_evaluation.py
-```
-
-It writes:
-
-```text
-diagnostic_outputs/diagnostic_metrics.json
-diagnostic_outputs/diagnostic_report.md
+v0.5.1 = verifier-reviewer read-only smoke PASS
+v0.5.2 = goal-orchestrator read-only status-report smoke PASS
+v0.5.3 = goal-orchestrator disposable certifier-invocation smoke PASS
 ```
 
 The v0.5 Pi chain lives at:
@@ -199,6 +185,8 @@ The new v0.5 Pi agents are:
 .pi/agents/verifier-generator.md
 .pi/agents/verifier-reviewer.md
 ```
+
+The full `goal-runner.chain.md` runtime remains unverified. The next runtime milestone is v0.5.7 controlled mini-chain smoke, then v0.6 local coding-agent host integration.
 
 ## Planner Stub
 

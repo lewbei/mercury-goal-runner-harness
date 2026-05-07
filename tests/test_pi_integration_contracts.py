@@ -86,6 +86,42 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("new PlanGraph features", doc)
         self.assertIn("agent-issued final status", doc)
 
+    def test_runtime_smoke_doc_records_local_evidence_boundary(self):
+        doc = read(ROOT / "docs" / "V0_5_RUNTIME_SMOKES.md")
+
+        self.assertIn("v0.5.1 = verifier-reviewer read-only smoke PASS", doc)
+        self.assertIn("v0.5.2 = goal-orchestrator read-only status-report smoke PASS", doc)
+        self.assertIn("v0.5.3 = goal-orchestrator disposable certifier-invocation smoke PASS", doc)
+        self.assertIn("local runtime evidence, not automated CI evidence", doc)
+        self.assertIn("full goal-runner.chain.md runtime", doc)
+        self.assertIn("Short strict one-action prompts work better", doc)
+        self.assertIn("goal-orchestrator bash remains risk", doc)
+
+    def test_pi_prompt_contract_doc_locks_safe_prompt_patterns(self):
+        doc = read(ROOT / "docs" / "PI_PROMPT_CONTRACTS.md")
+
+        self.assertIn("One prompt = one action.", doc)
+        self.assertIn("Do not mix", doc)
+        self.assertIn("copy", doc)
+        self.assertIn("repair", doc)
+        self.assertIn("certify", doc)
+        self.assertIn("Final status comes only from certify_run.py", doc)
+        self.assertIn("Do not certify DONE yourself", doc)
+        self.assertIn("MISSING", doc)
+
+    def test_pi_bash_allowlist_doc_locks_current_safety_boundary(self):
+        doc = read(ROOT / "docs" / "PI_BASH_ALLOWLIST.md")
+
+        self.assertIn("documentation-only for now", doc)
+        self.assertIn("python .agentic-pi\\validators\\certify_run.py .agentic-runs\\<run_id>", doc)
+        self.assertIn(".agentic-runs/pi_smoke_*", doc)
+        self.assertIn("manual edit of final_status.md", doc)
+        self.assertIn("manual edit of certification.json", doc)
+        self.assertIn("manual edit of policy_decision.json", doc)
+        self.assertIn("git reset", doc)
+        self.assertIn("git clean", doc)
+        self.assertIn("git push", doc)
+
 
 if __name__ == "__main__":
     unittest.main()

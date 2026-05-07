@@ -14,6 +14,7 @@ build/
 .agentic-runs/smoke_v01_latest/
 .agentic-runs/test_*/
 .agentic-runs/hard_test_001/
+.agentic-runs/pi_smoke_*/
 artifacts/
 !.agentic-pi/diagnostics/provenance_gate/**/artifacts/
 !.agentic-pi/diagnostics/provenance_gate/**/artifacts/**

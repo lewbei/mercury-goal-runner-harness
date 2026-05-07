@@ -88,6 +88,16 @@ Verifier agents can propose evidence.
 certify_run.py + policy_engine.py decide final status.
 ```
 
+Local smoke-tested state is slightly ahead of the committed v0.5 docs:
+
+```text
+v0.5.1 = verifier-reviewer read-only smoke PASS
+v0.5.2 = goal-orchestrator read-only status-report smoke PASS
+v0.5.3 = goal-orchestrator disposable certifier-invocation smoke PASS
+```
+
+These smokes are local evidence, not automated CI evidence. The full `goal-runner.chain.md` runtime remains unverified.
+
 ## What v0.3 proves
 
 v0.3 proves a narrower control principle:
@@ -175,6 +185,9 @@ See `docs/V0_3_5_STRENGTH_SCORER.md` for the verifier strength scoring boundary.
 See `docs/V0_3_6_POLICY_ENGINE.md` for the policy engine boundary.
 See `docs/V0_4_DIAGNOSTIC_EVALUATION.md` for the small diagnostic evaluation boundary.
 See `docs/V0_5_PI_INTEGRATION.md` for the Pi integration contract boundary.
+See `docs/V0_5_RUNTIME_SMOKES.md` for the local Pi runtime smoke boundary.
+See `docs/PI_PROMPT_CONTRACTS.md` for safe Pi prompt patterns.
+See `docs/PI_BASH_ALLOWLIST.md` for the current documented bash safety boundary.
 See `PROBLEM_AND_GAP.md` and `VERIFIER_PROVENANCE_DESIGN.md` for the current research direction.
 
 ## Known limitations
@@ -183,7 +196,7 @@ v0.5 is still intentionally small.
 
 It does not yet include:
 
-- real Mercury/Pi runtime invocation beyond prompt/chain contracts,
+- full `goal-runner.chain.md` runtime beyond local read-only and disposable certifier-invocation smokes,
 - automatic rough-goal to contract compilation from the user-facing command,
 - adaptive multi-plan generation,
 - fully parsed YAML policy configuration,
@@ -197,9 +210,12 @@ The current `run_goal.py` is still a prepared-run orchestrator. It expects an ex
 
 ## Next milestone
 
-The next milestone should be real coding-agent host integration after the v0.5 Pi contract remains stable:
+The next milestone should first stabilize the Pi runtime smoke path:
 
-1. keep the host integration narrow,
-2. compare baseline completion with provenance-gated certification,
-3. do not add new planner mechanisms while integration is being tested,
-4. and keep false PASS / false `CERTIFIED_DONE` as hard-fail metrics.
+1. run v0.5.7 controlled mini-chain smoke on a disposable run,
+2. keep verifier-reviewer read-only,
+3. allow goal-orchestrator to invoke only the deterministic certifier,
+4. keep final status from `certify_run.py` / `policy_engine.py`,
+5. then move to v0.6 local coding-agent host integration,
+6. do not add new planner mechanisms while host/certification integration is being tested,
+7. and keep false PASS / false `CERTIFIED_DONE` as hard-fail metrics.
