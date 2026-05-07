@@ -355,6 +355,19 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("v2.0 Integrated Harness Proof Package", roadmap)
         self.assertIn("IMPLEMENTED", roadmap)
 
+    def test_v21_doc_records_controlled_pi_chain_boundary(self):
+        doc = read(ROOT / "docs" / "V2_1_CONTROLLED_PI_CHAIN_RUNTIME_PROOF.md")
+        roadmap = read(ROOT / "docs" / "V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md")
+
+        self.assertIn("CONTROLLED PI CHAIN RUNTIME PROOF IMPLEMENTED", doc)
+        self.assertIn("run_pi_chain_smoke.py", doc)
+        self.assertIn("verifier-generator -> verifier-reviewer -> goal-orchestrator", doc)
+        self.assertIn("final_status_authority = certifier_only", doc)
+        self.assertIn("can_certify_done = false", doc)
+        self.assertIn("full Pi goal-runner chain is autonomously verified", doc)
+        self.assertIn("v2.1 Controlled Pi Chain Runtime Proof", roadmap)
+        self.assertIn("IMPLEMENTED", roadmap)
+
     def test_framework_doc_is_linked_from_status_docs(self):
         readme = read(ROOT / "README.md")
         status = read(ROOT / "PROJECT_STATUS.md")
@@ -381,6 +394,8 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("V2_0_INTEGRATED_HARNESS_PROOF_PACKAGE.md", status)
         self.assertIn("V2_0_EXAMPLES.md", readme)
         self.assertIn("V2_0_EXAMPLES.md", status)
+        self.assertIn("V2_1_CONTROLLED_PI_CHAIN_RUNTIME_PROOF.md", readme)
+        self.assertIn("V2_1_CONTROLLED_PI_CHAIN_RUNTIME_PROOF.md", status)
         self.assertIn("V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md", readme)
         self.assertIn("V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md", status)
 

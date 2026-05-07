@@ -349,6 +349,46 @@ Implemented proof command:
 python .agentic-pi\runtime\run_proof_matrix.py --mode quick
 ```
 
+## v2.1 Controlled Pi Chain Runtime Proof
+
+Status:
+
+```text
+IMPLEMENTED
+```
+
+Purpose:
+
+```text
+verifier-generator
+-> verifier-reviewer
+-> goal-orchestrator
+-> certifier-owned status artifacts
+```
+
+Macro steps:
+
+1. Add a controlled Pi chain smoke runner.
+2. Keep verifier-generator and verifier-reviewer read-only.
+3. Restrict goal-orchestrator to the deterministic certifier command.
+4. Read `final_status.md`, `certification.json`, and `policy_decision.json` directly after Pi exits.
+5. Record `final_status_authority = certifier_only`.
+6. Record `can_certify_done = false`.
+
+Acceptance:
+
+```text
+controlled Pi chain smoke is bounded
+status artifacts remain certifier-owned
+full arbitrary Pi chain autonomy remains unclaimed
+```
+
+Implemented proof command:
+
+```cmd
+python .agentic-pi\runtime\run_pi_chain_smoke.py --target-run-id pi_smoke_chain_p2_strong
+```
+
 ## Research Anchor Mapping
 
 ```text

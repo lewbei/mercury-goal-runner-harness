@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PiChainRuntimeResult",
+  "type": "object",
+  "required": [
+    "smoke_id",
+    "version",
+    "generated_at",
+    "run_id",
+    "live",
+    "result_status",
+    "step_count",
+    "steps",
+    "setup_report",
+    "status_values",
+    "status_artifacts_agree",
+    "final_status_authority",
+    "can_certify_done",
+    "claim_boundary"
+  ],
+  "properties": {
+    "smoke_id": { "type": "string", "enum": ["controlled_pi_chain_runtime"] },
+    "version": { "type": "string", "enum": ["v2.1"] },
+    "generated_at": { "type": "string", "minLength": 1 },
+    "run_id": { "type": "string", "minLength": 1 },
+    "live": { "type": "boolean" },
+    "result_status": { "type": "string", "enum": ["PLANNED", "PASS", "FAIL"] },
+    "step_count": { "type": "integer" },
+    "steps": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "required": [
+          "step_id",
+          "agent",
+          "tools",
+          "system_prompt",
+          "pi_command",
+          "allowed_bash_command",
+          "exit_code",
+          "passed",
+          "stdout_tail"
+        ],
+        "properties": {
+          "step_id": { "type": "string", "minLength": 1 },
+          "agent": { "type": "string", "minLength": 1 },
+          "tools": { "type": "string", "minLength": 1 },
+          "system_prompt": { "type": "string", "minLength": 1 },
+          "pi_command": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "allowed_bash_command": { "type": "string" },
+          "exit_code": { "type": "integer" },
+          "passed": { "type": "boolean" },
+          "stdout_tail": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "setup_report": { "type": "object" },
+    "status_values": {
+      "type": "object",
+      "required": ["final_status.md", "certification.json", "policy_decision.json"],
+      "properties": {
+        "final_status.md": { "type": "string", "minLength": 1 },
+        "certification.json": { "type": "string", "minLength": 1 },
+        "policy_decision.json": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "status_artifacts_agree": { "type": "boolean" },
+    "final_status_authority": { "type": "string", "enum": ["certifier_only"] },
+    "can_certify_done": { "type": "boolean", "enum": [false] },
+    "claim_boundary": { "type": "string", "minLength": 1 }
+  },
+  "additionalProperties": false
+}

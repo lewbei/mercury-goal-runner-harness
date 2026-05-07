@@ -15,10 +15,10 @@ class FrameworkDocTests(unittest.TestCase):
         self.assertIn("Certifier writes the final status.", doc)
         self.assertIn("Pi only reports what the certifier wrote.", doc)
 
-    def test_framework_doc_records_current_v20_state(self):
+    def test_framework_doc_records_current_v21_state(self):
         doc = (ROOT / "FRAMEWORK.md").read_text(encoding="utf-8")
 
-        self.assertIn("v2.0 = Integrated Harness Proof Package", doc)
+        self.assertIn("v2.1 = Controlled Pi Chain Runtime Proof", doc)
         self.assertIn("raw_simple_legacy -> DONE_PASS", doc)
         self.assertIn("raw_p2_provenance -> CERTIFIED_DONE", doc)
         self.assertIn("raw_missing_verifier -> NOT_DONE", doc)
@@ -31,6 +31,7 @@ class FrameworkDocTests(unittest.TestCase):
         self.assertIn("task_type_decision.json -> domain_pack_selection.json -> domain-aware strategy_candidates.json", doc)
         self.assertIn("domain / memory / trajectory / drift evidence -> workflow_candidates.json -> workflow_search_trace.json", doc)
         self.assertIn("proof_matrix.json -> run_proof_matrix.py -> proof_matrix_result.json", doc)
+        self.assertIn("verifier-generator -> verifier-reviewer -> goal-orchestrator", doc)
 
     def test_framework_doc_uses_actual_current_paths(self):
         doc = (ROOT / "FRAMEWORK.md").read_text(encoding="utf-8")
@@ -42,6 +43,7 @@ class FrameworkDocTests(unittest.TestCase):
             ".agentic-pi/runtime/domain_pack_selector.py",
             ".agentic-pi/runtime/workflow_search.py",
             ".agentic-pi/runtime/run_proof_matrix.py",
+            ".agentic-pi/runtime/run_pi_chain_smoke.py",
             ".agentic-pi/runtime/capability_inventory.py",
             ".agentic-pi/runtime/strategy_generator.py",
             ".agentic-pi/runtime/strategy_applicability_gate.py",
@@ -91,6 +93,7 @@ class FrameworkDocTests(unittest.TestCase):
         self.assertIn("prepared provenance full run through Pi -> CERTIFIED_DONE", doc)
         self.assertIn("arbitrary raw natural-language autonomy", doc)
         self.assertIn("full goal-runner.chain.md autonomous runtime", doc)
+        self.assertIn("strict internal Pi tool-call audit for live Pi chain smoke", doc)
         self.assertIn("semantic quality of milestones", doc)
         self.assertIn("automatic repair application", doc)
         self.assertIn("deterministic trajectory evaluation", doc)

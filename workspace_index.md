@@ -6,7 +6,7 @@ Last verified: 2026-05-07
 
 ## Current Direction
 
-The implemented local layer is v2.0 Integrated Harness Proof Package on top of v1.9 Strategy Search / Workflow Optimization, v1.8 Domain Packs, v1.7 Experience Memory, v1.6 Trajectory-Level Evaluation, v1.5 Drift-Aware Replanning, v1.4 Milestone Planning, v1.3 Strategy Planner, v1.2 Planning Proof Hardening, and the verifier-provenance certification stack. The research direction is Verifier-Provenance Goal Runner Harness, centered on:
+The implemented local layer is v2.1 Controlled Pi Chain Runtime Proof on top of v2.0 Integrated Harness Proof Package, v1.9 Strategy Search / Workflow Optimization, v1.8 Domain Packs, v1.7 Experience Memory, v1.6 Trajectory-Level Evaluation, v1.5 Drift-Aware Replanning, v1.4 Milestone Planning, v1.3 Strategy Planner, v1.2 Planning Proof Hardening, and the verifier-provenance certification stack. The research direction is Verifier-Provenance Goal Runner Harness, centered on:
 
 ```text
 Who is allowed to certify DONE?
@@ -19,7 +19,7 @@ Who is allowed to certify DONE?
 - `FRAMEWORK.md` - conceptual architecture and actual current file map.
 - `PROBLEM_AND_GAP.md` - current research problem and gap.
 - `VERIFIER_PROVENANCE_DESIGN.md` - verifier authority model and deferred implementation boundary.
-- `docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md` - completed v1.3-v2.0 roadmap.
+- `docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md` - completed v1.3-v2.1 roadmap.
 - `certification_policy.yaml` - draft static policy vocabulary.
 
 ## Active Supporting Files
@@ -47,6 +47,7 @@ Who is allowed to certify DONE?
 - `docs/V1_9_STRATEGY_SEARCH.md` - deterministic workflow-search proof.
 - `docs/V2_0_INTEGRATED_HARNESS_PROOF_PACKAGE.md` - integrated proof-matrix package.
 - `docs/V2_0_EXAMPLES.md` - v2.0 example set.
+- `docs/V2_1_CONTROLLED_PI_CHAIN_RUNTIME_PROOF.md` - controlled Pi chain runtime proof.
 - `.agentic-pi/diagnostics/provenance_gate/` - four-case copy-ready provenance diagnostic set.
 - `.agentic-pi/diagnostics/trajectory_evaluation/` - six-case trajectory-level diagnostic set.
 - `PLAN_ROUTER.md` - deterministic planner stub note.
@@ -63,3 +64,4 @@ Who is allowed to certify DONE?
 - Domain packs can shape strategy candidates and verifier hints, but cannot certify DONE.
 - Workflow search can rank candidates and reject unsafe workflows, but cannot execute them or certify DONE.
 - The proof matrix can report bounded proof command results, but cannot certify DONE.
+- The controlled Pi chain smoke can report bounded Pi-process evidence, but cannot certify DONE or prove arbitrary Pi autonomy.

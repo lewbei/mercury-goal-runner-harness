@@ -1,6 +1,6 @@
 {
-  "proof_matrix_id": "verifier_provenance_harness_v2_0",
-  "version": "v2.0",
+  "proof_matrix_id": "verifier_provenance_harness_v2_1",
+  "version": "v2.1",
   "entries": [
     {
       "claim_id": "domain_packs",
@@ -53,6 +53,14 @@
       "command": ["python", ".agentic-pi/runtime/pi_cli.py", "--help"],
       "expected_evidence": ["Final status comes only from certify_run.py / policy_engine.py"],
       "claim_boundary": "CLI surface exists; full Pi autonomy remains unverified."
+    },
+    {
+      "claim_id": "controlled_pi_chain_runtime",
+      "claim": "Controlled Pi chain smoke prompts are generated without granting Pi certification authority.",
+      "mode": "quick",
+      "command": ["python", "tests/test_pi_chain_runtime_proof.py", "-v"],
+      "expected_evidence": ["tests pass", "pi_chain_runtime_result can_certify_done remains false"],
+      "claim_boundary": "Dry-run contract proof plus optional live smoke; not arbitrary Pi chain autonomy."
     },
     {
       "claim_id": "full_unittest",

@@ -34,7 +34,7 @@ Pi only reports what the certifier wrote.
 Current pushed state:
 
 ```text
-v2.0 = Integrated Harness Proof Package
+v2.1 = Controlled Pi Chain Runtime Proof
 ```
 
 The deterministic raw-goal proof cases are:
@@ -105,7 +105,13 @@ v2.0 adds an integrated proof matrix:
 proof_matrix.json -> run_proof_matrix.py -> proof_matrix_result.json
 ```
 
-It does not prove arbitrary natural-language autonomy.
+v2.1 adds a controlled Pi chain smoke:
+
+```text
+verifier-generator -> verifier-reviewer -> goal-orchestrator -> certifier-owned status artifacts
+```
+
+It does not prove arbitrary natural-language autonomy or full Pi chain autonomy.
 
 ## Conceptual Architecture
 
@@ -139,6 +145,7 @@ Raw Goal
   -> Domain Packs
   -> Workflow Search
   -> Proof Matrix
+  -> Controlled Pi Chain Smoke
   -> Audit / Replay
   -> Final Status
   -> Pi Reports Status Only
@@ -227,6 +234,11 @@ Raw Goal
     Maps implementation claims to commands, expected evidence, and claim
     boundaries. The proof matrix can report pass/fail evidence, but cannot
     certify DONE.
+
+20. Controlled Pi Chain Smoke Layer
+    Runs or plans a bounded verifier-generator -> verifier-reviewer ->
+    goal-orchestrator smoke on disposable `pi_smoke_*` runs. The smoke runner
+    can report Pi-process evidence, but cannot certify DONE.
 ```
 
 ## Authority Model
@@ -274,6 +286,7 @@ top-level folders. The implemented files are:
 .agentic-pi/runtime/domain_pack_selector.py
 .agentic-pi/runtime/workflow_search.py
 .agentic-pi/runtime/run_proof_matrix.py
+.agentic-pi/runtime/run_pi_chain_smoke.py
 .agentic-pi/runtime/capability_inventory.py
 .agentic-pi/runtime/strategy_generator.py
 .agentic-pi/runtime/strategy_applicability_gate.py
@@ -440,6 +453,7 @@ deterministic experience memory -> success/failure/provisional lessons affect st
 deterministic domain packs -> task type selects pack -> strategy candidates receive advisory domain hints
 deterministic workflow search -> unsafe/high-risk workflows rejected -> selected workflow preserves certifier authority
 integrated proof matrix -> bounded proof commands -> proof_matrix_result.json
+controlled Pi chain smoke -> verifier-generator -> verifier-reviewer -> goal-orchestrator
 P0/P1/P2/missing verifier policy behavior
 smell report recording
 strength report recording
@@ -458,6 +472,8 @@ Not proven yet:
 ```text
 arbitrary raw natural-language autonomy
 full goal-runner.chain.md autonomous runtime
+strict internal Pi tool-call audit for live Pi chain smoke
+global Pi extension compatibility during Pi chain smoke
 live Mercury planning quality
 semantic optimality of selected branches
 semantic optimality of selected strategies
@@ -489,7 +505,9 @@ python tests\test_experience_memory.py -v
 python tests\test_domain_packs.py -v
 python tests\test_workflow_search.py -v
 python tests\test_v2_proof_package.py -v
+python tests\test_pi_chain_runtime_proof.py -v
 python .agentic-pi\runtime\run_proof_matrix.py --mode quick
+python .agentic-pi\runtime\run_pi_chain_smoke.py --target-run-id pi_smoke_chain_p2_strong
 python -m unittest discover tests -v
 python .agentic-pi\diagnostics\evaluation\run_diagnostic_evaluation.py
 python .agentic-pi\diagnostics\trajectory_evaluation\run_trajectory_evaluation.py
@@ -532,6 +550,7 @@ Raw Goal
   -> Domain Packs
   -> Workflow Search
   -> Proof Matrix
+  -> Controlled Pi Chain Smoke
   -> Audit / Replay
   -> Final Status
   -> Pi Reports Status Only

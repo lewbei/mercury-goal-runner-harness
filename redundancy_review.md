@@ -26,13 +26,14 @@ The workspace is clean enough to proceed with the verifier-provenance direction,
 | Domain pack evidence | `docs/V1_8_DOMAIN_PACKS.md` | `.agentic-pi/domain_packs/`, `.agentic-pi/runtime/domain_pack_selector.py`, `tests/test_domain_packs.py` | Current |
 | Workflow search evidence | `docs/V1_9_STRATEGY_SEARCH.md` | `.agentic-pi/runtime/workflow_search.py`, `tests/test_workflow_search.py` | Current |
 | Integrated proof package evidence | `docs/V2_0_INTEGRATED_HARNESS_PROOF_PACKAGE.md` | `.agentic-pi/proof_matrix/proof_matrix.json`, `.agentic-pi/runtime/run_proof_matrix.py`, `tests/test_v2_proof_package.py` | Current |
+| Controlled Pi chain runtime evidence | `docs/V2_1_CONTROLLED_PI_CHAIN_RUNTIME_PROOF.md` | `.agentic-pi/runtime/run_pi_chain_smoke.py`, `tests/test_pi_chain_runtime_proof.py` | Current |
 | Navigation | `workspace_index.md` | this file | Current |
 
 ## Outdated Or Superseded Direction
 
-The previous immediate milestone was integrated proof packaging after workflow search. That is now implemented.
+The previous immediate milestone was controlled Pi chain runtime proof after integrated proof packaging. That is now implemented.
 
-The active next step should be chosen separately. Good candidates are full Pi chain runtime proof, external host integration beyond fixtures, or paper-style experiment packaging. None should be claimed before its own proof matrix entry exists.
+The active next step should be chosen separately. Good candidates are external host integration beyond fixtures, arbitrary full Pi chain autonomy, or paper-style experiment packaging. None should be claimed before its own proof matrix entry exists.
 
 ## Remaining Risk
 
@@ -51,6 +52,8 @@ The current domain-pack layer stores deterministic task-domain hints. It is evid
 The current workflow-search layer stores deterministic workflow candidates and a search trace. It is evidence for rejecting unsafe workflow shapes, not evidence that workflow search is globally optimal or can certify DONE.
 
 The current proof-matrix layer stores claim-to-command evidence. It is evidence for local proof packaging, not evidence that every full mode command has been run on every machine or that Pi autonomy is verified.
+
+The current controlled Pi chain runtime layer stores bounded Pi smoke evidence. It is evidence for a disposable verifier-generator -> verifier-reviewer -> goal-orchestrator path, not evidence for arbitrary Pi autonomy or strict internal live Pi tool-call audit.
 
 ## Decision
 
