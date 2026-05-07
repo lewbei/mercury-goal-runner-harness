@@ -24,13 +24,14 @@ The workspace is clean enough to proceed with the verifier-provenance direction,
 | Trajectory-level evaluation evidence | `docs/V1_6_TRAJECTORY_LEVEL_EVALUATION.md` | `.agentic-pi/evaluation/`, `.agentic-pi/diagnostics/trajectory_evaluation/`, `tests/test_trajectory_evaluation.py` | Current |
 | Experience memory evidence | `docs/V1_7_EXPERIENCE_MEMORY.md` | `.agentic-pi/runtime/experience_extractor.py`, `.agentic-pi/runtime/experience_retriever.py`, `tests/test_experience_memory.py` | Current |
 | Domain pack evidence | `docs/V1_8_DOMAIN_PACKS.md` | `.agentic-pi/domain_packs/`, `.agentic-pi/runtime/domain_pack_selector.py`, `tests/test_domain_packs.py` | Current |
+| Workflow search evidence | `docs/V1_9_STRATEGY_SEARCH.md` | `.agentic-pi/runtime/workflow_search.py`, `tests/test_workflow_search.py` | Current |
 | Navigation | `workspace_index.md` | this file | Current |
 
 ## Outdated Or Superseded Direction
 
-The previous immediate milestone was domain packs after experience memory. That is now implemented.
+The previous immediate milestone was strategy search after domain packs. That is now implemented.
 
-The active next step is v1.9 Strategy Search / Workflow Optimization. Strategy search must stay advisory to execution planning and cannot certify DONE.
+The active next step is v2.0 Integrated Harness Proof Package. The proof package must keep tested and untested behavior explicit and cannot certify DONE by itself.
 
 ## Remaining Risk
 
@@ -45,6 +46,8 @@ The current trajectory evaluator records and scores tool-use behavior. It is evi
 The current experience memory stores reusable strategy lessons. It is evidence for advisory strategy scoring, not evidence that memory can certify or bypass policy.
 
 The current domain-pack layer stores deterministic task-domain hints. It is evidence for domain-aware strategy generation, not evidence that domain packs are semantically optimal or can certify DONE.
+
+The current workflow-search layer stores deterministic workflow candidates and a search trace. It is evidence for rejecting unsafe workflow shapes, not evidence that workflow search is globally optimal or can certify DONE.
 
 ## Decision
 

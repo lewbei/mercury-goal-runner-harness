@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WorkflowCandidate",
+  "type": "object",
+  "required": [
+    "workflow_id",
+    "workflow_name",
+    "nodes",
+    "edges",
+    "uses_certifier",
+    "writes_status_artifacts",
+    "writes_verifier_artifacts",
+    "hides_failed_checks",
+    "trajectory_score",
+    "false_certified_done_risk",
+    "cost_estimate",
+    "verifier_strength_path",
+    "drift_history_risk",
+    "domain_pack_used",
+    "experience_memory_used",
+    "final_status_authority",
+    "can_certify_done"
+  ],
+  "properties": {
+    "workflow_id": { "type": "string", "minLength": 1 },
+    "workflow_name": { "type": "string", "minLength": 1 },
+    "nodes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["node_id", "role"],
+        "properties": {
+          "node_id": { "type": "string", "minLength": 1 },
+          "role": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["from", "to", "dependency"],
+        "properties": {
+          "from": { "type": "string", "minLength": 1 },
+          "to": { "type": "string", "minLength": 1 },
+          "dependency": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "uses_certifier": { "type": "boolean" },
+    "writes_status_artifacts": { "type": "boolean" },
+    "writes_verifier_artifacts": { "type": "boolean" },
+    "hides_failed_checks": { "type": "boolean" },
+    "trajectory_score": { "type": "integer" },
+    "false_certified_done_risk": { "type": "integer" },
+    "cost_estimate": { "type": "integer" },
+    "verifier_strength_path": {
+      "type": "string",
+      "enum": ["none", "advisory", "gating", "certifying", "legacy"]
+    },
+    "drift_history_risk": { "type": "integer" },
+    "domain_pack_used": { "type": "string" },
+    "experience_memory_used": { "type": "boolean" },
+    "final_status_authority": { "type": "string", "enum": ["certifier_only"] },
+    "can_certify_done": { "type": "boolean", "enum": [false] }
+  },
+  "additionalProperties": false
+}

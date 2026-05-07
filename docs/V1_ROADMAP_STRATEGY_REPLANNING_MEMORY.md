@@ -8,6 +8,7 @@ Strategy can suggest.
 Planner can select.
 Memory can suggest.
 Domain packs can suggest.
+Workflow search can rank.
 Policy decides.
 Certifier writes final status.
 Pi only reports what the certifier wrote.
@@ -277,7 +278,7 @@ python tests\test_domain_packs.py -v
 Status:
 
 ```text
-DEFERRED
+IMPLEMENTED
 ```
 
 Purpose:
@@ -290,9 +291,10 @@ Macro steps:
 
 1. Add workflow candidate model.
 2. Add lightweight workflow search.
-3. Score workflows using trajectory score, false-certified risk, cost, verifier strength, and drift history.
+3. Score workflows using trajectory score, false-certified risk, cost, verifier strength, drift history, domain packs, and experience memory.
 4. Write `workflow_search_trace.json`.
 5. Reject workflows that bypass certifier or hide failed checks.
+6. Keep selected workflow execution deferred.
 
 Acceptance:
 
@@ -300,6 +302,12 @@ Acceptance:
 workflow search cannot bypass certifier
 rejected workflows have reasons
 fixed pipeline still works
+```
+
+Implemented proof command:
+
+```cmd
+python tests\test_workflow_search.py -v
 ```
 
 ## v2.0 Integrated Harness Proof Package

@@ -322,6 +322,20 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("v1.8 Domain Packs", roadmap)
         self.assertIn("IMPLEMENTED", roadmap)
 
+    def test_v19_doc_records_workflow_search_boundary(self):
+        doc = read(ROOT / "docs" / "V1_9_STRATEGY_SEARCH.md")
+        roadmap = read(ROOT / "docs" / "V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md")
+
+        self.assertIn("STRATEGY SEARCH IMPLEMENTED", doc)
+        self.assertIn("workflow_candidates.json", doc)
+        self.assertIn("selected_workflow.json", doc)
+        self.assertIn("workflow_search_trace.json", doc)
+        self.assertIn("workflow search cannot bypass certifier", doc)
+        self.assertIn("workflow search cannot certify DONE", doc)
+        self.assertIn("high false CERTIFIED_DONE risk", doc)
+        self.assertIn("v1.9 Strategy Search / Workflow Optimization", roadmap)
+        self.assertIn("IMPLEMENTED", roadmap)
+
     def test_framework_doc_is_linked_from_status_docs(self):
         readme = read(ROOT / "README.md")
         status = read(ROOT / "PROJECT_STATUS.md")
@@ -342,6 +356,8 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("V1_7_EXPERIENCE_MEMORY.md", status)
         self.assertIn("V1_8_DOMAIN_PACKS.md", readme)
         self.assertIn("V1_8_DOMAIN_PACKS.md", status)
+        self.assertIn("V1_9_STRATEGY_SEARCH.md", readme)
+        self.assertIn("V1_9_STRATEGY_SEARCH.md", status)
         self.assertIn("V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md", readme)
         self.assertIn("V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md", status)
 

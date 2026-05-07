@@ -15,10 +15,10 @@ class FrameworkDocTests(unittest.TestCase):
         self.assertIn("Certifier writes the final status.", doc)
         self.assertIn("Pi only reports what the certifier wrote.", doc)
 
-    def test_framework_doc_records_current_v18_state(self):
+    def test_framework_doc_records_current_v19_state(self):
         doc = (ROOT / "FRAMEWORK.md").read_text(encoding="utf-8")
 
-        self.assertIn("v1.8 = Domain Packs", doc)
+        self.assertIn("v1.9 = Strategy Search / Workflow Optimization", doc)
         self.assertIn("raw_simple_legacy -> DONE_PASS", doc)
         self.assertIn("raw_p2_provenance -> CERTIFIED_DONE", doc)
         self.assertIn("raw_missing_verifier -> NOT_DONE", doc)
@@ -29,6 +29,7 @@ class FrameworkDocTests(unittest.TestCase):
         self.assertIn("Pi/tool session -> tool_use_audit.json -> trajectory_score.json", doc)
         self.assertIn("completed run -> experience_extract.json -> learning record -> retrieved_experience.json", doc)
         self.assertIn("task_type_decision.json -> domain_pack_selection.json -> domain-aware strategy_candidates.json", doc)
+        self.assertIn("domain / memory / trajectory / drift evidence -> workflow_candidates.json -> workflow_search_trace.json", doc)
 
     def test_framework_doc_uses_actual_current_paths(self):
         doc = (ROOT / "FRAMEWORK.md").read_text(encoding="utf-8")
@@ -38,6 +39,7 @@ class FrameworkDocTests(unittest.TestCase):
             ".agentic-pi/runtime/planning_proof_runner.py",
             ".agentic-pi/runtime/task_type_router.py",
             ".agentic-pi/runtime/domain_pack_selector.py",
+            ".agentic-pi/runtime/workflow_search.py",
             ".agentic-pi/runtime/capability_inventory.py",
             ".agentic-pi/runtime/strategy_generator.py",
             ".agentic-pi/runtime/strategy_applicability_gate.py",

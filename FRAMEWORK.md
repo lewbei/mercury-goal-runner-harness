@@ -34,7 +34,7 @@ Pi only reports what the certifier wrote.
 Current pushed state:
 
 ```text
-v1.8 = Domain Packs
+v1.9 = Strategy Search / Workflow Optimization
 ```
 
 The deterministic raw-goal proof cases are:
@@ -93,6 +93,12 @@ v1.8 adds deterministic domain packs:
 task_type_decision.json -> domain_pack_selection.json -> domain-aware strategy_candidates.json
 ```
 
+v1.9 adds deterministic workflow search:
+
+```text
+domain / memory / trajectory / drift evidence -> workflow_candidates.json -> workflow_search_trace.json
+```
+
 It does not prove arbitrary natural-language autonomy.
 
 ## Conceptual Architecture
@@ -125,6 +131,7 @@ Raw Goal
   -> Trajectory Evaluation
   -> Experience Memory
   -> Domain Packs
+  -> Workflow Search
   -> Audit / Replay
   -> Final Status
   -> Pi Reports Status Only
@@ -203,6 +210,11 @@ Raw Goal
     debugging, experiment, benchmark, and devops tasks. Domain packs can shape
     strategy candidates and verifier hints, but cannot certify DONE or bypass
     the policy engine.
+
+18. Workflow Search Layer
+    Generates and scores deterministic workflow candidates using trajectory,
+    drift, memory, domain-pack, risk, and cost evidence. Workflow search can
+    rank workflows, but cannot execute them or certify DONE.
 ```
 
 ## Authority Model
@@ -248,6 +260,7 @@ top-level folders. The implemented files are:
 .agentic-pi/runtime/planning_proof_runner.py
 .agentic-pi/runtime/task_type_router.py
 .agentic-pi/runtime/domain_pack_selector.py
+.agentic-pi/runtime/workflow_search.py
 .agentic-pi/runtime/capability_inventory.py
 .agentic-pi/runtime/strategy_generator.py
 .agentic-pi/runtime/strategy_applicability_gate.py
@@ -411,6 +424,7 @@ deterministic drift proof fixture -> drift_report.json none -> CERTIFIED_DONE
 deterministic trajectory evaluation -> duplicate/manual/missing/unsafe/wrong-order cases fail
 deterministic experience memory -> success/failure/provisional lessons affect strategy score but do not certify
 deterministic domain packs -> task type selects pack -> strategy candidates receive advisory domain hints
+deterministic workflow search -> unsafe/high-risk workflows rejected -> selected workflow preserves certifier authority
 P0/P1/P2/missing verifier policy behavior
 smell report recording
 strength report recording
@@ -435,7 +449,8 @@ semantic optimality of selected strategies
 semantic quality of milestones
 automatic repair application
 domain pack quality
-strategy search / workflow optimization
+workflow-search execution integration
+workflow-search semantic optimality
 automatic verifier generation
 SWE-bench integration
 OpenHands integration
@@ -456,6 +471,7 @@ python tests\test_drift_replanning.py -v
 python tests\test_trajectory_evaluation.py -v
 python tests\test_experience_memory.py -v
 python tests\test_domain_packs.py -v
+python tests\test_workflow_search.py -v
 python -m unittest discover tests -v
 python .agentic-pi\diagnostics\evaluation\run_diagnostic_evaluation.py
 python .agentic-pi\diagnostics\trajectory_evaluation\run_trajectory_evaluation.py
@@ -495,6 +511,8 @@ Raw Goal
   -> Certifier
   -> Trajectory Evaluation
   -> Experience Memory
+  -> Domain Packs
+  -> Workflow Search
   -> Audit / Replay
   -> Final Status
   -> Pi Reports Status Only
