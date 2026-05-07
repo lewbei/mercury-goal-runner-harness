@@ -10,12 +10,15 @@ build/
 
 # Generated harness run outputs
 .agentic-runs/benchmark_*/
+.agentic-runs/diagnostic_eval_*/
 .agentic-runs/smoke_v01_latest/
 .agentic-runs/test_*/
 .agentic-runs/hard_test_001/
 artifacts/
 !.agentic-pi/diagnostics/provenance_gate/**/artifacts/
 !.agentic-pi/diagnostics/provenance_gate/**/artifacts/**
+!.agentic-pi/diagnostics/evaluation/**/artifacts/
+!.agentic-pi/diagnostics/evaluation/**/artifacts/**
 .pi/tasks/
 
 # Deferred v0.4/v0.5 prototypes; v0.3 is PlanGraph only.

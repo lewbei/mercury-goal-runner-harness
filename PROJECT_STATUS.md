@@ -2,7 +2,7 @@
 
 ## Current version
 
-Mercury Goal Runner Harness v0.3.6 is Policy Engine on top of the v0.3.5 Strength Scorer.
+Mercury Goal Runner Harness v0.4 is Small Diagnostic Evaluation on top of the v0.3.6 Policy Engine.
 
 The purpose of this repository is not to claim that Mercury V2 becomes smarter by looping. The purpose is to place Mercury V2 inside a controlled goal-execution harness where outputs are checked through contracts, logs, evidence, and certification.
 
@@ -26,6 +26,7 @@ The current harness passes its local regression tests and the current benchmark 
 
 ```text
 python -m unittest discover tests -v
+python .agentic-pi\diagnostics\evaluation\run_diagnostic_evaluation.py
 python .agentic-pi\benchmark\run_benchmark.py
 ```
 
@@ -57,6 +58,19 @@ The v0.3.4 smell scanner records metadata-level verifier smell reports.
 The v0.3.5 strength scorer converts verifier metadata and smell reports into `weak`, `advisory`, `gating`, or `certifying` strength reports.
 
 The v0.3.6 policy engine consumes verifier artifacts, smell reports, strength reports, and verifier contracts to decide provenance-mode final status.
+
+The v0.4 diagnostic evaluation compares four certification modes on six deterministic cases:
+
+- file-existence certifier,
+- artifact-test certifier,
+- provenance-gated certifier,
+- and policy-engine certifier.
+
+The main diagnostic metric is:
+
+```text
+false CERTIFIED_DONE rate
+```
 
 ## What v0.3 proves
 
@@ -143,6 +157,7 @@ See `docs/V0_3_3_PROVENANCE_GATE_DIAGNOSTICS.md` for the copy-ready provenance d
 See `docs/V0_3_4_SMELL_SCANNER.md` for the metadata-level smell scanner boundary.
 See `docs/V0_3_5_STRENGTH_SCORER.md` for the verifier strength scoring boundary.
 See `docs/V0_3_6_POLICY_ENGINE.md` for the policy engine boundary.
+See `docs/V0_4_DIAGNOSTIC_EVALUATION.md` for the small diagnostic evaluation boundary.
 See `PROBLEM_AND_GAP.md` and `VERIFIER_PROVENANCE_DESIGN.md` for the current research direction.
 
 ## Known limitations
@@ -155,7 +170,7 @@ It does not yet include:
 - automatic rough-goal to contract compilation from the user-facing command,
 - adaptive multi-plan generation,
 - fully parsed YAML policy configuration,
-- broad diagnostic evaluation beyond the four-case provenance gate check,
+- broad diagnostic evaluation beyond the small v0.4 deterministic diagnostic set,
 - rollback validation,
 - replay validation,
 - cost budgets,
@@ -165,9 +180,9 @@ The current `run_goal.py` is still a prepared-run orchestrator. It expects an ex
 
 ## Next milestone
 
-The next milestone should be a small diagnostic evaluation after the v0.3.6 policy engine remains stable:
+The next milestone should be Pi integration after the v0.4 diagnostic evaluation remains stable:
 
-1. compare file-existence, artifact-test, provenance-gated, and policy-engine certification,
-2. measure false `CERTIFIED_DONE` rate,
-3. keep diagnostic scope small and deterministic,
-4. and keep false PASS as the main hard-fail metric.
+1. keep Pi as orchestration only,
+2. keep the deterministic certifier as the final authority,
+3. do not add new planning features while integration is being tested,
+4. and keep false PASS / false `CERTIFIED_DONE` as hard-fail metrics.

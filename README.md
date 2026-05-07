@@ -6,7 +6,7 @@ The goal is not to make Mercury V2 magically smarter by looping. The goal is to 
 
 ## Current status
 
-v0.3.6 is the Policy Engine on top of the v0.3.5 Strength Scorer.
+v0.4 is a Small Diagnostic Evaluation on top of the v0.3.6 Policy Engine.
 
 The current research direction is:
 
@@ -38,11 +38,13 @@ See [`docs/V0_3_3_PROVENANCE_GATE_DIAGNOSTICS.md`](docs/V0_3_3_PROVENANCE_GATE_D
 See [`docs/V0_3_4_SMELL_SCANNER.md`](docs/V0_3_4_SMELL_SCANNER.md) for the metadata-level verifier smell scanner boundary.
 See [`docs/V0_3_5_STRENGTH_SCORER.md`](docs/V0_3_5_STRENGTH_SCORER.md) for the verifier strength scoring boundary.
 See [`docs/V0_3_6_POLICY_ENGINE.md`](docs/V0_3_6_POLICY_ENGINE.md) for the deterministic policy engine boundary.
+See [`docs/V0_4_DIAGNOSTIC_EVALUATION.md`](docs/V0_4_DIAGNOSTIC_EVALUATION.md) for the small diagnostic evaluation boundary.
 
 The current proof path is:
 
 ```text
 python -m unittest discover tests -v
+python .agentic-pi\diagnostics\evaluation\run_diagnostic_evaluation.py
 python .agentic-pi\benchmark\run_benchmark.py
 ```
 
@@ -61,7 +63,8 @@ It demonstrates:
 11. verifier smell reports are recorded without changing final status yet,
 12. verifier strength reports are recorded,
 13. `policy_decision.json` decides provenance-mode final status,
-14. and the benchmark reports false-PASS status explicitly.
+14. the v0.4 diagnostic evaluation compares weak certifier modes with the policy engine,
+15. and the benchmark reports false-PASS status explicitly.
 
 ## Core parts
 
@@ -94,6 +97,9 @@ Scores verifier strength as `weak`, `advisory`, `gating`, or `certifying` for la
 
 10. Policy Engine
 Consumes verifier artifacts, smell reports, strength reports, and the verifier contract to decide provenance-mode status.
+
+11. Small Diagnostic Evaluation
+Compares file-existence, artifact-test, provenance-gate, and policy-engine certification on six deterministic cases.
 
 ## Core rule
 
@@ -161,6 +167,19 @@ The v0.3.3 diagnostic set lives at:
 Each v0.3.3 case is a copy-ready run fixture. The regression test copies it into `.agentic-runs/test_<case_name>/`, runs the certifier, and reads `final_status.md`.
 
 The certification policy engine is implemented for the current provenance mode. Full oracle governance, Pi integration, and larger diagnostic evaluation remain deferred.
+
+The v0.4 diagnostic runner lives at:
+
+```text
+.agentic-pi/diagnostics/evaluation/run_diagnostic_evaluation.py
+```
+
+It writes:
+
+```text
+diagnostic_outputs/diagnostic_metrics.json
+diagnostic_outputs/diagnostic_report.md
+```
 
 ## Planner Stub
 

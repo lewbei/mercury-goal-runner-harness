@@ -1,0 +1,10 @@
+{
+  "case_id": "missing_verifier",
+  "description": "Verifier contract exists, but no verifier artifact exists.",
+  "expected_policy_status": "NOT_DONE",
+  "expected_certified": false,
+  "target_artifacts": [
+    "artifacts/output.txt"
+  ],
+  "artifact_tests": []
+}

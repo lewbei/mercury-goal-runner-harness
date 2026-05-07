@@ -1,0 +1,21 @@
+{
+  "case_id": "file_exists_but_wrong",
+  "description": "Artifact exists, but the behavior/content check fails.",
+  "expected_policy_status": "NOT_DONE",
+  "expected_certified": false,
+  "target_artifacts": [
+    "artifacts/output.txt"
+  ],
+  "artifact_tests": [
+    {
+      "test_id": "OUTPUT_BEHAVIOR",
+      "type": "command",
+      "cmd": "python artifacts/check_output.py",
+      "expect_exit_code": 0,
+      "expect_stdout_contains": [
+        "correct behavior"
+      ],
+      "expect_stdout_lines_min": 1
+    }
+  ]
+}

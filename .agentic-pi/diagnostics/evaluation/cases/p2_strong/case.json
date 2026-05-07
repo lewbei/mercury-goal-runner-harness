@@ -1,0 +1,21 @@
+{
+  "case_id": "p2_strong",
+  "description": "Independent verifier evidence has certifying strength.",
+  "expected_policy_status": "CERTIFIED_DONE",
+  "expected_certified": true,
+  "target_artifacts": [
+    "artifacts/output.txt"
+  ],
+  "artifact_tests": [
+    {
+      "test_id": "OUTPUT_BEHAVIOR",
+      "type": "command",
+      "cmd": "python artifacts/check_output.py",
+      "expect_exit_code": 0,
+      "expect_stdout_contains": [
+        "correct behavior"
+      ],
+      "expect_stdout_lines_min": 1
+    }
+  ]
+}

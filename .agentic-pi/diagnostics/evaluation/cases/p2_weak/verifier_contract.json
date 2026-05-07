@@ -1,0 +1,25 @@
+{
+  "run_id": "diagnostic_eval_p2_weak",
+  "target_goal": "Create output.txt with correct behavior text.",
+  "target_artifacts": [
+    "artifacts/output.txt"
+  ],
+  "required_verifier_level": "P2",
+  "allow_self_generated_only": false,
+  "required_behaviors": [
+    "artifacts/output.txt contains correct behavior"
+  ],
+  "forbidden_verifier_patterns": [
+    "post-solution verifier",
+    "depends on solution"
+  ],
+  "minimum_strength_level": "certifying",
+  "certifying_authority_levels": [
+    "P2",
+    "P3"
+  ],
+  "provisional_authority_levels": [
+    "P0",
+    "P1"
+  ]
+}

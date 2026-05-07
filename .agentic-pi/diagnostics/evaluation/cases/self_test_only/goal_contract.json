@@ -1,0 +1,26 @@
+{
+  "run_id": "diagnostic_eval_self_test_only",
+  "raw_user_prompt": "diagnostic self test only",
+  "intent": "diagnostic self test only",
+  "cleaned_goal": "Create output.txt with correct behavior text.",
+  "final_outputs": [
+    "artifacts/output.txt"
+  ],
+  "explicit_constraints": [],
+  "inferred_constraints": [],
+  "forbidden_actions": [
+    "Do not touch protected files."
+  ],
+  "ambiguities": [],
+  "risk_level": "LOW",
+  "complexity_level": "SIMPLE",
+  "done_criteria": [
+    "artifacts/output.txt exists."
+  ],
+  "failure_criteria": [
+    "artifacts/output.txt missing."
+  ],
+  "ask_user_conditions": [],
+  "max_steps": 3,
+  "execution_prompt": "create artifacts/output.txt"
+}

@@ -1,0 +1,26 @@
+{
+  "run_id": "diagnostic_eval_p2_strong",
+  "raw_user_prompt": "diagnostic p2 strong",
+  "intent": "diagnostic p2 strong",
+  "cleaned_goal": "Create output.txt with correct behavior text.",
+  "final_outputs": [
+    "artifacts/output.txt"
+  ],
+  "explicit_constraints": [],
+  "inferred_constraints": [],
+  "forbidden_actions": [
+    "Do not touch protected files."
+  ],
+  "ambiguities": [],
+  "risk_level": "LOW",
+  "complexity_level": "SIMPLE",
+  "done_criteria": [
+    "artifacts/output.txt exists."
+  ],
+  "failure_criteria": [
+    "artifacts/output.txt missing."
+  ],
+  "ask_user_conditions": [],
+  "max_steps": 3,
+  "execution_prompt": "create artifacts/output.txt"
+}

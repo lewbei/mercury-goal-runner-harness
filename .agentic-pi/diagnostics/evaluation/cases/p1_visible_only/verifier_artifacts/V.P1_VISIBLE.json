@@ -1,0 +1,20 @@
+{
+  "artifact_id": "V.P1_VISIBLE",
+  "run_id": "diagnostic_eval_p1_visible_only",
+  "target_artifact": "artifacts/output.txt",
+  "kind": "command_test",
+  "source": "existing_repo_test",
+  "created_at": "2026-05-07T00:00:00+00:00",
+  "created_at_phase": "external_preexisting",
+  "author_agent": "visible-local-test",
+  "author_model": "deterministic-visible-test",
+  "provenance_level": "P1",
+  "depends_on_solution": false,
+  "same_worker_as_solution": false,
+  "executes_code": true,
+  "assertion_count": 2,
+  "mock_ratio_percent": 0,
+  "smell_flags": [],
+  "authority": "gating",
+  "solution_exists_at_creation": false
+}

@@ -1,0 +1,20 @@
+{
+  "artifact_id": "V.P2_STRONG",
+  "run_id": "diagnostic_eval_p2_strong",
+  "target_artifact": "artifacts/output.txt",
+  "kind": "command_test",
+  "source": "independent_verifier_agent",
+  "created_at": "2026-05-07T00:00:00+00:00",
+  "created_at_phase": "pre_solution",
+  "author_agent": "independent-verifier",
+  "author_model": "deterministic-independent-verifier",
+  "provenance_level": "P2",
+  "depends_on_solution": false,
+  "same_worker_as_solution": false,
+  "executes_code": true,
+  "assertion_count": 2,
+  "mock_ratio_percent": 0,
+  "smell_flags": [],
+  "authority": "certifying",
+  "solution_exists_at_creation": false
+}
