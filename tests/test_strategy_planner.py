@@ -346,7 +346,8 @@ class StrategyPlannerTests(unittest.TestCase):
         self.assertIn("does not prove", doc.lower())
         self.assertIn("Certifier writes final status", doc)
         self.assertIn("v1.4 Milestone Planning", roadmap)
-        self.assertIn("DEFERRED", roadmap)
+        self.assertIn("v2.0 Integrated Harness Proof Package", roadmap)
+        self.assertIn("IMPLEMENTED", roadmap)
 
 
 if __name__ == "__main__":

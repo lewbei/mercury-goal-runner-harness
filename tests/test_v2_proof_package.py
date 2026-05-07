@@ -1,0 +1,114 @@
+import importlib.util
+import json
+import shutil
+import subprocess
+import sys
+import unittest
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+OUTPUT_DIR = ROOT / ".agentic-runs" / "proof_matrix_outputs"
+MATRIX_PATH = ROOT / ".agentic-pi" / "proof_matrix" / "proof_matrix.json"
+
+
+def run_python(*args):
+    return subprocess.run(
+        [sys.executable, *args],
+        cwd=ROOT,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+    )
+
+
+def load_json(path: Path):
+    with path.open("r", encoding="utf-8-sig") as f:
+        return json.load(f)
+
+
+def load_schema_validator():
+    module_path = ROOT / ".agentic-pi" / "validators" / "validate_schema.py"
+    spec = importlib.util.spec_from_file_location("validate_schema", module_path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+class V2ProofPackageTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.validator = load_schema_validator()
+
+    def tearDown(self):
+        if OUTPUT_DIR.exists():
+            shutil.rmtree(OUTPUT_DIR)
+
+    def validate_schema(self, instance, schema_name):
+        schema = self.validator.load_json(ROOT / ".agentic-pi" / "schemas" / schema_name)
+        return self.validator.validate(instance, schema)
+
+    def test_proof_matrix_schema_validates_and_contains_required_claims(self):
+        matrix = load_json(MATRIX_PATH)
+
+        self.assertEqual(self.validate_schema(matrix, "proof_matrix.schema.json"), [])
+        claim_ids = {entry["claim_id"] for entry in matrix["entries"]}
+        for claim_id in [
+            "domain_packs",
+            "workflow_search",
+            "diagnostic_evaluation",
+            "trajectory_evaluation",
+            "cli_help",
+            "full_unittest",
+            "benchmark",
+        ]:
+            self.assertIn(claim_id, claim_ids)
+        self.assertTrue(any(entry["mode"] == "full" for entry in matrix["entries"]))
+
+    def test_quick_proof_runner_writes_schema_valid_result(self):
+        result = run_python(".agentic-pi/runtime/run_proof_matrix.py", "--mode", "quick")
+
+        self.assertEqual(result.returncode, 0, result.stdout)
+        result_path = OUTPUT_DIR / "proof_matrix_result.json"
+        self.assertTrue(result_path.is_file())
+        proof_result = load_json(result_path)
+        self.assertEqual(self.validate_schema(proof_result, "proof_matrix_result.schema.json"), [])
+        self.assertEqual(proof_result["mode"], "quick")
+        self.assertTrue(proof_result["all_passed"])
+        self.assertFalse(proof_result["can_certify_done"])
+        self.assertEqual(proof_result["final_status_authority"], "certifier_only")
+        claim_ids = {entry["claim_id"] for entry in proof_result["entries"]}
+        self.assertIn("domain_packs", claim_ids)
+        self.assertIn("workflow_search", claim_ids)
+        self.assertNotIn("benchmark", claim_ids)
+
+    def test_quick_proof_runner_outputs_only_under_agentic_runs(self):
+        result = run_python(".agentic-pi/runtime/run_proof_matrix.py", "--mode", "quick")
+
+        self.assertEqual(result.returncode, 0, result.stdout)
+        for path in [
+            OUTPUT_DIR / "proof_matrix_result.json",
+            OUTPUT_DIR / "diagnostic" / "diagnostic_metrics.json",
+            OUTPUT_DIR / "trajectory" / "trajectory_metrics.json",
+        ]:
+            self.assertTrue(path.is_file(), path)
+            self.assertIn(".agentic-runs", path.as_posix())
+
+    def test_v20_docs_lock_integrated_proof_boundary(self):
+        doc = (ROOT / "docs" / "V2_0_INTEGRATED_HARNESS_PROOF_PACKAGE.md").read_text(encoding="utf-8")
+        examples = (ROOT / "docs" / "V2_0_EXAMPLES.md").read_text(encoding="utf-8")
+
+        self.assertIn("INTEGRATED HARNESS PROOF PACKAGE IMPLEMENTED", doc)
+        self.assertIn("proof_matrix_result.json", doc)
+        self.assertIn("can_certify_done = false", doc)
+        self.assertIn("The full Pi goal-runner chain is autonomously verified", doc)
+        self.assertIn("DONE_PASS", examples)
+        self.assertIn("PROVISIONAL_DONE", examples)
+        self.assertIn("CERTIFIED_DONE", examples)
+        self.assertIn("NOT_DONE", examples)
+        self.assertIn("workflow search", examples)
+        self.assertIn("Final status still comes only from", examples)
+
+
+if __name__ == "__main__":
+    unittest.main()

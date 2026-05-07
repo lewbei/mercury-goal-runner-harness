@@ -248,7 +248,8 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("does not prove", doc.lower())
         self.assertIn("v1.4 Milestone Planning", roadmap)
         self.assertIn("v1.9 Strategy Search / Workflow Optimization", roadmap)
-        self.assertIn("DEFERRED", roadmap)
+        self.assertIn("v2.0 Integrated Harness Proof Package", roadmap)
+        self.assertIn("IMPLEMENTED", roadmap)
 
     def test_v14_doc_records_milestone_planning_boundary(self):
         doc = read(ROOT / "docs" / "V1_4_MILESTONE_PLANNING.md")
@@ -336,6 +337,24 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("v1.9 Strategy Search / Workflow Optimization", roadmap)
         self.assertIn("IMPLEMENTED", roadmap)
 
+    def test_v20_doc_records_integrated_proof_package_boundary(self):
+        doc = read(ROOT / "docs" / "V2_0_INTEGRATED_HARNESS_PROOF_PACKAGE.md")
+        examples = read(ROOT / "docs" / "V2_0_EXAMPLES.md")
+        roadmap = read(ROOT / "docs" / "V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md")
+
+        self.assertIn("INTEGRATED HARNESS PROOF PACKAGE IMPLEMENTED", doc)
+        self.assertIn("proof_matrix.json", doc)
+        self.assertIn("run_proof_matrix.py", doc)
+        self.assertIn("proof_matrix_result.json", doc)
+        self.assertIn("can_certify_done = false", doc)
+        self.assertIn("full Pi goal-runner chain", doc)
+        self.assertIn("DONE_PASS", examples)
+        self.assertIn("PROVISIONAL_DONE", examples)
+        self.assertIn("CERTIFIED_DONE", examples)
+        self.assertIn("NOT_DONE", examples)
+        self.assertIn("v2.0 Integrated Harness Proof Package", roadmap)
+        self.assertIn("IMPLEMENTED", roadmap)
+
     def test_framework_doc_is_linked_from_status_docs(self):
         readme = read(ROOT / "README.md")
         status = read(ROOT / "PROJECT_STATUS.md")
@@ -358,6 +377,10 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("V1_8_DOMAIN_PACKS.md", status)
         self.assertIn("V1_9_STRATEGY_SEARCH.md", readme)
         self.assertIn("V1_9_STRATEGY_SEARCH.md", status)
+        self.assertIn("V2_0_INTEGRATED_HARNESS_PROOF_PACKAGE.md", readme)
+        self.assertIn("V2_0_INTEGRATED_HARNESS_PROOF_PACKAGE.md", status)
+        self.assertIn("V2_0_EXAMPLES.md", readme)
+        self.assertIn("V2_0_EXAMPLES.md", status)
         self.assertIn("V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md", readme)
         self.assertIn("V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md", status)
 

@@ -1,0 +1,74 @@
+{
+  "proof_matrix_id": "verifier_provenance_harness_v2_0",
+  "version": "v2.0",
+  "entries": [
+    {
+      "claim_id": "domain_packs",
+      "claim": "Domain packs select task-domain hints without certifying DONE.",
+      "mode": "quick",
+      "command": ["python", "tests/test_domain_packs.py", "-v"],
+      "expected_evidence": ["tests pass", "domain_pack_selection.json remains advisory"],
+      "claim_boundary": "Proves deterministic pack selection, not domain semantic optimality."
+    },
+    {
+      "claim_id": "workflow_search",
+      "claim": "Workflow search rejects certifier-bypass and high-risk candidates.",
+      "mode": "quick",
+      "command": ["python", "tests/test_workflow_search.py", "-v"],
+      "expected_evidence": ["tests pass", "workflow_search_trace.json remains non-certifying"],
+      "claim_boundary": "Proves deterministic workflow rejection, not globally optimal workflow search."
+    },
+    {
+      "claim_id": "diagnostic_evaluation",
+      "claim": "Policy-engine diagnostic false CERTIFIED_DONE rate remains zero on the fixture set.",
+      "mode": "quick",
+      "command": [
+        "python",
+        ".agentic-pi/diagnostics/evaluation/run_diagnostic_evaluation.py",
+        "--output-dir",
+        ".agentic-runs/proof_matrix_outputs/diagnostic",
+        "--run-prefix",
+        "proof_matrix_diag"
+      ],
+      "expected_evidence": ["policy false CERTIFIED_DONE rate = 0.000"],
+      "claim_boundary": "Small deterministic diagnostic only, not a broad benchmark."
+    },
+    {
+      "claim_id": "trajectory_evaluation",
+      "claim": "Trajectory diagnostics catch unsafe tool-use patterns.",
+      "mode": "quick",
+      "command": [
+        "python",
+        ".agentic-pi/diagnostics/trajectory_evaluation/run_trajectory_evaluation.py",
+        "--output-dir",
+        ".agentic-runs/proof_matrix_outputs/trajectory"
+      ],
+      "expected_evidence": ["status match rate = 1.000"],
+      "claim_boundary": "Evaluates tool trajectory only, not final artifact correctness."
+    },
+    {
+      "claim_id": "cli_help",
+      "claim": "The thin local CLI help is available and states certifier authority.",
+      "mode": "quick",
+      "command": ["python", ".agentic-pi/runtime/pi_cli.py", "--help"],
+      "expected_evidence": ["Final status comes only from certify_run.py / policy_engine.py"],
+      "claim_boundary": "CLI surface exists; full Pi autonomy remains unverified."
+    },
+    {
+      "claim_id": "full_unittest",
+      "claim": "The complete local unit suite passes.",
+      "mode": "full",
+      "command": ["python", "-m", "unittest", "discover", "tests", "-v"],
+      "expected_evidence": ["all tests pass"],
+      "claim_boundary": "Local test pass only; not external benchmark proof."
+    },
+    {
+      "claim_id": "benchmark",
+      "claim": "The current benchmark status-match and false-PASS checks complete.",
+      "mode": "full",
+      "command": ["python", ".agentic-pi/benchmark/run_benchmark.py"],
+      "expected_evidence": ["Benchmark complete"],
+      "claim_boundary": "Small local benchmark only; generated report should not be overclaimed."
+    }
+  ]
+}

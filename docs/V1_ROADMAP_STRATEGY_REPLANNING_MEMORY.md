@@ -9,6 +9,7 @@ Planner can select.
 Memory can suggest.
 Domain packs can suggest.
 Workflow search can rank.
+Proof matrix can report.
 Policy decides.
 Certifier writes final status.
 Pi only reports what the certifier wrote.
@@ -315,7 +316,7 @@ python tests\test_workflow_search.py -v
 Status:
 
 ```text
-DEFERRED
+IMPLEMENTED
 ```
 
 Purpose:
@@ -330,7 +331,8 @@ Macro steps:
 2. Add one-command proof runner.
 3. Add release docs.
 4. Add example set for `DONE_PASS`, `PROVISIONAL_DONE`, `CERTIFIED_DONE`, `NOT_DONE`, drift detection, trajectory failure, memory suggestion, and domain pack selection.
-5. Add package sanity checks.
+5. Add workflow-search example.
+6. Add package sanity checks.
 
 Acceptance:
 
@@ -339,6 +341,12 @@ full proof matrix passes
 false CERTIFIED_DONE remains zero on diagnostic set
 docs separate tested behavior from untested behavior
 full Pi autonomy is not claimed unless separately proven
+```
+
+Implemented proof command:
+
+```cmd
+python .agentic-pi\runtime\run_proof_matrix.py --mode quick
 ```
 
 ## Research Anchor Mapping

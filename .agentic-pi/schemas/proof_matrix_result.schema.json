@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ProofMatrixResult",
+  "type": "object",
+  "required": [
+    "proof_matrix_id",
+    "version",
+    "mode",
+    "all_passed",
+    "entry_count",
+    "passed_count",
+    "failed_count",
+    "entries",
+    "final_status_authority",
+    "can_certify_done"
+  ],
+  "properties": {
+    "proof_matrix_id": { "type": "string", "minLength": 1 },
+    "version": { "type": "string", "minLength": 1 },
+    "mode": { "type": "string", "enum": ["quick", "full"] },
+    "all_passed": { "type": "boolean" },
+    "entry_count": { "type": "integer" },
+    "passed_count": { "type": "integer" },
+    "failed_count": { "type": "integer" },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["claim_id", "command", "exit_code", "passed", "stdout_tail"],
+        "properties": {
+          "claim_id": { "type": "string", "minLength": 1 },
+          "command": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "exit_code": { "type": "integer" },
+          "passed": { "type": "boolean" },
+          "stdout_tail": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "final_status_authority": { "type": "string", "enum": ["certifier_only"] },
+    "can_certify_done": { "type": "boolean", "enum": [false] }
+  },
+  "additionalProperties": false
+}

@@ -34,7 +34,7 @@ Pi only reports what the certifier wrote.
 Current pushed state:
 
 ```text
-v1.9 = Strategy Search / Workflow Optimization
+v2.0 = Integrated Harness Proof Package
 ```
 
 The deterministic raw-goal proof cases are:
@@ -99,6 +99,12 @@ v1.9 adds deterministic workflow search:
 domain / memory / trajectory / drift evidence -> workflow_candidates.json -> workflow_search_trace.json
 ```
 
+v2.0 adds an integrated proof matrix:
+
+```text
+proof_matrix.json -> run_proof_matrix.py -> proof_matrix_result.json
+```
+
 It does not prove arbitrary natural-language autonomy.
 
 ## Conceptual Architecture
@@ -132,6 +138,7 @@ Raw Goal
   -> Experience Memory
   -> Domain Packs
   -> Workflow Search
+  -> Proof Matrix
   -> Audit / Replay
   -> Final Status
   -> Pi Reports Status Only
@@ -215,6 +222,11 @@ Raw Goal
     Generates and scores deterministic workflow candidates using trajectory,
     drift, memory, domain-pack, risk, and cost evidence. Workflow search can
     rank workflows, but cannot execute them or certify DONE.
+
+19. Proof Matrix Layer
+    Maps implementation claims to commands, expected evidence, and claim
+    boundaries. The proof matrix can report pass/fail evidence, but cannot
+    certify DONE.
 ```
 
 ## Authority Model
@@ -261,6 +273,7 @@ top-level folders. The implemented files are:
 .agentic-pi/runtime/task_type_router.py
 .agentic-pi/runtime/domain_pack_selector.py
 .agentic-pi/runtime/workflow_search.py
+.agentic-pi/runtime/run_proof_matrix.py
 .agentic-pi/runtime/capability_inventory.py
 .agentic-pi/runtime/strategy_generator.py
 .agentic-pi/runtime/strategy_applicability_gate.py
@@ -323,6 +336,7 @@ top-level folders. The implemented files are:
 .agentic-pi/memory/learning_records/
 
 .agentic-pi/domain_packs/
+.agentic-pi/proof_matrix/proof_matrix.json
 
 .pi/agents/goal-orchestrator.md
 .pi/agents/verifier-generator.md
@@ -425,6 +439,7 @@ deterministic trajectory evaluation -> duplicate/manual/missing/unsafe/wrong-ord
 deterministic experience memory -> success/failure/provisional lessons affect strategy score but do not certify
 deterministic domain packs -> task type selects pack -> strategy candidates receive advisory domain hints
 deterministic workflow search -> unsafe/high-risk workflows rejected -> selected workflow preserves certifier authority
+integrated proof matrix -> bounded proof commands -> proof_matrix_result.json
 P0/P1/P2/missing verifier policy behavior
 smell report recording
 strength report recording
@@ -451,6 +466,7 @@ automatic repair application
 domain pack quality
 workflow-search execution integration
 workflow-search semantic optimality
+full proof matrix mode runtime on every machine
 automatic verifier generation
 SWE-bench integration
 OpenHands integration
@@ -472,6 +488,8 @@ python tests\test_trajectory_evaluation.py -v
 python tests\test_experience_memory.py -v
 python tests\test_domain_packs.py -v
 python tests\test_workflow_search.py -v
+python tests\test_v2_proof_package.py -v
+python .agentic-pi\runtime\run_proof_matrix.py --mode quick
 python -m unittest discover tests -v
 python .agentic-pi\diagnostics\evaluation\run_diagnostic_evaluation.py
 python .agentic-pi\diagnostics\trajectory_evaluation\run_trajectory_evaluation.py
@@ -513,6 +531,7 @@ Raw Goal
   -> Experience Memory
   -> Domain Packs
   -> Workflow Search
+  -> Proof Matrix
   -> Audit / Replay
   -> Final Status
   -> Pi Reports Status Only

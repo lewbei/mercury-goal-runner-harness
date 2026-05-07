@@ -25,13 +25,14 @@ The workspace is clean enough to proceed with the verifier-provenance direction,
 | Experience memory evidence | `docs/V1_7_EXPERIENCE_MEMORY.md` | `.agentic-pi/runtime/experience_extractor.py`, `.agentic-pi/runtime/experience_retriever.py`, `tests/test_experience_memory.py` | Current |
 | Domain pack evidence | `docs/V1_8_DOMAIN_PACKS.md` | `.agentic-pi/domain_packs/`, `.agentic-pi/runtime/domain_pack_selector.py`, `tests/test_domain_packs.py` | Current |
 | Workflow search evidence | `docs/V1_9_STRATEGY_SEARCH.md` | `.agentic-pi/runtime/workflow_search.py`, `tests/test_workflow_search.py` | Current |
+| Integrated proof package evidence | `docs/V2_0_INTEGRATED_HARNESS_PROOF_PACKAGE.md` | `.agentic-pi/proof_matrix/proof_matrix.json`, `.agentic-pi/runtime/run_proof_matrix.py`, `tests/test_v2_proof_package.py` | Current |
 | Navigation | `workspace_index.md` | this file | Current |
 
 ## Outdated Or Superseded Direction
 
-The previous immediate milestone was strategy search after domain packs. That is now implemented.
+The previous immediate milestone was integrated proof packaging after workflow search. That is now implemented.
 
-The active next step is v2.0 Integrated Harness Proof Package. The proof package must keep tested and untested behavior explicit and cannot certify DONE by itself.
+The active next step should be chosen separately. Good candidates are full Pi chain runtime proof, external host integration beyond fixtures, or paper-style experiment packaging. None should be claimed before its own proof matrix entry exists.
 
 ## Remaining Risk
 
@@ -48,6 +49,8 @@ The current experience memory stores reusable strategy lessons. It is evidence f
 The current domain-pack layer stores deterministic task-domain hints. It is evidence for domain-aware strategy generation, not evidence that domain packs are semantically optimal or can certify DONE.
 
 The current workflow-search layer stores deterministic workflow candidates and a search trace. It is evidence for rejecting unsafe workflow shapes, not evidence that workflow search is globally optimal or can certify DONE.
+
+The current proof-matrix layer stores claim-to-command evidence. It is evidence for local proof packaging, not evidence that every full mode command has been run on every machine or that Pi autonomy is verified.
 
 ## Decision
 
