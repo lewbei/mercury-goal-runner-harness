@@ -41,7 +41,7 @@ def append_trace(run_dir: Path, event: str, data: dict) -> None:
         f.write(json.dumps(payload, ensure_ascii=False) + "\n")
 
 
-def goal_contract(run_id: str, raw_goal: str) -> dict:
+def goal_contract(run_id: str, raw_goal: str, complexity_level: str = "SIMPLE") -> dict:
     return {
         "run_id": run_id,
         "raw_user_prompt": raw_goal,
@@ -53,7 +53,7 @@ def goal_contract(run_id: str, raw_goal: str) -> dict:
         "forbidden_actions": ["Do not modify protected files.", "Do not certify DONE in the compiler."],
         "ambiguities": [],
         "risk_level": "LOW",
-        "complexity_level": "SIMPLE",
+        "complexity_level": complexity_level,
         "done_criteria": [
             "README.md exists.",
             "README.md contains the word 'harness'.",
@@ -129,11 +129,12 @@ def compile_raw_goal(run_id: str, raw_goal: str, mode: str) -> Path:
             "source": "compile_raw_goal.py",
         },
     )
-    write_json(run_dir / "goal_contract.json", goal_contract(run_id, raw_goal))
+    complexity_level = "HARD" if mode == "planning_p2" else "SIMPLE"
+    write_json(run_dir / "goal_contract.json", goal_contract(run_id, raw_goal, complexity_level))
 
-    if mode in {"p2", "missing_verifier"}:
+    if mode in {"p2", "missing_verifier", "planning_p2"}:
         write_json(run_dir / "verifier_contract.json", verifier_contract(run_id, raw_goal))
-    if mode == "p2":
+    if mode in {"p2", "planning_p2"}:
         write_json(run_dir / "verifier_artifacts" / "V.RAW_GOAL_P2.json", verifier_artifact(run_id))
 
     append_trace(
@@ -154,7 +155,7 @@ def main(argv=None) -> int:
     parser.add_argument("--goal", required=True)
     parser.add_argument(
         "--mode",
-        choices=["legacy", "p2", "missing_verifier"],
+        choices=["legacy", "p2", "missing_verifier", "planning_p2"],
         default="legacy",
         help="raw-goal proof fixture mode",
     )

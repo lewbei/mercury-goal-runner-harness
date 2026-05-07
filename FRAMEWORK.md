@@ -34,7 +34,7 @@ Pi only reports what the certifier wrote.
 Current pushed state:
 
 ```text
-v1.1 = Raw Goal Chain Proof
+v1.2 = Planning Proof Hardening
 ```
 
 The deterministic raw-goal proof cases are:
@@ -49,6 +49,12 @@ The current system proves a narrow but important path:
 
 ```text
 raw goal -> goal_contract.json -> full harness run -> certifier status
+```
+
+v1.2 also proves the deterministic planning handoff:
+
+```text
+raw goal -> branch candidates -> selected branch -> merged_plan.json -> worker -> certifier status
 ```
 
 It does not prove arbitrary natural-language autonomy.
@@ -155,6 +161,7 @@ top-level folders. The implemented files are:
 
 ```text
 .agentic-pi/runtime/compile_raw_goal.py
+.agentic-pi/runtime/planning_proof_runner.py
 .agentic-pi/runtime/pi_cli.py
 .agentic-pi/runtime/run_goal.py
 .agentic-pi/runtime/write_goal_contract.py
@@ -277,6 +284,7 @@ prepared provenance full run through Pi -> CERTIFIED_DONE
 deterministic raw-goal legacy fixture -> DONE_PASS
 deterministic raw-goal P2 fixture -> CERTIFIED_DONE
 deterministic raw-goal missing verifier fixture -> NOT_DONE
+deterministic planning proof fixture -> selected branch -> merged_plan.json -> CERTIFIED_DONE
 P0/P1/P2/missing verifier policy behavior
 smell report recording
 strength report recording
@@ -296,6 +304,7 @@ Not proven yet:
 arbitrary raw natural-language autonomy
 full goal-runner.chain.md autonomous runtime
 live Mercury planning quality
+semantic optimality of selected branches
 automatic verifier generation
 SWE-bench integration
 OpenHands integration
@@ -309,10 +318,13 @@ dashboard workflow
 
 ```cmd
 python tests\test_raw_goal_chain.py -v
+python tests\test_planning_proof_hardening.py -v
 python -m unittest discover tests -v
 python .agentic-pi\diagnostics\evaluation\run_diagnostic_evaluation.py
 python .agentic-pi\benchmark\run_benchmark.py
 python .agentic-pi\runtime\pi_cli.py --help
+python .agentic-pi\runtime\pi_cli.py goal-compile pi_smoke_planning_proof_p2 --goal "Create README.md explaining the harness" --mode planning_p2
+python .agentic-pi\runtime\pi_cli.py goal-plan-proof pi_smoke_planning_proof_p2
 ```
 
 ## One-Line Framework

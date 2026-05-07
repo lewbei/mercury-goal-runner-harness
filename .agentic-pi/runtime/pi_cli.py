@@ -79,6 +79,11 @@ def goal_run(args) -> int:
     return run_cmd(cmd)
 
 
+def goal_plan_proof(args) -> int:
+    require_existing_run(args.run_id)
+    return run_cmd([".agentic-pi/runtime/planning_proof_runner.py", args.run_id])
+
+
 def goal_certify(args) -> int:
     run_dir = require_existing_run(args.run_id)
     return run_cmd([".agentic-pi/validators/certify_run.py", str(run_dir)])
@@ -149,7 +154,11 @@ def build_parser() -> argparse.ArgumentParser:
     p_compile = subparsers.add_parser("goal-compile", help="Compile a deterministic raw goal")
     p_compile.add_argument("run_id")
     p_compile.add_argument("--goal", required=True)
-    p_compile.add_argument("--mode", choices=["legacy", "p2", "missing_verifier"], default="legacy")
+    p_compile.add_argument(
+        "--mode",
+        choices=["legacy", "p2", "missing_verifier", "planning_p2"],
+        default="legacy",
+    )
     p_compile.set_defaults(func=goal_compile)
 
     p_run = subparsers.add_parser("goal-run", help="Run the prepared-run harness path")
@@ -157,6 +166,13 @@ def build_parser() -> argparse.ArgumentParser:
     p_run.add_argument("--command", help="Human goal text for run_goal.py")
     p_run.add_argument("--skip-memory-update", action="store_true")
     p_run.set_defaults(func=goal_run)
+
+    p_plan_proof = subparsers.add_parser(
+        "goal-plan-proof",
+        help="Run the deterministic planning proof path",
+    )
+    p_plan_proof.add_argument("run_id")
+    p_plan_proof.set_defaults(func=goal_plan_proof)
 
     p_certify = subparsers.add_parser("goal-certify", help="Run certify_run.py")
     p_certify.add_argument("run_id")

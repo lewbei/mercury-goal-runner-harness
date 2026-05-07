@@ -6,7 +6,7 @@ The goal is not to make Mercury V2 magically smarter by looping. The goal is to 
 
 ## Current status
 
-v1.0 is Practical Package Freeze on top of the v0.9 replay / rollback / audit slice.
+v1.2 is Planning Proof Hardening on top of the v1.1 raw-goal chain proof.
 
 The current research direction is:
 
@@ -54,6 +54,7 @@ See [`docs/V0_9_REPLAY_ROLLBACK_AUDIT.md`](docs/V0_9_REPLAY_ROLLBACK_AUDIT.md) f
 See [`docs/V1_0_PRACTICAL_PACKAGE_FREEZE.md`](docs/V1_0_PRACTICAL_PACKAGE_FREEZE.md) for the practical package freeze boundary.
 See [`docs/V1_0_EXAMPLES.md`](docs/V1_0_EXAMPLES.md) for the frozen example set.
 See [`docs/V1_1_RAW_GOAL_CHAIN_PROOF.md`](docs/V1_1_RAW_GOAL_CHAIN_PROOF.md) for the deterministic raw-goal chain proof.
+See [`docs/V1_2_PLANNING_PROOF_HARDENING.md`](docs/V1_2_PLANNING_PROOF_HARDENING.md) for the deterministic planning handoff proof.
 See [`docs/PI_PROMPT_CONTRACTS.md`](docs/PI_PROMPT_CONTRACTS.md) for safe Pi prompt patterns.
 See [`docs/PI_BASH_ALLOWLIST.md`](docs/PI_BASH_ALLOWLIST.md) for the current documented bash safety boundary.
 
@@ -94,7 +95,9 @@ It demonstrates:
 24. v0.8 selects branches by verifier-provenance certifiability,
 25. v0.9 adds read-only replay, dry-run rollback, and audit blocking,
 26. v1.0 freezes a thin local command surface and practical examples,
-27. and the benchmark reports false-PASS status explicitly.
+27. v1.1 proves deterministic raw-goal compilation into the full harness path,
+28. v1.2 proves the selected branch handoff into `merged_plan.json`,
+29. and the benchmark reports false-PASS status explicitly.
 
 ## Core parts
 
@@ -190,6 +193,14 @@ Show the stable local command surface:
 python .agentic-pi\runtime\pi_cli.py --help
 ```
 
+Run the deterministic planning proof:
+
+```cmd
+python .agentic-pi\runtime\pi_cli.py goal-compile pi_smoke_planning_proof_p2 --goal "Create README.md explaining the harness" --mode planning_p2
+python .agentic-pi\runtime\pi_cli.py goal-plan-proof pi_smoke_planning_proof_p2
+python .agentic-pi\runtime\pi_cli.py goal-status pi_smoke_planning_proof_p2 --fail-on-missing
+```
+
 Run a disposable sample:
 
 ```cmd
@@ -219,7 +230,7 @@ python -m unittest discover tests -v
 Committed repo state:
 
 ```text
-v1.0 = Practical Package Freeze
+v1.2 = Planning Proof Hardening
 ```
 
 Local smoke-tested state:
@@ -239,6 +250,7 @@ v0.8 = Evidence-seeking branch selection IMPLEMENTED
 v0.9 = Replay / rollback / audit IMPLEMENTED
 v1.0 = Practical package freeze IMPLEMENTED
 v1.1 = Raw goal chain proof IMPLEMENTED
+v1.2 = Planning proof hardening IMPLEMENTED
 ```
 
 The v0.5 Pi chain lives at:
@@ -255,7 +267,7 @@ The new v0.5 Pi agents are:
 .pi/agents/verifier-reviewer.md
 ```
 
-The full `goal-runner.chain.md` runtime remains unverified. v0.5.8 shows the stale Pi exit disappears under a subagents-only Pi config. v0.5.9 adds deterministic auditing for one-bash-call discipline, including a failing fixture for the duplicate certifier invocation pattern. v0.5.10 adds deterministic disposable smoke setup so Pi prompts can stay single-action. v0.5.11 verifies that weak/failing statuses are reported, not repaired or upgraded. v0.6 adds local host-task certification against disposable runs. v0.7 adds deterministic branch candidates with explicit verifier requirements. v0.8 selects branches by path to verifier-provenance certification. v0.9 adds read-only replay, dry-run rollback, and audit blocking. v1.0 freezes a thin local command surface and practical examples without claiming full Pi autonomy. The next milestone is v1.1 proof-path hardening and release readiness.
+The full `goal-runner.chain.md` runtime remains unverified. v0.5.8 shows the stale Pi exit disappears under a subagents-only Pi config. v0.5.9 adds deterministic auditing for one-bash-call discipline, including a failing fixture for the duplicate certifier invocation pattern. v0.5.10 adds deterministic disposable smoke setup so Pi prompts can stay single-action. v0.5.11 verifies that weak/failing statuses are reported, not repaired or upgraded. v0.6 adds local host-task certification against disposable runs. v0.7 adds deterministic branch candidates with explicit verifier requirements. v0.8 selects branches by path to verifier-provenance certification. v0.9 adds read-only replay, dry-run rollback, and audit blocking. v1.0 freezes a thin local command surface and practical examples without claiming full Pi autonomy. v1.1 adds deterministic raw-goal compilation fixtures. v1.2 proves that the selected branch can be materialized into `merged_plan.json` before worker execution and certification. The next milestone is proof matrix / release readiness without claiming full Pi autonomy.
 
 ## Planner Stub
 

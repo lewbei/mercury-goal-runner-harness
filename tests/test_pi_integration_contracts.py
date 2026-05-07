@@ -224,12 +224,24 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("full autonomous Pi goal-runner.chain.md execution", doc)
         self.assertIn("Pi can invoke a deterministic raw-goal compiler", doc)
 
+    def test_v12_doc_records_planning_proof_boundary(self):
+        doc = read(ROOT / "docs" / "V1_2_PLANNING_PROOF_HARDENING.md")
+
+        self.assertIn("PLANNING PROOF HARDENING IMPLEMENTED", doc)
+        self.assertIn("-> branch candidates", doc)
+        self.assertIn("-> selected branch", doc)
+        self.assertIn("-> merged_plan.json", doc)
+        self.assertIn("The selected branch does not certify DONE", doc)
+        self.assertIn("does not prove", doc)
+
     def test_framework_doc_is_linked_from_status_docs(self):
         readme = read(ROOT / "README.md")
         status = read(ROOT / "PROJECT_STATUS.md")
 
         self.assertIn("FRAMEWORK.md", readme)
         self.assertIn("FRAMEWORK.md", status)
+        self.assertIn("V1_2_PLANNING_PROOF_HARDENING.md", readme)
+        self.assertIn("V1_2_PLANNING_PROOF_HARDENING.md", status)
 
     def test_pi_prompt_contract_doc_locks_safe_prompt_patterns(self):
         doc = read(ROOT / "docs" / "PI_PROMPT_CONTRACTS.md")

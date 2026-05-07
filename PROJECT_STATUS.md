@@ -2,7 +2,7 @@
 
 ## Current version
 
-Mercury Goal Runner Harness v1.0 is Practical Package Freeze on top of the v0.9 replay / rollback / audit slice.
+Mercury Goal Runner Harness v1.2 is Planning Proof Hardening on top of the v1.1 raw-goal chain proof.
 
 The purpose of this repository is not to claim that Mercury V2 becomes smarter by looping. The purpose is to place Mercury V2 inside a controlled goal-execution harness where outputs are checked through contracts, logs, evidence, and certification.
 
@@ -106,9 +106,10 @@ v0.8 = Evidence-seeking branch selection IMPLEMENTED
 v0.9 = Replay / rollback / audit IMPLEMENTED
 v1.0 = Practical package freeze IMPLEMENTED
 v1.1 = Raw goal chain proof IMPLEMENTED
+v1.2 = Planning proof hardening IMPLEMENTED
 ```
 
-These smokes are local evidence, not automated CI evidence. The full `goal-runner.chain.md` runtime remains unverified. The v0.5.7 smoke produced the expected certifier artifacts, but Pi exited with a stale extension-context error from the installed `@tmustier/pi-agent-teams` extension after output. The v0.5.8 smoke reproduced that failure with the global extension set and then showed a clean exit under a temporary subagents-only Pi config. The v0.5.9 slice adds deterministic session-audit fixtures so duplicate certifier invocations, manual status writes, unsafe deletion, and inferred status after missing reads fail audit. The v0.5.10 slice adds deterministic disposable smoke setup so Pi prompts no longer need to mix copy/setup/certify/report. The v0.5.11 slice adds weak/failing status preservation checks so Pi does not repair or upgrade `NOT_DONE`, `PROVISIONAL_DONE`, or `DONE_FAIL`. The v0.6 slice adds deterministic local host-task certification against disposable runs. The v0.7 slice adds deterministic branch candidates with explicit verifier requirements. The v0.8 slice selects branches by verifier-provenance certifiability while leaving final certification to the certifier. The v0.9 slice adds read-only replay, dry-run rollback, and audit reports that can block certification. The v1.0 slice freezes a thin local command surface and practical examples. The v1.1 slice adds deterministic raw-goal compilation fixtures.
+These smokes are local evidence, not automated CI evidence. The full `goal-runner.chain.md` runtime remains unverified. The v0.5.7 smoke produced the expected certifier artifacts, but Pi exited with a stale extension-context error from the installed `@tmustier/pi-agent-teams` extension after output. The v0.5.8 smoke reproduced that failure with the global extension set and then showed a clean exit under a temporary subagents-only Pi config. The v0.5.9 slice adds deterministic session-audit fixtures so duplicate certifier invocations, manual status writes, unsafe deletion, and inferred status after missing reads fail audit. The v0.5.10 slice adds deterministic disposable smoke setup so Pi prompts no longer need to mix copy/setup/certify/report. The v0.5.11 slice adds weak/failing status preservation checks so Pi does not repair or upgrade `NOT_DONE`, `PROVISIONAL_DONE`, or `DONE_FAIL`. The v0.6 slice adds deterministic local host-task certification against disposable runs. The v0.7 slice adds deterministic branch candidates with explicit verifier requirements. The v0.8 slice selects branches by verifier-provenance certifiability while leaving final certification to the certifier. The v0.9 slice adds read-only replay, dry-run rollback, and audit reports that can block certification. The v1.0 slice freezes a thin local command surface and practical examples. The v1.1 slice adds deterministic raw-goal compilation fixtures. The v1.2 slice proves the selected branch handoff into `merged_plan.json` before worker execution and certification.
 
 ## What v0.3 proves
 
@@ -210,6 +211,7 @@ See `docs/V0_9_REPLAY_ROLLBACK_AUDIT.md` for the replay / rollback / audit bound
 See `docs/V1_0_PRACTICAL_PACKAGE_FREEZE.md` for the practical package freeze boundary.
 See `docs/V1_0_EXAMPLES.md` for the frozen example set.
 See `docs/V1_1_RAW_GOAL_CHAIN_PROOF.md` for the deterministic raw-goal chain proof.
+See `docs/V1_2_PLANNING_PROOF_HARDENING.md` for the deterministic planning handoff proof.
 See `FRAMEWORK.md` for the conceptual architecture and actual current file map.
 See `docs/PI_PROMPT_CONTRACTS.md` for safe Pi prompt patterns.
 See `docs/PI_BASH_ALLOWLIST.md` for the current documented bash safety boundary.
@@ -217,15 +219,15 @@ See `PROBLEM_AND_GAP.md` and `VERIFIER_PROVENANCE_DESIGN.md` for the current res
 
 ## Known limitations
 
-v0.5 is still intentionally small.
+The Pi integration surface is still intentionally small.
 
 It does not yet include:
 
 - full `goal-runner.chain.md` runtime beyond local read-only, disposable certifier-invocation, and controlled mini-chain smokes,
 - clean Pi process-level runtime with all globally installed extensions enabled,
 - strict live one-bash-call Pi runtime proof for goal-orchestrator,
-- automatic rough-goal to contract compilation from the user-facing command,
-- adaptive multi-plan generation,
+- general natural-language goal compilation beyond deterministic fixtures,
+- live adaptive multi-plan generation beyond deterministic branch fixtures,
 - fully parsed YAML policy configuration,
 - broad diagnostic evaluation beyond the small v0.4 deterministic diagnostic set,
 - workspace-level rollback outside run-folder-owned artifacts,
@@ -233,13 +235,13 @@ It does not yet include:
 - cost budgets,
 - or long-term memory quality checks.
 
-The current `run_goal.py` is still a prepared-run orchestrator. It expects an existing run folder and `goal_contract.json`.
+The current `run_goal.py` is still a prepared-run orchestrator. It expects an existing run folder and `goal_contract.json`. The v1.2 planning proof runner is deterministic proof glue, not a live autonomous planner.
 
 ## Next milestone
 
 The next milestone should harden release readiness without overclaiming full Pi autonomy:
 
-1. run the full proof path from a clean workspace,
+1. add a proof matrix that maps every claim to a command or test,
 2. keep the stable command surface thin,
 3. keep final status from `certify_run.py` / `policy_engine.py`,
 4. keep audit/replay/rollback unable to certify DONE by themselves,

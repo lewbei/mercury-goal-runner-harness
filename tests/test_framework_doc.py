@@ -15,19 +15,21 @@ class FrameworkDocTests(unittest.TestCase):
         self.assertIn("Certifier writes the final status.", doc)
         self.assertIn("Pi only reports what the certifier wrote.", doc)
 
-    def test_framework_doc_records_current_v11_state(self):
+    def test_framework_doc_records_current_v12_state(self):
         doc = (ROOT / "FRAMEWORK.md").read_text(encoding="utf-8")
 
-        self.assertIn("v1.1 = Raw Goal Chain Proof", doc)
+        self.assertIn("v1.2 = Planning Proof Hardening", doc)
         self.assertIn("raw_simple_legacy -> DONE_PASS", doc)
         self.assertIn("raw_p2_provenance -> CERTIFIED_DONE", doc)
         self.assertIn("raw_missing_verifier -> NOT_DONE", doc)
+        self.assertIn("raw goal -> branch candidates -> selected branch -> merged_plan.json", doc)
 
     def test_framework_doc_uses_actual_current_paths(self):
         doc = (ROOT / "FRAMEWORK.md").read_text(encoding="utf-8")
 
         for path in [
             ".agentic-pi/runtime/compile_raw_goal.py",
+            ".agentic-pi/runtime/planning_proof_runner.py",
             ".agentic-pi/runtime/pi_cli.py",
             ".agentic-pi/runtime/policy_engine.py",
             ".agentic-pi/runtime/verifier_provenance.py",
