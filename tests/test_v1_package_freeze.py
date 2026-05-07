@@ -55,6 +55,7 @@ class V1PackageFreezeTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stdout)
         for command in [
             "goal-init",
+            "goal-compile",
             "goal-run",
             "goal-certify",
             "goal-status",

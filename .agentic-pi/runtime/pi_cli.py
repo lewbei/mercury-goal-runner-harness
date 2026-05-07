@@ -50,6 +50,21 @@ def goal_init(args) -> int:
     return run_cmd([".agentic-pi/runtime/init_run.py", "--run-id", args.run_id])
 
 
+def goal_compile(args) -> int:
+    require_run_id(args.run_id)
+    return run_cmd(
+        [
+            ".agentic-pi/runtime/compile_raw_goal.py",
+            "--run-id",
+            args.run_id,
+            "--goal",
+            args.goal,
+            "--mode",
+            args.mode,
+        ]
+    )
+
+
 def goal_run(args) -> int:
     require_existing_run(args.run_id)
     command = args.command or f"Run prepared goal {args.run_id}"
@@ -130,6 +145,12 @@ def build_parser() -> argparse.ArgumentParser:
     p_init = subparsers.add_parser("goal-init", help="Initialize a run folder")
     p_init.add_argument("run_id")
     p_init.set_defaults(func=goal_init)
+
+    p_compile = subparsers.add_parser("goal-compile", help="Compile a deterministic raw goal")
+    p_compile.add_argument("run_id")
+    p_compile.add_argument("--goal", required=True)
+    p_compile.add_argument("--mode", choices=["legacy", "p2", "missing_verifier"], default="legacy")
+    p_compile.set_defaults(func=goal_compile)
 
     p_run = subparsers.add_parser("goal-run", help="Run the prepared-run harness path")
     p_run.add_argument("run_id")

@@ -16,6 +16,7 @@ The stable command surface is:
 
 ```text
 goal-init
+goal-compile
 goal-run
 goal-certify
 goal-status

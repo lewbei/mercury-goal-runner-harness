@@ -216,6 +216,14 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("Final status still comes only from", examples)
         self.assertIn("False-PASS Rejection", examples)
 
+    def test_v11_doc_records_raw_goal_chain_boundary(self):
+        doc = read(ROOT / "docs" / "V1_1_RAW_GOAL_CHAIN_PROOF.md")
+
+        self.assertIn("RAW GOAL CHAIN PROOF IMPLEMENTED", doc)
+        self.assertIn("raw goal -> goal_contract.json -> full harness run -> certifier status", doc)
+        self.assertIn("full autonomous Pi goal-runner.chain.md execution", doc)
+        self.assertIn("Pi can invoke a deterministic raw-goal compiler", doc)
+
     def test_pi_prompt_contract_doc_locks_safe_prompt_patterns(self):
         doc = read(ROOT / "docs" / "PI_PROMPT_CONTRACTS.md")
 

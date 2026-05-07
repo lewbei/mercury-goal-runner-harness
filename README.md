@@ -52,6 +52,7 @@ See [`docs/V0_8_EVIDENCE_BRANCH_SELECTION.md`](docs/V0_8_EVIDENCE_BRANCH_SELECTI
 See [`docs/V0_9_REPLAY_ROLLBACK_AUDIT.md`](docs/V0_9_REPLAY_ROLLBACK_AUDIT.md) for the replay / rollback / audit boundary.
 See [`docs/V1_0_PRACTICAL_PACKAGE_FREEZE.md`](docs/V1_0_PRACTICAL_PACKAGE_FREEZE.md) for the practical package freeze boundary.
 See [`docs/V1_0_EXAMPLES.md`](docs/V1_0_EXAMPLES.md) for the frozen example set.
+See [`docs/V1_1_RAW_GOAL_CHAIN_PROOF.md`](docs/V1_1_RAW_GOAL_CHAIN_PROOF.md) for the deterministic raw-goal chain proof.
 See [`docs/PI_PROMPT_CONTRACTS.md`](docs/PI_PROMPT_CONTRACTS.md) for safe Pi prompt patterns.
 See [`docs/PI_BASH_ALLOWLIST.md`](docs/PI_BASH_ALLOWLIST.md) for the current documented bash safety boundary.
 
@@ -236,6 +237,7 @@ v0.7 = Branch contract and deterministic branch generation IMPLEMENTED
 v0.8 = Evidence-seeking branch selection IMPLEMENTED
 v0.9 = Replay / rollback / audit IMPLEMENTED
 v1.0 = Practical package freeze IMPLEMENTED
+v1.1 = Raw goal chain proof IMPLEMENTED
 ```
 
 The v0.5 Pi chain lives at:
