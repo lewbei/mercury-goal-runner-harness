@@ -224,6 +224,13 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("full autonomous Pi goal-runner.chain.md execution", doc)
         self.assertIn("Pi can invoke a deterministic raw-goal compiler", doc)
 
+    def test_framework_doc_is_linked_from_status_docs(self):
+        readme = read(ROOT / "README.md")
+        status = read(ROOT / "PROJECT_STATUS.md")
+
+        self.assertIn("FRAMEWORK.md", readme)
+        self.assertIn("FRAMEWORK.md", status)
+
     def test_pi_prompt_contract_doc_locks_safe_prompt_patterns(self):
         doc = read(ROOT / "docs" / "PI_PROMPT_CONTRACTS.md")
 

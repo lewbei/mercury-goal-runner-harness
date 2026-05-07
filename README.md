@@ -29,6 +29,7 @@ benchmark_outputs/benchmark_report.md
 Current benchmark scoring checks the expected verdict for each goal, not just whether the model says `DONE_PASS`. The impossible goal is expected to fail honestly.
 
 See [`PROJECT_STATUS.md`](PROJECT_STATUS.md) for the proof summary and current limitations.
+See [`FRAMEWORK.md`](FRAMEWORK.md) for the conceptual architecture and actual current file map.
 See [`PROBLEM_AND_GAP.md`](PROBLEM_AND_GAP.md) for the current research problem statement.
 See [`VERIFIER_PROVENANCE_DESIGN.md`](VERIFIER_PROVENANCE_DESIGN.md) for the verifier provenance model.
 See [`docs/V0_2_1_FREEZE.md`](docs/V0_2_1_FREEZE.md) for the exact freeze boundary.

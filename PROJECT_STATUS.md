@@ -210,6 +210,7 @@ See `docs/V0_9_REPLAY_ROLLBACK_AUDIT.md` for the replay / rollback / audit bound
 See `docs/V1_0_PRACTICAL_PACKAGE_FREEZE.md` for the practical package freeze boundary.
 See `docs/V1_0_EXAMPLES.md` for the frozen example set.
 See `docs/V1_1_RAW_GOAL_CHAIN_PROOF.md` for the deterministic raw-goal chain proof.
+See `FRAMEWORK.md` for the conceptual architecture and actual current file map.
 See `docs/PI_PROMPT_CONTRACTS.md` for safe Pi prompt patterns.
 See `docs/PI_BASH_ALLOWLIST.md` for the current documented bash safety boundary.
 See `PROBLEM_AND_GAP.md` and `VERIFIER_PROVENANCE_DESIGN.md` for the current research direction.
