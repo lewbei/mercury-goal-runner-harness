@@ -89,6 +89,11 @@ def goal_strategy_proof(args) -> int:
     return run_cmd([".agentic-pi/runtime/strategy_proof_runner.py", args.run_id])
 
 
+def goal_milestone_proof(args) -> int:
+    require_existing_run(args.run_id)
+    return run_cmd([".agentic-pi/runtime/milestone_proof_runner.py", args.run_id])
+
+
 def goal_certify(args) -> int:
     run_dir = require_existing_run(args.run_id)
     return run_cmd([".agentic-pi/validators/certify_run.py", str(run_dir)])
@@ -185,6 +190,13 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p_strategy_proof.add_argument("run_id")
     p_strategy_proof.set_defaults(func=goal_strategy_proof)
+
+    p_milestone_proof = subparsers.add_parser(
+        "goal-milestone-proof",
+        help="Run the deterministic milestone proof path",
+    )
+    p_milestone_proof.add_argument("run_id")
+    p_milestone_proof.set_defaults(func=goal_milestone_proof)
 
     p_certify = subparsers.add_parser("goal-certify", help="Run certify_run.py")
     p_certify.add_argument("run_id")

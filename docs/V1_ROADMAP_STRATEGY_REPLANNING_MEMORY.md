@@ -60,7 +60,7 @@ Strategy artifacts cannot certify DONE.
 Status:
 
 ```text
-DEFERRED
+IMPLEMENTED
 ```
 
 Purpose:
@@ -87,6 +87,12 @@ Acceptance:
 milestones preserve long-horizon structure
 local steps preserve milestone order
 certifier remains final authority
+```
+
+Implemented proof command:
+
+```cmd
+python .agentic-pi\runtime\pi_cli.py goal-milestone-proof <run_id>
 ```
 
 ## v1.5 Drift-Aware Replanning

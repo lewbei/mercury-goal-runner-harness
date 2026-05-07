@@ -250,6 +250,20 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("v1.9 Strategy Search / Workflow Optimization", roadmap)
         self.assertIn("DEFERRED", roadmap)
 
+    def test_v14_doc_records_milestone_planning_boundary(self):
+        doc = read(ROOT / "docs" / "V1_4_MILESTONE_PLANNING.md")
+        roadmap = read(ROOT / "docs" / "V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md")
+
+        self.assertIn("MILESTONE PLANNING IMPLEMENTED", doc)
+        self.assertIn("milestone_plan.json", doc)
+        self.assertIn("milestone_status.json", doc)
+        self.assertIn("local_step_plan.json", doc)
+        self.assertIn("goal-milestone-proof", doc)
+        self.assertIn("Certifier writes final status", doc)
+        self.assertIn("does not prove", doc.lower())
+        self.assertIn("v1.4 Milestone Planning", roadmap)
+        self.assertIn("IMPLEMENTED", roadmap)
+
     def test_framework_doc_is_linked_from_status_docs(self):
         readme = read(ROOT / "README.md")
         status = read(ROOT / "PROJECT_STATUS.md")
@@ -260,6 +274,8 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("V1_2_PLANNING_PROOF_HARDENING.md", status)
         self.assertIn("V1_3_STRATEGY_PLANNER.md", readme)
         self.assertIn("V1_3_STRATEGY_PLANNER.md", status)
+        self.assertIn("V1_4_MILESTONE_PLANNING.md", readme)
+        self.assertIn("V1_4_MILESTONE_PLANNING.md", status)
         self.assertIn("V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md", readme)
         self.assertIn("V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md", status)
 

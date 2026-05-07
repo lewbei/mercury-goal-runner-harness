@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compile selected strategy into merged_plan.json."""
+"""Compile selected strategy or local milestone steps into merged_plan.json."""
 import argparse
 import json
 import sys
@@ -42,7 +42,45 @@ def content_for_strategy(strategy_id: str, final_output: str) -> str:
     return "# Harness Strategy Output\n\nThis artifact explains the harness and preserves verifier provenance.\n"
 
 
+def compile_from_local_step_plan(run_dir: Path) -> dict:
+    local_step_plan = load_json(run_dir / "local_step_plan.json")
+    steps = []
+    for index, step in enumerate(local_step_plan.get("local_steps", []), start=1):
+        path = step["path"]
+        resolve_run_path(run_dir, path)
+        normalized_step = {
+            "task_id": step.get("task_id") or f"T.LOCAL_STEP_{index:03d}",
+            "milestone_id": step["milestone_id"],
+            "local_step_id": step["local_step_id"],
+            "action": step["action"],
+            "path": path,
+            "content": step.get("content", ""),
+            "requires": step.get("requires", []),
+            "produces": step.get("produces", []),
+        }
+        for produced in normalized_step["produces"]:
+            resolve_run_path(run_dir, produced["path"])
+        steps.append(normalized_step)
+
+    if not steps:
+        raise ValueError("local_step_plan.json has no local_steps")
+
+    merged_plan = {
+        "planner": "step-compiler-v1.4",
+        "selected_strategy": local_step_plan["selected_strategy"],
+        "strategy_task_type": local_step_plan.get("task_type", "unknown"),
+        "milestone_source": "local_step_plan.json",
+        "milestone_count": len({step["milestone_id"] for step in local_step_plan["local_steps"]}),
+        "steps": steps,
+    }
+    write_json(run_dir / "merged_plan.json", merged_plan)
+    return merged_plan
+
+
 def compile_steps(run_dir: Path) -> dict:
+    if (run_dir / "local_step_plan.json").is_file():
+        return compile_from_local_step_plan(run_dir)
+
     selected = load_json(run_dir / "selected_strategy.json")
     goal = load_json(run_dir / "goal_contract.json")
     final_outputs = goal.get("final_outputs") or ["artifacts/output.txt"]

@@ -34,7 +34,7 @@ Pi only reports what the certifier wrote.
 Current pushed state:
 
 ```text
-v1.3 = Strategy Planner
+v1.4 = Milestone Planning
 ```
 
 The deterministic raw-goal proof cases are:
@@ -63,6 +63,12 @@ v1.3 adds deterministic strategy selection before step compilation:
 raw goal -> task type -> capability inventory -> strategy candidates -> applicability gate -> strategy score -> selected strategy -> step compiler -> merged_plan.json -> worker -> certifier status
 ```
 
+v1.4 adds milestone planning between selected strategy and local executable steps:
+
+```text
+raw goal -> selected strategy -> milestone_plan.json -> local_step_plan.json -> merged_plan.json -> worker -> certifier status
+```
+
 It does not prove arbitrary natural-language autonomy.
 
 ## Conceptual Architecture
@@ -77,6 +83,8 @@ Raw Goal
   -> Applicability Gate
   -> Strategy Scorer
   -> Selected Strategy
+  -> Milestone Plan
+  -> Local Step Plan
   -> Step Compiler
   -> PlanGraph
   -> Guarded Worker
@@ -107,35 +115,40 @@ Raw Goal
 4. Strategy Layer
    Routes task type, records capabilities, generates strategy candidates,
    gates unsafe strategies, scores candidates, selects one strategy, and
-   compiles it into `merged_plan.json`. Strategies do not certify DONE.
+   prepares the selected strategy. Strategies do not certify DONE.
 
-5. Planning Layer
+5. Milestone Layer
+   Expands the selected strategy into milestone_plan.json, records local
+   milestone statuses, and lowers milestones into local_step_plan.json.
+   Milestones do not certify DONE.
+
+6. Planning Layer
    Builds plan and artifact-linked graph views. Plans do not certify DONE.
 
-6. Execution Layer
+7. Execution Layer
    Guarded Worker executes approved steps and writes artifacts inside the run
    folder.
 
-7. Artifact Layer
+8. Artifact Layer
    Stores produced outputs. Artifacts are checked; they are not trusted because
    they exist.
 
-8. Verifier Provenance Layer
+9. Verifier Provenance Layer
    Records who produced verifier evidence, when it was produced, and whether it
    is independent from the solution.
 
-9. Verifier Quality Layer
+10. Verifier Quality Layer
    Smell scanner and strength scorer classify weak, advisory, gating, and
    certifying evidence.
 
-10. Policy Layer
+11. Policy Layer
    Policy engine decides NOT_DONE, PROVISIONAL_DONE, or CERTIFIED_DONE in
    provenance mode.
 
-11. Certifier Layer
+12. Certifier Layer
     Certifier writes certification.json and final_status.md.
 
-12. Pi Report Layer
+13. Pi Report Layer
     Pi can orchestrate and report, but cannot certify DONE by itself.
 ```
 
@@ -186,8 +199,12 @@ top-level folders. The implemented files are:
 .agentic-pi/runtime/strategy_applicability_gate.py
 .agentic-pi/runtime/strategy_scorer.py
 .agentic-pi/runtime/strategy_selector.py
+.agentic-pi/runtime/milestone_builder.py
+.agentic-pi/runtime/milestone_tracker.py
+.agentic-pi/runtime/local_step_planner.py
 .agentic-pi/runtime/step_compiler.py
 .agentic-pi/runtime/strategy_proof_runner.py
+.agentic-pi/runtime/milestone_proof_runner.py
 .agentic-pi/runtime/pi_cli.py
 .agentic-pi/runtime/run_goal.py
 .agentic-pi/runtime/write_goal_contract.py
@@ -312,6 +329,7 @@ deterministic raw-goal P2 fixture -> CERTIFIED_DONE
 deterministic raw-goal missing verifier fixture -> NOT_DONE
 deterministic planning proof fixture -> selected branch -> merged_plan.json -> CERTIFIED_DONE
 deterministic strategy proof fixture -> selected strategy -> merged_plan.json -> CERTIFIED_DONE
+deterministic milestone proof fixture -> milestone_plan.json -> local_step_plan.json -> merged_plan.json -> CERTIFIED_DONE
 P0/P1/P2/missing verifier policy behavior
 smell report recording
 strength report recording
@@ -333,7 +351,7 @@ full goal-runner.chain.md autonomous runtime
 live Mercury planning quality
 semantic optimality of selected branches
 semantic optimality of selected strategies
-milestone planning
+semantic quality of milestones
 drift-aware replanning
 trajectory-level evaluation
 experience memory
@@ -354,6 +372,7 @@ dashboard workflow
 python tests\test_raw_goal_chain.py -v
 python tests\test_planning_proof_hardening.py -v
 python tests\test_strategy_planner.py -v
+python tests\test_milestone_planning.py -v
 python -m unittest discover tests -v
 python .agentic-pi\diagnostics\evaluation\run_diagnostic_evaluation.py
 python .agentic-pi\benchmark\run_benchmark.py
@@ -362,6 +381,8 @@ python .agentic-pi\runtime\pi_cli.py goal-compile pi_smoke_planning_proof_p2 --g
 python .agentic-pi\runtime\pi_cli.py goal-plan-proof pi_smoke_planning_proof_p2
 python .agentic-pi\runtime\pi_cli.py goal-compile pi_smoke_strategy_proof_p2 --goal "Create README.md explaining the harness" --mode p2
 python .agentic-pi\runtime\pi_cli.py goal-strategy-proof pi_smoke_strategy_proof_p2
+python .agentic-pi\runtime\pi_cli.py goal-compile pi_smoke_milestone_proof_p2 --goal "Create README.md explaining the harness" --mode p2
+python .agentic-pi\runtime\pi_cli.py goal-milestone-proof pi_smoke_milestone_proof_p2
 ```
 
 ## One-Line Framework
@@ -372,6 +393,8 @@ Raw Goal
   -> Task Type Router
   -> Capability Inventory
   -> Strategy Selector
+  -> Milestone Plan
+  -> Local Step Plan
   -> Step Compiler
   -> Verifier Contract
   -> PlanGraph

@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MilestonePlan",
+  "type": "object",
+  "required": [
+    "run_id",
+    "generated_by",
+    "selected_strategy",
+    "task_type",
+    "final_status_authority",
+    "milestones"
+  ],
+  "properties": {
+    "run_id": { "type": "string", "minLength": 1 },
+    "generated_by": { "type": "string", "minLength": 1 },
+    "selected_strategy": { "type": "string", "minLength": 1 },
+    "task_type": {
+      "type": "string",
+      "enum": ["coding", "research", "writing", "debugging", "experiment", "benchmark", "unknown"]
+    },
+    "final_status_authority": { "type": "string", "enum": ["certifier_only"] },
+    "milestones": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "order",
+          "milestone_id",
+          "title",
+          "purpose",
+          "expected_artifacts",
+          "verifier_relevance"
+        ],
+        "properties": {
+          "order": { "type": "integer" },
+          "milestone_id": { "type": "string", "minLength": 1 },
+          "title": { "type": "string", "minLength": 1 },
+          "purpose": { "type": "string", "minLength": 1 },
+          "expected_artifacts": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "verifier_relevance": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

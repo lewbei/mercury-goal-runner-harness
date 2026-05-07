@@ -6,7 +6,7 @@ The goal is not to make Mercury V2 magically smarter by looping. The goal is to 
 
 ## Current status
 
-v1.3 is the deterministic Strategy Planner proof on top of the v1.2 planning handoff proof.
+v1.4 is Milestone Planning on top of the v1.3 deterministic Strategy Planner proof.
 
 The current research direction is:
 
@@ -56,7 +56,8 @@ See [`docs/V1_0_EXAMPLES.md`](docs/V1_0_EXAMPLES.md) for the frozen example set.
 See [`docs/V1_1_RAW_GOAL_CHAIN_PROOF.md`](docs/V1_1_RAW_GOAL_CHAIN_PROOF.md) for the deterministic raw-goal chain proof.
 See [`docs/V1_2_PLANNING_PROOF_HARDENING.md`](docs/V1_2_PLANNING_PROOF_HARDENING.md) for the deterministic planning handoff proof.
 See [`docs/V1_3_STRATEGY_PLANNER.md`](docs/V1_3_STRATEGY_PLANNER.md) for the deterministic strategy-planner proof.
-See [`docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md`](docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md) for the v1.4-v2.0 roadmap.
+See [`docs/V1_4_MILESTONE_PLANNING.md`](docs/V1_4_MILESTONE_PLANNING.md) for the deterministic milestone-planning proof.
+See [`docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md`](docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md) for the v1.5-v2.0 roadmap.
 See [`docs/PI_PROMPT_CONTRACTS.md`](docs/PI_PROMPT_CONTRACTS.md) for safe Pi prompt patterns.
 See [`docs/PI_BASH_ALLOWLIST.md`](docs/PI_BASH_ALLOWLIST.md) for the current documented bash safety boundary.
 
@@ -100,7 +101,8 @@ It demonstrates:
 27. v1.1 proves deterministic raw-goal compilation into the full harness path,
 28. v1.2 proves the selected branch handoff into `merged_plan.json`,
 29. v1.3 proves deterministic task-type routing, capability inventory, strategy gating, strategy scoring, and strategy compilation into `merged_plan.json`,
-30. and the benchmark reports false-PASS status explicitly.
+30. v1.4 proves selected strategy -> milestone plan -> local step plan -> `merged_plan.json`,
+31. and the benchmark reports false-PASS status explicitly.
 
 ## Core parts
 
@@ -212,6 +214,14 @@ python .agentic-pi\runtime\pi_cli.py goal-strategy-proof pi_smoke_strategy_proof
 python .agentic-pi\runtime\pi_cli.py goal-status pi_smoke_strategy_proof_p2 --fail-on-missing
 ```
 
+Run the deterministic milestone proof:
+
+```cmd
+python .agentic-pi\runtime\pi_cli.py goal-compile pi_smoke_milestone_proof_p2 --goal "Create README.md explaining the harness" --mode p2
+python .agentic-pi\runtime\pi_cli.py goal-milestone-proof pi_smoke_milestone_proof_p2
+python .agentic-pi\runtime\pi_cli.py goal-status pi_smoke_milestone_proof_p2 --fail-on-missing
+```
+
 Run a disposable sample:
 
 ```cmd
@@ -241,7 +251,7 @@ python -m unittest discover tests -v
 Committed repo state:
 
 ```text
-v1.3 = Strategy Planner
+v1.4 = Milestone Planning
 ```
 
 Local smoke-tested state:
@@ -263,6 +273,7 @@ v1.0 = Practical package freeze IMPLEMENTED
 v1.1 = Raw goal chain proof IMPLEMENTED
 v1.2 = Planning proof hardening IMPLEMENTED
 v1.3 = Strategy planner IMPLEMENTED
+v1.4 = Milestone planning IMPLEMENTED
 ```
 
 The v0.5 Pi chain lives at:
@@ -279,7 +290,7 @@ The new v0.5 Pi agents are:
 .pi/agents/verifier-reviewer.md
 ```
 
-The full `goal-runner.chain.md` runtime remains unverified. v0.5.8 shows the stale Pi exit disappears under a subagents-only Pi config. v0.5.9 adds deterministic auditing for one-bash-call discipline, including a failing fixture for the duplicate certifier invocation pattern. v0.5.10 adds deterministic disposable smoke setup so Pi prompts can stay single-action. v0.5.11 verifies that weak/failing statuses are reported, not repaired or upgraded. v0.6 adds local host-task certification against disposable runs. v0.7 adds deterministic branch candidates with explicit verifier requirements. v0.8 selects branches by path to verifier-provenance certification. v0.9 adds read-only replay, dry-run rollback, and audit blocking. v1.0 freezes a thin local command surface and practical examples without claiming full Pi autonomy. v1.1 adds deterministic raw-goal compilation fixtures. v1.2 proves that the selected branch can be materialized into `merged_plan.json` before worker execution and certification. v1.3 adds deterministic strategy selection before step compilation. The next milestone is v1.4 milestone planning, then drift-aware replanning, trajectory evaluation, experience memory, domain packs, and strategy search without claiming full Pi autonomy.
+The full `goal-runner.chain.md` runtime remains unverified. v0.5.8 shows the stale Pi exit disappears under a subagents-only Pi config. v0.5.9 adds deterministic auditing for one-bash-call discipline, including a failing fixture for the duplicate certifier invocation pattern. v0.5.10 adds deterministic disposable smoke setup so Pi prompts can stay single-action. v0.5.11 verifies that weak/failing statuses are reported, not repaired or upgraded. v0.6 adds local host-task certification against disposable runs. v0.7 adds deterministic branch candidates with explicit verifier requirements. v0.8 selects branches by path to verifier-provenance certification. v0.9 adds read-only replay, dry-run rollback, and audit blocking. v1.0 freezes a thin local command surface and practical examples without claiming full Pi autonomy. v1.1 adds deterministic raw-goal compilation fixtures. v1.2 proves that the selected branch can be materialized into `merged_plan.json` before worker execution and certification. v1.3 adds deterministic strategy selection before step compilation. v1.4 adds deterministic milestone planning between selected strategy and local executable steps. The next milestone is v1.5 drift-aware replanning, then trajectory evaluation, experience memory, domain packs, and strategy search without claiming full Pi autonomy.
 
 ## Planner Stub
 

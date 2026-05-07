@@ -15,15 +15,16 @@ class FrameworkDocTests(unittest.TestCase):
         self.assertIn("Certifier writes the final status.", doc)
         self.assertIn("Pi only reports what the certifier wrote.", doc)
 
-    def test_framework_doc_records_current_v13_state(self):
+    def test_framework_doc_records_current_v14_state(self):
         doc = (ROOT / "FRAMEWORK.md").read_text(encoding="utf-8")
 
-        self.assertIn("v1.3 = Strategy Planner", doc)
+        self.assertIn("v1.4 = Milestone Planning", doc)
         self.assertIn("raw_simple_legacy -> DONE_PASS", doc)
         self.assertIn("raw_p2_provenance -> CERTIFIED_DONE", doc)
         self.assertIn("raw_missing_verifier -> NOT_DONE", doc)
         self.assertIn("raw goal -> branch candidates -> selected branch -> merged_plan.json", doc)
         self.assertIn("raw goal -> task type -> capability inventory -> strategy candidates", doc)
+        self.assertIn("raw goal -> selected strategy -> milestone_plan.json -> local_step_plan.json", doc)
 
     def test_framework_doc_uses_actual_current_paths(self):
         doc = (ROOT / "FRAMEWORK.md").read_text(encoding="utf-8")
@@ -37,8 +38,12 @@ class FrameworkDocTests(unittest.TestCase):
             ".agentic-pi/runtime/strategy_applicability_gate.py",
             ".agentic-pi/runtime/strategy_scorer.py",
             ".agentic-pi/runtime/strategy_selector.py",
+            ".agentic-pi/runtime/milestone_builder.py",
+            ".agentic-pi/runtime/milestone_tracker.py",
+            ".agentic-pi/runtime/local_step_planner.py",
             ".agentic-pi/runtime/step_compiler.py",
             ".agentic-pi/runtime/strategy_proof_runner.py",
+            ".agentic-pi/runtime/milestone_proof_runner.py",
             ".agentic-pi/runtime/pi_cli.py",
             ".agentic-pi/runtime/policy_engine.py",
             ".agentic-pi/runtime/verifier_provenance.py",
@@ -62,7 +67,8 @@ class FrameworkDocTests(unittest.TestCase):
         self.assertIn("prepared provenance full run through Pi -> CERTIFIED_DONE", doc)
         self.assertIn("arbitrary raw natural-language autonomy", doc)
         self.assertIn("full goal-runner.chain.md autonomous runtime", doc)
-        self.assertIn("milestone planning", doc)
+        self.assertIn("semantic quality of milestones", doc)
+        self.assertIn("drift-aware replanning", doc)
         self.assertIn("experience memory", doc)
         self.assertNotIn("Pi can safely solve arbitrary raw goals autonomously.", doc)
 
