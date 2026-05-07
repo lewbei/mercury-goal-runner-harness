@@ -15,10 +15,10 @@ class FrameworkDocTests(unittest.TestCase):
         self.assertIn("Certifier writes the final status.", doc)
         self.assertIn("Pi only reports what the certifier wrote.", doc)
 
-    def test_framework_doc_records_current_v25_state(self):
+    def test_framework_doc_records_current_v26_state(self):
         doc = (ROOT / "FRAMEWORK.md").read_text(encoding="utf-8")
 
-        self.assertIn("v2.5 = Real Pi Negative-Status Smoke Monitor", doc)
+        self.assertIn("v2.6 = Real Pi Session Trace Capture", doc)
         self.assertIn("raw_simple_legacy -> DONE_PASS", doc)
         self.assertIn("raw_p2_provenance -> CERTIFIED_DONE", doc)
         self.assertIn("raw_missing_verifier -> NOT_DONE", doc)
@@ -36,6 +36,7 @@ class FrameworkDocTests(unittest.TestCase):
         self.assertIn("real `pi` interactive prompt -> Mercury tool use -> pi_chain_runtime_result.json", doc)
         self.assertIn("captured real Pi transcript -> pi_real_session_monitor.py", doc)
         self.assertIn("captured real Pi negative-status transcript -> pi_real_session_monitor.py", doc)
+        self.assertIn("real Pi stdout/transcript -> pi_session_trace.jsonl -> pi_session_trace_monitor.py", doc)
 
     def test_framework_doc_uses_actual_current_paths(self):
         doc = (ROOT / "FRAMEWORK.md").read_text(encoding="utf-8")
@@ -50,6 +51,8 @@ class FrameworkDocTests(unittest.TestCase):
             ".agentic-pi/runtime/run_pi_chain_smoke.py",
             ".agentic-pi/runtime/pi_direct_behavior_audit.py",
             ".agentic-pi/runtime/pi_real_session_monitor.py",
+            ".agentic-pi/runtime/pi_session_trace_monitor.py",
+            ".agentic-pi/runtime/run_real_pi_trace_smoke.py",
             ".agentic-pi/diagnostics/pi_real_interactive/",
             ".agentic-pi/runtime/capability_inventory.py",
             ".agentic-pi/runtime/strategy_generator.py",
@@ -102,6 +105,7 @@ class FrameworkDocTests(unittest.TestCase):
         self.assertIn("full goal-runner.chain.md autonomous runtime", doc)
         self.assertIn("strict internal Pi tool-call audit for arbitrary live Pi chain smoke", doc)
         self.assertIn("additional live real Pi weak/failing transcript captures beyond fixtures", doc)
+        self.assertIn("live real Pi trace captures for every status class", doc)
         self.assertIn("semantic quality of milestones", doc)
         self.assertIn("automatic repair application", doc)
         self.assertIn("deterministic trajectory evaluation", doc)

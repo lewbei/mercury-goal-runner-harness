@@ -1,6 +1,6 @@
 {
-  "proof_matrix_id": "verifier_provenance_harness_v2_5",
-  "version": "v2.5",
+  "proof_matrix_id": "verifier_provenance_harness_v2_6",
+  "version": "v2.6",
   "entries": [
     {
       "claim_id": "domain_packs",
@@ -85,6 +85,14 @@
       "command": ["python", "tests/test_pi_real_session_monitor.py", "-v"],
       "expected_evidence": ["tests pass", "monitor_status PASS for positive fixtures", "negative fixtures fail", "assistant-side status upgrade fails"],
       "claim_boundary": "Transcript monitor only; not proof of arbitrary live Pi autonomy, live repair behavior, or full goal-runner.chain.md runtime."
+    },
+    {
+      "claim_id": "real_pi_session_trace_capture",
+      "claim": "Captured real Pi output can be normalized into pi_session_trace.jsonl and monitored for certifier-only status reporting.",
+      "mode": "quick",
+      "command": ["python", "tests/test_pi_session_trace_capture.py", "-v"],
+      "expected_evidence": ["tests pass", "trace monitor PASS for positive fixtures", "assistant-side status upgrade fails"],
+      "claim_boundary": "Trace capture and monitor proof only; not proof of arbitrary live Pi autonomy or full goal-runner.chain.md runtime."
     },
     {
       "claim_id": "full_unittest",

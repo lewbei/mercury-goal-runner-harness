@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PiSessionTraceEvent",
+  "type": "object",
+  "required": [
+    "version",
+    "run_id",
+    "index",
+    "event_type",
+    "recorded_at"
+  ],
+  "properties": {
+    "version": { "type": "string", "enum": ["v2.6"] },
+    "run_id": { "type": "string", "minLength": 1 },
+    "index": { "type": "integer" },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "assistant_text",
+        "bash_command",
+        "read_file",
+        "reported_field",
+        "reported_status_mention",
+        "tool_call"
+      ]
+    },
+    "recorded_at": { "type": "string", "minLength": 1 },
+    "source": { "type": "string" },
+    "line_number": { "type": "integer" },
+    "json_line_number": { "type": "integer" },
+    "command": { "type": "string" },
+    "path": { "type": "string" },
+    "field": { "type": "string" },
+    "value": {},
+    "status": { "type": "string" },
+    "text": { "type": "string" },
+    "tool_name": { "type": "string" },
+    "arguments": { "type": "object" }
+  },
+  "additionalProperties": false
+}

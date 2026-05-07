@@ -34,7 +34,7 @@ Pi only reports what the certifier wrote.
 Current pushed state:
 
 ```text
-v2.5 = Real Pi Negative-Status Smoke Monitor
+v2.6 = Real Pi Session Trace Capture
 ```
 
 The deterministic raw-goal proof cases are:
@@ -148,6 +148,15 @@ captured real Pi negative-status transcript -> pi_real_session_monitor.py -> sta
 This checks that `PROVISIONAL_DONE` and `NOT_DONE` are reported from
 certifier-owned artifacts and not upgraded by Mercury.
 
+v2.6 normalizes captured Pi output into a session trace:
+
+```text
+real Pi stdout/transcript -> pi_session_trace.jsonl -> pi_session_trace_monitor.py
+```
+
+This makes the trace log the auditable source of truth for command/read/report
+discipline.
+
 ## Conceptual Architecture
 
 ```text
@@ -185,6 +194,7 @@ Raw Goal
   -> Real Pi Interactive Smoke
   -> Real Pi Run Monitor
   -> Real Pi Negative-Status Smoke Monitor
+  -> Real Pi Session Trace Capture
   -> Audit / Replay
   -> Final Status
   -> Pi Reports Status Only
@@ -306,6 +316,12 @@ Raw Goal
     `NOT_DONE` cases. It accepts weak or failing statuses when all
     certifier-owned artifacts agree, and rejects assistant-side upgrades such
     as `PROVISIONAL_DONE` to `CERTIFIED_DONE`.
+
+25. Real Pi Session Trace Capture Layer
+    Converts captured Pi output into `pi_session_trace.jsonl` and audits that
+    normalized trace for exactly-one-command discipline, required reads,
+    certifier-only status authority, and no assistant-side status upgrades.
+    The trace monitor can fail unsafe behavior, but cannot certify DONE.
 ```
 
 ## Authority Model
@@ -393,6 +409,8 @@ top-level folders. The implemented files are:
 .agentic-pi/runtime/pi_session_audit.py
 .agentic-pi/runtime/pi_direct_behavior_audit.py
 .agentic-pi/runtime/pi_real_session_monitor.py
+.agentic-pi/runtime/pi_session_trace_monitor.py
+.agentic-pi/runtime/run_real_pi_trace_smoke.py
 
 .agentic-pi/evaluation/trajectory_metrics.py
 .agentic-pi/evaluation/tool_use_audit.py
@@ -529,6 +547,7 @@ direct Pi/Mercury behavior audit -> verifier evidence before certifier -> status
 real Pi interactive smoke -> controlled prompt -> pi_chain_runtime_result.json -> artifact-only report
 real Pi run monitor -> captured transcript -> command/read trajectory verdict
 real Pi negative-status monitor -> PROVISIONAL_DONE/NOT_DONE transcript fixtures -> no status upgrade
+real Pi session trace capture -> pi_session_trace.jsonl -> trace monitor verdict
 P0/P1/P2/missing verifier policy behavior
 smell report recording
 strength report recording
@@ -549,6 +568,7 @@ arbitrary raw natural-language autonomy
 full goal-runner.chain.md autonomous runtime
 strict internal Pi tool-call audit for arbitrary live Pi chain smoke
 additional live real Pi weak/failing transcript captures beyond fixtures
+live real Pi trace captures for every status class
 global Pi extension compatibility during Pi chain smoke
 live Mercury planning quality
 semantic optimality of selected branches
@@ -585,6 +605,7 @@ python tests\test_pi_chain_runtime_proof.py -v
 python tests\test_pi_direct_behavior_audit.py -v
 python tests\test_pi_real_interactive_smoke_docs.py -v
 python tests\test_pi_real_session_monitor.py -v
+python tests\test_pi_session_trace_capture.py -v
 python .agentic-pi\runtime\run_proof_matrix.py --mode quick
 python .agentic-pi\runtime\run_pi_chain_smoke.py --target-run-id pi_smoke_chain_p2_strong
 python -m unittest discover tests -v

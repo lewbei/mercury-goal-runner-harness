@@ -6,7 +6,7 @@ The goal is not to make Mercury V2 magically smarter by looping. The goal is to 
 
 ## Current status
 
-v2.5 is the Real Pi Negative-Status Smoke Monitor on top of the v2.4 Real Pi Run Monitor.
+v2.6 is the Real Pi Session Trace Capture on top of the v2.5 Real Pi Negative-Status Smoke Monitor.
 
 The current research direction is:
 
@@ -69,6 +69,7 @@ See [`docs/V2_2_DIRECT_PI_MERCURY_BEHAVIOR_AUDIT.md`](docs/V2_2_DIRECT_PI_MERCUR
 See [`docs/V2_3_REAL_PI_INTERACTIVE_SMOKE.md`](docs/V2_3_REAL_PI_INTERACTIVE_SMOKE.md) for the real Pi interactive smoke evidence boundary.
 See [`docs/V2_4_REAL_PI_RUN_MONITOR.md`](docs/V2_4_REAL_PI_RUN_MONITOR.md) for the captured real Pi run monitor boundary.
 See [`docs/V2_5_REAL_PI_NEGATIVE_STATUS_SMOKE.md`](docs/V2_5_REAL_PI_NEGATIVE_STATUS_SMOKE.md) for the real Pi negative-status monitor boundary.
+See [`docs/V2_6_REAL_PI_SESSION_TRACE_CAPTURE.md`](docs/V2_6_REAL_PI_SESSION_TRACE_CAPTURE.md) for the real Pi session trace boundary.
 See [`docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md`](docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md) for the completed v1.3-v2.0 roadmap.
 See [`docs/PI_PROMPT_CONTRACTS.md`](docs/PI_PROMPT_CONTRACTS.md) for safe Pi prompt patterns.
 See [`docs/PI_BASH_ALLOWLIST.md`](docs/PI_BASH_ALLOWLIST.md) for the current documented bash safety boundary.
@@ -86,6 +87,7 @@ python .agentic-pi\runtime\run_pi_chain_smoke.py --target-run-id pi_smoke_chain_
 python tests\test_pi_direct_behavior_audit.py -v
 python tests\test_pi_real_interactive_smoke_docs.py -v
 python tests\test_pi_real_session_monitor.py -v
+python tests\test_pi_session_trace_capture.py -v
 ```
 
 Important naming boundary:
@@ -141,7 +143,8 @@ It demonstrates:
 39. v2.3 records a real `pi` interactive smoke where Mercury reports certifier-owned artifacts without certifying DONE itself,
 40. v2.4 monitors captured real Pi transcripts for the allowed command/read trajectory,
 41. v2.5 monitors weak/failing real Pi transcript fixtures so PROVISIONAL_DONE and NOT_DONE are not upgraded,
-42. and the benchmark reports false-PASS status explicitly.
+42. v2.6 normalizes captured Pi output into `pi_session_trace.jsonl` and monitors that trace,
+43. and the benchmark reports false-PASS status explicitly.
 
 ## Core parts
 
@@ -298,7 +301,7 @@ python -m unittest discover tests -v
 Committed repo state:
 
 ```text
-v2.5 = Real Pi Negative-Status Smoke Monitor
+v2.6 = Real Pi Session Trace Capture
 ```
 
 Local smoke-tested state:
@@ -332,6 +335,7 @@ v2.2 = Direct Pi/Mercury behavior audit IMPLEMENTED
 v2.3 = Real Pi interactive smoke evidence RECORDED
 v2.4 = Real Pi run monitor IMPLEMENTED
 v2.5 = Real Pi negative-status smoke monitor IMPLEMENTED
+v2.6 = Real Pi session trace capture IMPLEMENTED
 ```
 
 The v0.5 Pi chain lives at:
@@ -348,7 +352,7 @@ The new v0.5 Pi agents are:
 .pi/agents/verifier-reviewer.md
 ```
 
-The full `goal-runner.chain.md` runtime remains unverified for arbitrary goals. v0.5.8 shows the stale Pi exit disappears under a subagents-only Pi config. v0.5.9 adds deterministic auditing for one-bash-call discipline, including a failing fixture for the duplicate certifier invocation pattern. v0.5.10 adds deterministic disposable smoke setup so Pi prompts can stay single-action. v0.5.11 verifies that weak/failing statuses are reported, not repaired or upgraded. v0.6 adds local host-task certification against disposable runs. v0.7 adds deterministic branch candidates with explicit verifier requirements. v0.8 selects branches by path to verifier-provenance certification. v0.9 adds read-only replay, dry-run rollback, and audit blocking. v1.0 freezes a thin local command surface and practical examples without claiming full Pi autonomy. v1.1 adds deterministic raw-goal compilation fixtures. v1.2 proves that the selected branch can be materialized into `merged_plan.json` before worker execution and certification. v1.3 adds deterministic strategy selection before step compilation. v1.4 adds deterministic milestone planning between selected strategy and local executable steps. v1.5 adds drift detection, bounded delta plans, and certifier blocking for unresolved drift. v1.6 adds trajectory-level tool-use evaluation for command choice, arguments, order, duplicate certifier calls, manual writes, missing reads, and unsafe deletion. v1.7 adds advisory experience memory that can adjust strategy scores but cannot bypass applicability gates or certify DONE. v1.8 adds deterministic domain packs that shape strategy candidates and verifier hints without certifying DONE. v1.9 adds deterministic workflow search that rejects certifier-bypass and high false-certified-risk candidates without executing or certifying. v2.0 adds an integrated proof matrix and example set without claiming full Pi autonomy. v2.1 adds a controlled Pi chain smoke runner without claiming arbitrary Pi chain autonomy. v2.2 adds direct Pi/Mercury behavior audit fixtures that require verifier evidence before certifier invocation, status reads after certifier invocation, and no self-certifying assistant language. v2.3 records a real `pi` interactive smoke result as local evidence, not automated CI evidence. v2.4 monitors captured real Pi transcript fixtures for exactly-one-command discipline, required result reads, protected-write attempts, and self-certifying language. v2.5 extends that monitor to weak/failing status transcripts and rejects assistant-side upgrades such as `PROVISIONAL_DONE` to `CERTIFIED_DONE`.
+The full `goal-runner.chain.md` runtime remains unverified for arbitrary goals. v0.5.8 shows the stale Pi exit disappears under a subagents-only Pi config. v0.5.9 adds deterministic auditing for one-bash-call discipline, including a failing fixture for the duplicate certifier invocation pattern. v0.5.10 adds deterministic disposable smoke setup so Pi prompts can stay single-action. v0.5.11 verifies that weak/failing statuses are reported, not repaired or upgraded. v0.6 adds local host-task certification against disposable runs. v0.7 adds deterministic branch candidates with explicit verifier requirements. v0.8 selects branches by path to verifier-provenance certification. v0.9 adds read-only replay, dry-run rollback, and audit blocking. v1.0 freezes a thin local command surface and practical examples without claiming full Pi autonomy. v1.1 adds deterministic raw-goal compilation fixtures. v1.2 proves that the selected branch can be materialized into `merged_plan.json` before worker execution and certification. v1.3 adds deterministic strategy selection before step compilation. v1.4 adds deterministic milestone planning between selected strategy and local executable steps. v1.5 adds drift detection, bounded delta plans, and certifier blocking for unresolved drift. v1.6 adds trajectory-level tool-use evaluation for command choice, arguments, order, duplicate certifier calls, manual writes, missing reads, and unsafe deletion. v1.7 adds advisory experience memory that can adjust strategy scores but cannot bypass applicability gates or certify DONE. v1.8 adds deterministic domain packs that shape strategy candidates and verifier hints without certifying DONE. v1.9 adds deterministic workflow search that rejects certifier-bypass and high false-certified-risk candidates without executing or certifying. v2.0 adds an integrated proof matrix and example set without claiming full Pi autonomy. v2.1 adds a controlled Pi chain smoke runner without claiming arbitrary Pi chain autonomy. v2.2 adds direct Pi/Mercury behavior audit fixtures that require verifier evidence before certifier invocation, status reads after certifier invocation, and no self-certifying assistant language. v2.3 records a real `pi` interactive smoke result as local evidence, not automated CI evidence. v2.4 monitors captured real Pi transcript fixtures for exactly-one-command discipline, required result reads, protected-write attempts, and self-certifying language. v2.5 extends that monitor to weak/failing status transcripts and rejects assistant-side upgrades such as `PROVISIONAL_DONE` to `CERTIFIED_DONE`. v2.6 normalizes captured Pi output into `pi_session_trace.jsonl` and monitors the trace directly.
 
 ## Planner Stub
 

@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PiSessionTraceMonitor",
+  "type": "object",
+  "required": [
+    "monitor_status",
+    "version",
+    "run_id",
+    "allowed_command_kind",
+    "trace_path",
+    "generated_by",
+    "generated_at",
+    "final_status_authority",
+    "can_certify_done",
+    "allowed_command",
+    "required_reads",
+    "event_count",
+    "bash_call_count",
+    "bash_commands",
+    "read_paths",
+    "unauthorized_tool_calls",
+    "required_result_read_after_bash",
+    "unexpected_read_paths",
+    "protected_write_attempts",
+    "result_status",
+    "status_values",
+    "status_artifacts_agree",
+    "reported_final_status_authority",
+    "reported_can_certify_done",
+    "reported_status_mentions",
+    "self_certification_claims",
+    "claim_boundary",
+    "violations",
+    "policy_checks"
+  ],
+  "properties": {
+    "monitor_status": { "type": "string", "enum": ["PASS", "FAIL"] },
+    "version": { "type": "string", "enum": ["v2.6"] },
+    "run_id": { "type": "string", "minLength": 1 },
+    "allowed_command_kind": { "type": "string", "enum": ["chain_smoke", "certifier"] },
+    "trace_path": { "type": "string", "minLength": 1 },
+    "generated_by": { "type": "string", "minLength": 1 },
+    "generated_at": { "type": "string", "minLength": 1 },
+    "final_status_authority": { "type": "string", "enum": ["certifier_only"] },
+    "can_certify_done": { "type": "boolean" },
+    "allowed_command": { "type": "string", "minLength": 1 },
+    "required_reads": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "event_count": { "type": "integer" },
+    "bash_call_count": { "type": "integer" },
+    "bash_commands": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "read_paths": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "unauthorized_tool_calls": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "required_result_read_after_bash": { "type": "boolean" },
+    "unexpected_read_paths": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "protected_write_attempts": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "result_status": { "type": "string", "minLength": 1 },
+    "status_values": {
+      "type": "object",
+      "properties": {
+        "final_status.md": { "type": "string" },
+        "certification.json": { "type": "string" },
+        "policy_decision.json": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "status_artifacts_agree": { "type": "boolean" },
+    "reported_final_status_authority": { "type": "string", "minLength": 1 },
+    "reported_can_certify_done": { "type": "boolean" },
+    "reported_status_mentions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "self_certification_claims": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "claim_boundary": { "type": "string" },
+    "violations": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "policy_checks": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false
+}
