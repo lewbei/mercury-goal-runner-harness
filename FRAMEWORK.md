@@ -34,7 +34,7 @@ Pi only reports what the certifier wrote.
 Current pushed state:
 
 ```text
-v1.4 = Milestone Planning
+v1.5 = Drift-Aware Replanning
 ```
 
 The deterministic raw-goal proof cases are:
@@ -69,6 +69,12 @@ v1.4 adds milestone planning between selected strategy and local executable step
 raw goal -> selected strategy -> milestone_plan.json -> local_step_plan.json -> merged_plan.json -> worker -> certifier status
 ```
 
+v1.5 adds drift detection after worker execution and before certification:
+
+```text
+raw goal -> worker -> checkpoints -> drift_report.json -> delta_plan.json -> certifier status
+```
+
 It does not prove arbitrary natural-language autonomy.
 
 ## Conceptual Architecture
@@ -88,6 +94,9 @@ Raw Goal
   -> Step Compiler
   -> PlanGraph
   -> Guarded Worker
+  -> Checkpoints
+  -> Drift Detector
+  -> Delta Plan
   -> Artifacts
   -> Verifier Artifacts
   -> Smell Scanner
@@ -129,26 +138,31 @@ Raw Goal
    Guarded Worker executes approved steps and writes artifacts inside the run
    folder.
 
-8. Artifact Layer
+8. Drift Layer
+   Writes checkpoints, compares execution against merged_plan.json, records
+   drift_report.json, and creates bounded delta_plan.json for repairable drift.
+   Drift reports can block certification, but cannot certify DONE.
+
+9. Artifact Layer
    Stores produced outputs. Artifacts are checked; they are not trusted because
    they exist.
 
-9. Verifier Provenance Layer
+10. Verifier Provenance Layer
    Records who produced verifier evidence, when it was produced, and whether it
    is independent from the solution.
 
-10. Verifier Quality Layer
+11. Verifier Quality Layer
    Smell scanner and strength scorer classify weak, advisory, gating, and
    certifying evidence.
 
-11. Policy Layer
+12. Policy Layer
    Policy engine decides NOT_DONE, PROVISIONAL_DONE, or CERTIFIED_DONE in
    provenance mode.
 
-12. Certifier Layer
+13. Certifier Layer
     Certifier writes certification.json and final_status.md.
 
-13. Pi Report Layer
+14. Pi Report Layer
     Pi can orchestrate and report, but cannot certify DONE by itself.
 ```
 
@@ -205,6 +219,11 @@ top-level folders. The implemented files are:
 .agentic-pi/runtime/step_compiler.py
 .agentic-pi/runtime/strategy_proof_runner.py
 .agentic-pi/runtime/milestone_proof_runner.py
+.agentic-pi/runtime/checkpoint_writer.py
+.agentic-pi/runtime/plan_monitor.py
+.agentic-pi/runtime/drift_detector.py
+.agentic-pi/runtime/replan_controller.py
+.agentic-pi/runtime/drift_proof_runner.py
 .agentic-pi/runtime/pi_cli.py
 .agentic-pi/runtime/run_goal.py
 .agentic-pi/runtime/write_goal_contract.py
@@ -227,6 +246,7 @@ top-level folders. The implemented files are:
 .agentic-pi/validators/smell_scanner.py
 .agentic-pi/validators/strength_scorer.py
 .agentic-pi/validators/validate_plan_graph.py
+.agentic-pi/validators/validate_delta_plan.py
 .agentic-pi/validators/validate_schema.py
 
 .agentic-pi/diagnostics/provenance_gate/
@@ -330,6 +350,7 @@ deterministic raw-goal missing verifier fixture -> NOT_DONE
 deterministic planning proof fixture -> selected branch -> merged_plan.json -> CERTIFIED_DONE
 deterministic strategy proof fixture -> selected strategy -> merged_plan.json -> CERTIFIED_DONE
 deterministic milestone proof fixture -> milestone_plan.json -> local_step_plan.json -> merged_plan.json -> CERTIFIED_DONE
+deterministic drift proof fixture -> drift_report.json none -> CERTIFIED_DONE
 P0/P1/P2/missing verifier policy behavior
 smell report recording
 strength report recording
@@ -352,7 +373,7 @@ live Mercury planning quality
 semantic optimality of selected branches
 semantic optimality of selected strategies
 semantic quality of milestones
-drift-aware replanning
+automatic repair application
 trajectory-level evaluation
 experience memory
 domain pack quality
@@ -373,6 +394,7 @@ python tests\test_raw_goal_chain.py -v
 python tests\test_planning_proof_hardening.py -v
 python tests\test_strategy_planner.py -v
 python tests\test_milestone_planning.py -v
+python tests\test_drift_replanning.py -v
 python -m unittest discover tests -v
 python .agentic-pi\diagnostics\evaluation\run_diagnostic_evaluation.py
 python .agentic-pi\benchmark\run_benchmark.py
@@ -383,6 +405,8 @@ python .agentic-pi\runtime\pi_cli.py goal-compile pi_smoke_strategy_proof_p2 --g
 python .agentic-pi\runtime\pi_cli.py goal-strategy-proof pi_smoke_strategy_proof_p2
 python .agentic-pi\runtime\pi_cli.py goal-compile pi_smoke_milestone_proof_p2 --goal "Create README.md explaining the harness" --mode p2
 python .agentic-pi\runtime\pi_cli.py goal-milestone-proof pi_smoke_milestone_proof_p2
+python .agentic-pi\runtime\pi_cli.py goal-compile pi_smoke_drift_proof_p2 --goal "Create README.md explaining the harness" --mode p2
+python .agentic-pi\runtime\pi_cli.py goal-drift-proof pi_smoke_drift_proof_p2
 ```
 
 ## One-Line Framework
@@ -399,6 +423,7 @@ Raw Goal
   -> Verifier Contract
   -> PlanGraph
   -> Guarded Worker
+  -> Drift Detector
   -> Artifacts
   -> Verifier Artifacts
   -> Smell Scanner

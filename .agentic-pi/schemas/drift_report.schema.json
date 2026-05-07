@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DriftReport",
+  "type": "object",
+  "required": [
+    "run_id",
+    "generated_by",
+    "generated_at",
+    "valid",
+    "drift_level",
+    "blocking",
+    "recommended_action",
+    "violations"
+  ],
+  "properties": {
+    "run_id": { "type": "string", "minLength": 1 },
+    "generated_by": { "type": "string", "minLength": 1 },
+    "generated_at": { "type": "string", "minLength": 1 },
+    "valid": { "type": "boolean" },
+    "drift_level": {
+      "type": "string",
+      "enum": ["none", "minor", "repairable", "fatal"]
+    },
+    "blocking": { "type": "boolean" },
+    "recommended_action": {
+      "type": "string",
+      "enum": ["continue", "continue_with_note", "generate_delta_plan", "abort_requires_user"]
+    },
+    "violations": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false
+}

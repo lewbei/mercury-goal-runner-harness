@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Checkpoint",
+  "type": "object",
+  "required": [
+    "run_id",
+    "generated_by",
+    "timestamp",
+    "step_id",
+    "current_task_id",
+    "expected_next_task_id",
+    "files_touched",
+    "expected_artifacts"
+  ],
+  "properties": {
+    "run_id": { "type": "string", "minLength": 1 },
+    "generated_by": { "type": "string", "minLength": 1 },
+    "timestamp": { "type": "string", "minLength": 1 },
+    "step_id": { "type": "integer" },
+    "current_task_id": { "type": "string" },
+    "expected_next_task_id": { "type": "string" },
+    "files_touched": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "exists", "sha256"],
+        "properties": {
+          "path": { "type": "string", "minLength": 1 },
+          "exists": { "type": "boolean" },
+          "sha256": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "expected_artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "exists", "sha256"],
+        "properties": {
+          "path": { "type": "string", "minLength": 1 },
+          "exists": { "type": "boolean" },
+          "sha256": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

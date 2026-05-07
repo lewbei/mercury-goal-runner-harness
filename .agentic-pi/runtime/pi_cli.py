@@ -94,6 +94,11 @@ def goal_milestone_proof(args) -> int:
     return run_cmd([".agentic-pi/runtime/milestone_proof_runner.py", args.run_id])
 
 
+def goal_drift_proof(args) -> int:
+    require_existing_run(args.run_id)
+    return run_cmd([".agentic-pi/runtime/drift_proof_runner.py", args.run_id])
+
+
 def goal_certify(args) -> int:
     run_dir = require_existing_run(args.run_id)
     return run_cmd([".agentic-pi/validators/certify_run.py", str(run_dir)])
@@ -197,6 +202,13 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p_milestone_proof.add_argument("run_id")
     p_milestone_proof.set_defaults(func=goal_milestone_proof)
+
+    p_drift_proof = subparsers.add_parser(
+        "goal-drift-proof",
+        help="Run the deterministic drift-aware proof path",
+    )
+    p_drift_proof.add_argument("run_id")
+    p_drift_proof.set_defaults(func=goal_drift_proof)
 
     p_certify = subparsers.add_parser("goal-certify", help="Run certify_run.py")
     p_certify.add_argument("run_id")

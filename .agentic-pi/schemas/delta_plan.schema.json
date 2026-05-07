@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DeltaPlan",
+  "type": "object",
+  "required": [
+    "run_id",
+    "generated_by",
+    "decision_status",
+    "drift_level",
+    "reason",
+    "final_status_authority",
+    "delta_steps"
+  ],
+  "properties": {
+    "run_id": { "type": "string", "minLength": 1 },
+    "generated_by": { "type": "string", "minLength": 1 },
+    "decision_status": {
+      "type": "string",
+      "enum": ["NO_DELTA_NEEDED", "DELTA_PLAN_CREATED", "ABORT_REQUIRES_USER"]
+    },
+    "drift_level": {
+      "type": "string",
+      "enum": ["none", "minor", "repairable", "fatal"]
+    },
+    "reason": { "type": "string", "minLength": 1 },
+    "final_status_authority": { "type": "string", "enum": ["certifier_only"] },
+    "delta_steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["delta_step_id", "task_id", "action", "path", "content", "produces"],
+        "properties": {
+          "delta_step_id": { "type": "string", "minLength": 1 },
+          "task_id": { "type": "string", "minLength": 1 },
+          "action": { "type": "string", "enum": ["create_file"] },
+          "path": { "type": "string", "minLength": 1 },
+          "content": { "type": "string" },
+          "produces": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["artifact_id", "path"],
+              "properties": {
+                "artifact_id": { "type": "string", "minLength": 1 },
+                "path": { "type": "string", "minLength": 1 }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

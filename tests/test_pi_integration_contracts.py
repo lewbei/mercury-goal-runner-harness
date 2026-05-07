@@ -264,6 +264,21 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("v1.4 Milestone Planning", roadmap)
         self.assertIn("IMPLEMENTED", roadmap)
 
+    def test_v15_doc_records_drift_replanning_boundary(self):
+        doc = read(ROOT / "docs" / "V1_5_DRIFT_AWARE_REPLANNING.md")
+        roadmap = read(ROOT / "docs" / "V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md")
+
+        self.assertIn("DRIFT-AWARE REPLANNING IMPLEMENTED", doc)
+        self.assertIn("checkpoints/", doc)
+        self.assertIn("plan_monitor_report.json", doc)
+        self.assertIn("drift_report.json", doc)
+        self.assertIn("delta_plan.json", doc)
+        self.assertIn("goal-drift-proof", doc)
+        self.assertIn("Certifier writes final status", doc)
+        self.assertIn("does not prove", doc.lower())
+        self.assertIn("v1.5 Drift-Aware Replanning", roadmap)
+        self.assertIn("IMPLEMENTED", roadmap)
+
     def test_framework_doc_is_linked_from_status_docs(self):
         readme = read(ROOT / "README.md")
         status = read(ROOT / "PROJECT_STATUS.md")
@@ -276,6 +291,8 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("V1_3_STRATEGY_PLANNER.md", status)
         self.assertIn("V1_4_MILESTONE_PLANNING.md", readme)
         self.assertIn("V1_4_MILESTONE_PLANNING.md", status)
+        self.assertIn("V1_5_DRIFT_AWARE_REPLANNING.md", readme)
+        self.assertIn("V1_5_DRIFT_AWARE_REPLANNING.md", status)
         self.assertIn("V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md", readme)
         self.assertIn("V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md", status)
 

@@ -100,7 +100,7 @@ python .agentic-pi\runtime\pi_cli.py goal-milestone-proof <run_id>
 Status:
 
 ```text
-DEFERRED
+IMPLEMENTED
 ```
 
 Purpose:
@@ -133,6 +133,12 @@ worker status-artifact writes are fatal drift
 worker verifier_artifacts writes are fatal drift
 delta plans cannot bypass policy
 rollback remains dry-run by default
+```
+
+Implemented proof command:
+
+```cmd
+python .agentic-pi\runtime\pi_cli.py goal-drift-proof <run_id>
 ```
 
 ## v1.6 Trajectory-Level Evaluation

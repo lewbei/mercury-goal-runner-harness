@@ -608,6 +608,36 @@ def apply_audit_report_gate(run_dir: Path, provenance_mode: bool, failed: list, 
     return current_status
 
 
+def apply_drift_report_gate(run_dir: Path, provenance_mode: bool, failed: list, passed: list, current_status: str) -> str:
+    drift_path = run_dir / "drift_report.json"
+    if not drift_path.is_file():
+        return current_status
+    try:
+        drift = load_json(drift_path)
+    except Exception as exc:
+        failed.append(f"drift_report.json invalid: {exc}")
+        return "NOT_DONE" if provenance_mode else "DONE_FAIL"
+
+    schema_failures = []
+    validate_with_schema(drift, "drift_report.schema.json", "drift_report.json", schema_failures)
+    if schema_failures:
+        failed.extend(schema_failures)
+        return "NOT_DONE" if provenance_mode else "DONE_FAIL"
+
+    if drift.get("valid") is False:
+        failed.append("drift_report.json invalid blocks certification")
+        return "NOT_DONE" if provenance_mode else "DONE_FAIL"
+
+    if drift.get("blocking") is True or drift.get("drift_level") in {"repairable", "fatal"}:
+        failed.append(f"drift_report.json blocks certification: {drift.get('drift_level')}")
+        for violation in drift.get("violations", []):
+            failed.append(f"drift violation: {violation}")
+        return "NOT_DONE" if provenance_mode else "DONE_FAIL"
+
+    passed.append(f"drift_report.json valid: {drift.get('drift_level')}")
+    return current_status
+
+
 def evaluate_done_criteria(
     run_dir,
     done_criteria,
@@ -850,6 +880,7 @@ def main():
         status = "DONE_PASS" if not failed else "DONE_FAIL"
 
     status = apply_audit_report_gate(run_dir, provenance_mode, failed, passed, status)
+    status = apply_drift_report_gate(run_dir, provenance_mode, failed, passed, status)
 
     certification = {
         "run_id": run_id,
