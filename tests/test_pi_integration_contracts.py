@@ -380,6 +380,20 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("does not prove arbitrary live Pi autonomy", doc)
         self.assertIn("v2.2 Direct Pi/Mercury Behavior Audit", read(ROOT / "docs" / "V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md"))
 
+    def test_v23_doc_records_real_pi_interactive_boundary(self):
+        doc = read(ROOT / "docs" / "V2_3_REAL_PI_INTERACTIVE_SMOKE.md")
+        roadmap = read(ROOT / "docs" / "V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md")
+
+        self.assertIn("REAL PI INTERACTIVE SMOKE EVIDENCE RECORDED", doc)
+        self.assertIn("pi = the real external Pi agent launched from cmd", doc)
+        self.assertIn("Mercury = the LLM behavior inside Pi", doc)
+        self.assertIn("local smoke evidence, not automated CI evidence", doc)
+        self.assertIn("final_status_authority: certifier_only", doc)
+        self.assertIn("can_certify_done: false", doc)
+        self.assertIn("Full autonomous Pi goal-runner runtime is proven", doc)
+        self.assertIn("Both unsafe claims remain false", doc)
+        self.assertIn("v2.3 Real Pi Interactive Smoke Evidence", roadmap)
+
     def test_framework_doc_is_linked_from_status_docs(self):
         readme = read(ROOT / "README.md")
         status = read(ROOT / "PROJECT_STATUS.md")
@@ -410,6 +424,8 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("V2_1_CONTROLLED_PI_CHAIN_RUNTIME_PROOF.md", status)
         self.assertIn("V2_2_DIRECT_PI_MERCURY_BEHAVIOR_AUDIT.md", readme)
         self.assertIn("V2_2_DIRECT_PI_MERCURY_BEHAVIOR_AUDIT.md", status)
+        self.assertIn("V2_3_REAL_PI_INTERACTIVE_SMOKE.md", readme)
+        self.assertIn("V2_3_REAL_PI_INTERACTIVE_SMOKE.md", status)
         self.assertIn("V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md", readme)
         self.assertIn("V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md", status)
 

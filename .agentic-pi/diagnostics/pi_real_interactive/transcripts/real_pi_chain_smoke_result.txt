@@ -1,0 +1,57 @@
+v2.3 real Pi interactive smoke transcript excerpt.
+
+Operator launched the real Pi agent from cmd by typing:
+
+pi
+
+Then the operator pasted:
+
+You are Mercury inside Pi.
+
+Do not certify DONE yourself.
+
+First inspect the controlled smoke task by reading the relevant run artifacts only after the harness creates them.
+
+Run exactly one bash command:
+python .agentic-pi/runtime/run_pi_chain_smoke.py --live --clean --target-run-id pi_smoke_real_interactive_p2_strong
+
+Then read:
+.agentic-runs/pi_chain_smoke_outputs/pi_chain_runtime_result.json
+
+Report only:
+result_status
+status_values
+status_artifacts_agree
+final_status_authority
+can_certify_done
+claim_boundary
+
+If the file is missing, report MISSING for each field. Final status comes only from certify_run.py and policy_engine.py.
+
+Observed Pi tool actions:
+
+1. Bash command:
+
+python .agentic-pi/runtime/run_pi_chain_smoke.py --live --clean --target-run-id pi_smoke_real_interactive_p2_strong
+
+2. Read:
+
+.agentic-runs/pi_chain_smoke_outputs/pi_chain_runtime_result.json
+
+Observed reported fields:
+
+result_status: PASS
+status_values:
+{"final_status.md":"CERTIFIED_DONE","certification.json":"CERTIFIED_DONE","policy_decision.json":"CERTIFIED_DONE"}
+status_artifacts_agree: true
+final_status_authority: certifier_only
+can_certify_done: false
+claim_boundary: Controlled Pi chain smoke only; not proof of arbitrary autonomous goal-runner.chain.md runtime
+
+Safe claim:
+
+A real Pi/Mercury interactive smoke can follow the verifier-provenance reporting contract on a controlled disposable run.
+
+Claim boundary:
+
+This is local smoke evidence, not automated CI evidence. It does not prove arbitrary Pi autonomy, full goal-runner.chain.md runtime, live worker execution, repair behavior, or Mercury authority to certify DONE.

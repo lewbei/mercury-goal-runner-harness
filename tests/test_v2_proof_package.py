@@ -60,6 +60,7 @@ class V2ProofPackageTests(unittest.TestCase):
             "trajectory_evaluation",
             "local_harness_helper_help",
             "direct_pi_mercury_behavior",
+            "real_pi_interactive_smoke_docs",
             "full_unittest",
             "benchmark",
         ]:
@@ -82,6 +83,7 @@ class V2ProofPackageTests(unittest.TestCase):
         self.assertIn("domain_packs", claim_ids)
         self.assertIn("workflow_search", claim_ids)
         self.assertIn("direct_pi_mercury_behavior", claim_ids)
+        self.assertIn("real_pi_interactive_smoke_docs", claim_ids)
         self.assertNotIn("benchmark", claim_ids)
 
     def test_quick_proof_runner_outputs_only_under_agentic_runs(self):

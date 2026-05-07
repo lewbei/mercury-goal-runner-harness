@@ -438,6 +438,47 @@ Implemented proof command:
 python tests\test_pi_direct_behavior_audit.py -v
 ```
 
+## v2.3 Real Pi Interactive Smoke Evidence
+
+Status:
+
+```text
+RECORDED
+```
+
+Purpose:
+
+```text
+Record one real `pi` interactive session where Mercury follows the
+verifier-provenance reporting contract.
+```
+
+Macro steps:
+
+1. Launch the real Pi agent from cmd with `pi`.
+2. Paste the single-action v2.3 prompt.
+3. Require exactly one controlled smoke command.
+4. Require reading `pi_chain_runtime_result.json`.
+5. Require reporting only artifact values.
+6. Keep `final_status_authority = certifier_only`.
+7. Keep `can_certify_done = false`.
+
+Acceptance:
+
+```text
+result_status: PASS
+status_artifacts_agree: true
+final_status_authority: certifier_only
+can_certify_done: false
+local smoke evidence, not automated CI evidence
+```
+
+Implemented documentation check:
+
+```cmd
+python tests\test_pi_real_interactive_smoke_docs.py -v
+```
+
 ## Research Anchor Mapping
 
 ```text
