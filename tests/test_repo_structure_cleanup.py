@@ -49,12 +49,13 @@ class RepoStructureCleanupTests(unittest.TestCase):
     def test_workspace_index_points_to_current_and_next_structure(self):
         index = (ROOT / "workspace_index.md").read_text(encoding="utf-8")
 
-        self.assertIn("v3.0 Real Pi Behavior Evaluation", index)
-        self.assertIn("arbitrary-goal chain probing", index)
+        self.assertIn("v3.1 Real Pi Prompt Coverage Evaluation", index)
+        self.assertIn("real Pi prompt coverage boundary", index)
         self.assertIn("agentic autonomy probe boundary", index)
         self.assertIn("agentic negative-probe hardening boundary", index)
         self.assertIn("negative prompt capture boundary", index)
         self.assertIn("real Pi behavior evaluation boundary", index)
+        self.assertIn(".agentic-pi/prompts/real_behavior_matrix/", index)
         self.assertIn(".agentic-pi/README.md", index)
 
 

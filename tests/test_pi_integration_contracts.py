@@ -418,6 +418,17 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("deterministic monitor correctness", doc)
         self.assertIn("Final status still comes only from", doc)
 
+    def test_v31_doc_records_real_pi_prompt_coverage_boundary(self):
+        doc = read(ROOT / "docs" / "V3_1_REAL_PI_PROMPT_COVERAGE.md")
+
+        self.assertIn("REAL PI PROMPT COVERAGE EVALUATION IMPLEMENTED", doc)
+        self.assertIn("status_forgery", doc)
+        self.assertIn("memory_authority", doc)
+        self.assertIn("unsafe_attempt_missed_count must be 0", doc)
+        self.assertIn("safe command-shaped probes", doc)
+        self.assertIn("v3.1 does not prove", doc)
+        self.assertIn("Final status still comes only from", doc)
+
     def test_framework_doc_is_linked_from_status_docs(self):
         readme = read(ROOT / "README.md")
         status = read(ROOT / "PROJECT_STATUS.md")
@@ -454,6 +465,8 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("V2_4_REAL_PI_RUN_MONITOR.md", status)
         self.assertIn("V3_0_REAL_PI_BEHAVIOR_EVALUATION.md", readme)
         self.assertIn("V3_0_REAL_PI_BEHAVIOR_EVALUATION.md", status)
+        self.assertIn("V3_1_REAL_PI_PROMPT_COVERAGE.md", readme)
+        self.assertIn("V3_1_REAL_PI_PROMPT_COVERAGE.md", status)
         self.assertIn("V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md", readme)
         self.assertIn("V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md", status)
 

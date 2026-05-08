@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RealPiBehaviorMatrixResult",
+  "type": "object",
+  "required": [
+    "matrix_id",
+    "version",
+    "generated_at",
+    "live",
+    "target_run_prefix",
+    "trials_per_case",
+    "case_count",
+    "trial_count",
+    "result_status",
+    "unsafe_attempt_caught_count",
+    "unsafe_attempt_missed_count",
+    "safe_refusal_count",
+    "inconclusive_count",
+    "unsafe_attempt_missed_rate_percent",
+    "safe_refusal_rate_percent",
+    "inconclusive_rate_percent",
+    "trial_results",
+    "final_status_authority",
+    "can_certify_done",
+    "claim_boundary"
+  ],
+  "properties": {
+    "matrix_id": { "type": "string", "enum": ["real_pi_behavior_matrix"] },
+    "version": { "type": "string", "enum": ["v3.1"] },
+    "generated_at": { "type": "string", "minLength": 1 },
+    "live": { "type": "boolean" },
+    "target_run_prefix": { "type": "string", "minLength": 1 },
+    "trials_per_case": { "type": "integer" },
+    "case_count": { "type": "integer" },
+    "trial_count": { "type": "integer" },
+    "result_status": { "type": "string", "enum": ["PASS", "FAIL", "INCONCLUSIVE"] },
+    "unsafe_attempt_caught_count": { "type": "integer" },
+    "unsafe_attempt_missed_count": { "type": "integer" },
+    "safe_refusal_count": { "type": "integer" },
+    "inconclusive_count": { "type": "integer" },
+    "unsafe_attempt_missed_rate_percent": { "type": "integer" },
+    "safe_refusal_rate_percent": { "type": "integer" },
+    "inconclusive_rate_percent": { "type": "integer" },
+    "trial_results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "case_id",
+          "run_id",
+          "behavior_classification",
+          "classification_reason",
+          "pi_exit_code",
+          "monitor_status",
+          "expected_violation",
+          "expected_violation_observed",
+          "monitor_violations",
+          "status_values",
+          "status_artifacts_agree",
+          "final_status_authority",
+          "can_certify_done",
+          "raw_output_path",
+          "trace_path",
+          "monitor_path",
+          "trial_index",
+          "case_summary"
+        ],
+        "properties": {
+          "case_id": { "type": "string", "minLength": 1 },
+          "run_id": { "type": "string", "minLength": 1 },
+          "behavior_classification": {
+            "type": "string",
+            "enum": [
+              "unsafe_attempt_caught",
+              "unsafe_attempt_missed",
+              "safe_refusal",
+              "inconclusive"
+            ]
+          },
+          "classification_reason": { "type": "string", "minLength": 1 },
+          "pi_exit_code": { "type": "integer" },
+          "monitor_status": { "type": "string", "minLength": 1 },
+          "expected_violation": { "type": "string", "minLength": 1 },
+          "expected_violation_observed": { "type": "boolean" },
+          "monitor_violations": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "status_values": { "type": "object" },
+          "status_artifacts_agree": { "type": "boolean" },
+          "final_status_authority": { "type": "string", "minLength": 1 },
+          "can_certify_done": { "type": "boolean" },
+          "raw_output_path": { "type": "string" },
+          "trace_path": { "type": "string" },
+          "monitor_path": { "type": "string" },
+          "trial_index": { "type": "integer" },
+          "case_summary": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "final_status_authority": { "type": "string", "enum": ["certifier_only"] },
+    "can_certify_done": { "type": "boolean" },
+    "claim_boundary": { "type": "string", "minLength": 1 }
+  },
+  "additionalProperties": false
+}

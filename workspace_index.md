@@ -6,10 +6,10 @@ Last verified: 2026-05-08
 
 ## Current Direction
 
-The implemented local layer is v3.0 Real Pi Behavior Evaluation on top of the
-verifier-provenance certification stack. The next planned layer is bounded
-arbitrary-goal chain probing, only after the real Pi behavior classification
-boundary stays stable. The research direction is Verifier-Provenance Goal Runner Harness,
+The implemented local layer is v3.1 Real Pi Prompt Coverage Evaluation on top of the
+verifier-provenance certification stack. The next planned layer is broader
+agentic probing only after the real Pi prompt coverage boundary stays stable.
+The research direction is Verifier-Provenance Goal Runner Harness,
 centered on:
 
 ```text
@@ -31,6 +31,7 @@ Who is allowed to certify DONE?
 - `docs/V2_8_AGENTIC_NEGATIVE_PROBES.md` - arbitrary-chain and unbounded-bash negative-probe boundary.
 - `docs/V2_9_LIVE_NEGATIVE_PROMPT_CAPTURE.md` - live negative prompt capture boundary.
 - `docs/V3_0_REAL_PI_BEHAVIOR_EVALUATION.md` - real Pi behavior evaluation boundary.
+- `docs/V3_1_REAL_PI_PROMPT_COVERAGE.md` - real Pi prompt coverage boundary.
 - `certification_policy.yaml` - draft static policy vocabulary.
 
 ## Active Supporting Files
@@ -68,10 +69,12 @@ Who is allowed to certify DONE?
 - `docs/V2_8_AGENTIC_NEGATIVE_PROBES.md` - implemented agentic negative-probe hardening boundary.
 - `docs/V2_9_LIVE_NEGATIVE_PROMPT_CAPTURE.md` - implemented negative prompt capture boundary.
 - `docs/V3_0_REAL_PI_BEHAVIOR_EVALUATION.md` - implemented real Pi behavior evaluation boundary.
+- `docs/V3_1_REAL_PI_PROMPT_COVERAGE.md` - implemented real Pi prompt coverage boundary.
 - `.agentic-pi/diagnostics/provenance_gate/` - four-case copy-ready provenance diagnostic set.
 - `.agentic-pi/diagnostics/trajectory_evaluation/` - six-case trajectory-level diagnostic set.
 - `.agentic-pi/prompts/agentic_autonomy_probe.md` - paste-ready real Pi probe prompt.
 - `.agentic-pi/prompts/negative_autonomy/` - paste-ready negative Pi/Mercury prompt templates.
+- `.agentic-pi/prompts/real_behavior_matrix/` - bounded real Pi/Mercury prompt coverage templates.
 - `PLAN_ROUTER.md` - deterministic planner stub note.
 
 ## Known Cleanup Debt
@@ -92,3 +95,4 @@ Who is allowed to certify DONE?
 - The v2.8 negative probes harden that boundary for unapproved chain reads, source-tree write commands, and second repair commands; they do not prove every possible unsafe command string is classified.
 - The v2.9 negative prompt capture path passes only when the monitor observes and rejects the expected unsafe prompt behavior; it does not prove every malicious prompt is classified.
 - The v3.0 real Pi behavior evaluation classifies captured behavior as unsafe caught, unsafe missed, safe refusal, or inconclusive; it does not prove broad prompt coverage.
+- The v3.1 real Pi prompt coverage matrix covers ten bounded negative prompt categories with repeated-trial support; it does not prove arbitrary prompt coverage or arbitrary unbounded bash safety.

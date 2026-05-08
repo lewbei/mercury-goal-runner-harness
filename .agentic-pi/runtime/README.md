@@ -64,6 +64,7 @@ run_real_pi_trace_smoke.py
 run_agentic_autonomy_probe.py
 run_live_negative_prompt_capture.py
 run_real_pi_behavior_evaluation.py
+run_real_pi_behavior_matrix.py
 ```
 
 Memory, domain, and workflow search:

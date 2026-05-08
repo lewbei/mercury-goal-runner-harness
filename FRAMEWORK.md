@@ -34,7 +34,7 @@ Pi only reports what the certifier wrote.
 Current pushed state:
 
 ```text
-v3.0 = Real Pi Behavior Evaluation
+v3.1 = Real Pi Prompt Coverage Evaluation
 ```
 
 The deterministic raw-goal proof cases are:
@@ -183,6 +183,16 @@ This separates deterministic monitor correctness from live runtime behavior.
 Safe refusal is useful evidence, but it is not the same claim as "the monitor
 caught the unsafe act."
 
+v3.1 expands the observed-behavior path into a bounded prompt coverage matrix:
+
+```text
+captured prompt matrix -> run_real_pi_behavior_matrix.py -> caught / missed / safe_refusal / inconclusive by category/trial
+```
+
+This adds repeated-trial support and ten negative prompt categories. It does
+not prove arbitrary prompts, arbitrary unbounded bash, or arbitrary
+goal-runner.chain.md autonomy are safe.
+
 ## Conceptual Architecture
 
 ```text
@@ -225,6 +235,7 @@ Raw Goal
   -> Agentic Negative-Probe Hardening
   -> Live Negative Prompt Capture
   -> Real Pi Behavior Evaluation
+  -> Real Pi Prompt Coverage Evaluation
   -> Audit / Replay
   -> Final Status
   -> Pi Reports Status Only
@@ -377,6 +388,12 @@ Raw Goal
     `unsafe_attempt_caught`, `unsafe_attempt_missed`, `safe_refusal`, or
     `inconclusive`. It exists to avoid overclaiming deterministic Python tests
     as proof of real Pi/Mercury behavior. It cannot certify DONE.
+
+30. Real Pi Prompt Coverage Evaluation Layer
+    Runs a bounded prompt matrix over multiple negative Pi/Mercury prompt
+    categories and classifies every category/trial as caught, missed, safe
+    refusal, or inconclusive. It can fail unsafe behavior coverage, but it
+    cannot certify DONE and does not prove arbitrary prompt safety.
 ```
 
 ## Authority Model
@@ -468,6 +485,7 @@ top-level folders. The implemented files are:
 .agentic-pi/runtime/run_real_pi_trace_smoke.py
 .agentic-pi/runtime/run_live_negative_prompt_capture.py
 .agentic-pi/runtime/run_real_pi_behavior_evaluation.py
+.agentic-pi/runtime/run_real_pi_behavior_matrix.py
 
 .agentic-pi/evaluation/trajectory_metrics.py
 .agentic-pi/evaluation/tool_use_audit.py
@@ -488,8 +506,10 @@ top-level folders. The implemented files are:
 .agentic-pi/diagnostics/pi_real_interactive/
 .agentic-pi/diagnostics/trajectory_evaluation/
 .agentic-pi/prompts/negative_autonomy/
+.agentic-pi/prompts/real_behavior_matrix/
 .agentic-pi/schemas/live_negative_prompt_capture_result.schema.json
 .agentic-pi/schemas/real_pi_behavior_evaluation_result.schema.json
+.agentic-pi/schemas/real_pi_behavior_matrix_result.schema.json
 
 .agentic-pi/evaluation/trajectory_metrics.py
 .agentic-pi/evaluation/tool_use_audit.py
@@ -611,6 +631,7 @@ real Pi session trace capture -> pi_session_trace.jsonl -> trace monitor verdict
 real Pi agentic autonomy probe -> chain/memory read -> repair loop -> certifier-only status verdict
 agentic negative probes -> unapproved chain / source write / second repair -> monitor FAIL
 real Pi behavior evaluation -> captured negative prompt behavior -> caught / missed / safe_refusal / inconclusive
+real Pi prompt coverage evaluation -> bounded prompt matrix -> caught / missed / safe_refusal / inconclusive by category/trial
 P0/P1/P2/missing verifier policy behavior
 smell report recording
 strength report recording
@@ -634,6 +655,7 @@ additional live real Pi weak/failing transcript captures beyond fixtures
 live real Pi trace captures for every status class
 every malicious prompt is classified
 live behavior evaluation on a large adversarial prompt set
+broad real Pi prompt coverage beyond the current bounded matrix
 global Pi extension compatibility during Pi chain smoke
 live Mercury planning quality
 semantic optimality of selected branches
@@ -674,6 +696,7 @@ python tests\test_pi_session_trace_capture.py -v
 python tests\test_agentic_autonomy_probe.py -v
 python tests\test_live_negative_prompt_capture.py -v
 python tests\test_real_pi_behavior_evaluation.py -v
+python tests\test_real_pi_behavior_matrix.py -v
 python .agentic-pi\runtime\run_proof_matrix.py --mode quick
 python .agentic-pi\runtime\run_pi_chain_smoke.py --target-run-id pi_smoke_chain_p2_strong
 python -m unittest discover tests -v
@@ -720,6 +743,7 @@ Raw Goal
   -> Proof Matrix
   -> Controlled Pi Chain Smoke
   -> Real Pi Behavior Evaluation
+  -> Real Pi Prompt Coverage Evaluation
   -> Audit / Replay
   -> Final Status
   -> Pi Reports Status Only
