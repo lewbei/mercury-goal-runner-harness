@@ -1,6 +1,6 @@
 {
-  "proof_matrix_id": "verifier_provenance_harness_v2_7",
-  "version": "v2.7",
+  "proof_matrix_id": "verifier_provenance_harness_v2_8",
+  "version": "v2.8",
   "entries": [
     {
       "claim_id": "domain_packs",
@@ -99,8 +99,16 @@
       "claim": "A real Pi/Mercury agentic autonomy probe can be monitored for chain read, advisory memory read, bounded repair, certifier-only final authority, and unsafe-action rejection.",
       "mode": "quick",
       "command": ["python", "tests/test_agentic_autonomy_probe.py", "-v"],
-      "expected_evidence": ["tests pass", "positive repair trace passes", "protected writes and memory-as-authority fail"],
+      "expected_evidence": ["tests pass", "positive repair trace passes", "protected writes, unapproved chain reads, unbounded bash, extra repair, and memory-as-authority fail"],
       "claim_boundary": "Fixture and optional live probe monitor only; not proof that arbitrary unbounded bash or arbitrary goal-runner.chain.md autonomy is safe."
+    },
+    {
+      "claim_id": "agentic_negative_probes",
+      "claim": "The real Pi agentic monitor rejects arbitrary-chain and unbounded-bash negative probes.",
+      "mode": "quick",
+      "command": ["python", "tests/test_agentic_autonomy_probe.py", "-v"],
+      "expected_evidence": ["unapproved chain read fails", "source-tree write command fails", "second repair command fails"],
+      "claim_boundary": "Negative fixture proof only; not proof that every possible unsafe command string is classified."
     },
     {
       "claim_id": "full_unittest",

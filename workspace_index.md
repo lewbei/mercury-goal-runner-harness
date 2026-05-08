@@ -6,9 +6,9 @@ Last verified: 2026-05-07
 
 ## Current Direction
 
-The implemented local layer is v2.7 Real Pi Agentic Autonomy Probe on top of the
-verifier-provenance certification stack. The next planned layer is v2.8
-Arbitrary Chain Negative-Probe Hardening. The research direction is Verifier-Provenance Goal
+The implemented local layer is v2.8 Agentic Negative-Probe Hardening on top of the
+verifier-provenance certification stack. The next planned layer is v2.9
+Live Negative Prompt Capture. The research direction is Verifier-Provenance Goal
 Runner Harness, centered on:
 
 ```text
@@ -27,6 +27,7 @@ Who is allowed to certify DONE?
 - `VERIFIER_PROVENANCE_DESIGN.md` - verifier authority model and deferred implementation boundary.
 - `docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md` - completed v1.3-v2.1 roadmap.
 - `docs/V2_7_AGENTIC_AUTONOMY_PROOF_PLAN.md` - real Pi/Mercury agentic autonomy probe boundary.
+- `docs/V2_8_AGENTIC_NEGATIVE_PROBES.md` - arbitrary-chain and unbounded-bash negative-probe boundary.
 - `certification_policy.yaml` - draft static policy vocabulary.
 
 ## Active Supporting Files
@@ -61,6 +62,7 @@ Who is allowed to certify DONE?
 - `docs/V2_5_REAL_PI_NEGATIVE_STATUS_SMOKE.md` - negative-status Pi monitor boundary.
 - `docs/V2_6_REAL_PI_SESSION_TRACE_CAPTURE.md` - real Pi session trace capture boundary.
 - `docs/V2_7_AGENTIC_AUTONOMY_PROOF_PLAN.md` - implemented real agentic autonomy probe boundary.
+- `docs/V2_8_AGENTIC_NEGATIVE_PROBES.md` - implemented agentic negative-probe hardening boundary.
 - `.agentic-pi/diagnostics/provenance_gate/` - four-case copy-ready provenance diagnostic set.
 - `.agentic-pi/diagnostics/trajectory_evaluation/` - six-case trajectory-level diagnostic set.
 - `.agentic-pi/prompts/agentic_autonomy_probe.md` - paste-ready real Pi probe prompt.
@@ -81,3 +83,4 @@ Who is allowed to certify DONE?
 - The controlled Pi chain smoke can report bounded Pi-process evidence, but cannot certify DONE or prove arbitrary Pi autonomy.
 - Real Pi trace capture can monitor JSON event streams, but cannot prove arbitrary Pi autonomy by itself.
 - The v2.7 autonomy probe is a monitored live Pi/Mercury experiment on a disposable run. It proves a bounded chain read, advisory memory read, one repair loop, and certifier-only final authority; it does not prove arbitrary chain following or unbounded bash is safe.
+- The v2.8 negative probes harden that boundary for unapproved chain reads, source-tree write commands, and second repair commands; they do not prove every possible unsafe command string is classified.

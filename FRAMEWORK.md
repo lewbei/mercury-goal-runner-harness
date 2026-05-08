@@ -34,7 +34,7 @@ Pi only reports what the certifier wrote.
 Current pushed state:
 
 ```text
-v2.7 = Real Pi Agentic Autonomy Probe
+v2.8 = Agentic Negative-Probe Hardening
 ```
 
 The deterministic raw-goal proof cases are:
@@ -162,7 +162,7 @@ v2.7 runs and monitors a real Pi/Mercury agentic autonomy probe:
 real Pi -> chain read -> advisory memory read -> first certifier NOT_DONE -> run-local repair -> second certifier CERTIFIED_DONE -> status artifact report -> agentic_autonomy_monitor.py
 ```
 
-This proves a bounded monitored repair path on a disposable run. It does not prove that arbitrary unbounded bash or arbitrary goal-runner.chain.md autonomy is safe.
+This proves a bounded monitored repair path on a disposable run. v2.8 adds negative probes for unapproved chain reads, source-tree write commands, and second repair commands. It does not prove that arbitrary unbounded bash or arbitrary goal-runner.chain.md autonomy is safe.
 
 ## Conceptual Architecture
 
@@ -203,6 +203,7 @@ Raw Goal
   -> Real Pi Negative-Status Smoke Monitor
   -> Real Pi Session Trace Capture
   -> Real Pi Agentic Autonomy Probe
+  -> Agentic Negative-Probe Hardening
   -> Audit / Replay
   -> Final Status
   -> Pi Reports Status Only
@@ -337,6 +338,11 @@ Raw Goal
     failure, allows one run-local artifact repair, reruns the certifier, and
     monitors the resulting trace. It proves a bounded repair path only; it
     cannot prove arbitrary unbounded bash or arbitrary chain autonomy is safe.
+
+27. Agentic Negative-Probe Hardening Layer
+    Extends the agentic autonomy monitor with explicit failure cases for
+    unapproved chain reads, source-tree write commands, and second repair
+    commands. It improves rejection coverage; it still cannot certify DONE.
 ```
 
 ## Authority Model
@@ -564,6 +570,7 @@ real Pi run monitor -> captured transcript -> command/read trajectory verdict
 real Pi negative-status monitor -> PROVISIONAL_DONE/NOT_DONE transcript fixtures -> no status upgrade
 real Pi session trace capture -> pi_session_trace.jsonl -> trace monitor verdict
 real Pi agentic autonomy probe -> chain/memory read -> repair loop -> certifier-only status verdict
+agentic negative probes -> unapproved chain / source write / second repair -> monitor FAIL
 P0/P1/P2/missing verifier policy behavior
 smell report recording
 strength report recording

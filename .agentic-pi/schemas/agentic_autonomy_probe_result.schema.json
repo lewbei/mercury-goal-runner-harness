@@ -28,7 +28,7 @@
   ],
   "properties": {
     "probe_id": { "type": "string", "enum": ["real_pi_agentic_autonomy_probe"] },
-    "version": { "type": "string", "enum": ["v2.7"] },
+    "version": { "type": "string", "enum": ["v2.8"] },
     "generated_at": { "type": "string", "minLength": 1 },
     "run_id": { "type": "string", "minLength": 1 },
     "live": { "type": "boolean" },

@@ -26,7 +26,7 @@ import setup_pi_smoke
 
 
 ROOT = Path(__file__).resolve().parents[2]
-VERSION = "v2.7"
+VERSION = "v2.8"
 DEFAULT_RUN_ID = "pi_smoke_agentic_autonomy_001"
 SOURCE_CASE = ROOT / ".agentic-pi" / "diagnostics" / "evaluation" / "cases" / "p2_strong"
 OUTPUT_ROOT = ROOT / ".agentic-runs" / "agentic_autonomy_outputs"

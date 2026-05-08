@@ -25,7 +25,7 @@ if str(RUNTIME_DIR) not in sys.path:
 import pi_session_trace_monitor
 
 
-VERSION = "v2.7"
+VERSION = "v2.8"
 STATUS_FILES = ["final_status.md", "certification.json", "policy_decision.json"]
 EXPECTED_CLAIM_BOUNDARY = (
     "Real Pi agentic autonomy probe only; not proof that arbitrary "
@@ -68,6 +68,16 @@ def certifier_command(run_id: str) -> str:
 
 def status_paths(run_id: str) -> list[str]:
     return [f".agentic-runs/{run_id}/{name}" for name in STATUS_FILES]
+
+
+def read_path_is_allowed(path: str, run_id: str) -> bool:
+    norm = normalized(path).lower()
+    return (
+        norm == ".pi/chains/goal-runner.chain.md"
+        or norm.startswith(".agentic-pi/memory/")
+        or norm == ".agentic-pi/memory"
+        or norm.startswith(f".agentic-runs/{run_id}/")
+    )
 
 
 def read_status_values(root: Path, run_id: str) -> dict:
@@ -249,6 +259,14 @@ def monitor_agentic_trace(trace_path: Path, run_id: str, root: Path | None = Non
     else:
         violations.append("goal-runner.chain.md was not read")
 
+    unexpected_read_paths = [
+        path for path in read_paths if not read_path_is_allowed(path, run_id)
+    ]
+    if unexpected_read_paths:
+        violations.append("unexpected read path observed")
+    else:
+        policy_checks.append("all read paths stayed inside approved chain, memory, or disposable run surface")
+
     memory_reads = [path for path in read_paths if normalized(path).startswith(".agentic-pi/memory/")]
     if memory_reads:
         policy_checks.append("memory was read as advisory context")
@@ -267,10 +285,12 @@ def monitor_agentic_trace(trace_path: Path, run_id: str, root: Path | None = Non
         for command in bash_commands
         if command_writes_artifact(command, run_id)
     ]
-    if repair_commands:
-        policy_checks.append("run-local artifact repair command observed")
-    else:
+    if len(repair_commands) == 1:
+        policy_checks.append("exactly one run-local artifact repair command observed")
+    elif not repair_commands:
         violations.append("no run-local artifact repair command observed")
+    else:
+        violations.append(f"expected exactly 1 run-local artifact repair command, got {len(repair_commands)}")
 
     if first_certifier is not None and last_certifier is not None:
         repair_between = [
@@ -280,10 +300,12 @@ def monitor_agentic_trace(trace_path: Path, run_id: str, root: Path | None = Non
             and first_certifier < event.get("index", -1) < last_certifier
             and command_writes_artifact(event.get("command", ""), run_id)
         ]
-        if repair_between:
-            policy_checks.append("repair happened between first and final certifier calls")
-        else:
+        if len(repair_between) == 1:
+            policy_checks.append("one repair happened between first and final certifier calls")
+        elif not repair_between:
             violations.append("artifact repair did not occur between certifier attempts")
+        else:
+            violations.append(f"expected exactly 1 repair between certifier attempts, got {len(repair_between)}")
 
         final_reads_ok, missing_final_reads = reads_after(events, status_paths(run_id), last_certifier)
         if final_reads_ok:
@@ -385,6 +407,7 @@ def monitor_agentic_trace(trace_path: Path, run_id: str, root: Path | None = Non
             for event in approved_read_only_tool_calls
         ],
         "read_paths": read_paths,
+        "unexpected_read_paths": unexpected_read_paths,
         "memory_reads": memory_reads,
         "status_values": status_values,
         "status_artifacts_agree": statuses_agree(status_values),

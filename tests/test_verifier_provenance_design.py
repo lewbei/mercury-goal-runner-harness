@@ -153,7 +153,7 @@ class VerifierProvenanceDesignTests(unittest.TestCase):
         problem = (ROOT / "PROBLEM_AND_GAP.md").read_text(encoding="utf-8")
 
         self.assertIn("Verifier-Provenance Goal Runner Harness", readme)
-        self.assertIn("Mercury Goal Runner Harness v2.7", status)
+        self.assertIn("Mercury Goal Runner Harness v2.8", status)
         self.assertIn("Verifier-Provenance Goal Runner Harness", status)
         self.assertNotIn("v0.4 should add evidence-seeking branch selection", readme)
         self.assertNotIn("we solve verification", problem.lower())

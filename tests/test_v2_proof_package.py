@@ -63,6 +63,8 @@ class V2ProofPackageTests(unittest.TestCase):
             "real_pi_interactive_smoke_docs",
             "real_pi_session_monitor",
             "real_pi_session_trace_capture",
+            "agentic_autonomy_probe",
+            "agentic_negative_probes",
             "full_unittest",
             "benchmark",
         ]:
@@ -88,6 +90,8 @@ class V2ProofPackageTests(unittest.TestCase):
         self.assertIn("real_pi_interactive_smoke_docs", claim_ids)
         self.assertIn("real_pi_session_monitor", claim_ids)
         self.assertIn("real_pi_session_trace_capture", claim_ids)
+        self.assertIn("agentic_autonomy_probe", claim_ids)
+        self.assertIn("agentic_negative_probes", claim_ids)
         self.assertNotIn("benchmark", claim_ids)
 
     def test_quick_proof_runner_outputs_only_under_agentic_runs(self):

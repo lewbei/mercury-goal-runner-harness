@@ -18,8 +18,9 @@ class FrameworkDocTests(unittest.TestCase):
     def test_framework_doc_records_current_v26_state(self):
         doc = (ROOT / "FRAMEWORK.md").read_text(encoding="utf-8")
 
-        self.assertIn("v2.7 = Real Pi Agentic Autonomy Probe", doc)
+        self.assertIn("v2.8 = Agentic Negative-Probe Hardening", doc)
         self.assertIn("Real Pi Agentic Autonomy Probe Layer", doc)
+        self.assertIn("Agentic Negative-Probe Hardening Layer", doc)
         self.assertIn("raw_simple_legacy -> DONE_PASS", doc)
         self.assertIn("raw_p2_provenance -> CERTIFIED_DONE", doc)
         self.assertIn("raw_missing_verifier -> NOT_DONE", doc)
