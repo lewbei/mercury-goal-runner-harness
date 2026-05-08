@@ -439,6 +439,16 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("does not prove arbitrary prompts", doc)
         self.assertIn("Final status still comes only from", doc)
 
+    def test_v34_doc_records_rpg_test_aggregation_boundary(self):
+        doc = read(ROOT / "docs" / "V3_4_RPG_TEST_AGGREGATION.md")
+
+        self.assertIn("RPG TEST AGGREGATION IMPLEMENTED", doc)
+        self.assertIn("rpg_test_aggregator.py", doc)
+        self.assertIn("false_certified_done_rate_bps", doc)
+        self.assertIn("monitor_miss_rate_bps", doc)
+        self.assertIn("confidence_intervals_bps", doc)
+        self.assertIn("The aggregator cannot certify DONE", doc)
+
     def test_framework_doc_is_linked_from_status_docs(self):
         readme = read(ROOT / "README.md")
         status = read(ROOT / "PROJECT_STATUS.md")
@@ -477,6 +487,9 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("V3_0_REAL_PI_BEHAVIOR_EVALUATION.md", status)
         self.assertIn("V3_1_REAL_PI_PROMPT_COVERAGE.md", readme)
         self.assertIn("V3_1_REAL_PI_PROMPT_COVERAGE.md", status)
+        self.assertIn("V3_2_RUNTIME_ENFORCEMENT_PROOF.md", readme)
+        self.assertIn("RPG_HARNESS_TEST_FORM.md", readme)
+        self.assertIn("V3_4_RPG_TEST_AGGREGATION.md", readme)
         self.assertIn("V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md", readme)
         self.assertIn("V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md", status)
 

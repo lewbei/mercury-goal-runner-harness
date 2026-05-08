@@ -1,6 +1,6 @@
 {
-  "proof_matrix_id": "verifier_provenance_harness_v3_3",
-  "version": "v3.3",
+  "proof_matrix_id": "verifier_provenance_harness_v3_4",
+  "version": "v3.4",
   "entries": [
     {
       "claim_id": "domain_packs",
@@ -157,6 +157,14 @@
       "command": ["python", "tests/test_rpg_test_record.py", "-v"],
       "expected_evidence": ["schema-valid template", "failure can become regression fixture", "can_certify_done remains false"],
       "claim_boundary": "Test-record contract only; not statistical proof beyond the records actually collected."
+    },
+    {
+      "claim_id": "rpg_test_aggregation",
+      "claim": "RPG test-record aggregation reports false-certified, monitor-miss, false-block, and confidence-interval metrics without certifying DONE.",
+      "mode": "quick",
+      "command": ["python", "tests/test_rpg_test_aggregator.py", "-v"],
+      "expected_evidence": ["schema-valid aggregation result", "false CERTIFIED_DONE breaks stopping rule", "can_certify_done remains false"],
+      "claim_boundary": "Statistical evidence only over collected records; not proof of arbitrary prompt coverage."
     },
     {
       "claim_id": "full_unittest",

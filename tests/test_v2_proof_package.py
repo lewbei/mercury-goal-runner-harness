@@ -71,6 +71,7 @@ class V2ProofPackageTests(unittest.TestCase):
             "adversarial_red_team_loop",
             "runtime_enforcement",
             "rpg_test_record",
+            "rpg_test_aggregation",
             "full_unittest",
             "benchmark",
         ]:
@@ -104,6 +105,7 @@ class V2ProofPackageTests(unittest.TestCase):
         self.assertIn("adversarial_red_team_loop", claim_ids)
         self.assertIn("runtime_enforcement", claim_ids)
         self.assertIn("rpg_test_record", claim_ids)
+        self.assertIn("rpg_test_aggregation", claim_ids)
         self.assertNotIn("benchmark", claim_ids)
 
     def test_quick_proof_runner_outputs_only_under_agentic_runs(self):

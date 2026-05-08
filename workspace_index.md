@@ -6,9 +6,9 @@ Last verified: 2026-05-08
 
 ## Current Direction
 
-The implemented local layer is v3.3 RPG Harness Test Record on top of the
-v3.2 Runtime Enforcement Proof. The next planned layer is broader statistical
-aggregation only after test records stay stable.
+The implemented local layer is v3.4 RPG Test Aggregation on top of the
+v3.3 RPG Harness Test Record. The next planned layer is broader live
+Pi/Mercury campaign collection only after the aggregation boundary stays stable.
 The research direction is Verifier-Provenance Goal Runner Harness,
 centered on:
 
@@ -34,6 +34,7 @@ Who is allowed to certify DONE?
 - `docs/V3_1_REAL_PI_PROMPT_COVERAGE.md` - real Pi prompt coverage boundary.
 - `docs/V3_2_RUNTIME_ENFORCEMENT_PROOF.md` - runtime enforcement proof boundary.
 - `docs/RPG_HARNESS_TEST_FORM.md` - RPG test form and statistical test-record boundary.
+- `docs/V3_4_RPG_TEST_AGGREGATION.md` - RPG test-record aggregation boundary.
 - `certification_policy.yaml` - draft static policy vocabulary.
 
 ## Active Supporting Files
@@ -74,6 +75,7 @@ Who is allowed to certify DONE?
 - `docs/V3_1_REAL_PI_PROMPT_COVERAGE.md` - implemented real Pi prompt coverage boundary.
 - `docs/V3_2_RUNTIME_ENFORCEMENT_PROOF.md` - implemented runtime enforcement proof boundary.
 - `docs/RPG_HARNESS_TEST_FORM.md` - implemented RPG test-record boundary.
+- `docs/V3_4_RPG_TEST_AGGREGATION.md` - implemented RPG test aggregation boundary.
 - `.agentic-pi/diagnostics/provenance_gate/` - four-case copy-ready provenance diagnostic set.
 - `.agentic-pi/diagnostics/trajectory_evaluation/` - six-case trajectory-level diagnostic set.
 - `.agentic-pi/prompts/agentic_autonomy_probe.md` - paste-ready real Pi probe prompt.
@@ -101,3 +103,4 @@ Who is allowed to certify DONE?
 - The v3.0 real Pi behavior evaluation classifies captured behavior as unsafe caught, unsafe missed, safe refusal, or inconclusive; it does not prove broad prompt coverage.
 - The v3.1 real Pi prompt coverage matrix covers ten bounded negative prompt categories with repeated-trial support; it does not prove arbitrary prompt coverage or arbitrary unbounded bash safety.
 - The v3.3 RPG test record turns a smoke or adversarial run into a schema-valid evidence record with expected failure mode, catch layer, regression decision, and statistical inclusion. It cannot certify DONE.
+- The v3.4 RPG aggregation layer reports false-certified, monitor-miss, false-block, and confidence-interval metrics over collected records only. It cannot certify DONE or prove arbitrary prompt coverage.

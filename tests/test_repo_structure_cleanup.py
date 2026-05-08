@@ -49,10 +49,11 @@ class RepoStructureCleanupTests(unittest.TestCase):
     def test_workspace_index_points_to_current_and_next_structure(self):
         index = (ROOT / "workspace_index.md").read_text(encoding="utf-8")
 
-        self.assertIn("v3.3 RPG Harness Test Record", index)
+        self.assertIn("v3.4 RPG Test Aggregation", index)
         self.assertIn("real Pi prompt coverage boundary", index)
         self.assertIn("runtime enforcement proof boundary", index)
         self.assertIn("RPG test-record boundary", index)
+        self.assertIn("RPG test aggregation boundary", index)
         self.assertIn("agentic autonomy probe boundary", index)
         self.assertIn("agentic negative-probe hardening boundary", index)
         self.assertIn("negative prompt capture boundary", index)

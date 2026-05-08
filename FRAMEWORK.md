@@ -34,7 +34,7 @@ Pi only reports what the certifier wrote.
 Current pushed state:
 
 ```text
-v3.3 = RPG Harness Test Record
+v3.4 = RPG Test Aggregation
 ```
 
 The deterministic raw-goal proof cases are:
@@ -213,6 +213,15 @@ This records what a test tried to prove, which failure mode was expected, which
 validator should catch it, whether it becomes a regression fixture, and whether
 the sample should enter statistics. It cannot certify DONE.
 
+v3.4 aggregates collected RPG test records:
+
+```text
+RPG test records -> rpg_test_aggregator.py -> false-certified / monitor-miss / false-block metrics
+```
+
+This reports statistics and confidence intervals over schema-valid collected
+records. It cannot certify DONE or prove arbitrary prompt coverage.
+
 ## Conceptual Architecture
 
 ```text
@@ -258,6 +267,7 @@ Raw Goal
   -> Real Pi Prompt Coverage Evaluation
   -> Runtime Enforcement Proof
   -> RPG Harness Test Record
+  -> RPG Test Aggregation
   -> Audit / Replay
   -> Final Status
   -> Pi Reports Status Only
@@ -429,6 +439,11 @@ Raw Goal
     expected graph path, actual result, evidence paths, regression decision,
     after-patch gate, and statistical inclusion. It turns failed Pi/Mercury
     behavior into regression evidence. It cannot certify DONE.
+
+33. RPG Test Aggregation Layer
+    Reads schema-valid RPG test records and reports false-certified,
+    monitor-miss, false-block, regression, patch-needed, and confidence
+    interval metrics. It cannot certify DONE.
 ```
 
 ## Authority Model
@@ -524,7 +539,9 @@ top-level folders. The implemented files are:
 .agentic-pi/runtime/command_gateway.py
 .agentic-pi/runtime/protected_file_guard.py
 .agentic-pi/runtime/run_enforced_pi_smoke.py
+.agentic-pi/runtime/rpg_test_aggregator.py
 .agentic-pi/schemas/rpg_test_record.schema.json
+.agentic-pi/schemas/rpg_test_aggregation_result.schema.json
 .agentic-pi/templates/rpg_test_record.template.json
 
 .agentic-pi/evaluation/trajectory_metrics.py
@@ -675,6 +692,7 @@ real Pi behavior evaluation -> captured negative prompt behavior -> caught / mis
 real Pi prompt coverage evaluation -> bounded prompt matrix -> caught / missed / safe_refusal / inconclusive by category/trial
 runtime enforcement proof -> command gateway -> protected file guard -> accepted status or MONITOR_FAIL
 RPG harness test record -> expected failure mode -> catch layer -> regression decision
+RPG test aggregation -> collected records -> statistical metrics and confidence intervals
 P0/P1/P2/missing verifier policy behavior
 smell report recording
 strength report recording
@@ -701,6 +719,7 @@ live behavior evaluation on a large adversarial prompt set
 broad real Pi prompt coverage beyond the current bounded matrix
 arbitrary command-gateway bypasses
 statistical proof beyond recorded RPG test records
+live campaign quality beyond collected RPG records
 global Pi extension compatibility during Pi chain smoke
 live Mercury planning quality
 semantic optimality of selected branches
@@ -744,6 +763,7 @@ python tests\test_real_pi_behavior_evaluation.py -v
 python tests\test_real_pi_behavior_matrix.py -v
 python .agentic-pi\runtime\run_proof_matrix.py --mode quick
 python tests\test_rpg_test_record.py -v
+python tests\test_rpg_test_aggregator.py -v
 python .agentic-pi\runtime\run_pi_chain_smoke.py --target-run-id pi_smoke_chain_p2_strong
 python -m unittest discover tests -v
 python .agentic-pi\diagnostics\evaluation\run_diagnostic_evaluation.py

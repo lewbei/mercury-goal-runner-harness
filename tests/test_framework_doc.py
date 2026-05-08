@@ -18,7 +18,7 @@ class FrameworkDocTests(unittest.TestCase):
     def test_framework_doc_records_current_state(self):
         doc = (ROOT / "FRAMEWORK.md").read_text(encoding="utf-8")
 
-        self.assertIn("v3.3 = RPG Harness Test Record", doc)
+        self.assertIn("v3.4 = RPG Test Aggregation", doc)
         self.assertIn("Real Pi Agentic Autonomy Probe Layer", doc)
         self.assertIn("Agentic Negative-Probe Hardening Layer", doc)
         self.assertIn("Live Negative Prompt Capture Layer", doc)
@@ -26,6 +26,7 @@ class FrameworkDocTests(unittest.TestCase):
         self.assertIn("Real Pi Prompt Coverage Evaluation Layer", doc)
         self.assertIn("Runtime Enforcement Proof Layer", doc)
         self.assertIn("RPG Harness Test Record Layer", doc)
+        self.assertIn("RPG Test Aggregation Layer", doc)
         self.assertIn("raw_simple_legacy -> DONE_PASS", doc)
         self.assertIn("raw_p2_provenance -> CERTIFIED_DONE", doc)
         self.assertIn("raw_missing_verifier -> NOT_DONE", doc)
@@ -49,6 +50,7 @@ class FrameworkDocTests(unittest.TestCase):
         self.assertIn("captured prompt matrix -> run_real_pi_behavior_matrix.py -> caught / missed / safe_refusal / inconclusive by category/trial", doc)
         self.assertIn("Pi/Mercury-shaped command -> command_gateway.py -> protected_file_guard.py", doc)
         self.assertIn("Pi/Mercury trace -> RPG test record -> regression decision -> deterministic gates", doc)
+        self.assertIn("RPG test records -> rpg_test_aggregator.py -> false-certified / monitor-miss / false-block metrics", doc)
 
     def test_framework_doc_uses_actual_current_paths(self):
         doc = (ROOT / "FRAMEWORK.md").read_text(encoding="utf-8")
@@ -71,7 +73,9 @@ class FrameworkDocTests(unittest.TestCase):
             ".agentic-pi/runtime/command_gateway.py",
             ".agentic-pi/runtime/protected_file_guard.py",
             ".agentic-pi/runtime/run_enforced_pi_smoke.py",
+            ".agentic-pi/runtime/rpg_test_aggregator.py",
             ".agentic-pi/schemas/rpg_test_record.schema.json",
+            ".agentic-pi/schemas/rpg_test_aggregation_result.schema.json",
             ".agentic-pi/templates/rpg_test_record.template.json",
             ".agentic-pi/prompts/negative_autonomy/",
             ".agentic-pi/prompts/real_behavior_matrix/",
@@ -137,6 +141,7 @@ class FrameworkDocTests(unittest.TestCase):
         self.assertIn("broad real Pi prompt coverage beyond the current bounded matrix", doc)
         self.assertIn("arbitrary command-gateway bypasses", doc)
         self.assertIn("statistical proof beyond recorded RPG test records", doc)
+        self.assertIn("live campaign quality beyond collected RPG records", doc)
         self.assertIn("semantic quality of milestones", doc)
         self.assertIn("automatic repair application", doc)
         self.assertIn("deterministic trajectory evaluation", doc)
