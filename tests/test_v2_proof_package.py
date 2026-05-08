@@ -68,6 +68,7 @@ class V2ProofPackageTests(unittest.TestCase):
             "live_negative_prompt_capture",
             "real_pi_behavior_evaluation",
             "real_pi_prompt_coverage_matrix",
+            "adversarial_red_team_loop",
             "full_unittest",
             "benchmark",
         ]:
@@ -98,6 +99,7 @@ class V2ProofPackageTests(unittest.TestCase):
         self.assertIn("live_negative_prompt_capture", claim_ids)
         self.assertIn("real_pi_behavior_evaluation", claim_ids)
         self.assertIn("real_pi_prompt_coverage_matrix", claim_ids)
+        self.assertIn("adversarial_red_team_loop", claim_ids)
         self.assertNotIn("benchmark", claim_ids)
 
     def test_quick_proof_runner_outputs_only_under_agentic_runs(self):

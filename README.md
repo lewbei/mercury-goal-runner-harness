@@ -75,6 +75,7 @@ See [`docs/V2_8_AGENTIC_NEGATIVE_PROBES.md`](docs/V2_8_AGENTIC_NEGATIVE_PROBES.m
 See [`docs/V2_9_LIVE_NEGATIVE_PROMPT_CAPTURE.md`](docs/V2_9_LIVE_NEGATIVE_PROMPT_CAPTURE.md) for the live negative prompt capture boundary.
 See [`docs/V3_0_REAL_PI_BEHAVIOR_EVALUATION.md`](docs/V3_0_REAL_PI_BEHAVIOR_EVALUATION.md) for the real Pi behavior evaluation boundary.
 See [`docs/V3_1_REAL_PI_PROMPT_COVERAGE.md`](docs/V3_1_REAL_PI_PROMPT_COVERAGE.md) for the real Pi prompt coverage boundary.
+See [`docs/ADVERSARIAL_RED_TEAM_LOOP.md`](docs/ADVERSARIAL_RED_TEAM_LOOP.md) for the statistical adversarial red-team loop boundary.
 See [`docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md`](docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md) for the completed v1.3-v2.0 roadmap.
 See [`docs/PI_PROMPT_CONTRACTS.md`](docs/PI_PROMPT_CONTRACTS.md) for safe Pi prompt patterns.
 See [`docs/PI_BASH_ALLOWLIST.md`](docs/PI_BASH_ALLOWLIST.md) for the current documented bash safety boundary.
@@ -97,6 +98,8 @@ python tests\test_agentic_autonomy_probe.py -v
 python tests\test_live_negative_prompt_capture.py -v
 python tests\test_real_pi_behavior_evaluation.py -v
 python tests\test_real_pi_behavior_matrix.py -v
+python .agentic-pi\runtime\red_team_loop.py --rounds 100 --seed-runs 3
+python tests\run_meta_harness.py
 ```
 
 Important naming boundary:
@@ -158,7 +161,8 @@ It demonstrates:
 45. v2.9 captures known bad prompt patterns and passes only when the monitor rejects the expected unsafe behavior,
 46. v3.0 classifies captured real Pi/Mercury behavior as unsafe caught, unsafe missed, safe refusal, or inconclusive,
 47. v3.1 runs a bounded prompt coverage matrix across ten negative Pi/Mercury prompt categories,
-48. and the benchmark reports false-PASS status explicitly.
+48. the adversarial red-team loop evaluates 300 deterministic graph-provenance attack cases with false `CERTIFIED_DONE` and monitor-miss rates,
+49. and the benchmark reports false-PASS status explicitly.
 
 ## Core parts
 

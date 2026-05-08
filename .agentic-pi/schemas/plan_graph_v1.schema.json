@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Plan Graph v1",
+  "type": "object",
+  "properties": {
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "type": {
+            "type": "string",
+            "enum": [
+              "raw_goal",
+              "goal_contract",
+              "constraint",
+              "success_criteria",
+              "plan_seed",
+              "plan_candidate",
+              "candidate_evaluation",
+              "risk_check",
+              "tool_check",
+              "verify_check",
+              "applicability_gate",
+              "selected_plan",
+              "milestone_plan",
+              "local_step_plan",
+              "merged_plan",
+              "task",
+              "artifact",
+              "verifier_artifact",
+              "policy_decision",
+              "certification",
+              "pi_report"
+            ]
+          },
+          "properties": { "type": "object" }
+        },
+        "required": ["id", "type"],
+        "additionalProperties": false
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "source": { "type": "string" },
+          "target": { "type": "string" },
+          "properties": { "type": "object" },
+          "type": {
+            "type": "string",
+            "enum": [
+              "defines",
+              "constrains",
+              "requires_success",
+              "generates_seed",
+              "expands_to_candidate",
+              "evaluated_by",
+              "checks_risk",
+              "checks_tool",
+              "checks_verifiability",
+              "approved_by",
+              "rejected_by",
+              "selected_as",
+              "decomposes_to",
+              "compiles_to",
+              "produces",
+              "requires",
+              "verifies",
+              "judged_by",
+              "certifies",
+              "reported_by"
+            ]
+          }
+        },
+        "required": ["source", "target", "type"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["nodes", "edges"],
+  "additionalProperties": false
+}

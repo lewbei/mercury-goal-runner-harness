@@ -1,7 +1,48 @@
-﻿{
+{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "GoalContract",
   "type": "object",
+  "properties": {
+    "run_id": {"type": "string"},
+    "raw_user_prompt": {"type": "string"},
+    "intent": {"type": "string"},
+    "cleaned_goal": {"type": "string"},
+    "final_outputs": {"type": "array", "items": {"type": "string"}},
+    "explicit_constraints": {"type": "array", "items": {"type": "string"}},
+    "inferred_constraints": {"type": "array", "items": {"type": "string"}},
+    "forbidden_actions": {"type": "array", "items": {"type": "string"}},
+    "ambiguities": {"type": "array", "items": {"type": "string"}},
+    "risk_level": {"type": "string", "enum": ["LOW", "MEDIUM", "HIGH"]},
+    "complexity_level": {"type": "string", "enum": ["SIMPLE", "MEDIUM", "HARD", "RISKY"]},
+    "done_criteria": {"type": "array", "items": {"type": "string"}},
+    "failure_criteria": {"type": "array", "items": {"type": "string"}},
+    "ask_user_conditions": {"type": "array", "items": {"type": "string"}},
+    "max_steps": {"type": "integer"},
+    "execution_prompt": {"type": "string"},
+    "artifact_tests": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["test_id", "type"],
+        "properties": {
+          "test_id": {"type": "string"},
+          "type": {
+            "type": "string",
+            "enum": ["command"]
+          },
+          "cmd": {"type": "string"},
+          "expect_exit_code": {"type": "integer"},
+          "expect_stdout_contains": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "expect_stdout_lines_min": {"type": "integer"},
+          "expect_file_exists": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
   "required": [
     "run_id",
     "raw_user_prompt",
@@ -20,76 +61,5 @@
     "max_steps",
     "execution_prompt"
   ],
-  "properties": {
-    "run_id": { "type": "string" },
-    "raw_user_prompt": { "type": "string" },
-    "intent": { "type": "string" },
-    "cleaned_goal": { "type": "string" },
-    "final_outputs": {
-      "type": "array",
-      "items": { "type": "string" }
-    },
-    "explicit_constraints": {
-      "type": "array",
-      "items": { "type": "string" }
-    },
-    "inferred_constraints": {
-      "type": "array",
-      "items": { "type": "string" }
-    },
-    "forbidden_actions": {
-      "type": "array",
-      "items": { "type": "string" }
-    },
-    "ambiguities": {
-      "type": "array",
-      "items": { "type": "string" }
-    },
-    "risk_level": {
-      "type": "string",
-      "enum": ["LOW", "MEDIUM", "HIGH"]
-    },
-    "complexity_level": {
-      "type": "string",
-      "enum": ["SIMPLE", "MEDIUM", "HARD", "RISKY"]
-    },
-    "done_criteria": {
-      "type": "array",
-      "items": { "type": "string" }
-    },
-    "failure_criteria": {
-      "type": "array",
-      "items": { "type": "string" }
-    },
-    "ask_user_conditions": {
-      "type": "array",
-      "items": { "type": "string" }
-    },
-    "max_steps": { "type": "integer" },
-    "execution_prompt": { "type": "string" },
-    "artifact_tests": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": ["test_id", "type"],
-        "properties": {
-          "test_id": { "type": "string" },
-          "type": {
-            "type": "string",
-            "enum": ["command"]
-          },
-          "cmd": { "type": "string" },
-          "expect_exit_code": { "type": "integer" },
-          "expect_stdout_contains": {
-            "type": "array",
-            "items": { "type": "string" }
-          },
-          "expect_stdout_lines_min": { "type": "integer" },
-          "expect_file_exists": { "type": "string" }
-        },
-        "additionalProperties": false
-      }
-    }
-  },
   "additionalProperties": false
 }

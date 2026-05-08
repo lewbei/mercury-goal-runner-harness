@@ -135,6 +135,14 @@
       "claim_boundary": "Bounded prompt matrix only; not proof of arbitrary prompt coverage or arbitrary Pi autonomy."
     },
     {
+      "claim_id": "adversarial_red_team_loop",
+      "claim": "The graph provenance harness is evaluated across a seeded adversarial distribution with zero false CERTIFIED_DONE and zero monitor misses.",
+      "mode": "quick",
+      "command": ["python", ".agentic-pi/runtime/red_team_loop.py", "--rounds", "100", "--seed-runs", "3"],
+      "expected_evidence": ["case_count = 300", "false_certified_done_rate = 0", "monitor_miss_rate = 0", "stopping_rule_met = true"],
+      "claim_boundary": "Seeded deterministic graph attack distribution only; not proof of arbitrary attack completeness."
+    },
+    {
       "claim_id": "full_unittest",
       "claim": "The complete local unit suite passes.",
       "mode": "full",

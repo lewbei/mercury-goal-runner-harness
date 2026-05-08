@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Harness Terms",
+  "type": "object",
+  "properties": {
+    "terms": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "Goal",
+          "Goal Contract",
+          "Constraint",
+          "Success Criteria",
+          "Plan Seed",
+          "Plan Candidate",
+          "Candidate Evaluation",
+          "Risk Check",
+          "Tool Check",
+          "Verify Check",
+          "Applicability Gate",
+          "Selected Plan",
+          "Milestone Plan",
+          "Local Step Plan",
+          "Merged Plan",
+          "Task Graph",
+          "Artifact Graph",
+          "Verifier Graph",
+          "Policy Decision",
+          "Certification",
+          "Pi Report",
+          "Monitor Verdict"
+        ]
+      },
+      "uniqueItems": true
+    }
+  },
+  "required": ["terms"],
+  "additionalProperties": false
+}
