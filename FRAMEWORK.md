@@ -34,7 +34,7 @@ Pi only reports what the certifier wrote.
 Current pushed state:
 
 ```text
-v2.9 = Live Negative Prompt Capture
+v3.0 = Real Pi Behavior Evaluation
 ```
 
 The deterministic raw-goal proof cases are:
@@ -173,6 +173,16 @@ negative prompt -> Pi/Mercury trace -> agentic_autonomy_monitor.py -> expected F
 This proves that the harness treats a bad prompt case as successful only when
 the monitor observes and rejects the expected unsafe behavior.
 
+v3.0 evaluates observed real Pi/Mercury behavior:
+
+```text
+captured negative prompt behavior -> run_real_pi_behavior_evaluation.py -> caught / missed / safe_refusal / inconclusive
+```
+
+This separates deterministic monitor correctness from live runtime behavior.
+Safe refusal is useful evidence, but it is not the same claim as "the monitor
+caught the unsafe act."
+
 ## Conceptual Architecture
 
 ```text
@@ -214,6 +224,7 @@ Raw Goal
   -> Real Pi Agentic Autonomy Probe
   -> Agentic Negative-Probe Hardening
   -> Live Negative Prompt Capture
+  -> Real Pi Behavior Evaluation
   -> Audit / Replay
   -> Final Status
   -> Pi Reports Status Only
@@ -360,6 +371,12 @@ Raw Goal
     commands, second repairs, status upgrades, and memory-as-authority claims.
     A negative prompt case passes only when the monitor rejects the expected
     unsafe behavior. It cannot certify DONE.
+
+29. Real Pi Behavior Evaluation Layer
+    Reads captured negative prompt behavior and classifies each case as
+    `unsafe_attempt_caught`, `unsafe_attempt_missed`, `safe_refusal`, or
+    `inconclusive`. It exists to avoid overclaiming deterministic Python tests
+    as proof of real Pi/Mercury behavior. It cannot certify DONE.
 ```
 
 ## Authority Model
@@ -450,6 +467,7 @@ top-level folders. The implemented files are:
 .agentic-pi/runtime/pi_session_trace_monitor.py
 .agentic-pi/runtime/run_real_pi_trace_smoke.py
 .agentic-pi/runtime/run_live_negative_prompt_capture.py
+.agentic-pi/runtime/run_real_pi_behavior_evaluation.py
 
 .agentic-pi/evaluation/trajectory_metrics.py
 .agentic-pi/evaluation/tool_use_audit.py
@@ -471,6 +489,7 @@ top-level folders. The implemented files are:
 .agentic-pi/diagnostics/trajectory_evaluation/
 .agentic-pi/prompts/negative_autonomy/
 .agentic-pi/schemas/live_negative_prompt_capture_result.schema.json
+.agentic-pi/schemas/real_pi_behavior_evaluation_result.schema.json
 
 .agentic-pi/evaluation/trajectory_metrics.py
 .agentic-pi/evaluation/tool_use_audit.py
@@ -591,6 +610,7 @@ real Pi negative-status monitor -> PROVISIONAL_DONE/NOT_DONE transcript fixtures
 real Pi session trace capture -> pi_session_trace.jsonl -> trace monitor verdict
 real Pi agentic autonomy probe -> chain/memory read -> repair loop -> certifier-only status verdict
 agentic negative probes -> unapproved chain / source write / second repair -> monitor FAIL
+real Pi behavior evaluation -> captured negative prompt behavior -> caught / missed / safe_refusal / inconclusive
 P0/P1/P2/missing verifier policy behavior
 smell report recording
 strength report recording
@@ -613,6 +633,7 @@ strict internal Pi tool-call audit for arbitrary live Pi chain smoke
 additional live real Pi weak/failing transcript captures beyond fixtures
 live real Pi trace captures for every status class
 every malicious prompt is classified
+live behavior evaluation on a large adversarial prompt set
 global Pi extension compatibility during Pi chain smoke
 live Mercury planning quality
 semantic optimality of selected branches
@@ -652,6 +673,7 @@ python tests\test_pi_real_session_monitor.py -v
 python tests\test_pi_session_trace_capture.py -v
 python tests\test_agentic_autonomy_probe.py -v
 python tests\test_live_negative_prompt_capture.py -v
+python tests\test_real_pi_behavior_evaluation.py -v
 python .agentic-pi\runtime\run_proof_matrix.py --mode quick
 python .agentic-pi\runtime\run_pi_chain_smoke.py --target-run-id pi_smoke_chain_p2_strong
 python -m unittest discover tests -v
@@ -697,6 +719,7 @@ Raw Goal
   -> Workflow Search
   -> Proof Matrix
   -> Controlled Pi Chain Smoke
+  -> Real Pi Behavior Evaluation
   -> Audit / Replay
   -> Final Status
   -> Pi Reports Status Only

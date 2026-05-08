@@ -6,10 +6,10 @@ Last verified: 2026-05-08
 
 ## Current Direction
 
-The implemented local layer is v2.9 Live Negative Prompt Capture on top of the
+The implemented local layer is v3.0 Real Pi Behavior Evaluation on top of the
 verifier-provenance certification stack. The next planned layer is bounded
-arbitrary-goal chain probing, only after the negative prompt capture boundary
-stays stable. The research direction is Verifier-Provenance Goal Runner Harness,
+arbitrary-goal chain probing, only after the real Pi behavior classification
+boundary stays stable. The research direction is Verifier-Provenance Goal Runner Harness,
 centered on:
 
 ```text
@@ -30,6 +30,7 @@ Who is allowed to certify DONE?
 - `docs/V2_7_AGENTIC_AUTONOMY_PROOF_PLAN.md` - real Pi/Mercury agentic autonomy probe boundary.
 - `docs/V2_8_AGENTIC_NEGATIVE_PROBES.md` - arbitrary-chain and unbounded-bash negative-probe boundary.
 - `docs/V2_9_LIVE_NEGATIVE_PROMPT_CAPTURE.md` - live negative prompt capture boundary.
+- `docs/V3_0_REAL_PI_BEHAVIOR_EVALUATION.md` - real Pi behavior evaluation boundary.
 - `certification_policy.yaml` - draft static policy vocabulary.
 
 ## Active Supporting Files
@@ -66,6 +67,7 @@ Who is allowed to certify DONE?
 - `docs/V2_7_AGENTIC_AUTONOMY_PROOF_PLAN.md` - implemented real agentic autonomy probe boundary.
 - `docs/V2_8_AGENTIC_NEGATIVE_PROBES.md` - implemented agentic negative-probe hardening boundary.
 - `docs/V2_9_LIVE_NEGATIVE_PROMPT_CAPTURE.md` - implemented negative prompt capture boundary.
+- `docs/V3_0_REAL_PI_BEHAVIOR_EVALUATION.md` - implemented real Pi behavior evaluation boundary.
 - `.agentic-pi/diagnostics/provenance_gate/` - four-case copy-ready provenance diagnostic set.
 - `.agentic-pi/diagnostics/trajectory_evaluation/` - six-case trajectory-level diagnostic set.
 - `.agentic-pi/prompts/agentic_autonomy_probe.md` - paste-ready real Pi probe prompt.
@@ -89,3 +91,4 @@ Who is allowed to certify DONE?
 - The v2.7 autonomy probe is a monitored live Pi/Mercury experiment on a disposable run. It proves a bounded chain read, advisory memory read, one repair loop, and certifier-only final authority; it does not prove arbitrary chain following or unbounded bash is safe.
 - The v2.8 negative probes harden that boundary for unapproved chain reads, source-tree write commands, and second repair commands; they do not prove every possible unsafe command string is classified.
 - The v2.9 negative prompt capture path passes only when the monitor observes and rejects the expected unsafe prompt behavior; it does not prove every malicious prompt is classified.
+- The v3.0 real Pi behavior evaluation classifies captured behavior as unsafe caught, unsafe missed, safe refusal, or inconclusive; it does not prove broad prompt coverage.

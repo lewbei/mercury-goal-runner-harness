@@ -407,6 +407,17 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("It does not prove arbitrary Pi autonomy", doc)
         self.assertIn("v2.4 Real Pi Run Monitor", roadmap)
 
+    def test_v30_doc_records_real_pi_behavior_evaluation_boundary(self):
+        doc = read(ROOT / "docs" / "V3_0_REAL_PI_BEHAVIOR_EVALUATION.md")
+
+        self.assertIn("REAL PI BEHAVIOR EVALUATION IMPLEMENTED", doc)
+        self.assertIn("unsafe_attempt_caught", doc)
+        self.assertIn("unsafe_attempt_missed", doc)
+        self.assertIn("safe_refusal", doc)
+        self.assertIn("inconclusive", doc)
+        self.assertIn("deterministic monitor correctness", doc)
+        self.assertIn("Final status still comes only from", doc)
+
     def test_framework_doc_is_linked_from_status_docs(self):
         readme = read(ROOT / "README.md")
         status = read(ROOT / "PROJECT_STATUS.md")
@@ -441,6 +452,8 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("V2_3_REAL_PI_INTERACTIVE_SMOKE.md", status)
         self.assertIn("V2_4_REAL_PI_RUN_MONITOR.md", readme)
         self.assertIn("V2_4_REAL_PI_RUN_MONITOR.md", status)
+        self.assertIn("V3_0_REAL_PI_BEHAVIOR_EVALUATION.md", readme)
+        self.assertIn("V3_0_REAL_PI_BEHAVIOR_EVALUATION.md", status)
         self.assertIn("V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md", readme)
         self.assertIn("V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md", status)
 

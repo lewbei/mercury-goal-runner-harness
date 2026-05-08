@@ -15,13 +15,14 @@ class FrameworkDocTests(unittest.TestCase):
         self.assertIn("Certifier writes the final status.", doc)
         self.assertIn("Pi only reports what the certifier wrote.", doc)
 
-    def test_framework_doc_records_current_v26_state(self):
+    def test_framework_doc_records_current_state(self):
         doc = (ROOT / "FRAMEWORK.md").read_text(encoding="utf-8")
 
-        self.assertIn("v2.9 = Live Negative Prompt Capture", doc)
+        self.assertIn("v3.0 = Real Pi Behavior Evaluation", doc)
         self.assertIn("Real Pi Agentic Autonomy Probe Layer", doc)
         self.assertIn("Agentic Negative-Probe Hardening Layer", doc)
         self.assertIn("Live Negative Prompt Capture Layer", doc)
+        self.assertIn("Real Pi Behavior Evaluation Layer", doc)
         self.assertIn("raw_simple_legacy -> DONE_PASS", doc)
         self.assertIn("raw_p2_provenance -> CERTIFIED_DONE", doc)
         self.assertIn("raw_missing_verifier -> NOT_DONE", doc)
@@ -41,6 +42,7 @@ class FrameworkDocTests(unittest.TestCase):
         self.assertIn("captured real Pi negative-status transcript -> pi_real_session_monitor.py", doc)
         self.assertIn("real Pi stdout/transcript -> pi_session_trace.jsonl -> pi_session_trace_monitor.py", doc)
         self.assertIn("negative prompt -> Pi/Mercury trace -> agentic_autonomy_monitor.py -> expected FAIL", doc)
+        self.assertIn("captured negative prompt behavior -> run_real_pi_behavior_evaluation.py -> caught / missed / safe_refusal / inconclusive", doc)
 
     def test_framework_doc_uses_actual_current_paths(self):
         doc = (ROOT / "FRAMEWORK.md").read_text(encoding="utf-8")
@@ -58,8 +60,10 @@ class FrameworkDocTests(unittest.TestCase):
             ".agentic-pi/runtime/pi_session_trace_monitor.py",
             ".agentic-pi/runtime/run_real_pi_trace_smoke.py",
             ".agentic-pi/runtime/run_live_negative_prompt_capture.py",
+            ".agentic-pi/runtime/run_real_pi_behavior_evaluation.py",
             ".agentic-pi/prompts/negative_autonomy/",
             ".agentic-pi/schemas/live_negative_prompt_capture_result.schema.json",
+            ".agentic-pi/schemas/real_pi_behavior_evaluation_result.schema.json",
             ".agentic-pi/diagnostics/pi_real_interactive/",
             ".agentic-pi/runtime/capability_inventory.py",
             ".agentic-pi/runtime/strategy_generator.py",
@@ -114,6 +118,7 @@ class FrameworkDocTests(unittest.TestCase):
         self.assertIn("additional live real Pi weak/failing transcript captures beyond fixtures", doc)
         self.assertIn("live real Pi trace captures for every status class", doc)
         self.assertIn("every malicious prompt is classified", doc)
+        self.assertIn("live behavior evaluation on a large adversarial prompt set", doc)
         self.assertIn("semantic quality of milestones", doc)
         self.assertIn("automatic repair application", doc)
         self.assertIn("deterministic trajectory evaluation", doc)
