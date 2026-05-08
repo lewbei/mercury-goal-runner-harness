@@ -61,6 +61,8 @@ pi_real_session_monitor.py
 pi_session_trace_monitor.py
 run_pi_chain_smoke.py
 run_real_pi_trace_smoke.py
+run_agentic_autonomy_probe.py
+run_live_negative_prompt_capture.py
 ```
 
 Memory, domain, and workflow search:

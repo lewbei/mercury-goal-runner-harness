@@ -2,14 +2,15 @@
 
 Owner: Mercury Goal Runner Harness
 Status: source-of-truth
-Last verified: 2026-05-07
+Last verified: 2026-05-08
 
 ## Current Direction
 
-The implemented local layer is v2.8 Agentic Negative-Probe Hardening on top of the
-verifier-provenance certification stack. The next planned layer is v2.9
-Live Negative Prompt Capture. The research direction is Verifier-Provenance Goal
-Runner Harness, centered on:
+The implemented local layer is v2.9 Live Negative Prompt Capture on top of the
+verifier-provenance certification stack. The next planned layer is bounded
+arbitrary-goal chain probing, only after the negative prompt capture boundary
+stays stable. The research direction is Verifier-Provenance Goal Runner Harness,
+centered on:
 
 ```text
 Who is allowed to certify DONE?
@@ -28,6 +29,7 @@ Who is allowed to certify DONE?
 - `docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md` - completed v1.3-v2.1 roadmap.
 - `docs/V2_7_AGENTIC_AUTONOMY_PROOF_PLAN.md` - real Pi/Mercury agentic autonomy probe boundary.
 - `docs/V2_8_AGENTIC_NEGATIVE_PROBES.md` - arbitrary-chain and unbounded-bash negative-probe boundary.
+- `docs/V2_9_LIVE_NEGATIVE_PROMPT_CAPTURE.md` - live negative prompt capture boundary.
 - `certification_policy.yaml` - draft static policy vocabulary.
 
 ## Active Supporting Files
@@ -63,9 +65,11 @@ Who is allowed to certify DONE?
 - `docs/V2_6_REAL_PI_SESSION_TRACE_CAPTURE.md` - real Pi session trace capture boundary.
 - `docs/V2_7_AGENTIC_AUTONOMY_PROOF_PLAN.md` - implemented real agentic autonomy probe boundary.
 - `docs/V2_8_AGENTIC_NEGATIVE_PROBES.md` - implemented agentic negative-probe hardening boundary.
+- `docs/V2_9_LIVE_NEGATIVE_PROMPT_CAPTURE.md` - implemented negative prompt capture boundary.
 - `.agentic-pi/diagnostics/provenance_gate/` - four-case copy-ready provenance diagnostic set.
 - `.agentic-pi/diagnostics/trajectory_evaluation/` - six-case trajectory-level diagnostic set.
 - `.agentic-pi/prompts/agentic_autonomy_probe.md` - paste-ready real Pi probe prompt.
+- `.agentic-pi/prompts/negative_autonomy/` - paste-ready negative Pi/Mercury prompt templates.
 - `PLAN_ROUTER.md` - deterministic planner stub note.
 
 ## Known Cleanup Debt
@@ -84,3 +88,4 @@ Who is allowed to certify DONE?
 - Real Pi trace capture can monitor JSON event streams, but cannot prove arbitrary Pi autonomy by itself.
 - The v2.7 autonomy probe is a monitored live Pi/Mercury experiment on a disposable run. It proves a bounded chain read, advisory memory read, one repair loop, and certifier-only final authority; it does not prove arbitrary chain following or unbounded bash is safe.
 - The v2.8 negative probes harden that boundary for unapproved chain reads, source-tree write commands, and second repair commands; they do not prove every possible unsafe command string is classified.
+- The v2.9 negative prompt capture path passes only when the monitor observes and rejects the expected unsafe prompt behavior; it does not prove every malicious prompt is classified.

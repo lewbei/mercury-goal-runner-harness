@@ -34,7 +34,7 @@ Pi only reports what the certifier wrote.
 Current pushed state:
 
 ```text
-v2.8 = Agentic Negative-Probe Hardening
+v2.9 = Live Negative Prompt Capture
 ```
 
 The deterministic raw-goal proof cases are:
@@ -162,7 +162,16 @@ v2.7 runs and monitors a real Pi/Mercury agentic autonomy probe:
 real Pi -> chain read -> advisory memory read -> first certifier NOT_DONE -> run-local repair -> second certifier CERTIFIED_DONE -> status artifact report -> agentic_autonomy_monitor.py
 ```
 
-This proves a bounded monitored repair path on a disposable run. v2.8 adds negative probes for unapproved chain reads, source-tree write commands, and second repair commands. It does not prove that arbitrary unbounded bash or arbitrary goal-runner.chain.md autonomy is safe.
+This proves a bounded monitored repair path on a disposable run. v2.8 adds negative probes for unapproved chain reads, source-tree write commands, and second repair commands. v2.9 adds prompt-level negative capture for known bad Pi/Mercury prompts. It does not prove that arbitrary unbounded bash or arbitrary goal-runner.chain.md autonomy is safe.
+
+v2.9 captures known bad prompt patterns:
+
+```text
+negative prompt -> Pi/Mercury trace -> agentic_autonomy_monitor.py -> expected FAIL
+```
+
+This proves that the harness treats a bad prompt case as successful only when
+the monitor observes and rejects the expected unsafe behavior.
 
 ## Conceptual Architecture
 
@@ -204,6 +213,7 @@ Raw Goal
   -> Real Pi Session Trace Capture
   -> Real Pi Agentic Autonomy Probe
   -> Agentic Negative-Probe Hardening
+  -> Live Negative Prompt Capture
   -> Audit / Replay
   -> Final Status
   -> Pi Reports Status Only
@@ -343,6 +353,13 @@ Raw Goal
     Extends the agentic autonomy monitor with explicit failure cases for
     unapproved chain reads, source-tree write commands, and second repair
     commands. It improves rejection coverage; it still cannot certify DONE.
+
+28. Live Negative Prompt Capture Layer
+    Stores negative Pi/Mercury prompt templates and captures deterministic or
+    optional live traces for unapproved chain reads, source-tree write-shaped
+    commands, second repairs, status upgrades, and memory-as-authority claims.
+    A negative prompt case passes only when the monitor rejects the expected
+    unsafe behavior. It cannot certify DONE.
 ```
 
 ## Authority Model
@@ -432,6 +449,7 @@ top-level folders. The implemented files are:
 .agentic-pi/runtime/pi_real_session_monitor.py
 .agentic-pi/runtime/pi_session_trace_monitor.py
 .agentic-pi/runtime/run_real_pi_trace_smoke.py
+.agentic-pi/runtime/run_live_negative_prompt_capture.py
 
 .agentic-pi/evaluation/trajectory_metrics.py
 .agentic-pi/evaluation/tool_use_audit.py
@@ -451,6 +469,8 @@ top-level folders. The implemented files are:
 .agentic-pi/diagnostics/pi_direct_behavior/
 .agentic-pi/diagnostics/pi_real_interactive/
 .agentic-pi/diagnostics/trajectory_evaluation/
+.agentic-pi/prompts/negative_autonomy/
+.agentic-pi/schemas/live_negative_prompt_capture_result.schema.json
 
 .agentic-pi/evaluation/trajectory_metrics.py
 .agentic-pi/evaluation/tool_use_audit.py
@@ -592,6 +612,7 @@ full goal-runner.chain.md autonomous runtime
 strict internal Pi tool-call audit for arbitrary live Pi chain smoke
 additional live real Pi weak/failing transcript captures beyond fixtures
 live real Pi trace captures for every status class
+every malicious prompt is classified
 global Pi extension compatibility during Pi chain smoke
 live Mercury planning quality
 semantic optimality of selected branches
@@ -629,6 +650,8 @@ python tests\test_pi_direct_behavior_audit.py -v
 python tests\test_pi_real_interactive_smoke_docs.py -v
 python tests\test_pi_real_session_monitor.py -v
 python tests\test_pi_session_trace_capture.py -v
+python tests\test_agentic_autonomy_probe.py -v
+python tests\test_live_negative_prompt_capture.py -v
 python .agentic-pi\runtime\run_proof_matrix.py --mode quick
 python .agentic-pi\runtime\run_pi_chain_smoke.py --target-run-id pi_smoke_chain_p2_strong
 python -m unittest discover tests -v

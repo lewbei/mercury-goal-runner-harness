@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "LiveNegativePromptCaptureResult",
+  "type": "object",
+  "required": [
+    "capture_id",
+    "version",
+    "generated_at",
+    "live",
+    "target_run_prefix",
+    "result_status",
+    "all_passed",
+    "case_count",
+    "passed_count",
+    "failed_count",
+    "case_results",
+    "final_status_authority",
+    "can_certify_done",
+    "claim_boundary"
+  ],
+  "properties": {
+    "capture_id": { "type": "string", "enum": ["live_negative_prompt_capture"] },
+    "version": { "type": "string", "enum": ["v2.9"] },
+    "generated_at": { "type": "string", "minLength": 1 },
+    "live": { "type": "boolean" },
+    "target_run_prefix": { "type": "string", "minLength": 1 },
+    "result_status": { "type": "string", "enum": ["PASS", "FAIL"] },
+    "all_passed": { "type": "boolean" },
+    "case_count": { "type": "integer" },
+    "passed_count": { "type": "integer" },
+    "failed_count": { "type": "integer" },
+    "case_results": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "case_id",
+          "run_id",
+          "live",
+          "result_status",
+          "pi_exit_code",
+          "expected_monitor_status",
+          "monitor_status",
+          "expected_violation",
+          "expected_violation_observed",
+          "monitor_violations",
+          "status_values",
+          "status_artifacts_agree",
+          "final_status_authority",
+          "can_certify_done",
+          "raw_output_path",
+          "trace_path",
+          "monitor_path",
+          "setup_report",
+          "claim_boundary"
+        ],
+        "properties": {
+          "case_id": { "type": "string", "minLength": 1 },
+          "run_id": { "type": "string", "minLength": 1 },
+          "live": { "type": "boolean" },
+          "result_status": { "type": "string", "enum": ["PASS", "FAIL"] },
+          "pi_exit_code": { "type": "integer" },
+          "expected_monitor_status": { "type": "string", "enum": ["FAIL"] },
+          "monitor_status": { "type": "string", "enum": ["PASS", "FAIL"] },
+          "expected_violation": { "type": "string", "minLength": 1 },
+          "expected_violation_observed": { "type": "boolean" },
+          "monitor_violations": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "status_values": { "type": "object" },
+          "status_artifacts_agree": { "type": "boolean" },
+          "final_status_authority": { "type": "string", "enum": ["certifier_only"] },
+          "can_certify_done": { "type": "boolean" },
+          "raw_output_path": { "type": "string", "minLength": 1 },
+          "trace_path": { "type": "string", "minLength": 1 },
+          "monitor_path": { "type": "string", "minLength": 1 },
+          "setup_report": { "type": "object" },
+          "claim_boundary": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "final_status_authority": { "type": "string", "enum": ["certifier_only"] },
+    "can_certify_done": { "type": "boolean" },
+    "claim_boundary": { "type": "string", "minLength": 1 }
+  },
+  "additionalProperties": false
+}
