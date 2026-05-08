@@ -429,6 +429,16 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("v3.1 does not prove", doc)
         self.assertIn("Final status still comes only from", doc)
 
+    def test_v32_doc_records_runtime_enforcement_boundary(self):
+        doc = read(ROOT / "docs" / "V3_2_RUNTIME_ENFORCEMENT_PROOF.md")
+
+        self.assertIn("RUNTIME ENFORCEMENT PROOF IMPLEMENTED", doc)
+        self.assertIn("command_gateway.py", doc)
+        self.assertIn("protected_file_guard.py", doc)
+        self.assertIn("MONITOR_FAIL", doc)
+        self.assertIn("does not prove arbitrary prompts", doc)
+        self.assertIn("Final status still comes only from", doc)
+
     def test_framework_doc_is_linked_from_status_docs(self):
         readme = read(ROOT / "README.md")
         status = read(ROOT / "PROJECT_STATUS.md")

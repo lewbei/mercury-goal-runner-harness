@@ -6,9 +6,9 @@ Last verified: 2026-05-08
 
 ## Current Direction
 
-The implemented local layer is v3.1 Real Pi Prompt Coverage Evaluation on top of the
-verifier-provenance certification stack. The next planned layer is broader
-agentic probing only after the real Pi prompt coverage boundary stays stable.
+The implemented local layer is v3.3 RPG Harness Test Record on top of the
+v3.2 Runtime Enforcement Proof. The next planned layer is broader statistical
+aggregation only after test records stay stable.
 The research direction is Verifier-Provenance Goal Runner Harness,
 centered on:
 
@@ -32,6 +32,8 @@ Who is allowed to certify DONE?
 - `docs/V2_9_LIVE_NEGATIVE_PROMPT_CAPTURE.md` - live negative prompt capture boundary.
 - `docs/V3_0_REAL_PI_BEHAVIOR_EVALUATION.md` - real Pi behavior evaluation boundary.
 - `docs/V3_1_REAL_PI_PROMPT_COVERAGE.md` - real Pi prompt coverage boundary.
+- `docs/V3_2_RUNTIME_ENFORCEMENT_PROOF.md` - runtime enforcement proof boundary.
+- `docs/RPG_HARNESS_TEST_FORM.md` - RPG test form and statistical test-record boundary.
 - `certification_policy.yaml` - draft static policy vocabulary.
 
 ## Active Supporting Files
@@ -70,6 +72,8 @@ Who is allowed to certify DONE?
 - `docs/V2_9_LIVE_NEGATIVE_PROMPT_CAPTURE.md` - implemented negative prompt capture boundary.
 - `docs/V3_0_REAL_PI_BEHAVIOR_EVALUATION.md` - implemented real Pi behavior evaluation boundary.
 - `docs/V3_1_REAL_PI_PROMPT_COVERAGE.md` - implemented real Pi prompt coverage boundary.
+- `docs/V3_2_RUNTIME_ENFORCEMENT_PROOF.md` - implemented runtime enforcement proof boundary.
+- `docs/RPG_HARNESS_TEST_FORM.md` - implemented RPG test-record boundary.
 - `.agentic-pi/diagnostics/provenance_gate/` - four-case copy-ready provenance diagnostic set.
 - `.agentic-pi/diagnostics/trajectory_evaluation/` - six-case trajectory-level diagnostic set.
 - `.agentic-pi/prompts/agentic_autonomy_probe.md` - paste-ready real Pi probe prompt.
@@ -96,3 +100,4 @@ Who is allowed to certify DONE?
 - The v2.9 negative prompt capture path passes only when the monitor observes and rejects the expected unsafe prompt behavior; it does not prove every malicious prompt is classified.
 - The v3.0 real Pi behavior evaluation classifies captured behavior as unsafe caught, unsafe missed, safe refusal, or inconclusive; it does not prove broad prompt coverage.
 - The v3.1 real Pi prompt coverage matrix covers ten bounded negative prompt categories with repeated-trial support; it does not prove arbitrary prompt coverage or arbitrary unbounded bash safety.
+- The v3.3 RPG test record turns a smoke or adversarial run into a schema-valid evidence record with expected failure mode, catch layer, regression decision, and statistical inclusion. It cannot certify DONE.

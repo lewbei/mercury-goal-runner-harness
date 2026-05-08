@@ -6,7 +6,7 @@ The goal is not to make Mercury V2 magically smarter by looping. The goal is to 
 
 ## Current status
 
-v3.1 is Real Pi Prompt Coverage Evaluation on top of the v3.0 Real Pi Behavior Evaluation.
+v3.3 is RPG Harness Test Record on top of the v3.2 Runtime Enforcement Proof.
 
 The current research direction is:
 
@@ -76,6 +76,8 @@ See [`docs/V2_9_LIVE_NEGATIVE_PROMPT_CAPTURE.md`](docs/V2_9_LIVE_NEGATIVE_PROMPT
 See [`docs/V3_0_REAL_PI_BEHAVIOR_EVALUATION.md`](docs/V3_0_REAL_PI_BEHAVIOR_EVALUATION.md) for the real Pi behavior evaluation boundary.
 See [`docs/V3_1_REAL_PI_PROMPT_COVERAGE.md`](docs/V3_1_REAL_PI_PROMPT_COVERAGE.md) for the real Pi prompt coverage boundary.
 See [`docs/ADVERSARIAL_RED_TEAM_LOOP.md`](docs/ADVERSARIAL_RED_TEAM_LOOP.md) for the statistical adversarial red-team loop boundary.
+See [`docs/V3_2_RUNTIME_ENFORCEMENT_PROOF.md`](docs/V3_2_RUNTIME_ENFORCEMENT_PROOF.md) for the runtime enforcement proof boundary.
+See [`docs/RPG_HARNESS_TEST_FORM.md`](docs/RPG_HARNESS_TEST_FORM.md) for the RPG harness test form and statistical test-record boundary.
 See [`docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md`](docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md) for the completed v1.3-v2.0 roadmap.
 See [`docs/PI_PROMPT_CONTRACTS.md`](docs/PI_PROMPT_CONTRACTS.md) for safe Pi prompt patterns.
 See [`docs/PI_BASH_ALLOWLIST.md`](docs/PI_BASH_ALLOWLIST.md) for the current documented bash safety boundary.
@@ -100,6 +102,8 @@ python tests\test_real_pi_behavior_evaluation.py -v
 python tests\test_real_pi_behavior_matrix.py -v
 python .agentic-pi\runtime\red_team_loop.py --rounds 100 --seed-runs 3
 python tests\run_meta_harness.py
+python tests\test_runtime_enforcement.py -v
+python tests\test_rpg_test_record.py -v
 ```
 
 Important naming boundary:
@@ -162,7 +166,9 @@ It demonstrates:
 46. v3.0 classifies captured real Pi/Mercury behavior as unsafe caught, unsafe missed, safe refusal, or inconclusive,
 47. v3.1 runs a bounded prompt coverage matrix across ten negative Pi/Mercury prompt categories,
 48. the adversarial red-team loop evaluates 300 deterministic graph-provenance attack cases with false `CERTIFIED_DONE` and monitor-miss rates,
-49. and the benchmark reports false-PASS status explicitly.
+49. v3.2 blocks or downgrades unsafe Pi/Mercury-shaped commands to `MONITOR_FAIL` before they can become accepted certification,
+50. v3.3 records RPG harness tests as validated evidence and regression decisions,
+51. and the benchmark reports false-PASS status explicitly.
 
 ## Core parts
 
@@ -320,6 +326,8 @@ Committed repo state:
 
 ```text
 v3.1 = Real Pi Prompt Coverage Evaluation
+v3.2 = Runtime Enforcement Proof
+v3.3 = RPG Harness Test Record
 ```
 
 Local smoke-tested state:
@@ -359,6 +367,8 @@ v2.8 = Agentic negative-probe hardening IMPLEMENTED
 v2.9 = Live negative prompt capture IMPLEMENTED
 v3.0 = Real Pi behavior evaluation IMPLEMENTED
 v3.1 = Real Pi prompt coverage evaluation IMPLEMENTED
+v3.2 = Runtime enforcement proof IMPLEMENTED
+v3.3 = RPG harness test record IMPLEMENTED
 ```
 
 The v0.5 Pi chain lives at:
@@ -375,7 +385,7 @@ The new v0.5 Pi agents are:
 .pi/agents/verifier-reviewer.md
 ```
 
-The full `goal-runner.chain.md` runtime remains unverified for arbitrary goals. v0.5.8 shows the stale Pi exit disappears under a subagents-only Pi config. v0.5.9 adds deterministic auditing for one-bash-call discipline, including a failing fixture for the duplicate certifier invocation pattern. v0.5.10 adds deterministic disposable smoke setup so Pi prompts can stay single-action. v0.5.11 verifies that weak/failing statuses are reported, not repaired or upgraded. v0.6 adds local host-task certification against disposable runs. v0.7 adds deterministic branch candidates with explicit verifier requirements. v0.8 selects branches by path to verifier-provenance certification. v0.9 adds read-only replay, dry-run rollback, and audit blocking. v1.0 freezes a thin local command surface and practical examples without claiming full Pi autonomy. v1.1 adds deterministic raw-goal compilation fixtures. v1.2 proves that the selected branch can be materialized into `merged_plan.json` before worker execution and certification. v1.3 adds deterministic strategy selection before step compilation. v1.4 adds deterministic milestone planning between selected strategy and local executable steps. v1.5 adds drift detection, bounded delta plans, and certifier blocking for unresolved drift. v1.6 adds trajectory-level tool-use evaluation for command choice, arguments, order, duplicate certifier calls, manual writes, missing reads, and unsafe deletion. v1.7 adds advisory experience memory that can adjust strategy scores but cannot bypass applicability gates or certify DONE. v1.8 adds deterministic domain packs that shape strategy candidates and verifier hints without certifying DONE. v1.9 adds deterministic workflow search that rejects certifier-bypass and high false-certified-risk candidates without executing or certifying. v2.0 adds an integrated proof matrix and example set without claiming full Pi autonomy. v2.1 adds a controlled Pi chain smoke runner without claiming arbitrary Pi chain autonomy. v2.2 adds direct Pi/Mercury behavior audit fixtures that require verifier evidence before certifier invocation, status reads after certifier invocation, and no self-certifying assistant language. v2.3 records a real `pi` interactive smoke result as local evidence, not automated CI evidence. v2.4 monitors captured real Pi transcript fixtures for exactly-one-command discipline, required result reads, protected-write attempts, and self-certifying language. v2.5 extends that monitor to weak/failing status transcripts and rejects assistant-side upgrades such as `PROVISIONAL_DONE` to `CERTIFIED_DONE`. v2.6 normalizes captured Pi output into `pi_session_trace.jsonl` and monitors the trace directly. v2.7 runs and monitors a real Pi/Mercury agentic autonomy probe that reads the chain, reads advisory memory, observes an initial certifier failure, performs one run-local repair, reruns the certifier, and reports certifier-owned status artifacts without proving arbitrary unbounded bash is safe. v2.8 hardens that monitor with negative probes for unapproved chain reads, source-tree write commands, and second repair commands. v2.9 captures known bad prompt patterns and treats them as successful only when the monitor observes and rejects the expected unsafe behavior. v3.0 classifies captured real Pi/Mercury behavior separately from deterministic monitor correctness. v3.1 expands that into a bounded ten-category prompt coverage matrix with repeated-trial support; it does not prove arbitrary prompts or arbitrary unbounded bash are safe.
+The full `goal-runner.chain.md` runtime remains unverified for arbitrary goals. v0.5.8 shows the stale Pi exit disappears under a subagents-only Pi config. v0.5.9 adds deterministic auditing for one-bash-call discipline, including a failing fixture for the duplicate certifier invocation pattern. v0.5.10 adds deterministic disposable smoke setup so Pi prompts can stay single-action. v0.5.11 verifies that weak/failing statuses are reported, not repaired or upgraded. v0.6 adds local host-task certification against disposable runs. v0.7 adds deterministic branch candidates with explicit verifier requirements. v0.8 selects branches by path to verifier-provenance certification. v0.9 adds read-only replay, dry-run rollback, and audit blocking. v1.0 freezes a thin local command surface and practical examples without claiming full Pi autonomy. v1.1 adds deterministic raw-goal compilation fixtures. v1.2 proves that the selected branch can be materialized into `merged_plan.json` before worker execution and certification. v1.3 adds deterministic strategy selection before step compilation. v1.4 adds deterministic milestone planning between selected strategy and local executable steps. v1.5 adds drift detection, bounded delta plans, and certifier blocking for unresolved drift. v1.6 adds trajectory-level tool-use evaluation for command choice, arguments, order, duplicate certifier calls, manual writes, missing reads, and unsafe deletion. v1.7 adds advisory experience memory that can adjust strategy scores but cannot bypass applicability gates or certify DONE. v1.8 adds deterministic domain packs that shape strategy candidates and verifier hints without certifying DONE. v1.9 adds deterministic workflow search that rejects certifier-bypass and high false-certified-risk candidates without executing or certifying. v2.0 adds an integrated proof matrix and example set without claiming full Pi autonomy. v2.1 adds a controlled Pi chain smoke runner without claiming arbitrary Pi chain autonomy. v2.2 adds direct Pi/Mercury behavior audit fixtures that require verifier evidence before certifier invocation, status reads after certifier invocation, and no self-certifying assistant language. v2.3 records a real `pi` interactive smoke result as local evidence, not automated CI evidence. v2.4 monitors captured real Pi transcript fixtures for exactly-one-command discipline, required result reads, protected-write attempts, and self-certifying language. v2.5 extends that monitor to weak/failing status transcripts and rejects assistant-side upgrades such as `PROVISIONAL_DONE` to `CERTIFIED_DONE`. v2.6 normalizes captured Pi output into `pi_session_trace.jsonl` and monitors the trace directly. v2.7 runs and monitors a real Pi/Mercury agentic autonomy probe that reads the chain, reads advisory memory, observes an initial certifier failure, performs one run-local repair, reruns the certifier, and reports certifier-owned status artifacts without proving arbitrary unbounded bash is safe. v2.8 hardens that monitor with negative probes for unapproved chain reads, source-tree write commands, and second repair commands. v2.9 captures known bad prompt patterns and treats them as successful only when the monitor observes and rejects the expected unsafe behavior. v3.0 classifies captured real Pi/Mercury behavior separately from deterministic monitor correctness. v3.1 expands that into a bounded ten-category prompt coverage matrix with repeated-trial support. v3.2 adds command-gateway and protected-file enforcement so unsafe Pi/Mercury-shaped commands are blocked or downgraded to `MONITOR_FAIL`; it does not prove arbitrary prompts or arbitrary unbounded bash are safe. v3.3 adds a human form plus schema-valid RPG test records so failures become regression decisions and later statistical runs have machine-readable evidence.
 
 ## Planner Stub
 

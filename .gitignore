@@ -20,6 +20,7 @@ build/
 .agentic-runs/pi_chain_smoke_outputs/
 .agentic-runs/agentic_autonomy_outputs/
 .agentic-runs/red_team_outputs/
+.agentic-runs/runtime_enforcement_outputs/
 diagnostic_outputs/trajectory_metrics.json
 diagnostic_outputs/trajectory_report.md
 artifacts/

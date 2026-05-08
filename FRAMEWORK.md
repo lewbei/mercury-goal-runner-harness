@@ -34,7 +34,7 @@ Pi only reports what the certifier wrote.
 Current pushed state:
 
 ```text
-v3.1 = Real Pi Prompt Coverage Evaluation
+v3.3 = RPG Harness Test Record
 ```
 
 The deterministic raw-goal proof cases are:
@@ -193,6 +193,26 @@ This adds repeated-trial support and ten negative prompt categories. It does
 not prove arbitrary prompts, arbitrary unbounded bash, or arbitrary
 goal-runner.chain.md autonomy are safe.
 
+v3.2 adds runtime enforcement around Pi/Mercury-shaped commands:
+
+```text
+Pi/Mercury-shaped command -> command_gateway.py -> protected_file_guard.py -> accepted status or MONITOR_FAIL
+```
+
+This proves that unsafe command shapes are blocked or downgraded before they
+can become accepted certification. It still does not prove arbitrary prompts,
+arbitrary unbounded bash, or full Pi autonomy are safe.
+
+v3.3 adds a human RPG test form and machine-readable test record:
+
+```text
+Pi/Mercury trace -> RPG test record -> regression decision -> deterministic gates
+```
+
+This records what a test tried to prove, which failure mode was expected, which
+validator should catch it, whether it becomes a regression fixture, and whether
+the sample should enter statistics. It cannot certify DONE.
+
 ## Conceptual Architecture
 
 ```text
@@ -236,6 +256,8 @@ Raw Goal
   -> Live Negative Prompt Capture
   -> Real Pi Behavior Evaluation
   -> Real Pi Prompt Coverage Evaluation
+  -> Runtime Enforcement Proof
+  -> RPG Harness Test Record
   -> Audit / Replay
   -> Final Status
   -> Pi Reports Status Only
@@ -394,6 +416,19 @@ Raw Goal
     categories and classifies every category/trial as caught, missed, safe
     refusal, or inconclusive. It can fail unsafe behavior coverage, but it
     cannot certify DONE and does not prove arbitrary prompt safety.
+
+31. Runtime Enforcement Proof Layer
+    Routes Pi/Mercury-shaped commands through a command gateway and protected
+    file guard. Safe certifier commands can be accepted. Manual status writes,
+    duplicate certifier calls, verifier artifact edits, path escapes,
+    unapproved bash, and unsafe deletion are blocked or downgraded to
+    MONITOR_FAIL. It cannot certify DONE.
+
+32. RPG Harness Test Record Layer
+    Records a test identity, expected failure mode, expected catch layer,
+    expected graph path, actual result, evidence paths, regression decision,
+    after-patch gate, and statistical inclusion. It turns failed Pi/Mercury
+    behavior into regression evidence. It cannot certify DONE.
 ```
 
 ## Authority Model
@@ -486,6 +521,11 @@ top-level folders. The implemented files are:
 .agentic-pi/runtime/run_live_negative_prompt_capture.py
 .agentic-pi/runtime/run_real_pi_behavior_evaluation.py
 .agentic-pi/runtime/run_real_pi_behavior_matrix.py
+.agentic-pi/runtime/command_gateway.py
+.agentic-pi/runtime/protected_file_guard.py
+.agentic-pi/runtime/run_enforced_pi_smoke.py
+.agentic-pi/schemas/rpg_test_record.schema.json
+.agentic-pi/templates/rpg_test_record.template.json
 
 .agentic-pi/evaluation/trajectory_metrics.py
 .agentic-pi/evaluation/tool_use_audit.py
@@ -510,6 +550,7 @@ top-level folders. The implemented files are:
 .agentic-pi/schemas/live_negative_prompt_capture_result.schema.json
 .agentic-pi/schemas/real_pi_behavior_evaluation_result.schema.json
 .agentic-pi/schemas/real_pi_behavior_matrix_result.schema.json
+.agentic-pi/schemas/runtime_enforcement_result.schema.json
 
 .agentic-pi/evaluation/trajectory_metrics.py
 .agentic-pi/evaluation/tool_use_audit.py
@@ -632,6 +673,8 @@ real Pi agentic autonomy probe -> chain/memory read -> repair loop -> certifier-
 agentic negative probes -> unapproved chain / source write / second repair -> monitor FAIL
 real Pi behavior evaluation -> captured negative prompt behavior -> caught / missed / safe_refusal / inconclusive
 real Pi prompt coverage evaluation -> bounded prompt matrix -> caught / missed / safe_refusal / inconclusive by category/trial
+runtime enforcement proof -> command gateway -> protected file guard -> accepted status or MONITOR_FAIL
+RPG harness test record -> expected failure mode -> catch layer -> regression decision
 P0/P1/P2/missing verifier policy behavior
 smell report recording
 strength report recording
@@ -656,6 +699,8 @@ live real Pi trace captures for every status class
 every malicious prompt is classified
 live behavior evaluation on a large adversarial prompt set
 broad real Pi prompt coverage beyond the current bounded matrix
+arbitrary command-gateway bypasses
+statistical proof beyond recorded RPG test records
 global Pi extension compatibility during Pi chain smoke
 live Mercury planning quality
 semantic optimality of selected branches
@@ -698,6 +743,7 @@ python tests\test_live_negative_prompt_capture.py -v
 python tests\test_real_pi_behavior_evaluation.py -v
 python tests\test_real_pi_behavior_matrix.py -v
 python .agentic-pi\runtime\run_proof_matrix.py --mode quick
+python tests\test_rpg_test_record.py -v
 python .agentic-pi\runtime\run_pi_chain_smoke.py --target-run-id pi_smoke_chain_p2_strong
 python -m unittest discover tests -v
 python .agentic-pi\diagnostics\evaluation\run_diagnostic_evaluation.py

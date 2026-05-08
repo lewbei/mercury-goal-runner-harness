@@ -1,0 +1,314 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RpgHarnessTestRecord",
+  "type": "object",
+  "required": [
+    "record_id",
+    "version",
+    "generated_at",
+    "test_identity",
+    "purpose",
+    "system_roles",
+    "input_goal",
+    "expected_graph_path",
+    "expected_verdict",
+    "actual_result",
+    "evidence_paths",
+    "failure_classification",
+    "regression_decision",
+    "after_patch",
+    "statistical_metadata",
+    "authority_boundary",
+    "operating_rule"
+  ],
+  "properties": {
+    "record_id": { "type": "string", "minLength": 1 },
+    "version": { "type": "string", "enum": ["v3.3"] },
+    "generated_at": { "type": "string", "minLength": 1 },
+    "test_identity": {
+      "type": "object",
+      "required": [
+        "test_id",
+        "campaign_id",
+        "date",
+        "harness_version",
+        "roadmap_slice",
+        "profile",
+        "random_seed",
+        "case_generator",
+        "sample_index",
+        "statistical_bucket"
+      ],
+      "properties": {
+        "test_id": { "type": "string", "minLength": 1 },
+        "campaign_id": { "type": "string", "minLength": 1 },
+        "date": { "type": "string", "minLength": 1 },
+        "harness_version": { "type": "string", "minLength": 1 },
+        "roadmap_slice": { "type": "string", "minLength": 1 },
+        "profile": {
+          "type": "string",
+          "enum": ["minimal", "standard", "research", "high-risk"]
+        },
+        "random_seed": { "type": "integer" },
+        "case_generator": { "type": "string", "minLength": 1 },
+        "sample_index": { "type": "integer" },
+        "statistical_bucket": {
+          "type": "string",
+          "enum": [
+            "deterministic_fixture",
+            "generated_adversarial_case",
+            "live_pi_mercury_smoke",
+            "regression_replay"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "purpose": {
+      "type": "object",
+      "required": ["prove", "expected_failure_mode", "expected_catch_layer"],
+      "properties": {
+        "prove": { "type": "string", "minLength": 1 },
+        "expected_failure_mode": {
+          "type": "string",
+          "enum": [
+            "false_DONE",
+            "status_upgrade",
+            "missing_evidence",
+            "wrong_plan",
+            "weak_verifier",
+            "memory_used_as_authority",
+            "protected_file_touched",
+            "replay_mismatch",
+            "unbounded_bash",
+            "command_obfuscation",
+            "other"
+          ]
+        },
+        "expected_catch_layer": {
+          "type": "string",
+          "enum": [
+            "command_gateway",
+            "protected_file_guard",
+            "plan_graph_validator",
+            "verifier_provenance_policy",
+            "policy_engine",
+            "replay_audit",
+            "pi_report_monitor",
+            "trajectory_monitor",
+            "meta_harness"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "system_roles": {
+      "type": "object",
+      "required": ["builder", "system_under_test", "judge", "reporter"],
+      "properties": {
+        "builder": { "type": "string", "minLength": 1 },
+        "system_under_test": { "type": "string", "minLength": 1 },
+        "judge": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "reporter": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "input_goal": {
+      "type": "object",
+      "required": [
+        "raw_goal",
+        "expected_goal_contract",
+        "success_criteria",
+        "forbidden_behavior",
+        "allowed_command_surface",
+        "forbidden_command_surface"
+      ],
+      "properties": {
+        "raw_goal": { "type": "string", "minLength": 1 },
+        "expected_goal_contract": { "type": "string", "minLength": 1 },
+        "success_criteria": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "forbidden_behavior": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "allowed_command_surface": { "type": "array", "items": { "type": "string" } },
+        "forbidden_command_surface": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "expected_graph_path": {
+      "type": "object",
+      "required": ["expected_nodes", "expected_evidence"],
+      "properties": {
+        "expected_nodes": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "expected_evidence": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+      },
+      "additionalProperties": false
+    },
+    "expected_verdict": {
+      "type": "object",
+      "required": [
+        "expected_policy_status",
+        "expected_certification_status",
+        "expected_monitor_status",
+        "expected_pi_report"
+      ],
+      "properties": {
+        "expected_policy_status": {
+          "type": "string",
+          "enum": ["NOT_DONE", "PROVISIONAL_DONE", "CERTIFIED_DONE"]
+        },
+        "expected_certification_status": {
+          "type": "string",
+          "enum": ["NOT_DONE", "PROVISIONAL_DONE", "CERTIFIED_DONE"]
+        },
+        "expected_monitor_status": {
+          "type": "string",
+          "enum": ["PASS", "MONITOR_FAIL", "REPLAY_FAIL", "INCONCLUSIVE"]
+        },
+        "expected_pi_report": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+      },
+      "additionalProperties": false
+    },
+    "actual_result": {
+      "type": "object",
+      "required": [
+        "actual_policy_status",
+        "actual_certification_status",
+        "actual_final_status_md",
+        "actual_pi_report",
+        "pi_upgraded_status",
+        "pi_touched_protected_files",
+        "pi_used_memory_as_authority",
+        "replay_passed"
+      ],
+      "properties": {
+        "actual_policy_status": { "type": "string", "minLength": 1 },
+        "actual_certification_status": { "type": "string", "minLength": 1 },
+        "actual_final_status_md": { "type": "string", "minLength": 1 },
+        "actual_pi_report": { "type": "string", "minLength": 1 },
+        "pi_upgraded_status": { "type": "boolean" },
+        "pi_touched_protected_files": { "type": "boolean" },
+        "pi_used_memory_as_authority": { "type": "boolean" },
+        "replay_passed": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "evidence_paths": {
+      "type": "object",
+      "required": [
+        "run_folder",
+        "trace_file",
+        "terminal_logs",
+        "artifacts",
+        "verifier_artifacts",
+        "policy_file",
+        "certification_file",
+        "replay_report",
+        "pi_report",
+        "rpg_test_record"
+      ],
+      "properties": {
+        "run_folder": { "type": "string", "minLength": 1 },
+        "trace_file": { "type": "string", "minLength": 1 },
+        "terminal_logs": { "type": "string", "minLength": 1 },
+        "artifacts": { "type": "string", "minLength": 1 },
+        "verifier_artifacts": { "type": "string", "minLength": 1 },
+        "policy_file": { "type": "string", "minLength": 1 },
+        "certification_file": { "type": "string", "minLength": 1 },
+        "replay_report": { "type": "string", "minLength": 1 },
+        "pi_report": { "type": "string", "minLength": 1 },
+        "rpg_test_record": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "failure_classification": {
+      "type": "object",
+      "required": ["result", "root_cause", "validator_should_catch", "was_caught"],
+      "properties": {
+        "result": {
+          "type": "string",
+          "enum": [
+            "PASS",
+            "EXPECTED_FAIL",
+            "FALSE_CERTIFIED_DONE",
+            "FALSE_NOT_DONE",
+            "MONITOR_FAIL",
+            "REPLAY_FAIL",
+            "INCONCLUSIVE"
+          ]
+        },
+        "root_cause": { "type": "string", "minLength": 1 },
+        "validator_should_catch": { "type": "string", "minLength": 1 },
+        "was_caught": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "regression_decision": {
+      "type": "object",
+      "required": [
+        "should_become_regression_fixture",
+        "regression_fixture_name",
+        "expected_verdict",
+        "patch_needed",
+        "patch_target"
+      ],
+      "properties": {
+        "should_become_regression_fixture": { "type": "boolean" },
+        "regression_fixture_name": { "type": "string", "minLength": 1 },
+        "expected_verdict": { "type": "string", "minLength": 1 },
+        "patch_needed": { "type": "boolean" },
+        "patch_target": {
+          "type": "string",
+          "enum": [
+            "validator",
+            "policy_engine",
+            "pi_monitor",
+            "plan_graph_validator",
+            "memory_authority_validator",
+            "replay_certification",
+            "command_gateway",
+            "protected_file_guard",
+            "other"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "after_patch": {
+      "type": "object",
+      "required": ["patch_id_or_commit", "tests_rerun", "final_result"],
+      "properties": {
+        "patch_id_or_commit": { "type": "string", "minLength": 1 },
+        "tests_rerun": { "type": "array", "items": { "type": "string" } },
+        "final_result": { "type": "string", "enum": ["accepted", "rejected", "not_patched_yet"] }
+      },
+      "additionalProperties": false
+    },
+    "statistical_metadata": {
+      "type": "object",
+      "required": ["include_in_statistics", "exclusion_reason", "aggregation_use"],
+      "properties": {
+        "include_in_statistics": { "type": "boolean" },
+        "exclusion_reason": { "type": "string" },
+        "aggregation_use": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "authority_boundary": {
+      "type": "object",
+      "required": [
+        "final_status_authority",
+        "can_certify_done",
+        "pi_report_only",
+        "memory_advisory_only"
+      ],
+      "properties": {
+        "final_status_authority": { "type": "string", "enum": ["certifier_only"] },
+        "can_certify_done": { "type": "boolean", "enum": [false] },
+        "pi_report_only": { "type": "boolean", "enum": [true] },
+        "memory_advisory_only": { "type": "boolean", "enum": [true] }
+      },
+      "additionalProperties": false
+    },
+    "operating_rule": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+  },
+  "additionalProperties": false
+}
