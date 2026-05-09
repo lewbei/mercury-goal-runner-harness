@@ -1,0 +1,99 @@
+{
+  "schema_version": "tool_registry_v1",
+  "description": "Allowed tools per phase. Tools not listed are forbidden. Deterministic phases have no tool restrictions because they run under core control.",
+  "phases": {
+    "INTAKE": {
+      "allowed_tools": ["read", "list", "python"],
+      "forbidden_tools": ["write", "delete", "network", "shell"],
+      "note": "Goal intake is read-only until goal_contract.json is received."
+    },
+    "QUESTIONING": {
+      "allowed_tools": ["read", "list", "python"],
+      "forbidden_tools": ["write", "delete", "network", "shell"]
+    },
+    "RESEARCHING": {
+      "allowed_tools": ["read", "list", "python", "web_search"],
+      "forbidden_tools": ["write", "delete", "network_destructive", "shell"]
+    },
+    "DESIGNING": {
+      "allowed_tools": ["read", "list", "python"],
+      "forbidden_tools": ["write", "delete", "network", "shell"]
+    },
+    "STRUCTURING": {
+      "allowed_tools": ["read", "list", "python"],
+      "forbidden_tools": ["write", "delete", "network", "shell"]
+    },
+    "PLANNING": {
+      "allowed_tools": ["read", "list", "python"],
+      "forbidden_tools": ["write", "delete", "network", "shell"]
+    },
+    "WORKTREE_READY": {
+      "allowed_tools": ["read", "list", "python", "git_status", "git_diff"],
+      "forbidden_tools": ["delete", "network", "shell"]
+    },
+    "IMPLEMENTING": {
+      "allowed_tools": ["read", "list", "python", "write", "git_status", "git_diff"],
+      "forbidden_tools": ["delete", "network_destructive", "shell"],
+      "allowed_write_prefixes_role": "Engineer"
+    },
+    "VALIDATOR_BUILDING": {
+      "allowed_tools": ["read", "list", "python", "write"],
+      "forbidden_tools": ["delete", "network", "shell"],
+      "allowed_write_prefixes_role": "ValidatorEngineer"
+    },
+    "VALIDATING": {
+      "allowed_tools": ["read", "list", "python"],
+      "forbidden_tools": ["write", "delete", "network", "shell"]
+    },
+    "EVIDENCE_INDEXING": {
+      "allowed_tools": ["read", "list", "python"],
+      "forbidden_tools": ["write", "delete", "network", "shell"],
+      "note": "Evidence freezer runs under core control."
+    },
+    "POLICY_DECIDING": {
+      "allowed_tools": [],
+      "note": "Deterministic policy engine. No agent tool access."
+    },
+    "REPLAYING": {
+      "allowed_tools": [],
+      "note": "Deterministic replay checker. No agent tool access."
+    },
+    "CERTIFYING": {
+      "allowed_tools": [],
+      "note": "Deterministic certifier. No agent tool access."
+    },
+    "REPORTING": {
+      "allowed_tools": ["read", "list", "python"],
+      "forbidden_tools": ["write", "delete", "network", "shell"],
+      "note": "Reporter reads final_status.json. Does not write authority files."
+    },
+    "MEMORY_CONSOLIDATING": {
+      "allowed_tools": ["read", "list", "python", "write"],
+      "forbidden_tools": ["delete", "network", "shell"],
+      "allowed_write_prefixes_role": "MemoryWriter"
+    },
+    "REPAIRING_PLAN": {
+      "allowed_tools": ["read", "list", "python"],
+      "forbidden_tools": ["delete", "network", "shell"]
+    },
+    "REPAIRING_ARTIFACT_ROUTING": {
+      "allowed_tools": ["read", "list", "python", "write"],
+      "forbidden_tools": ["delete", "network", "shell"],
+      "allowed_write_prefixes_role": "Engineer"
+    },
+    "REPAIRING_VALIDATOR": {
+      "allowed_tools": ["read", "list", "python", "write"],
+      "forbidden_tools": ["delete", "network", "shell"],
+      "allowed_write_prefixes_role": "ValidatorEngineer"
+    },
+    "REPAIRING_EVIDENCE": {
+      "allowed_tools": ["read", "list", "python"],
+      "forbidden_tools": ["write", "delete", "network", "shell"]
+    },
+    "REPAIRING_IMPLEMENTATION": {
+      "allowed_tools": ["read", "list", "python", "write"],
+      "forbidden_tools": ["delete", "network", "shell"],
+      "allowed_write_prefixes_role": "Engineer"
+    }
+  }
+}

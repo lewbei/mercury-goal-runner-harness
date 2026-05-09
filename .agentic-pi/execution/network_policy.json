@@ -1,0 +1,17 @@
+{
+  "schema_version": "network_policy_v1",
+  "description": "Network access policy per phase. Default: no network access.",
+  "default_policy": "deny",
+  "phase_overrides": {
+    "RESEARCHING": {
+      "policy": "allow",
+      "allowed_patterns": ["https://*", "http://*"],
+      "forbidden_patterns": [
+        "localhost:*",
+        "127.0.0.1:*",
+        "*.internal*",
+        "*.corp*"
+      ]
+    }
+  }
+}

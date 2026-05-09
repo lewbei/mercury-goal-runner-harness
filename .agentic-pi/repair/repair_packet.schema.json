@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "repair_packet_v1",
+  "description": "Schema for a repair work packet created when a validator rejects an artifact or evidence.",
+  "type": "object",
+  "required": [
+    "packet_id",
+    "run_id",
+    "repair_type",
+    "triggered_by",
+    "max_attempts",
+    "attempt_count",
+    "allowed_actions",
+    "forbidden_actions",
+    "status"
+  ],
+  "properties": {
+    "packet_id": {
+      "type": "string",
+      "pattern": "^RP\\.[A-Z]+\\.[0-9]{3}$"
+    },
+    "run_id": { "type": "string", "minLength": 1 },
+    "repair_type": {
+      "type": "string",
+      "enum": [
+        "REPAIRING_PLAN",
+        "REPAIRING_ARTIFACT_ROUTING",
+        "REPAIRING_VALIDATOR",
+        "REPAIRING_EVIDENCE",
+        "REPAIRING_IMPLEMENTATION"
+      ]
+    },
+    "triggered_by": {
+      "type": "string",
+      "description": "Validator or check that triggered this repair."
+    },
+    "trigger_detail": {
+      "type": "string",
+      "description": "Human-readable detail about what failed."
+    },
+    "max_attempts": { "type": "integer", "minimum": 1 },
+    "attempt_count": { "type": "integer", "minimum": 0 },
+    "allowed_actions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "forbidden_actions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "input_artifacts": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["PENDING", "IN_PROGRESS", "COMPLETED", "FAILED", "BLOCKED"]
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "schema_version": "repair_policy_v1",
+  "description": "Repair budget and escalation policy per phase. Each repair type has a max attempt count before escalation.",
+  "global_max_repair_attempts": 3,
+  "per_phase_budget": {
+    "REPAIRING_PLAN": {
+      "max_attempts": 2,
+      "escalation_on_exhaustion": "BLOCKED_BY_GOAL_AMBIGUITY",
+      "allowed_roles": ["Planner"]
+    },
+    "REPAIRING_ARTIFACT_ROUTING": {
+      "max_attempts": 2,
+      "escalation_on_exhaustion": "BLOCKED_BY_ARTIFACT_MISPLACEMENT",
+      "allowed_roles": ["Engineer"]
+    },
+    "REPAIRING_VALIDATOR": {
+      "max_attempts": 3,
+      "escalation_on_exhaustion": "BLOCKED_BY_VALIDATOR_UNTRUSTED",
+      "allowed_roles": ["ValidatorEngineer"]
+    },
+    "REPAIRING_EVIDENCE": {
+      "max_attempts": 2,
+      "escalation_on_exhaustion": "BLOCKED_BY_EVIDENCE_GAP",
+      "allowed_roles": ["Critic"]
+    },
+    "REPAIRING_IMPLEMENTATION": {
+      "max_attempts": 3,
+      "escalation_on_exhaustion": "BLOCKED",
+      "allowed_roles": ["Engineer"]
+    }
+  },
+  "forbidden_repair_actions": [
+    "write to final_status.json",
+    "write to certification.json",
+    "write to policy_decision.json",
+    "write to replay_report.json",
+    "write to run_state.json",
+    "write to verifier_artifacts/ (unless repair type is REPAIRING_VALIDATOR)",
+    "delete frozen evidence",
+    "modify phase_queue.json",
+    "modify dispatch_log.jsonl"
+  ],
+  "repair_tracking_file": "repair_attempts.jsonl"
+}

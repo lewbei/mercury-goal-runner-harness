@@ -6,9 +6,10 @@ Last verified: 2026-05-08
 
 ## Current Direction
 
-The implemented local layer is v3.4 RPG Test Aggregation on top of the
-v3.3 RPG Harness Test Record. The next planned layer is broader live
-Pi/Mercury campaign collection only after the aggregation boundary stays stable.
+The implemented local layer is RPG-Harness v5 Phase 2-8 (Supervisor Ledger,
+Artifact Routing, Success Criteria/Oracles, Validator Factory, Replay
+Certification, Memory Split, Meta-Harness v0.1) on top of v3.7 MemPalace
++ ACE Memory Governance.
 The research direction is Verifier-Provenance Goal Runner Harness,
 centered on:
 
@@ -21,6 +22,7 @@ Who is allowed to certify DONE?
 - `README.md` - repository overview and current commands.
 - `PROJECT_STATUS.md` - implementation status and limitations.
 - `FRAMEWORK.md` - conceptual architecture and actual current file map.
+- `docs/V5_ARCHITECTURE_GUIDE.md` - corrected V5 architecture plan with per-layer build status (✅ exists / 🔧 needs work).
 - `.agentic-pi/README.md` - local harness folder ownership map.
 - `.agentic-pi/runtime/README.md` - runtime module ownership map.
 - `.agentic-pi/diagnostics/README.md` - deterministic diagnostic fixture map.
@@ -35,7 +37,18 @@ Who is allowed to certify DONE?
 - `docs/V3_2_RUNTIME_ENFORCEMENT_PROOF.md` - runtime enforcement proof boundary.
 - `docs/RPG_HARNESS_TEST_FORM.md` - RPG test form and statistical test-record boundary.
 - `docs/V3_4_RPG_TEST_AGGREGATION.md` - RPG test-record aggregation boundary.
+- `docs/V3_5_0_AUTHORITY_ARTIFACT_PREREQUISITE.md` - v3.5.0 Authority Artifact Prerequisite: final_status.json machine-readable authority boundary.
+- `docs/V3_5_EVIDENCE_FREEZE.md` - frozen producer-linked evidence boundary.
+- `docs/V3_6_RUN_LOCAL_AND_QUARANTINE_MEMORY.md` - run-local and quarantine memory boundary.
+- `docs/V3_7_MEMPALACE_ACE_MEMORY_GOVERNANCE.md` - structured advisory memory governance boundary.
+- `docs/V3_5_TO_V4_0_AUTHORITY_EVIDENCE_MEMORY_PLAN.md` - implemented authority-artifact prerequisite plus evidence-freeze, ACE/MemPalace memory, context-board, adapter, and paper-evaluation roadmap.
 - `certification_policy.yaml` - draft static policy vocabulary.
+
+- `.agentic-pi/run_kernel/` - RPG-Harness v5 Phase 2 supervisor ledger: run kernel, transition validator, phase registry, work packet lifecycle, dispatch ledger, protected core artifacts.
+- `.agentic-pi/core/` - RPG-Harness v5 trusted core: core authority policy, protected artifacts, status lattice, trusted core manifest.
+- `.agentic-pi/artifacts/` - RPG-Harness v5 Phase 3 artifact routing: expected_artifacts schema, artifact contract schema, placement policy, location/misplacement/fallback/satisfaction validators.
+- `tests/test_supervisor_ledger.py` - 57 deterministic tests for transition validation, run kernel state machine, work packet lifecycle, dependencies, trusted core files, and integration scenarios.
+- `tests/test_artifact_routing.py` - 46 deterministic tests for artifact schema validation, location checking, misplacement detection, fallback detection, content satisfaction, and kernel integration.
 
 ## Active Supporting Files
 
@@ -104,3 +117,8 @@ Who is allowed to certify DONE?
 - The v3.1 real Pi prompt coverage matrix covers ten bounded negative prompt categories with repeated-trial support; it does not prove arbitrary prompt coverage or arbitrary unbounded bash safety.
 - The v3.3 RPG test record turns a smoke or adversarial run into a schema-valid evidence record with expected failure mode, catch layer, regression decision, and statistical inclusion. It cannot certify DONE.
 - The v3.4 RPG aggregation layer reports false-certified, monitor-miss, false-block, and confidence-interval metrics over collected records only. It cannot certify DONE or prove arbitrary prompt coverage.
+- The v3.5.0 authority artifact layer makes `final_status.json` machine-readable authority and keeps `final_status.md` derived. It cannot certify DONE beyond `certify_run.py` / `policy_engine.py`.
+- The v3.5.1 evidence-freeze layer indexes and freezes producer-linked evidence while excluding memory paths.
+- The v3.6 run-local/quarantine memory layer can record observations and candidate lessons, but memory remains advisory, non-durable, excluded from evidence, and unable to certify DONE.
+- The v3.7 MemPalace/ACE layer can store durable advisory cards, build bounded context packs, reflect helpful/harmful memory use, and promote cards only through `memory_write_gate.py`; it still cannot certify DONE or replace evidence.
+- The `modules/ace-main/` and `modules/mempalace-develop/` folders are local ignored references only. They informed v3.7 memory governance design, but they are not vendored harness dependencies.

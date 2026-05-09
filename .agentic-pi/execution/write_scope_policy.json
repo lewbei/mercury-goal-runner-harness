@@ -1,0 +1,110 @@
+{
+  "schema_version": "write_scope_v1",
+  "description": "Per-role file write scope policy. All paths are relative to repo root. {run_id} is templated at runtime.",
+  "default_policy": "deny",
+  "roles": {
+    "Questioner": {
+      "allowed_prefixes": [".agentic-runs/{run_id}/question_contract.json"],
+      "forbidden_prefixes": []
+    },
+    "Researcher": {
+      "allowed_prefixes": [".agentic-runs/{run_id}/research_pack.md"],
+      "forbidden_prefixes": []
+    },
+    "Designer": {
+      "allowed_prefixes": [".agentic-runs/{run_id}/design_options.json"],
+      "forbidden_prefixes": []
+    },
+    "Structurer": {
+      "allowed_prefixes": [".agentic-runs/{run_id}/structure_outline.json"],
+      "forbidden_prefixes": []
+    },
+    "Planner": {
+      "allowed_prefixes": [".agentic-runs/{run_id}/plan_graph.json"],
+      "forbidden_prefixes": []
+    },
+    "Engineer": {
+      "allowed_prefixes": [
+        ".agentic-runs/{run_id}/artifacts/",
+        ".agentic-runs/{run_id}/trace.jsonl"
+      ],
+      "forbidden_prefixes": [
+        ".agentic-runs/{run_id}/verifier_artifacts/",
+        ".agentic-runs/{run_id}/policy_decision.json",
+        ".agentic-runs/{run_id}/certification.json",
+        ".agentic-runs/{run_id}/final_status.json",
+        ".agentic-runs/{run_id}/final_status.md",
+        ".agentic-runs/{run_id}/replay_report.json",
+        ".agentic-runs/{run_id}/evidence_freeze.json",
+        ".agentic-runs/{run_id}/run_state.json",
+        ".agentic-runs/{run_id}/phase_queue.json"
+      ]
+    },
+    "ValidatorEngineer": {
+      "allowed_prefixes": [
+        ".agentic-runs/{run_id}/validator_spec.json",
+        ".agentic-runs/{run_id}/verifier_artifacts/",
+        ".agentic-runs/{run_id}/verifier_smell_reports/",
+        ".agentic-runs/{run_id}/verifier_strength_reports/"
+      ],
+      "forbidden_prefixes": [
+        ".agentic-runs/{run_id}/policy_decision.json",
+        ".agentic-runs/{run_id}/certification.json",
+        ".agentic-runs/{run_id}/final_status.json",
+        ".agentic-runs/{run_id}/final_status.md",
+        ".agentic-runs/{run_id}/evidence_freeze.json",
+        ".agentic-runs/{run_id}/run_state.json"
+      ]
+    },
+    "Critic": {
+      "allowed_prefixes": [
+        ".agentic-runs/{run_id}/verifier_artifacts/",
+        ".agentic-runs/{run_id}/verifier_smell_reports/",
+        ".agentic-runs/{run_id}/verifier_strength_reports/",
+        ".agentic-runs/{run_id}/evidence_index.json",
+        ".agentic-runs/{run_id}/evidence_freeze.json",
+        ".agentic-runs/{run_id}/evidence_hash_manifest.json"
+      ],
+      "forbidden_prefixes": [
+        ".agentic-runs/{run_id}/run_state.json",
+        ".agentic-runs/{run_id}/policy_decision.json",
+        ".agentic-runs/{run_id}/certification.json",
+        ".agentic-runs/{run_id}/final_status.json",
+        ".agentic-runs/{run_id}/final_status.md"
+      ]
+    },
+    "Reporter": {
+      "allowed_prefixes": [".agentic-runs/{run_id}/pi_report.md"],
+      "forbidden_prefixes": [
+        ".agentic-runs/{run_id}/final_status.json",
+        ".agentic-runs/{run_id}/certification.json",
+        ".agentic-runs/{run_id}/run_state.json"
+      ]
+    },
+    "MemoryWriter": {
+      "allowed_prefixes": [
+        ".agentic-runs/{run_id}/memory_write_proposal.json",
+        ".agentic-pi/memory/run_local/",
+        ".agentic-pi/memory/quarantine/"
+      ],
+      "forbidden_prefixes": [
+        ".agentic-pi/memory/durable/"
+      ]
+    }
+  },
+  "authority_files": [
+    "certification.json",
+    "final_status.json",
+    "final_status.md",
+    "policy_decision.json",
+    "replay_report.json",
+    "run_state.json",
+    "phase_queue.json"
+  ],
+  "protected_directories": [
+    ".agentic-pi/core/",
+    ".agentic-pi/run_kernel/",
+    ".agentic-pi/validators/",
+    ".agentic-pi/schemas/"
+  ]
+}

@@ -1,7 +1,71 @@
 {
-  "proof_matrix_id": "verifier_provenance_harness_v3_4",
-  "version": "v3.4",
+  "proof_matrix_id": "verifier_provenance_harness_v3_7",
+  "version": "v3.7",
   "entries": [
+    {
+      "claim_id": "final_status_json_authority",
+      "claim": "final_status.json is the machine-readable final authority and final_status.md is a derived view only.",
+      "mode": "quick",
+      "command": ["python", "tests/test_final_status_json_authority.py", "-v"],
+      "expected_evidence": ["tests pass", "Markdown cannot upgrade JSON authority", "certification.json and final_status.json agree"],
+      "claim_boundary": "Proves final status artifact authority, not arbitrary Pi/Mercury autonomy."
+    },
+    {
+      "claim_id": "evidence_freeze",
+      "claim": "Producer-linked evidence is indexed, frozen, hash-checked, and memory is excluded from certification evidence.",
+      "mode": "quick",
+      "command": ["python", "tests/test_evidence_freeze.py", "-v"],
+      "expected_evidence": ["tests pass", "policy claims cite verifier evidence", "post-freeze mutation is detected", "memory files are excluded"],
+      "claim_boundary": "Proves deterministic evidence-freeze validation on fixture runs, not arbitrary prompt coverage or full Pi autonomy."
+    },
+    {
+      "claim_id": "run_local_quarantine_memory",
+      "claim": "Run-local memory can record current-run observations without becoming evidence, policy, certification, or final status.",
+      "mode": "quick",
+      "command": ["python", "tests/test_run_local_memory.py", "-v"],
+      "expected_evidence": ["tests pass", "run-local memory appends during planning, execution, and verifier failure", "authority artifacts are rejected", "memory paths in evidence_index.json fail validation"],
+      "claim_boundary": "Proves deterministic run-local memory boundary only; not durable MemPalace, ACE curation, or future-run retrieval."
+    },
+    {
+      "claim_id": "quarantine_memory",
+      "claim": "Quarantine memory candidates require source_run_id and are not retrievable by future runs.",
+      "mode": "quick",
+      "command": ["python", "tests/test_quarantine_memory.py", "-v"],
+      "expected_evidence": ["tests pass", "source_run_id is required", "retrievable_by_future_runs remains false"],
+      "claim_boundary": "Proves non-durable quarantine memory boundary only; not durable memory promotion."
+    },
+    {
+      "claim_id": "mempalace_card_governance",
+      "claim": "MemPalace durable memory cards require evidence refs, remain advisory-only, and cannot claim certification authority.",
+      "mode": "quick",
+      "command": ["python", "tests/test_mempalace_adapter.py", "-v"],
+      "expected_evidence": ["tests pass", "evidence_refs required", "authority leakage rejected", "durable card writes stay under memory root"],
+      "claim_boundary": "Proves structured card storage and validation only; not memory semantic quality."
+    },
+    {
+      "claim_id": "mempalace_context_pack",
+      "claim": "Durable MemPalace cards are advisory-only and context packs exclude deprecated, harmful, evidence-free, and authority-leaking memory.",
+      "mode": "quick",
+      "command": ["python", "tests/test_context_pack_builder.py", "-v"],
+      "expected_evidence": ["tests pass", "context_pack respects max_cards", "deprecated and harmful cards are excluded", "can_certify_done remains false"],
+      "claim_boundary": "Proves deterministic advisory context-pack selection only; not memory semantic quality or authority."
+    },
+    {
+      "claim_id": "ace_reflector_curator",
+      "claim": "ACE reflector marks used memory as helpful or harmful and ACE curator writes delta candidates without durable-memory authority.",
+      "mode": "quick",
+      "command": ["python", "tests/test_ace_reflector_curator.py", "-v"],
+      "expected_evidence": ["tests pass", "reflection cannot write durable memory", "curator candidate cannot directly write durable memory", "source_run_id required"],
+      "claim_boundary": "Proves deterministic ACE proposal boundary only; not autonomous self-improvement quality."
+    },
+    {
+      "claim_id": "ace_memory_write_gate",
+      "claim": "ACE reflection and curator proposals cannot directly write durable memory; memory_write_gate promotes only schema-valid advisory cards after certifier-owned final_status.json.",
+      "mode": "quick",
+      "command": ["python", "tests/test_memory_write_gate.py", "-v"],
+      "expected_evidence": ["tests pass", "authority leakage is rejected", "missing evidence_refs are rejected", "valid card promotes only after final_status.json"],
+      "claim_boundary": "Proves deterministic durable-memory promotion boundary only; memory still cannot certify DONE or override policy."
+    },
     {
       "claim_id": "domain_packs",
       "claim": "Domain packs select task-domain hints without certifying DONE.",
@@ -143,6 +207,14 @@
       "claim_boundary": "Seeded deterministic graph attack distribution only; not proof of arbitrary attack completeness."
     },
     {
+      "claim_id": "vertical_slice_gate",
+      "claim": "The vertical slice gate rejects horizontal output (no fixture, no verdict, no proof command, no test) and accepts vertical proof (one case, one verdict, one proof command, one test).",
+      "mode": "quick",
+      "command": ["python", "tests/test_vertical_slice.py", "-v"],
+      "expected_evidence": ["tests pass", "horizontal 'create all schemas' rejected", "vertical 'one artifact path' accepted", "no-fixture and no-test horizontal output rejected"],
+      "claim_boundary": "Deterministic pattern-based gate on task text and output files only; not proof that all possible horizontal patterns are caught or that the gate prevents every form of shallow work."
+    },
+    {
       "claim_id": "runtime_enforcement",
       "claim": "The runtime command gateway and protected-file guard block or downgrade unsafe Pi/Mercury-shaped commands to MONITOR_FAIL.",
       "mode": "quick",
@@ -165,6 +237,62 @@
       "command": ["python", "tests/test_rpg_test_aggregator.py", "-v"],
       "expected_evidence": ["schema-valid aggregation result", "false CERTIFIED_DONE breaks stopping rule", "can_certify_done remains false"],
       "claim_boundary": "Statistical evidence only over collected records; not proof of arbitrary prompt coverage."
+    },
+    {
+      "claim_id": "raw_goal_chain",
+      "claim": "The raw goal chain compiles, runs, certifies, and returns non-zero exit for NOT_DONE status.",
+      "mode": "quick",
+      "command": ["python", "tests/test_raw_goal_chain.py", "-v"],
+      "expected_evidence": ["tests pass", "NOT_DONE status exits non-zero", "DONE_PASS exits zero", "CERTIFIED_DONE exits zero"],
+      "claim_boundary": "Deterministic raw-goal compilation and certification fixtures only; not general natural-language goal compilation."
+    },
+    {
+      "claim_id": "execution_layer",
+      "claim": "The controlled execution layer validates command allowlist, write scope, and protected files per role.",
+      "mode": "quick",
+      "command": ["python", "tests/test_execution_layer.py", "-v"],
+      "expected_evidence": ["tests pass", "safe commands allowed", "authority files blocked", "role-based write scope enforced"],
+      "claim_boundary": "Deterministic execution-policy validator tests only; not proof of arbitrary command security."
+    },
+    {
+      "claim_id": "repair_layer",
+      "claim": "The repair escalation layer enforces per-phase repair budgets and prevents authority file writes.",
+      "mode": "quick",
+      "command": ["python", "tests/test_repair_layer.py", "-v"],
+      "expected_evidence": ["tests pass", "budget exhaustion blocks with escalation target", "authority file writes forbidden", "verifier artifacts gated to REPAIRING_VALIDATOR"],
+      "claim_boundary": "Deterministic repair-policy and budget validator tests only; not proof of live repair loop safety."
+    },
+    {
+      "claim_id": "skill_dispatcher",
+      "claim": "The progressive skill dispatcher loads QRSPI skills cumulatively across phases without duplication.",
+      "mode": "quick",
+      "command": ["python", "tests/test_skill_dispatcher.py", "-v"],
+      "expected_evidence": ["tests pass", "skills accumulate progressively", "deterministic phases add no skills", "DONE has all 13 skills"],
+      "claim_boundary": "Deterministic skill accumulation and text loading only; not proof of agent prompt quality or skill effectiveness."
+    },
+    {
+      "claim_id": "skill_wiring",
+      "claim": "The skill dispatcher is wired into the Run Kernel — work packets auto-load accumulated QRSPI skills based on their phase.",
+      "mode": "quick",
+      "command": ["python", "tests/test_skill_wiring.py", "-v"],
+      "expected_evidence": ["tests pass", "INTAKE packet has question-contract", "IMPLEMENTING packet has all prior skills", "NEW packet has no skills"],
+      "claim_boundary": "Deterministic work-packet skill injection only; not proof of agent prompt quality."
+    },
+    {
+      "claim_id": "supervisor_loop",
+      "claim": "The supervisor loop dispatches all ready work packets horizontally within a phase, polls for results, and determines phase outcome.",
+      "mode": "quick",
+      "command": ["python", "tests/test_supervisor_loop.py", "-v"],
+      "expected_evidence": ["tests pass", "get_ready_packets returns all PENDING packets with met dependencies", "dispatch_all dispatches every packet", "poll_until_complete collects all terminal statuses", "phase outcome computed correctly"],
+      "claim_boundary": "Deterministic supervisor dispatch and polling only; not proof of live agent execution speed or arbitrary network reliability."
+    },
+    {
+      "claim_id": "run_supervised",
+      "claim": "The supervised run pipeline integrates all layers: kernel phase walking, horizontal packet dispatch, progressive skills, write scope validation, and repair budget enforcement.",
+      "mode": "quick",
+      "command": ["python", "tests/test_run_supervised.py", "-v"],
+      "expected_evidence": ["tests pass", "PLANNING creates 4 packets", "skills accumulated in each phase", "write scope and repair validators accessible", "live tool execution within phase packets"],
+      "claim_boundary": "Deterministic integration test using in-process tool execution only; not proof of live agent dispatch, network reliability, or arbitrary goal completion."
     },
     {
       "claim_id": "full_unittest",
