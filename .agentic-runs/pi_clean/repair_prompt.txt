@@ -1,4 +1,0 @@
-The certifier found these issues in run pi_clean:
-FAILED_CHECK: 1.json touched file missing: step_1.txt
-
-Fix EVERY issue. Read the current step logs from .agentic-runs/pi_clean/step_logs/ and fix them in place. Read files from .agentic-runs/pi_clean/ to understand what was created. Write corrected files using the write tool. Do NOT touch certification.json or final_status.json.

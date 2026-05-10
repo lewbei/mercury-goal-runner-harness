@@ -1,7 +1,0 @@
-{
-  "algorithm": "Ed25519",
-  "private_key_b64": "+Jtd0JvhUzS8qNJ2asm+rEtbccL0ZC9H8IQGV+b9yMI=",
-  "public_key_b64": "CnxJaZ8h9WcvxBsyZ7g7X9va5USAo5vaMb63owgjRdE=",
-  "generated_at": "2026-05-10T09:18:04.660073+00:00",
-  "generated_by": "harness_signing"
-}

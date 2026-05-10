@@ -1,9 +1,0 @@
-{
-  "planner": "planner-minimal",
-  "steps": [
-    {
-      "action": "placeholder",
-      "description": "Step from planner-minimal"
-    }
-  ]
-}

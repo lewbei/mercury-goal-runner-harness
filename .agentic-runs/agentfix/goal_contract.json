@@ -1,1 +1,0 @@
-{"run_id":"agentfix","raw_user_prompt":"Write a Python function that reverses a string","intent":"String reverser","final_outputs":["reverse_string.py"],"done_criteria":["reverse_string.py exists"],"complexity_level":"EASY","max_steps":1}

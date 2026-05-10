@@ -4,54 +4,40 @@ __pycache__/
 *.pyo
 *.pyd
 *.egg-info/
-/
+dist/
 build/
 *.egg
 
-# Generated harness run outputs
-.agentic-runs/benchmark_*/
-.agentic-runs/diagnostic_eval_*/
-.agentic-runs/smoke_v01_latest/
-.agentic-runs/test_*/
-.agentic-runs/hard_test_001/
-.agentic-runs/pi_smoke_*/
-.agentic-runs/proof_matrix_*/
-.agentic-runs/proof_matrix_outputs/
-.agentic-runs/pi_chain_smoke_outputs/
-.agentic-runs/agentic_autonomy_outputs/
-.agentic-runs/red_team_outputs/
-.agentic-runs/runtime_enforcement_outputs/
-.agentic-runs/rpg_test_aggregation_outputs/
-diagnostic_outputs/trajectory_metrics.json
-diagnostic_outputs/trajectory_report.md
+# All harness run outputs
+.agentic-runs/
+
+# Diagnostic outputs
+diagnostic_outputs/
+benchmark_outputs/
 artifacts/
-!.agentic-pi/diagnostics/provenance_gate/**/artifacts/
-!.agentic-pi/diagnostics/provenance_gate/**/artifacts/**
-!.agentic-pi/diagnostics/evaluation/**/artifacts/
-!.agentic-pi/diagnostics/evaluation/**/artifacts/**
+
+# Stale test files at root
+test_*.py
+check_*.py
+verifier_*.*
+
+# Memory runtime data
 .agentic-pi/memory/learning_records/*.json
+.agentic-pi/memory/durable/learn-*.json
 .pi/tasks/
-modules/ace-main/
-modules/mempalace-develop/
 
-# Deferred planner/runtime prototypes; v0.5 Pi integration is prompt contracts only.
-.agentic-pi/runtime/branch_selector.py
-.agentic-pi/runtime/evidence_selector.py
-.agentic-pi/runtime/goal_pipeline.py
-.agentic-pi/schemas/branch.schema.json
-.agentic-pi/schemas/evidence.schema.json
-.pi/supervisor-config.json
+# Reference modules (not part of harness)
+modules/
 
-# IDE / editor files
+# IDE
 .vscode/
 .idea/
 *.swp
 *~
-*.sublime-workspace
-*.sublime-project
 
-# OS junk
+# OS
 .DS_Store
 Thumbs.db
-nul
-modules/
+
+# Pi sessions
+.pi/sessions/

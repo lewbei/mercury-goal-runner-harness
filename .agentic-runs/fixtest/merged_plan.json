@@ -1,5 +1,0 @@
-{
-  "steps": [
-    {"task_id": "step1", "action": "create_file", "path": "factorial.py", "requires": [], "produces": ["factorial.py"]}
-  ]
-}

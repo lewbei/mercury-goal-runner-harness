@@ -1,9 +1,0 @@
-{
-  "nodes": [
-    {"node_id": "step0", "type": "task", "task_id": "step0"},
-    {"node_id": "planner-minimal.md", "type": "artifact", "path": "planner-minimal.md", "artifact_id": "planner-minimal.md"}
-  ],
-  "edges": [
-    {"source": "step0", "target": "planner-minimal.md", "type": "produces"}
-  ]
-}

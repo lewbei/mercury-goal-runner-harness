@@ -1,9 +1,0 @@
-{
-  "nodes": [
-    {"node_id": "step1", "type": "task", "task_id": "step1"},
-    {"node_id": "project_adapter.py", "type": "artifact", "path": "project_adapter.py", "artifact_id": "project_adapter.py"}
-  ],
-  "edges": [
-    {"source": "step1", "target": "project_adapter.py", "type": "produces"}
-  ]
-}

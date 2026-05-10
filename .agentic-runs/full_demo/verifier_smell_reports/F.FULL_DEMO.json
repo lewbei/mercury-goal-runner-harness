@@ -1,8 +1,0 @@
-{
-  "artifact_id": "F.FULL_DEMO",
-  "smell_flags": [
-    "post_solution_test"
-  ],
-  "disqualifying": false,
-  "authority_penalty": 1
-}

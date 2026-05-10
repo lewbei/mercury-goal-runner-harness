@@ -1,4 +1,0 @@
-{
-  "goal": "Create a simple Python calculator module with add, subtract, multiply, divide functions. Write it to a file called calculator.py with basic error handling (division by zero). Also create a test_calculator.py that tests all four operations.",
-  "run_id": "qrspi_final"
-}

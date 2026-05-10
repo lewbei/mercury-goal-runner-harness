@@ -1,5 +1,0 @@
-{
-  "steps": [
-    {"task_id": "step0", "action": "create_file", "path": "planner-minimal.md", "requires": [], "produces": ["planner-minimal.md"]}
-  ]
-}

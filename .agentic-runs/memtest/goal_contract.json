@@ -1,1 +1,0 @@
-{"run_id":"memtest","raw_user_prompt":"Write a Python function that checks if a string is a valid email address","intent":"Email validator","final_outputs":["validate_email.py"],"done_criteria":["validate_email.py exists"],"complexity_level":"EASY","max_steps":2}

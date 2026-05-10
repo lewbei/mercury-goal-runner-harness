@@ -1,9 +1,0 @@
-{
-  "nodes": [
-    {"node_id": "step1", "type": "task", "task_id": "step1"},
-    {"node_id": "count_vowels.py", "type": "artifact", "path": "count_vowels.py", "artifact_id": "count_vowels.py"}
-  ],
-  "edges": [
-    {"source": "step1", "target": "count_vowels.py", "type": "produces"}
-  ]
-}

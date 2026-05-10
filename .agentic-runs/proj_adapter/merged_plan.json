@@ -1,5 +1,0 @@
-{
-  "steps": [
-    {"task_id": "step1", "action": "create_file", "path": "project_adapter.py", "requires": [], "produces": ["project_adapter.py"]}
-  ]
-}

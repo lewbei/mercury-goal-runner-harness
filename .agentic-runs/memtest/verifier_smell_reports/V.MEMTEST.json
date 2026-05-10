@@ -1,8 +1,0 @@
-{
-  "artifact_id": "V.MEMTEST",
-  "smell_flags": [
-    "post_solution_test"
-  ],
-  "disqualifying": false,
-  "authority_penalty": 1
-}

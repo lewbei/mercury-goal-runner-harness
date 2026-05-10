@@ -1,9 +1,0 @@
-{
-  "nodes": [
-    {"node_id": "step1", "type": "task", "task_id": "step1"},
-    {"node_id": "factorial.py", "type": "artifact", "path": "factorial.py", "artifact_id": "factorial.py"}
-  ],
-  "edges": [
-    {"source": "step1", "target": "factorial.py", "type": "produces"}
-  ]
-}

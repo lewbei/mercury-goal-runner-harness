@@ -1,1 +1,0 @@
-{"run_id": "vs008_vertical_smoke", "step_id": 1, "status": "PASSED", "action_taken": "vertical smoke", "files_touched": ["output.txt"], "commands_run": ["echo smoke > output.txt"], "evidence": ["output.txt"], "pass_condition_satisfied": true, "remaining_work": []}

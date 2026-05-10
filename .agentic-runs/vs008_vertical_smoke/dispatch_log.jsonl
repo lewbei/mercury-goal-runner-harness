@@ -1,6 +1,0 @@
-{"event": "run_created", "run_id": "vs008_vertical_smoke", "timestamp": "2026-05-09T12:22:57.794923+00:00", "goal_contract_path": null}
-{"event": "phase_transition", "run_id": "vs008_vertical_smoke", "from_phase": "NEW", "to_phase": "INTAKE", "timestamp": "2026-05-09T12:22:57.817658+00:00"}
-{"event": "work_packet_created", "run_id": "vs008_vertical_smoke", "work_packet_id": "WP.INTAKE.001", "phase": "INTAKE", "role": "Questioner", "timestamp": "2026-05-09T12:22:57.857929+00:00"}
-{"event": "work_packet_dispatched", "run_id": "vs008_vertical_smoke", "work_packet_id": "WP.INTAKE.001", "timestamp": "2026-05-09T12:22:57.871279+00:00"}
-{"event": "work_packet_result_received", "run_id": "vs008_vertical_smoke", "work_packet_id": "WP.INTAKE.001", "result_path": "work_results/WP.INTAKE.001.json", "timestamp": "2026-05-09T12:22:57.884627+00:00"}
-{"event": "work_packet_accepted", "run_id": "vs008_vertical_smoke", "work_packet_id": "WP.INTAKE.001", "timestamp": "2026-05-09T12:22:57.913053+00:00"}

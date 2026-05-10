@@ -1,3 +1,0 @@
-{"timestamp": "2026-05-06T09:10:13.958494Z", "event": "goal_contract_added", "file": "goal_contract.json"}
-{"time": "2026-05-06T09:10:14.826721+00:00", "agent": "guarded_worker", "event": "step_executed", "status": "OK", "data": {"step_id": 1, "status": "PASSED"}, "data_hash": "b1fb210298e196578e500bc1e134168d1ccc9f79242b4850819696da92abd285"}
-{"time": "2026-05-06T09:10:14.986399+00:00", "agent": "guarded_worker", "event": "run_completed", "status": "OK", "data": {}, "data_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"}

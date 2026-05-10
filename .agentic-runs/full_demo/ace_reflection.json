@@ -1,1 +1,0 @@
-{"schema_version":"reflection_report_v1","run_id":"full_demo","generated_at":"2026-05-10T08:50:00Z","outcome_status":"CERTIFIED_DONE","helpful":[{"card_id":"ctx-001","reason":"Guided algorithm choice to right-to-left iteration"}],"harmful":[],"neutral":[]}
