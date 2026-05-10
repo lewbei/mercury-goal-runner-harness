@@ -1006,6 +1006,25 @@ def apply_memory_authority_gate(
     return current_status
 
 
+def check_validator_certification(run_dir: Path, failed: list, passed: list) -> None:
+    """Read validator_certification.json and block if missing or not certified."""
+    vc_path = run_dir / "validator_certification.json"
+    if not vc_path.is_file():
+        failed.append("validator_certification.json missing \u2014 verifier not certified")
+        return
+    try:
+        data = json.loads(vc_path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        failed.append(f"validator_certification.json parse error: {exc}")
+        return
+    if data.get("certified") is not True:
+        reasons = data.get("reasons", [])
+        reasons_str = "; ".join(reasons) if reasons else "no reason given"
+        failed.append(f"verifier not certified: {reasons_str}")
+        return
+    passed.append("validator_certification.json present and certified=True")
+
+
 def main():
     if len(sys.argv) < 2:
         print("Usage: python certify_run.py <run_dir> [--skill-context <path>]")
@@ -1202,6 +1221,8 @@ def main():
             failed,
             artifact_tests_present=artifact_tests_present,
         )
+
+    check_validator_certification(run_dir, failed, passed)
 
     if provenance_mode:
         if verifier_contract:
