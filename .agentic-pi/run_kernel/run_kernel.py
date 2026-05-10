@@ -205,6 +205,100 @@ def get_dispatch_log(run_id: str) -> list[dict]:
 # ─── Phase transitions ────────────────────────────────────────────────────────
 
 
+def _run_pre_transition_gates(run_id: str, target_phase: str) -> None:
+    """Run pre-transition gates before entering certain phases.
+
+    Raises RuntimeError if a gate blocks the transition.
+    """
+    run_dir = _get_run_dir(run_id)
+
+    if target_phase == "PLANNING":
+        # Gate: plan_coverage_matrix.json must exist and be complete
+        _gate_plan_completeness(run_dir)
+    elif target_phase == "IMPLEMENTING":
+        # Gate: vertical slice must be selected
+        _gate_vertical_slice_selected(run_dir)
+    elif target_phase == "VALIDATING":
+        # Gate: validator factory must have certified the verifier
+        _gate_validator_certified(run_dir)
+
+
+def _gate_plan_completeness(run_dir: Path) -> None:
+    """Run Plan Completeness Gate. Blocks if plan is incomplete."""
+    planning_dir = Path(__file__).resolve().parents[1] / "planning"
+    gate_path = planning_dir / "plan_completeness_gate.py"
+    if not gate_path.is_file():
+        return
+    matrix_path = run_dir / "plan_coverage_matrix.json"
+    if not matrix_path.is_file():
+        raise RuntimeError(
+            "PLANNING blocked: plan_coverage_matrix.json missing in run_dir"
+        )
+    import subprocess
+    result = subprocess.run(
+        [sys.executable, str(gate_path), str(run_dir)],
+        capture_output=True, text=True, timeout=30
+    )
+    if result.returncode != 0:
+        raise RuntimeError(f"Plan Completeness Gate failed: {result.stderr.strip()}")
+    report_path = run_dir / "plan_completeness_report.json"
+    if report_path.is_file():
+        report = _load_json(report_path)
+        if not report.get("plan_complete", False):
+            gaps = report.get("gaps", [])
+            raise RuntimeError(
+                f"PLANNING blocked: plan incomplete. Gaps: {'; '.join(gaps[:5])}"
+            )
+
+
+def _gate_vertical_slice_selected(run_dir: Path) -> None:
+    """Run Vertical Slice Selector. Blocks if no slice was selected."""
+    supervisor_dir = Path(__file__).resolve().parents[1] / "supervisor"
+    selector_path = supervisor_dir / "vertical_slice_selector.py"
+    if not selector_path.is_file():
+        return
+    candidates_path = run_dir / "vertical_slice_candidates.json"
+    if not candidates_path.is_file():
+        raise RuntimeError(
+            "IMPLEMENT blocked: vertical_slice_candidates.json missing"
+        )
+    import subprocess
+    result = subprocess.run(
+        [sys.executable, str(selector_path), str(run_dir)],
+        capture_output=True, text=True, timeout=30
+    )
+    if result.returncode != 0:
+        raise RuntimeError(
+            f"Vertical Slice Selector failed: {result.stderr.strip()}"
+        )
+    selection_path = run_dir / "vertical_slice_selection.json"
+    if not selection_path.is_file():
+        raise RuntimeError(
+            "IMPLEMENT blocked: vertical_slice_selection.json not produced"
+        )
+    selection = _load_json(selection_path)
+    if not selection.get("selected_slice_id"):
+        raise RuntimeError(
+            "IMPLEMENTING blocked: no vertical slice selected \u2014 all candidates failed validation"
+        )
+
+
+def _gate_validator_certified(run_dir: Path) -> None:
+    """Gate: validator_factory must have certified the verifier before validation."""
+    cert_path = run_dir / "validator_certification.json"
+    if not cert_path.is_file():
+        raise RuntimeError(
+            "VALIDATING blocked: validator_certification.json missing \u2014 "
+            "run validator_factory first"
+        )
+    cert = _load_json(cert_path)
+    if not cert.get("certified", False):
+        reasons = cert.get("reasons", [])
+        raise RuntimeError(
+            f"VALIDATING blocked: verifier not certified. Reasons: {'; '.join(reasons[:3])}"
+        )
+
+
 def transition_to(run_id: str, target_phase: str) -> dict:
     """Attempt to transition the run to a new phase.
 
@@ -222,6 +316,9 @@ def transition_to(run_id: str, target_phase: str) -> dict:
     errors = vt.validate_transition_with_registry(current, target_phase)
     if errors:
         raise RuntimeError(f"Transition rejected: {'; '.join(errors)}")
+
+    # ── Pre-transition gates ──────────────────────────────────────────
+    _run_pre_transition_gates(run_id, target_phase)
 
     now = _now_iso()
 

@@ -111,7 +111,9 @@ def score_candidate(candidate: Dict[str, Any]) -> float:
 # Main orchestration
 # ---------------------------------------------------------------------------
 
-def main() -> None:
+def main(argv: list = None) -> None:
+    if argv is None:
+        argv = sys.argv
     """Entry point for the selector.
 
     #@ Requires(lambda _: True, "No pre‑conditions")
@@ -126,7 +128,11 @@ def main() -> None:
     # and the run directory is `.agentic-runs/vslice` as given by the environment variable.
     # If the environment variable `RUN_ID` is set we use it.
     run_id = os.getenv("RUN_ID", "vslice")
-    run_path = os.path.join(os.getcwd(), ".agentic-runs", run_id)
+    # Use command-line run_dir if provided, otherwise default
+    if len(argv) >= 2:
+        run_path = os.path.abspath(argv[1])
+    else:
+        run_path = os.path.join(os.getcwd(), ".agentic-runs", run_id)
     macro_path = os.path.join(run_path, "macro_plan.json")
     candidates_path = os.path.join(run_path, "vertical_slice_candidates.json")
 

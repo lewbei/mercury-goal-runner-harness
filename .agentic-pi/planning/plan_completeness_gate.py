@@ -7,6 +7,7 @@ Validates a macro‑plan coverage matrix against the required checks and writes 
 
 import json
 import os
+import sys
 from dataclasses import dataclass
 from typing import List, Dict
 
@@ -109,9 +110,14 @@ def compute_score(dimensions: List[Dict]) -> float:
 # Main routine
 # ---------------------------------------------------------------------------
 
-def main() -> None:
-    # Determine the run directory (two levels up from this file)
-    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".agentic-runs", "plangate"))
+def main(argv: list = None) -> None:
+    if argv is None:
+        argv = sys.argv
+    # Accept run_dir as command-line argument, or default
+    if len(argv) >= 2:
+        base_dir = os.path.abspath(argv[1])
+    else:
+        base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".agentic-runs", "plangate"))
     coverage_path = os.path.join(base_dir, "plan_coverage_matrix.json")
     report_path = os.path.join(base_dir, "plan_completeness_report.json")
 
