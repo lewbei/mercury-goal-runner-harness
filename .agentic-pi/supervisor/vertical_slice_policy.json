@@ -1,0 +1,1 @@
+{"rule": "No horizontal expansion until one vertical slice passes.", "min_layers": 3, "max_files_first_slice": 5}
