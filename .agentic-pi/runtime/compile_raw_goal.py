@@ -160,6 +160,25 @@ def main(argv=None) -> int:
         help="raw-goal proof fixture mode",
     )
     args = parser.parse_args(argv)
+
+    # Initialize run via the Run Kernel so run_state.json exists.
+    # This is NOT best-effort: goal-run requires run_state.json, so
+    # we fail early with a clear message if kernel init fails.
+    try:
+        import importlib.util
+        from pathlib import Path as _Path
+        _rk_path = _Path(__file__).resolve().parents[2] / ".agentic-pi" / "run_kernel" / "run_kernel.py"
+        _spec = importlib.util.spec_from_file_location("run_kernel_compile", _rk_path)
+        _rk = importlib.util.module_from_spec(_spec)
+        _spec.loader.exec_module(_rk)
+        _rk.create_run(args.run_id, goal_contract_path=args.goal)
+    except FileExistsError:
+        pass  # run already exists, continue
+    except Exception as exc:
+        print(f"ERROR: Run Kernel initialization failed: {exc}", file=sys.stderr)
+        print("goal-run will not work without run_state.json. Use 'pi_cli.py goal-init' first.", file=sys.stderr)
+        sys.exit(1)
+
     run_dir = compile_raw_goal(args.run_id, args.goal, args.mode)
     print(f"Compiled raw goal into {run_dir}")
     print(f"mode={args.mode}")

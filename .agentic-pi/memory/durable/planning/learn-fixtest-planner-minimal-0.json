@@ -1,0 +1,8 @@
+{
+  "card_id": "learn-fixtest-planner-minimal-0",
+  "content": "Subagent planner-minimal in fixtest: # Thinking Plan: Factorial Function\n\n## Architecture\nThe solution consists of a single Python module `factorial.py` that provides a function `factorial`. This module is sufficient to satisfy the goal ",
+  "source": "thinking_plan",
+  "agent": "planner-minimal",
+  "outcome": "CERTIFIED_DONE",
+  "stored_at": "2026-05-10T09:20:18.134989+00:00"
+}

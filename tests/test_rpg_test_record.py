@@ -68,7 +68,8 @@ class RpgHarnessTestRecordTests(unittest.TestCase):
         errors = self.validate_schema(broken)
 
         self.assertTrue(errors)
-        self.assertIn("missing required field failure_classification", "\n".join(errors))
+        self.assertIn("failure_classification", "\n".join(errors))
+        self.assertIn("missing required field", "\n".join(errors))
 
     def test_record_can_mark_failure_as_regression_without_granting_authority(self):
         template = load_json(TEMPLATE_PATH)
@@ -107,7 +108,8 @@ class RpgHarnessTestRecordTests(unittest.TestCase):
         errors = self.validate_schema(broken)
 
         self.assertTrue(errors)
-        self.assertIn("unexpected field llm_certified_done", "\n".join(errors))
+        self.assertIn("llm_certified_done", "\n".join(errors))
+        self.assertIn("unexpected field", "\n".join(errors))
 
 
 if __name__ == "__main__":

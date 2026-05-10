@@ -1,0 +1,12 @@
+{
+  "schema_version": "evidence_freeze_v1",
+  "run_id": "memtest",
+  "freeze_id": "freeze_0001",
+  "frozen_at": "2026-05-10T09:10:33.243067+00:00",
+  "evidence_index_path": "evidence_index.json",
+  "evidence_index_sha256": "78e5c3beeff9b5a039695fe631618bf371e556ad2604431b05a6cfcaa7c4832b",
+  "policy_decision_path": "policy_decision.json",
+  "policy_decision_sha256": "ff0a7db3a7420dd8615348a4c287e21a07b2b292cd1d0375ad66a23ce1c318d6",
+  "hash_manifest_path": "evidence_hash_manifest.json",
+  "item_count": 11
+}

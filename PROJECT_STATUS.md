@@ -1,8 +1,28 @@
 # Project Status
 
-## Current version
+## Version boundary (read first)
 
-Mercury Goal Runner Harness RPG-Harness v5 Phases 1-9 (Supervisor Ledger, Artifact Routing, Success Criteria/Oracles, Validator Factory, Replay Certification, Memory Split, Meta-Harness v0.1, QRSPI Skills) on top of v3.7 MemPalace + ACE Memory Governance.
+```text
+Committed state:     v3.4 RPG Test Aggregation
+Local/uncommitted:   v3.5–v3.7 (authority artifact, evidence freeze/index,
+                     run-local memory, quarantine memory, MemPalace + ACE
+                     memory governance — proof slices exist locally but are
+                     not fully wired into the default end-to-end runtime)
+Planned / roadmap:   v3.8–v4.0 (multi-agent context board, external host
+                     integration, paper-style evaluation package)
+```
+
+This file describes all three layers. A reviewer should not mistake
+locally-implemented proof slices for committed-and-CI-verified defaults.
+
+## Current committed version
+
+RPG-Harness v5 Phases 1-9 (Supervisor Ledger, Artifact Routing, Success
+Criteria/Oracles, Validator Factory, Replay Certification, Memory Split,
+Meta-Harness v0.1, QRSPI Skills) on top of v3.4 RPG Test Aggregation.
+
+Local working copies may include v3.5–v3.7 proof slices that are not yet
+merged into the default runtime path — see the version boundary above.
 
 The purpose of this repository is not to claim that Mercury V2 becomes smarter by looping. The purpose is to place Mercury V2 inside a controlled goal-execution harness where outputs are checked through contracts, logs, evidence, and certification.
 
@@ -20,9 +40,9 @@ Who is allowed to certify DONE?
 
 ## Current result
 
-Status: LOCAL PASS
+Status: LOCAL PASS (committed tests)
 
-The current harness passes its local regression tests and the current benchmark verdict check:
+The current harness passes its committed regression tests and benchmark verdict check:
 
 ```text
 python -m unittest discover tests -v
@@ -157,10 +177,16 @@ v3.x = Statistical adversarial red-team loop IMPLEMENTED LOCALLY
 v3.2 = Runtime enforcement proof IMPLEMENTED
 v3.3 = RPG harness test record IMPLEMENTED
 v3.4 = RPG test aggregation IMPLEMENTED LOCALLY
+
+# ── COMMITTED BOUNDARY ── everything below is local/uncommitted or planned ──
+
 v3.5.0 = Authority artifact prerequisite IMPLEMENTED LOCALLY
 v3.5.1 = Evidence freeze + evidence index IMPLEMENTED LOCALLY
 v3.6 = Run-local memory + quarantine memory IMPLEMENTED LOCALLY
 v3.7 = MemPalace + ACE memory governance IMPLEMENTED LOCALLY
+
+# ── PLANNED ──
+
 v3.8 = Multi-agent context board PLANNED
 v3.9 = External host / coding-agent integration PLANNED
 v4.0 = Paper-style evaluation package PLANNED

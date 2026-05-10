@@ -1,0 +1,17 @@
+{
+  "schema_version": "reflection_report_v1",
+  "run_id": "he_full",
+  "generated_at": "2026-05-10T07:45:38.057248+00:00",
+  "outcome_status": "CERTIFIED_DONE",
+  "helpful_cards": [
+    {
+      "card_id": "card_he_full",
+      "reason": "outcome=CERTIFIED_DONE"
+    }
+  ],
+  "harmful_cards": [],
+  "neutral_cards": [],
+  "can_write_durable_memory": false,
+  "final_status_authority": "certifier_only",
+  "can_certify_done": false
+}

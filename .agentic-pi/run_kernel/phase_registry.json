@@ -1,0 +1,256 @@
+{
+  "schema_version": "phase_registry_v1",
+  "description": "Registry of all phases recognized by the Run Kernel, with role and expected artifact output.",
+  "phases": [
+    {
+      "phase": "NEW",
+      "display_name": "New Run",
+      "description": "Run has been created but not started.",
+      "is_blocked": false,
+      "is_repair": false
+    },
+    {
+      "phase": "INTAKE",
+      "display_name": "Goal Intake",
+      "description": "Raw goal captured as goal_contract.json.",
+      "expected_output": "goal_contract.json",
+      "role": "Questioner",
+      "is_blocked": false,
+      "is_repair": false
+    },
+    {
+      "phase": "QUESTIONING",
+      "display_name": "Question Phase",
+      "description": "Clarify goal into question_contract.json.",
+      "expected_output": "question_contract.json",
+      "role": "Questioner",
+      "is_blocked": false,
+      "is_repair": false
+    },
+    {
+      "phase": "RESEARCHING",
+      "display_name": "Research Phase",
+      "description": "Gather relevant context into research_pack.md.",
+      "expected_output": "research_pack.md",
+      "role": "Researcher",
+      "is_blocked": false,
+      "is_repair": false
+    },
+    {
+      "phase": "DESIGNING",
+      "display_name": "Design Phase",
+      "description": "Design options into design_options.json.",
+      "expected_output": "design_options.json",
+      "role": "Designer",
+      "is_blocked": false,
+      "is_repair": false
+    },
+    {
+      "phase": "STRUCTURING",
+      "display_name": "Structure Phase",
+      "description": "Structure outline into structure_outline.json.",
+      "expected_output": "structure_outline.json",
+      "role": "Structurer",
+      "is_blocked": false,
+      "is_repair": false
+    },
+    {
+      "phase": "PLANNING",
+      "display_name": "Planning Phase",
+      "description": "Produce PlanGraph + selected/rejected branches.",
+      "expected_output": "plan_graph.json",
+      "role": "Planner",
+      "is_blocked": false,
+      "is_repair": false
+    },
+    {
+      "phase": "WORKTREE_READY",
+      "display_name": "Worktree Ready",
+      "description": "Controlled workspace prepared with artifact contracts.",
+      "expected_output": "workspace_manifest.json",
+      "role": "Engineer",
+      "is_blocked": false,
+      "is_repair": false
+    },
+    {
+      "phase": "IMPLEMENTING",
+      "display_name": "Implementation Phase",
+      "description": "Engineer executes bounded work packets.",
+      "expected_output": "artifacts + trace logs",
+      "role": "Engineer",
+      "is_blocked": false,
+      "is_repair": false
+    },
+    {
+      "phase": "VALIDATOR_BUILDING",
+      "display_name": "Validator Building",
+      "description": "Build and certify generated validators for this run.",
+      "expected_output": "validator_spec.json",
+      "role": "ValidatorEngineer",
+      "is_blocked": false,
+      "is_repair": false
+    },
+    {
+      "phase": "VALIDATING",
+      "display_name": "Validation Phase",
+      "description": "Run validators against evidence and produce verifier artifacts.",
+      "expected_output": "verifier_artifacts/",
+      "role": "Critic",
+      "is_blocked": false,
+      "is_repair": false
+    },
+    {
+      "phase": "EVIDENCE_INDEXING",
+      "display_name": "Evidence Indexing",
+      "description": "Index and freeze all evidence from the run.",
+      "expected_output": "evidence_index.json + evidence_freeze.json",
+      "role": "Critic",
+      "is_blocked": false,
+      "is_repair": false
+    },
+    {
+      "phase": "POLICY_DECIDING",
+      "display_name": "Policy Decision",
+      "description": "Policy engine evaluates evidence and writes policy_decision.json.",
+      "expected_output": "policy_decision.json",
+      "role": "PolicyJudge",
+      "is_blocked": false,
+      "is_repair": false
+    },
+    {
+      "phase": "REPLAYING",
+      "display_name": "Replay Check",
+      "description": "Recompute certification from frozen evidence to verify consistency.",
+      "expected_output": "replay_report.json",
+      "role": "ReplayJudge",
+      "is_blocked": false,
+      "is_repair": false
+    },
+    {
+      "phase": "CERTIFYING",
+      "display_name": "Certification",
+      "description": "Certifier writes certification.json and final_status.json.",
+      "expected_output": "certification.json + final_status.json",
+      "role": "Certifier",
+      "is_blocked": false,
+      "is_repair": false
+    },
+    {
+      "phase": "REPORTING",
+      "display_name": "Reporting Phase",
+      "description": "Generate pi_report.md / pr_summary.md from final_status.json.",
+      "expected_output": "pi_report.md",
+      "role": "Reporter",
+      "is_blocked": false,
+      "is_repair": false
+    },
+    {
+      "phase": "MEMORY_CONSOLIDATING",
+      "display_name": "Memory Consolidation",
+      "description": "Write advisory durable memory after final status is locked.",
+      "expected_output": "memory_write_proposal.json",
+      "role": "MemoryWriter",
+      "is_blocked": false,
+      "is_repair": false
+    },
+    {
+      "phase": "DONE",
+      "display_name": "Done",
+      "description": "Run completed. No further transitions allowed.",
+      "is_blocked": false,
+      "is_repair": false,
+      "terminal": true
+    },
+    {
+      "phase": "BLOCKED_BY_GOAL_AMBIGUITY",
+      "display_name": "Blocked: Goal Ambiguity",
+      "description": "Goal contract is ambiguous or incomplete.",
+      "is_blocked": true,
+      "is_repair": false
+    },
+    {
+      "phase": "BLOCKED_BY_MISSING_SUCCESS_CRITERIA",
+      "display_name": "Blocked: Missing Success Criteria",
+      "description": "No measurable success criteria defined for this goal.",
+      "is_blocked": true,
+      "is_repair": false
+    },
+    {
+      "phase": "BLOCKED_BY_VERIFIER_MISSING",
+      "display_name": "Blocked: Missing Verifier",
+      "description": "No verifier exists for the required success criteria.",
+      "is_blocked": true,
+      "is_repair": false
+    },
+    {
+      "phase": "BLOCKED_BY_ARTIFACT_MISPLACEMENT",
+      "display_name": "Blocked: Artifact Misplacement",
+      "description": "Artifact found at wrong path per contract.",
+      "is_blocked": true,
+      "is_repair": false
+    },
+    {
+      "phase": "BLOCKED_BY_VALIDATOR_UNTRUSTED",
+      "display_name": "Blocked: Validator Untrusted",
+      "description": "Generated validator failed certification.",
+      "is_blocked": true,
+      "is_repair": false
+    },
+    {
+      "phase": "BLOCKED_BY_EVIDENCE_GAP",
+      "display_name": "Blocked: Evidence Gap",
+      "description": "Required evidence is missing to support certification.",
+      "is_blocked": true,
+      "is_repair": false
+    },
+    {
+      "phase": "BLOCKED_BY_REPLAY_MISMATCH",
+      "display_name": "Blocked: Replay Mismatch",
+      "description": "Replay certification did not match original decision.",
+      "is_blocked": true,
+      "is_repair": false
+    },
+    {
+      "phase": "BLOCKED_BY_AUTHORITY_VIOLATION",
+      "display_name": "Blocked: Authority Violation",
+      "description": "An agent attempted an authority-claiming action.",
+      "is_blocked": true,
+      "is_repair": false
+    },
+    {
+      "phase": "REPAIRING_PLAN",
+      "display_name": "Repairing: Plan",
+      "description": "Repairing plan or criteria issues.",
+      "is_blocked": false,
+      "is_repair": true
+    },
+    {
+      "phase": "REPAIRING_ARTIFACT_ROUTING",
+      "display_name": "Repairing: Artifact Routing",
+      "description": "Repairing artifact location or contract.",
+      "is_blocked": false,
+      "is_repair": true
+    },
+    {
+      "phase": "REPAIRING_VALIDATOR",
+      "display_name": "Repairing: Validator",
+      "description": "Repairing validator or verifier setup.",
+      "is_blocked": false,
+      "is_repair": true
+    },
+    {
+      "phase": "REPAIRING_EVIDENCE",
+      "display_name": "Repairing: Evidence",
+      "description": "Repairing evidence collection or indexing.",
+      "is_blocked": false,
+      "is_repair": true
+    },
+    {
+      "phase": "REPAIRING_IMPLEMENTATION",
+      "display_name": "Repairing: Implementation",
+      "description": "Repairing implementation artifacts.",
+      "is_blocked": false,
+      "is_repair": true
+    }
+  ]
+}

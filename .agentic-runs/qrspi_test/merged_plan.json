@@ -1,0 +1,11 @@
+{
+  "steps": [
+    {
+      "task_id": "step1",
+      "action": "create_file",
+      "path": "is_perfect_square.py",
+      "requires": [],
+      "produces": ["is_perfect_square.py"]
+    }
+  ]
+}

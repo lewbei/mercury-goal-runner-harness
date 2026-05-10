@@ -55,11 +55,11 @@ PHASE_SKILL_MAP: dict[str, list[str]] = {
     "BLOCKED_BY_EVIDENCE_GAP":         [],
     "BLOCKED_BY_REPLAY_MISMATCH":      [],
     "BLOCKED_BY_AUTHORITY_VIOLATION":  [],
-    "REPAIRING_PLAN":                   [],
-    "REPAIRING_ARTIFACT_ROUTING":       [],
-    "REPAIRING_VALIDATOR":              [],
-    "REPAIRING_EVIDENCE":               [],
-    "REPAIRING_IMPLEMENTATION":         [],
+    "REPAIRING_PLAN":                   ["harness-repair"],
+    "REPAIRING_ARTIFACT_ROUTING":       ["harness-repair"],
+    "REPAIRING_VALIDATOR":              ["harness-repair"],
+    "REPAIRING_EVIDENCE":               ["harness-repair"],
+    "REPAIRING_IMPLEMENTATION":         ["harness-repair"],
 }
 
 # Phase order for progressive accumulation

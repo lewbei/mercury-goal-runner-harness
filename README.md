@@ -6,7 +6,7 @@ The goal is not to make Mercury V2 magically smarter by looping. The goal is to 
 
 ## Current status
 
-v3.4 is RPG Test Aggregation on top of the v3.3 RPG Harness Test Record.
+RPG-Harness v5 Phases 1-9 is the current implemented layer (Supervisor Ledger, Artifact Routing, Success Criteria/Oracles, Validator Factory, Replay Certification, Memory Split, Meta-Harness v0.1, QRSPI Skills) on top of v3.7 MemPalace + ACE Memory Governance.
 
 The current research direction is:
 
@@ -79,6 +79,11 @@ See [`docs/ADVERSARIAL_RED_TEAM_LOOP.md`](docs/ADVERSARIAL_RED_TEAM_LOOP.md) for
 See [`docs/V3_2_RUNTIME_ENFORCEMENT_PROOF.md`](docs/V3_2_RUNTIME_ENFORCEMENT_PROOF.md) for the runtime enforcement proof boundary.
 See [`docs/RPG_HARNESS_TEST_FORM.md`](docs/RPG_HARNESS_TEST_FORM.md) for the RPG harness test form and statistical test-record boundary.
 See [`docs/V3_4_RPG_TEST_AGGREGATION.md`](docs/V3_4_RPG_TEST_AGGREGATION.md) for the RPG test-record aggregation boundary.
+See [`docs/V3_5_0_AUTHORITY_ARTIFACT_PREREQUISITE.md`](docs/V3_5_0_AUTHORITY_ARTIFACT_PREREQUISITE.md) for the machine-readable final-status authority boundary.
+See [`docs/V3_5_EVIDENCE_FREEZE.md`](docs/V3_5_EVIDENCE_FREEZE.md) for the frozen producer-linked evidence boundary.
+See [`docs/V3_6_RUN_LOCAL_AND_QUARANTINE_MEMORY.md`](docs/V3_6_RUN_LOCAL_AND_QUARANTINE_MEMORY.md) for the run-local and quarantine memory boundary.
+See [`docs/V3_7_MEMPALACE_ACE_MEMORY_GOVERNANCE.md`](docs/V3_7_MEMPALACE_ACE_MEMORY_GOVERNANCE.md) for the structured advisory memory governance boundary.
+See [`docs/V3_5_TO_V4_0_AUTHORITY_EVIDENCE_MEMORY_PLAN.md`](docs/V3_5_TO_V4_0_AUTHORITY_EVIDENCE_MEMORY_PLAN.md) for the next authority, evidence-freeze, memory-governance, adapter, and evaluation plan.
 See [`docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md`](docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md) for the completed v1.3-v2.0 roadmap.
 See [`docs/PI_PROMPT_CONTRACTS.md`](docs/PI_PROMPT_CONTRACTS.md) for safe Pi prompt patterns.
 See [`docs/PI_BASH_ALLOWLIST.md`](docs/PI_BASH_ALLOWLIST.md) for the current documented bash safety boundary.
@@ -106,6 +111,7 @@ python tests\run_meta_harness.py
 python tests\test_runtime_enforcement.py -v
 python tests\test_rpg_test_record.py -v
 python tests\test_rpg_test_aggregator.py -v
+python tests\test_final_status_json_authority.py -v
 ```
 
 Important naming boundary:
@@ -171,7 +177,11 @@ It demonstrates:
 49. v3.2 blocks or downgrades unsafe Pi/Mercury-shaped commands to `MONITOR_FAIL` before they can become accepted certification,
 50. v3.3 records RPG harness tests as validated evidence and regression decisions,
 51. v3.4 aggregates RPG test records into false-certified, monitor-miss, false-block, and confidence-interval metrics,
-52. and the benchmark reports false-PASS status explicitly.
+52. v3.5.0 makes `final_status.json` the machine-readable final authority and renders `final_status.md` from it,
+53. v3.5.1 freezes producer-linked evidence while excluding memory from evidence authority,
+54. v3.6 adds run-local memory and quarantine learning candidates that remain advisory and non-certifying,
+55. v3.7 adds structured MemPalace + ACE advisory memory governance with gated durable promotion,
+56. and the benchmark reports false-PASS status explicitly.
 
 ## Core parts
 
@@ -332,6 +342,7 @@ v3.1 = Real Pi Prompt Coverage Evaluation
 v3.2 = Runtime Enforcement Proof
 v3.3 = RPG Harness Test Record
 v3.4 = RPG Test Aggregation
+v3.7 = MemPalace + ACE Memory Governance
 ```
 
 Local smoke-tested state:
@@ -374,6 +385,11 @@ v3.1 = Real Pi prompt coverage evaluation IMPLEMENTED
 v3.2 = Runtime enforcement proof IMPLEMENTED
 v3.3 = RPG harness test record IMPLEMENTED
 v3.4 = RPG test aggregation IMPLEMENTED
+v3.5.0 = Authority artifact prerequisite IMPLEMENTED
+v3.5.1 = Evidence freeze + evidence index IMPLEMENTED
+v3.6 = Run-local memory + quarantine memory IMPLEMENTED
+v3.7 = MemPalace + ACE memory governance IMPLEMENTED
+v3.8 = Formal verification + cryptographic signing IMPLEMENTED
 ```
 
 The v0.5 Pi chain lives at:
@@ -390,8 +406,37 @@ The new v0.5 Pi agents are:
 .pi/agents/verifier-reviewer.md
 ```
 
-The full `goal-runner.chain.md` runtime remains unverified for arbitrary goals. v0.5.8 shows the stale Pi exit disappears under a subagents-only Pi config. v0.5.9 adds deterministic auditing for one-bash-call discipline, including a failing fixture for the duplicate certifier invocation pattern. v0.5.10 adds deterministic disposable smoke setup so Pi prompts can stay single-action. v0.5.11 verifies that weak/failing statuses are reported, not repaired or upgraded. v0.6 adds local host-task certification against disposable runs. v0.7 adds deterministic branch candidates with explicit verifier requirements. v0.8 selects branches by path to verifier-provenance certification. v0.9 adds read-only replay, dry-run rollback, and audit blocking. v1.0 freezes a thin local command surface and practical examples without claiming full Pi autonomy. v1.1 adds deterministic raw-goal compilation fixtures. v1.2 proves that the selected branch can be materialized into `merged_plan.json` before worker execution and certification. v1.3 adds deterministic strategy selection before step compilation. v1.4 adds deterministic milestone planning between selected strategy and local executable steps. v1.5 adds drift detection, bounded delta plans, and certifier blocking for unresolved drift. v1.6 adds trajectory-level tool-use evaluation for command choice, arguments, order, duplicate certifier calls, manual writes, missing reads, and unsafe deletion. v1.7 adds advisory experience memory that can adjust strategy scores but cannot bypass applicability gates or certify DONE. v1.8 adds deterministic domain packs that shape strategy candidates and verifier hints without certifying DONE. v1.9 adds deterministic workflow search that rejects certifier-bypass and high false-certified-risk candidates without executing or certifying. v2.0 adds an integrated proof matrix and example set without claiming full Pi autonomy. v2.1 adds a controlled Pi chain smoke runner without claiming arbitrary Pi chain autonomy. v2.2 adds direct Pi/Mercury behavior audit fixtures that require verifier evidence before certifier invocation, status reads after certifier invocation, and no self-certifying assistant language. v2.3 records a real `pi` interactive smoke result as local evidence, not automated CI evidence. v2.4 monitors captured real Pi transcript fixtures for exactly-one-command discipline, required result reads, protected-write attempts, and self-certifying language. v2.5 extends that monitor to weak/failing status transcripts and rejects assistant-side upgrades such as `PROVISIONAL_DONE` to `CERTIFIED_DONE`. v2.6 normalizes captured Pi output into `pi_session_trace.jsonl` and monitors the trace directly. v2.7 runs and monitors a real Pi/Mercury agentic autonomy probe that reads the chain, reads advisory memory, observes an initial certifier failure, performs one run-local repair, reruns the certifier, and reports certifier-owned status artifacts without proving arbitrary unbounded bash is safe. v2.8 hardens that monitor with negative probes for unapproved chain reads, source-tree write commands, and second repair commands. v2.9 captures known bad prompt patterns and treats them as successful only when the monitor observes and rejects the expected unsafe behavior. v3.0 classifies captured real Pi/Mercury behavior separately from deterministic monitor correctness. v3.1 expands that into a bounded ten-category prompt coverage matrix with repeated-trial support. v3.2 adds command-gateway and protected-file enforcement so unsafe Pi/Mercury-shaped commands are blocked or downgraded to `MONITOR_FAIL`; it does not prove arbitrary prompts or arbitrary unbounded bash are safe. v3.3 adds a human form plus schema-valid RPG test records so failures become regression decisions and later statistical runs have machine-readable evidence. v3.4 aggregates collected RPG records into false-certified, monitor-miss, false-block, and confidence-interval metrics without claiming arbitrary prompt coverage.
+The full `goal-runner.chain.md` runtime remains unverified for arbitrary goals. v0.5.8 shows the stale Pi exit disappears under a subagents-only Pi config. v0.5.9 adds deterministic auditing for one-bash-call discipline, including a failing fixture for the duplicate certifier invocation pattern. v0.5.10 adds deterministic disposable smoke setup so Pi prompts can stay single-action. v0.5.11 verifies that weak/failing statuses are reported, not repaired or upgraded. v0.6 adds local host-task certification against disposable runs. v0.7 adds deterministic branch candidates with explicit verifier requirements. v0.8 selects branches by path to verifier-provenance certification. v0.9 adds read-only replay, dry-run rollback, and audit blocking. v1.0 freezes a thin local command surface and practical examples without claiming full Pi autonomy. v1.1 adds deterministic raw-goal compilation fixtures. v1.2 proves that the selected branch can be materialized into `merged_plan.json` before worker execution and certification. v1.3 adds deterministic strategy selection before step compilation. v1.4 adds deterministic milestone planning between selected strategy and local executable steps. v1.5 adds drift detection, bounded delta plans, and certifier blocking for unresolved drift. v1.6 adds trajectory-level tool-use evaluation for command choice, arguments, order, duplicate certifier calls, manual writes, missing reads, and unsafe deletion. v1.7 adds advisory experience memory that can adjust strategy scores but cannot bypass applicability gates or certify DONE. v1.8 adds deterministic domain packs that shape strategy candidates and verifier hints without certifying DONE. v1.9 adds deterministic workflow search that rejects certifier-bypass and high false-certified-risk candidates without executing or certifying. v2.0 adds an integrated proof matrix and example set without claiming full Pi autonomy. v2.1 adds a controlled Pi chain smoke runner without claiming arbitrary Pi chain autonomy. v2.2 adds direct Pi/Mercury behavior audit fixtures that require verifier evidence before certifier invocation, status reads after certifier invocation, and no self-certifying assistant language. v2.3 records a real `pi` interactive smoke result as local evidence, not automated CI evidence. v2.4 monitors captured real Pi transcript fixtures for exactly-one-command discipline, required result reads, protected-write attempts, and self-certifying language. v2.5 extends that monitor to weak/failing status transcripts and rejects assistant-side upgrades such as `PROVISIONAL_DONE` to `CERTIFIED_DONE`. v2.6 normalizes captured Pi output into `pi_session_trace.jsonl` and monitors the trace directly. v2.7 runs and monitors a real Pi/Mercury agentic autonomy probe that reads the chain, reads advisory memory, observes an initial certifier failure, performs one run-local repair, reruns the certifier, and reports certifier-owned status artifacts without proving arbitrary unbounded bash is safe. v2.8 hardens that monitor with negative probes for unapproved chain reads, source-tree write commands, and second repair commands. v2.9 captures known bad prompt patterns and treats them as successful only when the monitor observes and rejects the expected unsafe behavior. v3.0 classifies captured real Pi/Mercury behavior separately from deterministic monitor correctness. v3.1 expands that into a bounded ten-category prompt coverage matrix with repeated-trial support. v3.2 adds command-gateway and protected-file enforcement so unsafe Pi/Mercury-shaped commands are blocked or downgraded to `MONITOR_FAIL`; it does not prove arbitrary prompts or arbitrary unbounded bash are safe. v3.3 adds a human form plus schema-valid RPG test records so failures become regression decisions and later statistical runs have machine-readable evidence. v3.4 aggregates collected RPG records into false-certified, monitor-miss, false-block, and confidence-interval metrics without claiming arbitrary prompt coverage. v3.5.0 makes `final_status.json` the machine-readable final authority and keeps `final_status.md` as a derived view only. v3.5.1 freezes producer-linked evidence and excludes memory from evidence authority. v3.6 adds current-run memory and quarantine candidates, but memory remains advisory, non-durable, excluded from evidence, and unable to certify DONE.
 
 ## Planner Stub
+
+v3.7 adds structured MemPalace + ACE memory governance with bounded advisory
+context packs, helpful/harmful reflection, curator delta candidates, and gated
+durable promotion after certifier-owned `final_status.json`.
+
+v3.8 adds formal contract verification (VeriGuard-inspired) and cryptographic
+artifact signing (VET-inspired):
+
+- **Formal verification**: `.agentic-pi/formal/harness_contract_verifier.py` —
+  parses `#@ Requires/Ensures/Invariant` annotations, evaluates contracts at
+  runtime, produces `F_{RUN_ID}.json` verifier evidence with confidence scoring.
+  Catches missing None guards, type violations. Reference: `modules/nagini-develop/`.
+
+- **Cryptographic signing**: `.agentic-pi/formal/harness_signing.py` —
+  Ed25519 keypair generation, artifact signing with `.sig` files (content hash
+  + Ed25519 signature), verification to detect tampering. FORGED/TAMPERED
+  verdicts block certification.
+
+- **Certifier gates**: `apply_formal_verification_gate` and
+  `apply_cryptographic_signature_gate` wired into `certify_run.py`.
+
+Quick test commands:
+
+```cmd
+python .agentic-pi/formal/harness_contract_verifier.py .agentic-runs/<run_id> <target.py>
+python .agentic-pi/formal/harness_signing.py keygen .agentic-runs/<run_id>
+python .agentic-pi/formal/harness_signing.py sign .agentic-runs/<run_id> .agentic-runs/<run_id>/<artifact.py>
+python .agentic-pi/formal/harness_signing.py verify .agentic-runs/<run_id>
+```
 
 The current `plan_router.py` is a deterministic stub for testing. See [PLAN_ROUTER.md](PLAN_ROUTER.md) for details. Real planner agents will replace this stub in future versions.

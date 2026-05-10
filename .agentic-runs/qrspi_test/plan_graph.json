@@ -1,0 +1,9 @@
+{
+  "nodes": [
+    {"node_id": "step1", "type": "task", "task_id": "step1"},
+    {"node_id": "is_perfect_square.py", "type": "artifact", "path": "is_perfect_square.py", "artifact_id": "is_perfect_square.py"}
+  ],
+  "edges": [
+    {"source": "step1", "target": "is_perfect_square.py", "type": "produces"}
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "artifact_id": "V.FIXTEST",
+  "smell_flags": [
+    "post_solution_test"
+  ],
+  "disqualifying": false,
+  "authority_penalty": 1
+}

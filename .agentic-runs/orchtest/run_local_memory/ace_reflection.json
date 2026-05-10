@@ -1,0 +1,10 @@
+{
+  "schema_version": "reflection_report_v1",
+  "run_id": "orchtest",
+  "agent_name": "verifier-generator",
+  "generated_at": "2026-05-10T09:29:40.029901+00:00",
+  "outcome_status": "UNKNOWN",
+  "helpful": [],
+  "harmful": [],
+  "neutral": []
+}

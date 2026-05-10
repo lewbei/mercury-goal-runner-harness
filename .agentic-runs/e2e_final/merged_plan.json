@@ -1,0 +1,11 @@
+{
+  "steps": [
+    {
+      "task_id": "step1",
+      "action": "create_file",
+      "path": "count_vowels.py",
+      "requires": [],
+      "produces": ["count_vowels.py"]
+    }
+  ]
+}

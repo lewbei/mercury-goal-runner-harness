@@ -18,7 +18,7 @@ class FrameworkDocTests(unittest.TestCase):
     def test_framework_doc_records_current_state(self):
         doc = (ROOT / "FRAMEWORK.md").read_text(encoding="utf-8")
 
-        self.assertIn("v3.4 = RPG Test Aggregation", doc)
+        self.assertIn("v3.7 MemPalace + ACE Memory Governance", doc)
         self.assertIn("Real Pi Agentic Autonomy Probe Layer", doc)
         self.assertIn("Agentic Negative-Probe Hardening Layer", doc)
         self.assertIn("Live Negative Prompt Capture Layer", doc)
@@ -51,6 +51,11 @@ class FrameworkDocTests(unittest.TestCase):
         self.assertIn("Pi/Mercury-shaped command -> command_gateway.py -> protected_file_guard.py", doc)
         self.assertIn("Pi/Mercury trace -> RPG test record -> regression decision -> deterministic gates", doc)
         self.assertIn("RPG test records -> rpg_test_aggregator.py -> false-certified / monitor-miss / false-block metrics", doc)
+        self.assertIn("policy_decision.json -> certification.json -> final_status.json -> final_status.md", doc)
+        self.assertIn("trace/logs/artifacts/verifier evidence/policy -> evidence_index.json -> evidence_freeze.json", doc)
+        self.assertIn("current run observation -> memory/*.jsonl -> advisory repair context only", doc)
+        self.assertIn("candidate lesson -> quarantine memory -> not retrievable by future runs", doc)
+        self.assertIn("MemPalace durable card -> context_pack.json -> ACE reflection -> curator delta -> memory_write_gate.py", doc)
 
     def test_framework_doc_uses_actual_current_paths(self):
         doc = (ROOT / "FRAMEWORK.md").read_text(encoding="utf-8")
@@ -74,8 +79,29 @@ class FrameworkDocTests(unittest.TestCase):
             ".agentic-pi/runtime/protected_file_guard.py",
             ".agentic-pi/runtime/run_enforced_pi_smoke.py",
             ".agentic-pi/runtime/rpg_test_aggregator.py",
+            ".agentic-pi/runtime/final_status_renderer.py",
+            ".agentic-pi/runtime/evidence_indexer.py",
+            ".agentic-pi/runtime/evidence_freezer.py",
+            ".agentic-pi/runtime/run_memory_clerk.py",
+            ".agentic-pi/runtime/quarantine_memory_writer.py",
+            ".agentic-pi/runtime/mempalace_adapter.py",
+            ".agentic-pi/runtime/context_pack_builder.py",
+            ".agentic-pi/runtime/ace_reflector.py",
+            ".agentic-pi/runtime/ace_curator.py",
+            ".agentic-pi/runtime/memory_write_gate.py",
             ".agentic-pi/schemas/rpg_test_record.schema.json",
             ".agentic-pi/schemas/rpg_test_aggregation_result.schema.json",
+            ".agentic-pi/schemas/final_status.schema.json",
+            ".agentic-pi/schemas/evidence_index.schema.json",
+            ".agentic-pi/schemas/evidence_freeze.schema.json",
+            ".agentic-pi/schemas/evidence_hash_manifest.schema.json",
+            ".agentic-pi/schemas/run_journal_entry.schema.json",
+            ".agentic-pi/schemas/learning_candidate.schema.json",
+            ".agentic-pi/schemas/mempalace_card.schema.json",
+            ".agentic-pi/schemas/context_pack.schema.json",
+            ".agentic-pi/schemas/reflection_report.schema.json",
+            ".agentic-pi/schemas/curator_delta.schema.json",
+            ".agentic-pi/schemas/memory_write_decision.schema.json",
             ".agentic-pi/templates/rpg_test_record.template.json",
             ".agentic-pi/prompts/negative_autonomy/",
             ".agentic-pi/prompts/real_behavior_matrix/",
@@ -111,6 +137,16 @@ class FrameworkDocTests(unittest.TestCase):
             ".agentic-pi/runtime/policy_engine.py",
             ".agentic-pi/runtime/verifier_provenance.py",
             ".agentic-pi/validators/certify_run.py",
+            ".agentic-pi/validators/validate_final_status.py",
+            ".agentic-pi/validators/validate_evidence_index.py",
+            ".agentic-pi/validators/validate_evidence_freeze.py",
+            ".agentic-pi/validators/validate_run_local_memory.py",
+            ".agentic-pi/validators/validate_quarantine_memory.py",
+            ".agentic-pi/validators/validate_memory_card.py",
+            ".agentic-pi/validators/validate_context_pack.py",
+            ".agentic-pi/validators/validate_memory_write_gate.py",
+            ".agentic-pi/validators/validate_memory_authority.py",
+            ".agentic-pi/validators/validate_memory_contradictions.py",
             ".agentic-pi/validators/smell_scanner.py",
             ".agentic-pi/validators/strength_scorer.py",
             ".agentic-pi/validators/validate_delta_plan.py",

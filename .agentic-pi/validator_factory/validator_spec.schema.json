@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "validator_spec_v1",
+  "description": "Specification for a validator that can be certified by the Validator Factory. Validators start at V0_PROPOSED and must pass certification to be trusted.",
+  "type": "object",
+  "required": [
+    "schema_version", "validator_id", "authority_level",
+    "success_criteria", "check_type", "runtime_command"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["validator_spec_v1"]
+    },
+    "validator_id": { "type": "string" },
+    "authority_level": {
+      "type": "string",
+      "enum": ["V0_PROPOSED", "V1_LOCAL_TESTED", "V2_INDEPENDENT_TESTED",
+               "V3_EXTERNAL_TRUSTED", "V4_CORE_TRUSTED"]
+    },
+    "description": { "type": "string" },
+    "success_criteria": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "check_type": {
+      "type": "string",
+      "enum": [
+        "file_exists", "file_content", "json_schema", "command_output",
+        "test_suite", "structural", "behavioral", "semantic",
+        "comparative", "negative", "replay", "external"
+      ]
+    },
+    "runtime_command": { "type": "string" },
+    "source_path": { "type": "string" },
+    "fixture_suite_path": { "type": "string" },
+    "pass_condition": { "type": "string" },
+    "generated_by": { "type": "string" },
+    "generated_at": { "type": "string" },
+    "certified_at": { "type": "string" },
+    "certification_result": {
+      "type": "object",
+      "properties": {
+        "meta_check_passed": { "type": "boolean" },
+        "fixtures_passed": { "type": "integer" },
+        "fixtures_failed": { "type": "integer" },
+        "mutations_passed": { "type": "integer" },
+        "mutations_failed": { "type": "integer" },
+        "overall_verdict": {
+          "type": "string",
+          "enum": ["CERTIFIED", "FAILED", "PENDING"]
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

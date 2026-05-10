@@ -1,0 +1,16 @@
+{
+  "steps": [
+    {
+      "task_id": "T1",
+      "action": "create_file",
+      "path": "longest_palindrome.py",
+      "requires": [],
+      "produces": [
+        {
+          "artifact_id": "A.001",
+          "path": "longest_palindrome.py"
+        }
+      ]
+    }
+  ]
+}

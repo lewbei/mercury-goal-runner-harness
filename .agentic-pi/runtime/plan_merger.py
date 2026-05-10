@@ -12,6 +12,7 @@ from pathlib import Path
 def main():
     parser = argparse.ArgumentParser(description="Merge selected plan(s) for a run")
     parser.add_argument("--run-id", required=True, help="Run identifier")
+    parser.add_argument("--skill-context", default=None, help="Path to skill_context.json (QRSPI skills)")
     args = parser.parse_args()
     run_dir = Path(".agentic-runs") / args.run_id
     selected_path = run_dir / "selected_plan.json"

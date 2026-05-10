@@ -1,0 +1,17 @@
+{
+  "cards": [
+    {
+      "card_id": "card_he_full",
+      "run_id": "he_full",
+      "wing": "planning",
+      "room": "plan_seed_patterns",
+      "content": {
+        "goal": "he_full",
+        "outcome": "CERTIFIED_DONE",
+        "lesson": "Run he_full completed. Memory is advisory only."
+      },
+      "advisory": true,
+      "can_certify": false
+    }
+  ]
+}

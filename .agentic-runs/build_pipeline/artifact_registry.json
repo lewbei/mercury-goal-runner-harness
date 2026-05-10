@@ -1,0 +1,14 @@
+[
+  {
+    "artifact_id": "orchestrate_pipeline.py",
+    "producer_task": "step1",
+    "path": ".agentic-pi/runtime/orchestrate_pipeline.py",
+    "type": "py",
+    "required_by": [],
+    "validation": {
+      "exists": false,
+      "json_valid": false,
+      "required_fields": []
+    }
+  }
+]

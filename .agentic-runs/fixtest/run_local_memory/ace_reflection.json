@@ -1,0 +1,19 @@
+{
+  "schema_version": "reflection_report_v1",
+  "run_id": "fixtest",
+  "agent_name": "verifier-generator",
+  "generated_at": "2026-05-10T09:20:18.444326+00:00",
+  "outcome_status": "CERTIFIED_DONE",
+  "helpful": [
+    {
+      "card_id": "plan-fixtest",
+      "reason": "Contributed to CERTIFIED_DONE"
+    },
+    {
+      "card_id": "step-fixtest-1",
+      "reason": "Contributed to CERTIFIED_DONE"
+    }
+  ],
+  "harmful": [],
+  "neutral": []
+}

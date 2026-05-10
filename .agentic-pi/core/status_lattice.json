@@ -1,0 +1,50 @@
+{
+  "schema_version": "status_lattice_v1",
+  "description": "The status lattice for overall run outcomes, ordered from weakest to strongest.",
+  "statuses": {
+    "NOT_DONE": {
+      "rank": 0,
+      "description": "Goal was not achieved. Evidence insufficient or verifier failed.",
+      "can_upgrade_to": ["PROVISIONAL_DONE"],
+      "is_final": false
+    },
+    "DONE_FAIL": {
+      "rank": 0,
+      "description": "Goal was attempted but produced a valid failure (expected for impossible goals).",
+      "can_upgrade_to": [],
+      "is_final": true
+    },
+    "PROVISIONAL_DONE": {
+      "rank": 1,
+      "description": "Goal appears done based on self-test or P0/P1 evidence only. Not independently verified.",
+      "can_upgrade_to": ["CERTIFIED_DONE"],
+      "is_final": false
+    },
+    "CERTIFIED_DONE": {
+      "rank": 2,
+      "description": "Goal done and independently verified with P2 or P3 certifying verifiers.",
+      "can_upgrade_to": [],
+      "is_final": true
+    },
+    "DONE_PASS": {
+      "rank": 2,
+      "description": "Legacy DONE_PASS without provenance path. Kept for backward compatibility.",
+      "can_upgrade_to": [],
+      "is_final": true
+    },
+    "BLOCKED": {
+      "rank": -1,
+      "description": "Run is blocked and cannot proceed without intervention.",
+      "can_upgrade_to": [],
+      "is_final": false
+    },
+    "FAILED_AUTHORITY_VIOLATION": {
+      "rank": -2,
+      "description": "Run failed because an agent attempted an authority-claiming action.",
+      "can_upgrade_to": [],
+      "is_final": true
+    }
+  },
+  "authority_claim": "Only the Certifier may write a final status. The status lattice enforces that PROVISIONAL_DONE requires P0/P1 verifiers and CERTIFIED_DONE requires P2/P3 verifiers. No self-upgrade path exists.",
+  "updated_at": "2026-05-08T00:00:00Z"
+}

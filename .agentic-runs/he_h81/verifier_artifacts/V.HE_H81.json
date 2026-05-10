@@ -1,0 +1,20 @@
+{
+  "artifact_id": "V.HE_H81",
+  "run_id": "he_h81",
+  "target_artifact": "numerical_letter_grade.py",
+  "kind": "command_test",
+  "source": "independent_verifier_agent",
+  "provenance_level": "P2",
+  "depends_on_solution": false,
+  "same_worker_as_solution": false,
+  "executes_code": true,
+  "assertion_count": 5,
+  "mock_ratio_percent": 0,
+  "authority": "certifying",
+  "created_at": "2026-01-01T00:00:00Z",
+  "created_at_phase": "post_solution",
+  "author_agent": "verifier-generator",
+  "author_model": "deepseek-v4-flash",
+  "smell_flags": [],
+  "solution_exists_at_creation": true
+}

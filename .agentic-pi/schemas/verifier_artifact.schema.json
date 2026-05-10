@@ -37,7 +37,8 @@
         "static_check",
         "human_signoff",
         "hidden_test",
-        "benchmark_oracle"
+        "benchmark_oracle",
+        "formal_verification"
       ]
     },
     "source": {
@@ -50,7 +51,8 @@
         "user_provided",
         "hidden_oracle",
         "external_benchmark",
-        "human_review"
+        "human_review",
+        "harness_formal_verifier"
       ]
     },
     "created_at": { "type": "string", "minLength": 1 },
@@ -85,5 +87,5 @@
     },
     "solution_exists_at_creation": { "type": "boolean" }
   },
-  "additionalProperties": false
+  "additionalProperties": true
 }

@@ -1,0 +1,29 @@
+{
+  "run_id": "proj_adapter",
+  "status": "DONE_FAIL",
+  "passed_checks": [
+    "goal_contract.json exists",
+    "goal_contract.json parses as JSON",
+    "trace.jsonl exists",
+    "trace.jsonl lines parse as JSON",
+    "step_logs contain at least one step result",
+    "1.json evidence maps to touched files",
+    "done_criteria is non-empty",
+    "final_outputs is non-empty",
+    "formal_verification: no artifacts dir (informational)",
+    "crypto_signatures: no signatures found (informational)",
+    "final_status.json validated"
+  ],
+  "failed_checks": [
+    "1.json touched file missing: .agentic-pi/runtime/project_adapter.py",
+    "step 1 touched files do not include merged plan path: project_adapter.py",
+    "PlanGraph validation failed",
+    "PlanGraph: produced artifact missing at exact path: project_adapter.py -> project_adapter.py",
+    "PlanGraph: artifact_registry validation.exists must be true for project_adapter.py",
+    "final output missing: .agentic-pi/runtime/project_adapter.py"
+  ],
+  "artifact_hashes": {},
+  "audit_chain_valid": false,
+  "generated_by": "agentic-pi-certifier-v0.3.6",
+  "timestamp": "2026-05-10T10:15:38.280690+00:00"
+}

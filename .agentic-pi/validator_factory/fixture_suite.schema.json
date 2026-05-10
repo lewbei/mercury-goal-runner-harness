@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "fixture_suite_v1",
+  "description": "A suite of test fixtures for a validator. Positive fixtures should pass, negative fixtures should fail.",
+  "type": "object",
+  "required": ["schema_version", "suite_id", "validator_id", "fixtures"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["fixture_suite_v1"]
+    },
+    "suite_id": { "type": "string" },
+    "validator_id": { "type": "string" },
+    "description": { "type": "string" },
+    "fixtures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["fixture_id", "type", "input", "expected_verdict"],
+        "properties": {
+          "fixture_id": { "type": "string" },
+          "type": {
+            "type": "string",
+            "enum": ["positive", "negative", "adversarial", "edge"]
+          },
+          "description": { "type": "string" },
+          "input": {
+            "type": "object",
+            "description": "Input to the validator. Structure varies by validator type."
+          },
+          "expected_verdict": {
+            "type": "string",
+            "enum": ["PASS", "FAIL"]
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "created_at": { "type": "string" },
+    "updated_at": { "type": "string" }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "artifact_id": "reverse_string.py",
+    "producer_task": "step1",
+    "path": "reverse_string.py",
+    "type": "py",
+    "required_by": [],
+    "validation": {
+      "exists": true,
+      "json_valid": false,
+      "required_fields": []
+    }
+  }
+]

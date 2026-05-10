@@ -1,0 +1,23 @@
+[
+  {
+    "card_id": "learn-full_demo-0",
+    "content": "Subagent planner-minimal in full_demo: # Thinking Plan: Roman Numeral to Integer Converter\n\n## Architecture\n\nWe will implement a single module `roman_to_int.py` that contains a function `roman_to_int` converting a Roman numeral string to a",
+    "source": "thinking_plan",
+    "agent": "planner-minimal",
+    "outcome": "NOT_DONE"
+  },
+  {
+    "card_id": "learn-full_demo-1",
+    "content": "Subagent planner-minimal in full_demo: Created roman_to_int.py with roman_to_int function implementing right-to-left iteration, round-trip validation, and proper error handling (TypeError for non-string, ValueError for invalid characters/s",
+    "source": "step_log",
+    "agent": "planner-minimal",
+    "outcome": "NOT_DONE"
+  },
+  {
+    "card_id": "learn-full_demo-2",
+    "content": "Subagent planner-minimal in full_demo: Test file placeholder - tests run by verifier agent",
+    "source": "step_log",
+    "agent": "planner-minimal",
+    "outcome": "NOT_DONE"
+  }
+]

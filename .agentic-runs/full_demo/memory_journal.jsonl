@@ -1,0 +1,1 @@
+{"timestamp": "2026-05-10T09:00:55.795862+00:00", "agent": "planner-minimal", "run_id": "full_demo", "action": "memory_capture", "reflection": "0 helpful / 3 harmful", "learning_candidates": 3, "outcome": "NOT_DONE"}

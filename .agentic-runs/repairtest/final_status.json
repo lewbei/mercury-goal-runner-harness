@@ -1,0 +1,15 @@
+{
+  "schema_version": "final_status_v1",
+  "run_id": "repairtest",
+  "status": "DONE_FAIL",
+  "status_source": "certification.json",
+  "final_status_authority": "certifier_only",
+  "can_certify_done": false,
+  "policy_decision_path": "",
+  "certification_path": "certification.json",
+  "confidence_score": 0.6667,
+  "checks_passed": 8,
+  "checks_failed": 4,
+  "checks_total": 12,
+  "generated_at": "2026-05-10T10:31:45.791877+00:00"
+}

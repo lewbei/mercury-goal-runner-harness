@@ -1,0 +1,11 @@
+{
+  "run_id": "proj_adapter",
+  "step_id": 1,
+  "status": "PASSED",
+  "action_taken": "create_file",
+  "files_touched": [".agentic-pi/runtime/project_adapter.py"],
+  "commands_run": ["write .agentic-pi/runtime/project_adapter.py"],
+  "evidence": ["Created .agentic-pi/runtime/project_adapter.py with 6630 bytes containing the project adapter module: generate_project_map(), helper functions, and CLI"],
+  "pass_condition_satisfied": true,
+  "remaining_work": []
+}

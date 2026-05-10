@@ -1,0 +1,15 @@
+{
+  "schema_version": "final_status_v1",
+  "run_id": "build_pipeline",
+  "status": "NOT_DONE",
+  "status_source": "policy_decision.json",
+  "final_status_authority": "certifier_only",
+  "can_certify_done": false,
+  "policy_decision_path": "policy_decision.json",
+  "certification_path": "certification.json",
+  "confidence_score": 0.7308,
+  "checks_passed": 19,
+  "checks_failed": 7,
+  "checks_total": 26,
+  "generated_at": "2026-05-10T09:52:09.765775+00:00"
+}

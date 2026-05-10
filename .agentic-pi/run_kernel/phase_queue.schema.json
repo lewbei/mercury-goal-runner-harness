@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "phase_queue_v1",
+  "description": "Ordered phase queue for a run. Only the kernel may modify the queue.",
+  "type": "object",
+  "required": ["schema_version", "run_id", "phases"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["phase_queue_v1"]
+    },
+    "run_id": { "type": "string" },
+    "phases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["phase", "status", "order"],
+        "properties": {
+          "phase": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["PENDING", "ACTIVE", "COMPLETED", "BLOCKED", "SKIPPED"]
+          },
+          "order": { "type": "integer" },
+          "work_packet_ids": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "dependencies": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "result_summary": { "type": "string" },
+          "started_at": { "type": "string" },
+          "completed_at": { "type": "string" }
+        }
+      }
+    },
+    "created_at": { "type": "string" },
+    "updated_at": { "type": "string" }
+  },
+  "additionalProperties": false
+}

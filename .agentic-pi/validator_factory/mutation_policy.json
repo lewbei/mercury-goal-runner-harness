@@ -1,0 +1,51 @@
+{
+  "schema_version": "mutation_policy_v1",
+  "description": "Policy for mutation testing of validators. Mutations introduce defects to verify the validator can still reject bad output.",
+  "default_settings": {
+    "min_mutations": 3,
+    "max_mutations": 10,
+    "mutation_types": [
+      "invert_condition",
+      "remove_check",
+      "change_threshold",
+      "swap_expected_output",
+      "disable_validation",
+      "return_always_pass"
+    ],
+    "required_pass_rate": 0.8
+  },
+  "mutation_definitions": [
+    {
+      "mutation_type": "invert_condition",
+      "description": "Invert a boolean condition in the validator (e.g., == becomes !=)",
+      "severity": "high"
+    },
+    {
+      "mutation_type": "remove_check",
+      "description": "Remove one check from the validator entirely",
+      "severity": "high"
+    },
+    {
+      "mutation_type": "change_threshold",
+      "description": "Change a numeric threshold to an incorrect value",
+      "severity": "medium"
+    },
+    {
+      "mutation_type": "swap_expected_output",
+      "description": "Swap the expected output with a different value",
+      "severity": "high"
+    },
+    {
+      "mutation_type": "disable_validation",
+      "description": "Replace the validation body with a pass-all stub",
+      "severity": "critical"
+    },
+    {
+      "mutation_type": "return_always_pass",
+      "description": "Replace the return value with always PASS",
+      "severity": "critical"
+    }
+  ],
+  "rule": "If a mutated validator still passes all fixtures, the original validator may be returning always-pass or ignoring its input. This indicates the validator is NOT trustworthy and must not be certified above V0.",
+  "updated_at": "2026-05-08T00:00:00Z"
+}

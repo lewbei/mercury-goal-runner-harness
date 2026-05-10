@@ -1,0 +1,25 @@
+{
+  "run_id": "iter_test",
+  "target_goal": "Implement from specification",
+  "target_artifacts": [
+    "longest_palindrome.py"
+  ],
+  "required_verifier_level": "P2",
+  "allow_self_generated_only": false,
+  "required_behaviors": [
+    "longest_palindrome.py exists"
+  ],
+  "forbidden_verifier_patterns": [
+    "self-test only",
+    "file existence only"
+  ],
+  "minimum_strength_level": "gating",
+  "certifying_authority_levels": [
+    "P2",
+    "P3"
+  ],
+  "provisional_authority_levels": [
+    "P0",
+    "P1"
+  ]
+}

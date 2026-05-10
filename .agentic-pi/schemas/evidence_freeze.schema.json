@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EvidenceFreeze",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "run_id",
+    "freeze_id",
+    "frozen_at",
+    "evidence_index_path",
+    "evidence_index_sha256",
+    "policy_decision_path",
+    "policy_decision_sha256",
+    "hash_manifest_path",
+    "item_count"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "enum": ["evidence_freeze_v1"] },
+    "run_id": { "type": "string", "minLength": 1 },
+    "freeze_id": { "type": "string", "minLength": 1 },
+    "frozen_at": { "type": "string", "minLength": 1 },
+    "evidence_index_path": { "type": "string", "minLength": 1 },
+    "evidence_index_sha256": { "type": "string", "minLength": 64 },
+    "policy_decision_path": { "type": "string", "minLength": 1 },
+    "policy_decision_sha256": { "type": "string", "minLength": 64 },
+    "hash_manifest_path": { "type": "string", "minLength": 1 },
+    "item_count": { "type": "integer" }
+  },
+  "additionalProperties": false
+}

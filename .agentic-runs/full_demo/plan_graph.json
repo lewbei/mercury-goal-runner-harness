@@ -1,0 +1,31 @@
+{
+  "nodes": [
+    {
+      "node_id": "step1",
+      "type": "task",
+      "task_id": "step1"
+    },
+    {
+      "node_id": "step2",
+      "type": "task",
+      "task_id": "step2"
+    },
+    {
+      "node_id": "roman_to_int.py",
+      "type": "artifact",
+      "task_id": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "step1",
+      "target": "roman_to_int.py",
+      "type": "produces"
+    },
+    {
+      "source": "roman_to_int.py",
+      "target": "step2",
+      "type": "requires"
+    }
+  ]
+}

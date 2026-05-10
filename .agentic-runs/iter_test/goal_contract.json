@@ -1,0 +1,14 @@
+{
+  "run_id": "iter_test",
+  "raw_user_prompt": "Create a Python function that finds the longest palindromic substring in a given string. Return the substring itself.",
+  "intent": "Palindrome finder",
+  "final_outputs": [
+    "longest_palindrome.py"
+  ],
+  "done_criteria": [
+    "longest_palindrome.py exists",
+    "Works correctly on test cases"
+  ],
+  "complexity_level": "MEDIUM",
+  "max_steps": 5
+}

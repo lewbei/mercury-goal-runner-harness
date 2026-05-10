@@ -1,0 +1,1 @@
+{"run_id": "vs008_vertical_smoke", "goal": "Vertical smoke test goal", "final_outputs": ["output.txt"], "done_criteria": ["output.txt exists"]}

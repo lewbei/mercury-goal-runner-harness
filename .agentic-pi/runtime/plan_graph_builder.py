@@ -140,6 +140,7 @@ def build_plan_graph(run_dir: Path, merged_plan: dict):
 def main():
     parser = argparse.ArgumentParser(description="Build plan_graph.json for a run")
     parser.add_argument("run_id")
+    parser.add_argument("--skill-context", default=None, help="Path to skill_context.json (QRSPI skills)")
     args = parser.parse_args()
 
     run_dir = Path(".agentic-runs") / args.run_id

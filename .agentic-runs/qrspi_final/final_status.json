@@ -1,0 +1,11 @@
+{
+  "schema_version": "final_status_v1",
+  "run_id": "qrspi_final",
+  "status": "NOT_DONE",
+  "status_source": "policy_decision.json",
+  "final_status_authority": "certifier_only",
+  "can_certify_done": false,
+  "policy_decision_path": "policy_decision.json",
+  "certification_path": "certification.json",
+  "generated_at": "2026-05-10T04:33:46.153165+00:00"
+}

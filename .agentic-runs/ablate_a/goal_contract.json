@@ -1,0 +1,17 @@
+{
+  "run_id": "ablate_a",
+  "raw_user_prompt": "Create a URL shortener service with two endpoints: POST /shorten (accepts JSON {url: ...}, returns {short_url: ...}) and GET /<code> (redirects to original URL). Use Python Flask, store mappings in memory. Add error handling for invalid URLs and missing codes.",
+  "final_outputs": [
+    "app.py",
+    "requirements.txt"
+  ],
+  "done_criteria": [
+    "app.py runs without errors",
+    "POST /shorten returns valid JSON with short_url",
+    "GET /<code> redirects to original URL",
+    "Invalid URL returns 400 error",
+    "Missing code returns 404 error"
+  ],
+  "complexity_level": "MEDIUM",
+  "max_steps": 8
+}

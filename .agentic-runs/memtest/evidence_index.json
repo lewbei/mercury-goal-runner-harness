@@ -1,0 +1,123 @@
+{
+  "schema_version": "evidence_index_v1",
+  "run_id": "memtest",
+  "frozen": true,
+  "freeze_id": "freeze_0001",
+  "generated_at": "2026-05-10T09:10:33.205035+00:00",
+  "items": [
+    {
+      "evidence_id": "ev_trace_trace_jsonl",
+      "kind": "TRACE",
+      "path": "trace.jsonl",
+      "sha256": "955ef8df33eb3cb3131efe809adb1ea80aa632f8a25672d03df8a620c6d9e362",
+      "producer": "guarded_worker",
+      "producer_command_id": "cmd_trace",
+      "trust_level": "L2_EXECUTION_EVIDENCE",
+      "created_before_freeze": true
+    },
+    {
+      "evidence_id": "ev_step_log_step_logs_1_json",
+      "kind": "STEP_LOG",
+      "path": "step_logs/1.json",
+      "sha256": "bdd34e006ef80b453cace23a96c8393c38b0fc306eedd5f48e1dedfbfd6255f7",
+      "producer": "guarded_worker",
+      "producer_command_id": "cmd_step_log",
+      "trust_level": "L2_EXECUTION_EVIDENCE",
+      "created_before_freeze": true
+    },
+    {
+      "evidence_id": "ev_verifier_artifact_verifier_artifacts_F_MEMTEST_json",
+      "kind": "VERIFIER_ARTIFACT",
+      "path": "verifier_artifacts/F_MEMTEST.json",
+      "sha256": "500411221cded1aa492104ea4ecec07a267874ca2b56a676a3ae4adb6bd435af",
+      "producer": "verifier_provenance",
+      "producer_command_id": "cmd_verifier_artifact",
+      "trust_level": "L3_VERIFIER_EVIDENCE",
+      "created_before_freeze": true,
+      "artifact_id": "F.MEMTEST",
+      "cited_by_policy": true
+    },
+    {
+      "evidence_id": "ev_verifier_artifact_verifier_artifacts_V_MEMTEST_json",
+      "kind": "VERIFIER_ARTIFACT",
+      "path": "verifier_artifacts/V.MEMTEST.json",
+      "sha256": "8427ce6c3749b581fc005a552bab8aa55cb36d7df7eb9a9c19f2bd36dc15860f",
+      "producer": "verifier_provenance",
+      "producer_command_id": "cmd_verifier_artifact",
+      "trust_level": "L3_VERIFIER_EVIDENCE",
+      "created_before_freeze": true,
+      "artifact_id": "V.MEMTEST",
+      "cited_by_policy": true
+    },
+    {
+      "evidence_id": "ev_verifier_smell_report_verifier_smell_reports_F_MEMTEST_json",
+      "kind": "VERIFIER_SMELL_REPORT",
+      "path": "verifier_smell_reports/F.MEMTEST.json",
+      "sha256": "cbf4ca8ea8e7dd9e579bbc928a832fc06129efdd6e59b3d8038627aaec78ace1",
+      "producer": "smell_scanner",
+      "producer_command_id": "cmd_smell_scan",
+      "trust_level": "L3_VERIFIER_QUALITY",
+      "created_before_freeze": true
+    },
+    {
+      "evidence_id": "ev_verifier_smell_report_verifier_smell_reports_V_MEMTEST_json",
+      "kind": "VERIFIER_SMELL_REPORT",
+      "path": "verifier_smell_reports/V.MEMTEST.json",
+      "sha256": "3ead71ff0e9fadf0deea09062ba9f3adec0512f586154341581887154913221f",
+      "producer": "smell_scanner",
+      "producer_command_id": "cmd_smell_scan",
+      "trust_level": "L3_VERIFIER_QUALITY",
+      "created_before_freeze": true
+    },
+    {
+      "evidence_id": "ev_verifier_strength_report_verifier_strength_reports_F_MEMTEST_json",
+      "kind": "VERIFIER_STRENGTH_REPORT",
+      "path": "verifier_strength_reports/F.MEMTEST.json",
+      "sha256": "0d519c9e5feb25840ab84a04913ab0d12939e62b1d1bb737f3eead4e48811460",
+      "producer": "strength_scorer",
+      "producer_command_id": "cmd_strength_score",
+      "trust_level": "L3_VERIFIER_QUALITY",
+      "created_before_freeze": true
+    },
+    {
+      "evidence_id": "ev_verifier_strength_report_verifier_strength_reports_V_MEMTEST_json",
+      "kind": "VERIFIER_STRENGTH_REPORT",
+      "path": "verifier_strength_reports/V.MEMTEST.json",
+      "sha256": "429caa80c39263102f161cfb7b25d6fffbe864d7b01f7c30206a83721823ada8",
+      "producer": "strength_scorer",
+      "producer_command_id": "cmd_strength_score",
+      "trust_level": "L3_VERIFIER_QUALITY",
+      "created_before_freeze": true
+    },
+    {
+      "evidence_id": "ev_policy_decision_policy_decision_json",
+      "kind": "POLICY_DECISION",
+      "path": "policy_decision.json",
+      "sha256": "ff0a7db3a7420dd8615348a4c287e21a07b2b292cd1d0375ad66a23ce1c318d6",
+      "producer": "policy_engine",
+      "producer_command_id": "cmd_policy_decision",
+      "trust_level": "L4_AUTHORITY",
+      "created_before_freeze": true
+    },
+    {
+      "evidence_id": "ev_certification_certification_json",
+      "kind": "CERTIFICATION",
+      "path": "certification.json",
+      "sha256": "afd7c052a95b1f07083ba23be767977156982d33a09442dcf1151ea9a5eed90d",
+      "producer": "certify_run",
+      "producer_command_id": "cmd_certification",
+      "trust_level": "L4_AUTHORITY",
+      "created_before_freeze": true
+    },
+    {
+      "evidence_id": "ev_final_status_final_status_json",
+      "kind": "FINAL_STATUS",
+      "path": "final_status.json",
+      "sha256": "5d550172aa8351390a9fb32f64c3f9ac9aa4b1c0a85ea34d05928304627bea9b",
+      "producer": "certify_run",
+      "producer_command_id": "cmd_final_status",
+      "trust_level": "L4_AUTHORITY",
+      "created_before_freeze": true
+    }
+  ]
+}

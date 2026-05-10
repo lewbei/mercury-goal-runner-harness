@@ -1,0 +1,35 @@
+{
+  "schema_version": "work_packet_v1",
+  "work_packet_id": "WP.INTAKE.001",
+  "phase": "INTAKE",
+  "role": "Questioner",
+  "task": "Vertical smoke: create question contract",
+  "input_artifacts": [],
+  "input_summaries": {},
+  "allowed_write_paths": [
+    "output.txt"
+  ],
+  "forbidden_write_paths": [
+    "final_status.json",
+    "final_status.md",
+    "certification.json",
+    "policy_decision.json",
+    "evidence_freeze.json",
+    "run_state.json",
+    "phase_queue.json"
+  ],
+  "status": "ACCEPTED",
+  "max_model_calls": 1,
+  "max_repair_attempts": 0,
+  "repair_attempt_count": 0,
+  "output_schema": "default_result.schema.json",
+  "status_claim_allowed": false,
+  "result_path": "work_results/WP.INTAKE.001.json",
+  "validation_result_path": "validation_results/WP.INTAKE.001.json",
+  "error": null,
+  "dispatch_timestamp": "2026-05-09T12:22:57.870089+00:00",
+  "result_timestamp": "2026-05-09T12:22:57.883747+00:00",
+  "dependencies": [],
+  "created_at": "2026-05-09T12:22:57.843624+00:00",
+  "updated_at": "2026-05-09T12:22:57.912345+00:00"
+}

@@ -53,9 +53,32 @@ def log_trace(run_dir: Path, agent: str, event: str, status: str = "OK", data: d
 def main():
     parser = argparse.ArgumentParser(description="Execute merged plan for a run")
     parser.add_argument("--run-id", required=True, help="Run identifier")
+    parser.add_argument("--skill-context", default=None, help="Path to skill_context.json (QRSPI skills)")
     args = parser.parse_args()
     run_dir = Path(".agentic-runs") / args.run_id
     run_dir.mkdir(parents=True, exist_ok=True)
+
+    # ── Read QRSPI skill context if provided ───────────────────────────
+    active_skills = []
+    if args.skill_context:
+        ctx_path = Path(args.skill_context)
+        if ctx_path.is_file():
+            ctx = json.loads(ctx_path.read_text(encoding="utf-8"))
+            active_skills = ctx.get("skill_names", [])
+            print(f"  QRSPI skills active: {', '.join(active_skills)}")
+
+    # ── Apply path-grounding skill: validate against expected_artifacts ─
+    expected_artifacts = None
+    ea_path = run_dir / "expected_artifacts.json"
+    if ea_path.is_file() and "path-grounding" in active_skills:
+        expected_artifacts = json.loads(ea_path.read_text(encoding="utf-8"))
+        print(f"  path-grounding: loaded {len(expected_artifacts.get('artifacts', []))} expected artifacts")
+
+    # ── Apply artifact-contract skill: enforce allowed/forbidden writers ─
+    writer_role = "Engineer"
+    if "artifact-contract" in active_skills:
+        print(f"  artifact-contract: enforcing write scope for role={writer_role}")
+
     merged_plan_path = run_dir / "merged_plan.json"
     if not merged_plan_path.is_file():
         raise FileNotFoundError(f"merged_plan.json not found at {merged_plan_path}")
@@ -76,10 +99,20 @@ def main():
         if action == "create_file":
             raw_target_path = step.get("path", f"artifact_{idx}.txt")
             full_path = resolve_run_path(run_dir, raw_target_path)
+
+            # ── path-grounding: validate against expected_artifacts ────
+            relative_path = run_relative(run_dir, full_path)
+            if expected_artifacts:
+                expected_paths = [a.get("expected_path", "") for a in expected_artifacts.get("artifacts", [])]
+                if expected_paths and relative_path not in expected_paths:
+                    print(f"  path-grounding WARNING: {relative_path} not in expected_artifacts ({expected_paths})")
+                else:
+                    print(f"  path-grounding OK: {relative_path} matches expected artifact")
+
             full_path.parent.mkdir(parents=True, exist_ok=True)
             content = step.get("content", "")
             full_path.write_text(content, encoding="utf-8")
-            files_touched = [run_relative(run_dir, full_path)]
+            files_touched = [relative_path]
             evidence = [f"Created file {files_touched[0]}"]
             action_taken = "create_file"
             command_desc = f"write {files_touched[0]}"

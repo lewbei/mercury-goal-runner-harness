@@ -1,0 +1,10 @@
+{
+  "schema_version": "reflection_report_v1",
+  "run_id": "memtest",
+  "agent_name": "verifier-generator",
+  "generated_at": "2026-05-10T09:07:52.395727+00:00",
+  "outcome_status": "UNKNOWN",
+  "helpful": [],
+  "harmful": [],
+  "neutral": []
+}

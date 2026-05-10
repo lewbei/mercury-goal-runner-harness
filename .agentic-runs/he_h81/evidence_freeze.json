@@ -1,0 +1,12 @@
+{
+  "schema_version": "evidence_freeze_v1",
+  "run_id": "he_h81",
+  "freeze_id": "freeze_0001",
+  "frozen_at": "2026-05-10T07:22:45.422646+00:00",
+  "evidence_index_path": "evidence_index.json",
+  "evidence_index_sha256": "0292c9fda56382cc8a1b9c9e58452913c3f49336ae7ac65bf0c36d57d6e7e233",
+  "policy_decision_path": "policy_decision.json",
+  "policy_decision_sha256": "2f4e7cb840b487624e9e3f85026de063ad249e858d8eafd4a630b8dd6815c1a9",
+  "hash_manifest_path": "evidence_hash_manifest.json",
+  "item_count": 6
+}

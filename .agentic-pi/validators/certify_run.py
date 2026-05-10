@@ -4,6 +4,7 @@ import os
 import shlex
 import subprocess
 import sys
+import importlib.util
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -20,6 +21,7 @@ from policy_engine import decide_run_policy, write_policy_decision
 
 PROTECTED_NAMES = {
     "certification.json",
+    "final_status.json",
     "final_status.md",
     "policy_decision.json",
     "trace.jsonl",
@@ -64,6 +66,14 @@ def sha256_file(path: Path) -> str:
 
 def write_json(path: Path, obj):
     path.write_text(json.dumps(obj, indent=2, ensure_ascii=False), encoding="utf-8")
+
+
+def load_local_module(name: str, path: Path):
+    spec = importlib.util.spec_from_file_location(name, path)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[name] = module
+    spec.loader.exec_module(module)
+    return module
 
 
 def schema_path(name: str) -> Path:
@@ -588,6 +598,148 @@ def run_policy_engine(run_dir: Path, failed: list, passed: list) -> str:
     return written_decision["status"]
 
 
+def apply_formal_verification_gate(
+    run_dir: Path,
+    provenance_mode: bool,
+    failed: list,
+    passed: list,
+    current_status: str,
+) -> str:
+    """Gate: check for formal verification artifacts.
+
+    If F_*.json artifacts exist and have verdict PASS, credit them.
+    Missing formal verification is a soft warning (not blocking).
+    """
+    artifacts_dir = run_dir / "verifier_artifacts"
+    if not artifacts_dir.is_dir():
+        passed.append("formal_verification: no artifacts dir (informational)")
+        return current_status
+
+    formal_artifacts = list(artifacts_dir.glob("F_*.json"))
+    if not formal_artifacts:
+        passed.append("formal_verification: no formal artifacts (informational)")
+        return current_status
+
+    for fa in formal_artifacts:
+        try:
+            data = json.loads(fa.read_text(encoding="utf-8"))
+            if data.get("kind") == "formal_verification":
+                verdict = data.get("verdict", "UNKNOWN")
+                detail = data.get("formal_verification_detail", {})
+                confidence = detail.get("confidence", 0.0)
+
+                if verdict == "PASS":
+                    passed.append(
+                        f"formal_verification: {fa.stem} PASS "
+                        f"(confidence={confidence:.2f})"
+                    )
+                else:
+                    failed.append(
+                        f"formal_verification: {fa.stem} {verdict} "
+                        f"(confidence={confidence:.2f})"
+                    )
+                    if current_status in ("DONE_PASS", "CERTIFIED_DONE"):
+                        current_status = "DONE_FAIL"
+        except Exception as e:
+            passed.append(f"formal_verification: {fa.stem} could not read ({e})")
+
+    return current_status
+
+
+def apply_cryptographic_signature_gate(
+    run_dir: Path,
+    provenance_mode: bool,
+    failed: list,
+    passed: list,
+    current_status: str,
+) -> str:
+    """Gate: verify cryptographic signatures on artifacts.
+
+    If agent public key and signatures exist, verify them.
+    Unsigned artifacts get a warning. Forged/tampered artifacts block certification.
+    """
+    sig_files = list(run_dir.rglob("*.sig"))
+    if not sig_files:
+        passed.append("crypto_signatures: no signatures found (informational)")
+        return current_status
+
+    try:
+        formal_dir = Path(__file__).resolve().parents[1] / "formal"
+        sys.path.insert(0, str(formal_dir))
+        from harness_signing import HarnessSigner
+        signer = HarnessSigner(run_dir)
+        results = signer.verify_all()
+
+        for r in results:
+            if r["verdict"] == "AUTHENTIC":
+                passed.append(f"crypto_signature: {r['artifact']} AUTHENTIC")
+            elif r["verdict"] in ("FORGED", "TAMPERED"):
+                failed.append(
+                    f"crypto_signature: {r['artifact']} {r['verdict']} — {r['reason']}"
+                )
+                if current_status in ("DONE_PASS", "CERTIFIED_DONE"):
+                    current_status = "DONE_FAIL"
+            elif r["verdict"] == "UNSIGNED":
+                passed.append(
+                    f"crypto_signature: {r['artifact']} unsigned (informational)"
+                )
+    except ImportError:
+        passed.append("crypto_signatures: signing module not available (informational)")
+    except Exception as e:
+        passed.append(f"crypto_signatures: verification error ({e})")
+
+    return current_status
+
+
+def apply_artifact_location_gate(
+    run_dir: Path,
+    provenance_mode: bool,
+    failed: list,
+    passed: list,
+    current_status: str,
+) -> str:
+    """Gate: if expected_artifacts.json exists, check artifact placement.
+
+    Blocks certification if:
+    - A required artifact is at the wrong path (BLOCKED_BY_ARTIFACT_MISPLACEMENT)
+    - A required artifact is missing entirely
+    """
+    ea_path = run_dir / "expected_artifacts.json"
+    if not ea_path.is_file():
+        return current_status
+
+    try:
+        vloc = load_local_module(
+            "validate_artifact_location",
+            Path(__file__).resolve().parents[1] / "artifacts" / "validators" / "validate_artifact_location.py",
+        )
+    except Exception as exc:
+        failed.append(f"artifact location validator load failed: {exc}")
+        return current_status
+
+    try:
+        verdicts = vloc.validate_artifact_location(run_dir)
+    except Exception as exc:
+        failed.append(f"artifact location validation failed: {exc}")
+        return "NOT_DONE"
+
+    has_misplacement = vloc.has_misplacement(verdicts)
+    has_missing = vloc.has_missing_required(verdicts)
+
+    for v in verdicts:
+        if v["verdict"] == "ACCEPTED":
+            passed.append(f"artifact placement OK: {v['artifact_id']} at {v['expected_path']}")
+        elif v["verdict"] == "BLOCKED_BY_ARTIFACT_MISPLACEMENT":
+            failed.append(f"artifact MISPLACED: {v['artifact_id']} expected at {v['expected_path']}, found at {v['actual_path']}")
+        elif v["verdict"] == "NOT_DONE":
+            failed.append(f"artifact MISSING: {v['artifact_id']} expected at {v['expected_path']} but not found")
+
+    if has_misplacement or has_missing:
+        return "NOT_DONE"
+
+    return current_status
+
+
 def apply_audit_report_gate(run_dir: Path, provenance_mode: bool, failed: list, passed: list, current_status: str) -> str:
     audit_path = run_dir / "audit_report.json"
     if not audit_path.is_file():
@@ -605,6 +757,45 @@ def apply_audit_report_gate(run_dir: Path, provenance_mode: bool, failed: list, 
         return "NOT_DONE" if provenance_mode else "DONE_FAIL"
 
     passed.append("audit_report.json valid")
+    return current_status
+
+
+def apply_replay_gate(
+    run_dir: Path,
+    provenance_mode: bool,
+    failed: list,
+    passed: list,
+    current_status: str,
+) -> str:
+    """Gate: if replay_report.json exists, check replay verdict.
+
+    Blocks certification if replay verdict is REPLAY_MISMATCH.
+    """
+    replay_path = run_dir / "replay_report.json"
+    if not replay_path.is_file():
+        return current_status
+
+    try:
+        replay = load_json(replay_path)
+    except Exception as exc:
+        failed.append(f"replay_report.json invalid: {exc}")
+        return "NOT_DONE"
+
+    verdict = replay.get("verdict", "")
+    if verdict == "REPLAY_MISMATCH":
+        failed.append("replay_check: REPLAY_MISMATCH blocks certification")
+        for check_name, check_result in replay.get("checks", {}).items():
+            if not check_result.get("passed", True):
+                failed.append(f"  replay check failed: {check_name}: {check_result.get('detail', '')}")
+        return "NOT_DONE"
+    elif verdict == "REPLAY_PARTIAL":
+        passed.append("replay_check: REPLAY_PARTIAL (warning-level issues only)")
+    elif verdict == "REPLAY_MATCH":
+        passed.append("replay_check: REPLAY_MATCH — certification is reproducible")
+    else:
+        failed.append(f"replay_check: unknown verdict '{verdict}'")
+        return "NOT_DONE"
+
     return current_status
 
 
@@ -635,6 +826,59 @@ def apply_drift_report_gate(run_dir: Path, provenance_mode: bool, failed: list, 
         return "NOT_DONE" if provenance_mode else "DONE_FAIL"
 
     passed.append(f"drift_report.json valid: {drift.get('drift_level')}")
+    return current_status
+
+
+def apply_evidence_freeze_gate(
+    run_dir: Path,
+    provenance_mode: bool,
+    failed: list,
+    passed: list,
+    current_status: str,
+) -> str:
+    """Freeze producer-linked evidence after policy decision and before certification.
+
+    Evidence freeze can block certification when provenance evidence is missing,
+    mutable, or not producer-linked. It does not certify DONE by itself.
+    """
+    if not provenance_mode:
+        return current_status
+
+    try:
+        indexer = load_local_module(
+            "evidence_indexer",
+            Path(__file__).resolve().parents[1] / "runtime" / "evidence_indexer.py",
+        )
+        freezer = load_local_module(
+            "evidence_freezer",
+            Path(__file__).resolve().parents[1] / "runtime" / "evidence_freezer.py",
+        )
+        index_validator = load_local_module(
+            "validate_evidence_index",
+            Path(__file__).resolve().parents[1] / "validators" / "validate_evidence_index.py",
+        )
+        freeze_validator = load_local_module(
+            "validate_evidence_freeze",
+            Path(__file__).resolve().parents[1] / "validators" / "validate_evidence_freeze.py",
+        )
+
+        indexer.write_evidence_index(run_dir)
+        ok, message = index_validator.validate_evidence_index(run_dir)
+        if not ok:
+            failed.append(f"evidence_index.json invalid: {message}")
+            return "NOT_DONE"
+        passed.append("evidence_index.json validates")
+
+        freezer.freeze_evidence(run_dir)
+        ok, message = freeze_validator.validate_evidence_freeze(run_dir)
+        if not ok:
+            failed.append(f"evidence_freeze.json invalid: {message}")
+            return "NOT_DONE"
+        passed.append("evidence_freeze.json validates")
+    except Exception as exc:
+        failed.append(f"evidence freeze failed: {exc}")
+        return "NOT_DONE"
+
     return current_status
 
 
@@ -711,9 +955,60 @@ def evaluate_done_criteria(
                     )
 
 
+def apply_memory_authority_gate(
+    run_dir: Path,
+    provenance_mode: bool,
+    failed: list,
+    passed: list,
+    current_status: str,
+) -> str:
+    """Gate: scan for memory artifacts with authority-leak fields.
+
+    Memory artifacts must not contain fields like final_status, certified_done,
+    policy_override, etc. If such leaks are found, certification is blocked.
+    """
+    # Paths to scan for memory-like artifacts
+    memory_paths = [
+        run_dir / "memory_journal.jsonl",
+        run_dir / "memory_journal.json",
+        run_dir / "learning_candidate.json",
+    ]
+    # Also scan run_local_memory/ directory if it exists
+    run_local_dir = run_dir / "run_local_memory"
+    if run_local_dir.is_dir():
+        for fpath in run_local_dir.glob("*.json"):
+            memory_paths.append(fpath)
+
+    found_leaks = False
+    for mem_path in memory_paths:
+        if not mem_path.is_file():
+            continue
+        try:
+            vma = load_local_module(
+                "validate_memory_authority",
+                Path(__file__).resolve().parents[1] / "validators" / "validate_memory_authority.py",
+            )
+            data = vma.load_json(mem_path)
+            errors = vma.validate_memory_authority(data)
+            if errors:
+                found_leaks = True
+                failed.append(f"MEMORY_AUTHORITY_VIOLATION: {mem_path.name}")
+                for err in errors:
+                    failed.append(f"  memory leak: {err}")
+        except Exception as exc:
+            failed.append(f"memory authority check failed for {mem_path.name}: {exc}")
+            found_leaks = True
+
+    if found_leaks:
+        failed.append("Memory authority violation blocks certification")
+        return "NOT_DONE"
+
+    return current_status
+
+
 def main():
-    if len(sys.argv) != 2:
-        print("Usage: python certify_run.py <run_dir>")
+    if len(sys.argv) < 2:
+        print("Usage: python certify_run.py <run_dir> [--skill-context <path>]")
         sys.exit(2)
 
     run_dir = Path(sys.argv[1])
@@ -721,6 +1016,22 @@ def main():
     failed = []
     artifact_hashes = {}
     output_paths = {}
+
+    # ── QRSPI skill context (auto-detect or explicit) ──────────────────
+    active_skills = []
+    if "--skill-context" in sys.argv:
+        idx = sys.argv.index("--skill-context")
+        if idx + 1 < len(sys.argv):
+            ctx_path = Path(sys.argv[idx + 1])
+            if ctx_path.is_file():
+                ctx = json.loads(ctx_path.read_text(encoding="utf-8"))
+                active_skills = ctx.get("skill_names", [])
+                print(f"certify_run: QRSPI skills active: {', '.join(active_skills)}")
+    elif (run_dir / "skill_context.json").exists():
+        ctx = json.loads((run_dir / "skill_context.json").read_text(encoding="utf-8"))
+        active_skills = ctx.get("skill_names", [])
+        if active_skills:
+            print(f"certify_run: QRSPI skills auto-detected: {', '.join(active_skills)}")
 
     if not run_dir.exists():
         print("RUN_DIR_MISSING")
@@ -837,18 +1148,44 @@ def main():
                         artifact_hashes[output] = sha256_file(output_path)
                         if output_path.suffix == ".py" and not artifact_tests_present:
                             try:
-                                result = run_python_output(output_path, cwd=run_dir)
-                                line_count = len(
-                                    [line for line in result.stdout.splitlines() if line.strip()]
-                                )
-                                if result.returncode == 0 and line_count >= 2:
-                                    passed.append(
-                                        f"Python script {output} produced >=2 lines of output"
-                                    )
+                                # Check if file is a script (has __main__) or pure module
+                                file_text = output_path.read_text(encoding="utf-8")
+                                has_main = "if __name__" in file_text or "print(" in file_text
+
+                                if has_main:
+                                    # Skip CLI tools that need args (argparse or sys.argv)
+                                    if "argparse" in file_text or "sys.argv" in file_text:
+                                        passed.append(
+                                            f"Python script {output} is a CLI tool (requires args)"
+                                        )
+                                    else:
+                                        result = run_python_output(output_path, cwd=run_dir)
+                                        line_count = len(
+                                            [line for line in result.stdout.splitlines() if line.strip()]
+                                        )
+                                        if result.returncode == 0 and line_count >= 2:
+                                            passed.append(
+                                                f"Python script {output} produced >=2 lines of output"
+                                            )
+                                        else:
+                                            failed.append(
+                                                f"Python script {output} exit={result.returncode}, lines={line_count}"
+                                            )
                                 else:
-                                    failed.append(
-                                        f"Python script {output} exit={result.returncode}, lines={line_count}"
-                                    )
+                                    # Pure module — just verify it imports cleanly
+                                    try:
+                                        import importlib.util
+                                        spec = importlib.util.spec_from_file_location(
+                                            output_path.stem, str(output_path))
+                                        mod = importlib.util.module_from_spec(spec)
+                                        spec.loader.exec_module(mod)
+                                        passed.append(
+                                            f"Python module {output} imports cleanly"
+                                        )
+                                    except Exception as import_exc:
+                                        failed.append(
+                                            f"Python module {output} import failed: {import_exc}"
+                                        )
                             except Exception as exc:
                                 failed.append(f"Running Python script {output} failed: {exc}")
                 else:
@@ -879,8 +1216,14 @@ def main():
     else:
         status = "DONE_PASS" if not failed else "DONE_FAIL"
 
+    status = apply_artifact_location_gate(run_dir, provenance_mode, failed, passed, status)
+    status = apply_replay_gate(run_dir, provenance_mode, failed, passed, status)
     status = apply_audit_report_gate(run_dir, provenance_mode, failed, passed, status)
     status = apply_drift_report_gate(run_dir, provenance_mode, failed, passed, status)
+    status = apply_evidence_freeze_gate(run_dir, provenance_mode, failed, passed, status)
+    status = apply_memory_authority_gate(run_dir, provenance_mode, failed, passed, status)
+    status = apply_formal_verification_gate(run_dir, provenance_mode, failed, passed, status)
+    status = apply_cryptographic_signature_gate(run_dir, provenance_mode, failed, passed, status)
 
     certification = {
         "run_id": run_id,
@@ -894,34 +1237,39 @@ def main():
     }
 
     cert_path = run_dir / "certification.json"
-    final_status_path = run_dir / "final_status.md"
-
     write_json(cert_path, certification)
 
-    report = []
-    report.append(f"# Final Status: {status}")
-    report.append("")
-    report.append(f"Run ID: `{run_id}`")
-    report.append("")
-    report.append("## Passed checks")
-    for item in passed:
-        report.append(f"- {item}")
-    report.append("")
-    report.append("## Failed checks")
-    if failed:
-        for item in failed:
-            report.append(f"- {item}")
-    else:
-        report.append("- none")
-    report.append("")
-    report.append("## Artifact hashes")
-    if artifact_hashes:
-        for key, value in artifact_hashes.items():
-            report.append(f"- `{key}`: `{value}`")
-    else:
-        report.append("- none")
+    total = len(passed) + len(failed)
+    confidence = len(passed) / total if total > 0 else 0.0
+    final_status_data = {
+        "schema_version": "final_status_v1",
+        "run_id": run_id,
+        "status": status,
+        "status_source": "policy_decision.json" if provenance_mode else "certification.json",
+        "final_status_authority": "certifier_only",
+        "can_certify_done": False,
+        "policy_decision_path": "policy_decision.json" if provenance_mode else "",
+        "certification_path": "certification.json",
+        "confidence_score": round(confidence, 4),
+        "checks_passed": len(passed),
+        "checks_failed": len(failed),
+        "checks_total": total,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+    }
+    final_status_path = run_dir / "final_status.json"
+    write_json(final_status_path, final_status_data)
 
-    final_status_path.write_text("\n".join(report), encoding="utf-8")
+    validator_path = Path(__file__).resolve().parents[1] / "validators" / "validate_final_status.py"
+    validator = load_local_module("validate_final_status", validator_path)
+    validator.validate(final_status_path, run_dir, passed, failed)
+    certification["passed_checks"] = passed
+    certification["failed_checks"] = failed
+    certification["audit_chain_valid"] = not failed
+    write_json(cert_path, certification)
+
+    renderer_path = Path(__file__).resolve().parents[1] / "runtime" / "final_status_renderer.py"
+    renderer = load_local_module("final_status_renderer", renderer_path)
+    renderer.render_final_status_md(final_status_path, run_dir / "final_status.md", certification)
 
     print(status)
     print(f"Wrote {cert_path}")

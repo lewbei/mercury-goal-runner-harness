@@ -1,0 +1,25 @@
+{
+  "run_id": "pi_dep",
+  "status": "DONE_PASS",
+  "passed_checks": [
+    "goal_contract.json exists",
+    "goal_contract.json parses as JSON",
+    "trace.jsonl exists",
+    "trace.jsonl lines parse as JSON",
+    "step_logs contain at least one step result",
+    "1.json evidence maps to touched files",
+    "2.json evidence maps to touched files",
+    "done_criteria is non-empty",
+    "final_outputs is non-empty",
+    "final output exists: dependency_report.md",
+    "Done criterion satisfied: dependency_report.md contains the word 'A.SOURCE'.",
+    "final_status.json validated"
+  ],
+  "failed_checks": [],
+  "artifact_hashes": {
+    "dependency_report.md": "36c97834e3446c9ec0ec1e4a3a9bd32b97987163752981ea5b778deb03333b26"
+  },
+  "audit_chain_valid": true,
+  "generated_by": "agentic-pi-certifier-v0.3.6",
+  "timestamp": "2026-05-10T06:05:24.066640+00:00"
+}

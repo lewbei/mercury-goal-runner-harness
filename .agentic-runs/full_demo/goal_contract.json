@@ -1,0 +1,1 @@
+{"run_id":"full_demo","raw_user_prompt":"Create a function that converts Roman numerals to integers","intent":"Roman numeral converter","final_outputs":["roman_to_int.py"],"done_criteria":["roman_to_int.py exists"],"complexity_level":"MEDIUM","max_steps":2}

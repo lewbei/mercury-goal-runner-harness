@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Run Journal Entry",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "run_id",
+    "entry_id",
+    "created_at",
+    "phase",
+    "event_type",
+    "message",
+    "target_file",
+    "details",
+    "memory_scope",
+    "durable",
+    "excluded_from_evidence_index",
+    "authority_level",
+    "final_status_authority",
+    "can_certify_done"
+  ],
+  "properties": {
+    "schema_version": {"type": "string", "enum": ["run_journal_entry_v1"]},
+    "run_id": {"type": "string", "minLength": 1},
+    "entry_id": {"type": "string", "minLength": 1},
+    "created_at": {"type": "string", "minLength": 1},
+    "phase": {
+      "type": "string",
+      "enum": [
+        "planning",
+        "execution",
+        "verifier_failure",
+        "repair",
+        "context_update",
+        "memory_usage",
+        "memory_effect"
+      ]
+    },
+    "event_type": {"type": "string", "minLength": 1},
+    "message": {"type": "string", "minLength": 1},
+    "target_file": {"type": "string"},
+    "details": {"type": "object"},
+    "memory_scope": {"type": "string", "enum": ["run_local"]},
+    "durable": {"type": "boolean", "enum": [false]},
+    "excluded_from_evidence_index": {"type": "boolean", "enum": [true]},
+    "authority_level": {"type": "string", "enum": ["advisory_only"]},
+    "final_status_authority": {"type": "string", "enum": ["certifier_only"]},
+    "can_certify_done": {"type": "boolean", "enum": [false]}
+  },
+  "additionalProperties": false
+}

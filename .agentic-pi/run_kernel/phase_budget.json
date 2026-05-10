@@ -1,0 +1,41 @@
+{
+  "schema_version": "phase_budget_v1",
+  "description": "Per-phase budget limits. The kernel enforces these caps.",
+  "default_limits": {
+    "max_model_calls_per_packet": 3,
+    "max_repair_attempts_per_packet": 2,
+    "max_repair_attempts_per_run": 10,
+    "max_concurrent_packets": 4
+  },
+  "phase_overrides": {
+    "IMPLEMENTING": {
+      "max_model_calls_per_packet": 5,
+      "max_repair_attempts_per_packet": 3
+    },
+    "VALIDATOR_BUILDING": {
+      "max_model_calls_per_packet": 3,
+      "max_repair_attempts_per_packet": 2
+    },
+    "REPAIRING_PLAN": {
+      "max_model_calls_per_packet": 2,
+      "max_repair_attempts_per_packet": 1
+    },
+    "REPAIRING_ARTIFACT_ROUTING": {
+      "max_model_calls_per_packet": 1,
+      "max_repair_attempts_per_packet": 1
+    },
+    "REPAIRING_VALIDATOR": {
+      "max_model_calls_per_packet": 2,
+      "max_repair_attempts_per_packet": 1
+    },
+    "REPAIRING_EVIDENCE": {
+      "max_model_calls_per_packet": 1,
+      "max_repair_attempts_per_packet": 1
+    },
+    "REPAIRING_IMPLEMENTATION": {
+      "max_model_calls_per_packet": 2,
+      "max_repair_attempts_per_packet": 1
+    }
+  },
+  "updated_at": "2026-05-08T00:00:00Z"
+}

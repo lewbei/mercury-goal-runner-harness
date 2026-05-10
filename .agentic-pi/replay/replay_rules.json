@@ -1,0 +1,72 @@
+{
+  "schema_version": "replay_rules_v1",
+  "description": "Rules for replay certification. Defines what checks must pass for a replay to be considered valid.",
+  "rules": [
+    {
+      "id": "evidence_freeze_exists",
+      "description": "An evidence_freeze.json must exist from the original run.",
+      "severity": "FAILED",
+      "enabled": true
+    },
+    {
+      "id": "evidence_hashes_match",
+      "description": "Hashes in evidence_hash_manifest.json must match current filesystem hashes.",
+      "severity": "FAILED",
+      "enabled": true
+    },
+    {
+      "id": "certification_exists",
+      "description": "Original certification.json must exist.",
+      "severity": "FAILED",
+      "enabled": true
+    },
+    {
+      "id": "policy_decision_exists",
+      "description": "Original policy_decision.json must exist (for provenance runs).",
+      "severity": "FAILED",
+      "enabled": true
+    },
+    {
+      "id": "policy_cert_match",
+      "description": "The policy decision status must match the certification status.",
+      "severity": "FAILED",
+      "enabled": true
+    },
+    {
+      "id": "goal_contract_present",
+      "description": "goal_contract.json must be present.",
+      "severity": "FAILED",
+      "enabled": true
+    },
+    {
+      "id": "trace_valid",
+      "description": "trace.jsonl must be valid JSONL with at least one event.",
+      "severity": "WARNING",
+      "enabled": true
+    },
+    {
+      "id": "step_logs_present",
+      "description": "step_logs directory must have at least one .json file.",
+      "severity": "WARNING",
+      "enabled": true
+    },
+    {
+      "id": "final_status_exists",
+      "description": "final_status.json must exist.",
+      "severity": "FAILED",
+      "enabled": true
+    },
+    {
+      "id": "final_status_cert_match",
+      "description": "final_status.json status must match certification.json status.",
+      "severity": "FAILED",
+      "enabled": true
+    }
+  ],
+  "replay_verdicts": {
+    "REPLAY_MATCH": "All FAILED-severity checks pass. The certification decision is reproducible.",
+    "REPLAY_MISMATCH": "One or more FAILED-severity checks failed. The certification decision may have been compromised.",
+    "REPLAY_PARTIAL": "All FAILED checks pass, but some WARNING checks failed. The decision is reproducible but may have degraded evidence."
+  },
+  "updated_at": "2026-05-08T00:00:00Z"
+}

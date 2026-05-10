@@ -96,7 +96,7 @@ class SmellScannerTests(unittest.TestCase):
 
         errors = validate(report, "verifier_smell_report.schema.json")
 
-        self.assertTrue(any("unexpected field unexpected" in error for error in errors), errors)
+        self.assertTrue(any("'unexpected'" in error and "unexpected field" in error for error in errors), errors)
 
     def test_p0_self_test_gets_self_certification_smells(self):
         artifact = load_json(

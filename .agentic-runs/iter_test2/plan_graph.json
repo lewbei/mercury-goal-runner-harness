@@ -1,0 +1,21 @@
+{
+  "nodes": [
+    {
+      "node_id": "n1",
+      "type": "task",
+      "task_id": "step1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "START",
+      "target": "n1",
+      "type": "flow"
+    },
+    {
+      "source": "n1",
+      "target": "END",
+      "type": "output"
+    }
+  ]
+}

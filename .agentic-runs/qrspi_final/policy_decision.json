@@ -1,0 +1,31 @@
+{
+  "run_id": "qrspi_final",
+  "status": "NOT_DONE",
+  "reason": "Hard validation failure exists before policy decision.",
+  "required_verifier_level": "P2",
+  "certifying_artifacts": [],
+  "provisional_artifacts": [],
+  "rejected_artifacts": [
+    "verifier_contract.json schema validation failed: $: missing required field 'run_id'",
+    "verifier_contract.json schema validation failed: $: missing required field 'target_goal'",
+    "verifier_contract.json schema validation failed: $: missing required field 'target_artifacts'",
+    "verifier_contract.json schema validation failed: $: missing required field 'required_verifier_level'",
+    "verifier_contract.json schema validation failed: $: missing required field 'allow_self_generated_only'",
+    "verifier_contract.json schema validation failed: $: missing required field 'required_behaviors'",
+    "verifier_contract.json schema validation failed: $: missing required field 'forbidden_verifier_patterns'",
+    "verifier_contract.json schema validation failed: $: missing required field 'minimum_strength_level'",
+    "verifier_contract.json schema validation failed: $: missing required field 'certifying_authority_levels'",
+    "verifier_contract.json schema validation failed: $: missing required field 'provisional_authority_levels'",
+    "verifier_contract.json schema validation failed: $: unexpected field 'requirements'",
+    "trace.jsonl missing",
+    "step_logs directory missing",
+    "done_criteria is empty",
+    "final_outputs is empty"
+  ],
+  "policy_checks": [
+    "verifier contract exists",
+    "target artifact exists",
+    "hard validation failure blocks certification"
+  ],
+  "generated_at": "2026-05-10T04:33:46.113165+00:00"
+}

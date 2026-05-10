@@ -1,0 +1,9 @@
+{
+  "nodes": [
+    {"node_id": "step1", "type": "task", "task_id": "step1"},
+    {"node_id": "orchestrate_pipeline.py", "type": "artifact", "path": ".agentic-pi/runtime/orchestrate_pipeline.py", "artifact_id": "orchestrate_pipeline.py"}
+  ],
+  "edges": [
+    {"source": "step1", "target": "orchestrate_pipeline.py", "type": "produces"}
+  ]
+}

@@ -31,10 +31,21 @@ Pi only reports what the certifier wrote.
 
 ## Current Implemented State
 
-Current pushed state:
+Committed state (v3.4 RPG Test Aggregation):
 
 ```text
-v3.4 = RPG Test Aggregation
+RPG-Harness v5 Phases 1-9 = Supervisor Ledger + Artifact Routing + Success Criteria/Oracles + Validator Factory + Replay Certification + Memory Split + Meta-Harness v0.1 + QRSPI Skills on top of v3.4 RPG Test Aggregation
+```
+
+Local proof slices ahead of committed (v3.5–v3.7):
+
+```text
+v3.5 = authority artifact (final_status.json), evidence freeze/index
+v3.6 = run-local memory, quarantine memory
+v3.7 = MemPalace + ACE memory governance (proof slices only; not fully
+       wired into the default end-to-end runtime path)
+v3.8 = Formal contract verification (VeriGuard-inspired) + cryptographic
+       artifact signing (VET-inspired) — both wired as certifier gates
 ```
 
 The deterministic raw-goal proof cases are:
@@ -218,6 +229,64 @@ v3.4 aggregates collected RPG test records:
 ```text
 RPG test records -> rpg_test_aggregator.py -> false-certified / monitor-miss / false-block metrics
 ```
+
+v3.5.0 adds machine-readable final status authority:
+
+```text
+policy_decision.json -> certification.json -> final_status.json -> final_status.md
+```
+
+`final_status.json` is the machine-readable authority artifact.
+`final_status.md` is a derived human-readable view only.
+
+v3.5.1 freezes producer-linked evidence:
+
+```text
+trace/logs/artifacts/verifier evidence/policy -> evidence_index.json -> evidence_freeze.json
+```
+
+Memory paths are excluded from `evidence_index.json`.
+
+v3.6 adds run-local and quarantine memory:
+
+```text
+current run observation -> memory/*.jsonl -> advisory repair context only
+candidate lesson -> quarantine memory -> not retrievable by future runs
+```
+
+Memory can suggest and record context. It cannot certify, replace evidence,
+enter `evidence_index.json`, or write status/policy/certification artifacts.
+
+v3.7 adds structured durable advisory memory:
+
+```text
+MemPalace durable card -> context_pack.json -> ACE reflection -> curator delta -> memory_write_gate.py
+```
+
+MemPalace stores memory. ACE reflects and proposes memory changes. RPG-Harness
+governs durable promotion. Memory remains advisory only; it cannot certify
+DONE, replace frozen evidence, or override policy.
+
+The next planned roadmap is `docs/V3_5_TO_V4_0_AUTHORITY_EVIDENCE_MEMORY_PLAN.md`:
+
+```text
+multi-agent context board
+  -> external host adapters
+  -> paper-style evaluation package
+```
+
+The local ignored reference folders are:
+
+```text
+modules/ace-main/
+modules/mempalace-develop/
+```
+
+They are design references only. ACE contributes the Generator / Reflector /
+Curator and helpful / harmful playbook-counter pattern. MemPalace contributes
+the local-first wing / room / closet / drawer retrieval pattern. Neither
+reference module can certify DONE or become a required clean-checkout
+dependency.
 
 This reports statistics and confidence intervals over schema-valid collected
 records. It cannot certify DONE or prove arbitrary prompt coverage.
@@ -444,6 +513,13 @@ Raw Goal
     Reads schema-valid RPG test records and reports false-certified,
     monitor-miss, false-block, regression, patch-needed, and confidence
     interval metrics. It cannot certify DONE.
+
+34. MemPalace + ACE Memory Governance Layer
+    Stores durable advisory cards as wings / rooms / drawers, builds bounded
+    context packs, reflects on helpful or harmful memory use, writes curator
+    delta candidates, and promotes durable cards only through
+    `memory_write_gate.py` after certifier-owned `final_status.json`.
+    It cannot certify DONE or override policy.
 ```
 
 ## Authority Model
@@ -540,8 +616,29 @@ top-level folders. The implemented files are:
 .agentic-pi/runtime/protected_file_guard.py
 .agentic-pi/runtime/run_enforced_pi_smoke.py
 .agentic-pi/runtime/rpg_test_aggregator.py
+.agentic-pi/runtime/final_status_renderer.py
+.agentic-pi/runtime/evidence_indexer.py
+.agentic-pi/runtime/evidence_freezer.py
+.agentic-pi/runtime/run_memory_clerk.py
+.agentic-pi/runtime/quarantine_memory_writer.py
+.agentic-pi/runtime/mempalace_adapter.py
+.agentic-pi/runtime/context_pack_builder.py
+.agentic-pi/runtime/ace_reflector.py
+.agentic-pi/runtime/ace_curator.py
+.agentic-pi/runtime/memory_write_gate.py
 .agentic-pi/schemas/rpg_test_record.schema.json
 .agentic-pi/schemas/rpg_test_aggregation_result.schema.json
+.agentic-pi/schemas/final_status.schema.json
+.agentic-pi/schemas/evidence_index.schema.json
+.agentic-pi/schemas/evidence_freeze.schema.json
+.agentic-pi/schemas/evidence_hash_manifest.schema.json
+.agentic-pi/schemas/run_journal_entry.schema.json
+.agentic-pi/schemas/learning_candidate.schema.json
+.agentic-pi/schemas/mempalace_card.schema.json
+.agentic-pi/schemas/context_pack.schema.json
+.agentic-pi/schemas/reflection_report.schema.json
+.agentic-pi/schemas/curator_delta.schema.json
+.agentic-pi/schemas/memory_write_decision.schema.json
 .agentic-pi/templates/rpg_test_record.template.json
 
 .agentic-pi/evaluation/trajectory_metrics.py
@@ -549,6 +646,16 @@ top-level folders. The implemented files are:
 .agentic-pi/evaluation/session_trace_scorer.py
 
 .agentic-pi/validators/certify_run.py
+.agentic-pi/validators/validate_final_status.py
+.agentic-pi/validators/validate_evidence_index.py
+.agentic-pi/validators/validate_evidence_freeze.py
+.agentic-pi/validators/validate_run_local_memory.py
+.agentic-pi/validators/validate_quarantine_memory.py
+.agentic-pi/validators/validate_memory_card.py
+.agentic-pi/validators/validate_context_pack.py
+.agentic-pi/validators/validate_memory_write_gate.py
+.agentic-pi/validators/validate_memory_authority.py
+.agentic-pi/validators/validate_memory_contradictions.py
 .agentic-pi/validators/smell_scanner.py
 .agentic-pi/validators/strength_scorer.py
 .agentic-pi/validators/validate_plan_graph.py
@@ -574,6 +681,9 @@ top-level folders. The implemented files are:
 .agentic-pi/evaluation/session_trace_scorer.py
 
 .agentic-pi/memory/learning_records/
+.agentic-pi/memory/durable/
+.agentic-pi/memory/index/
+.agentic-pi/memory/verbatim/run_excerpts/
 
 .agentic-pi/domain_packs/
 .agentic-pi/proof_matrix/proof_matrix.json
@@ -603,6 +713,7 @@ Typical run folder:
   verifier_strength_reports/
   policy_decision.json
   certification.json
+  final_status.json
   final_status.md
   run_manifest.json
   audit_report.json
@@ -693,7 +804,11 @@ real Pi prompt coverage evaluation -> bounded prompt matrix -> caught / missed /
 runtime enforcement proof -> command gateway -> protected file guard -> accepted status or MONITOR_FAIL
 RPG harness test record -> expected failure mode -> catch layer -> regression decision
 RPG test aggregation -> collected records -> statistical metrics and confidence intervals
+frozen evidence index -> producer-linked evidence -> post-freeze hash validation
+run-local memory -> advisory current-run notes -> excluded from evidence index
+quarantine memory -> candidate lessons -> not retrievable by future runs
 P0/P1/P2/missing verifier policy behavior
+final_status.json machine-readable authority
 smell report recording
 strength report recording
 policy_decision.json enforcement
@@ -764,6 +879,7 @@ python tests\test_real_pi_behavior_matrix.py -v
 python .agentic-pi\runtime\run_proof_matrix.py --mode quick
 python tests\test_rpg_test_record.py -v
 python tests\test_rpg_test_aggregator.py -v
+python tests\test_final_status_json_authority.py -v
 python .agentic-pi\runtime\run_pi_chain_smoke.py --target-run-id pi_smoke_chain_p2_strong
 python -m unittest discover tests -v
 python .agentic-pi\diagnostics\evaluation\run_diagnostic_evaluation.py
@@ -811,6 +927,7 @@ Raw Goal
   -> Real Pi Behavior Evaluation
   -> Real Pi Prompt Coverage Evaluation
   -> Audit / Replay
-  -> Final Status
+  -> final_status.json
+  -> final_status.md
   -> Pi Reports Status Only
 ```

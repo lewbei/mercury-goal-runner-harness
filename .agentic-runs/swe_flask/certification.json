@@ -1,0 +1,25 @@
+{
+  "run_id": "swe_flask",
+  "status": "DONE_PASS",
+  "passed_checks": [
+    "goal_contract.json exists",
+    "goal_contract.json parses as JSON",
+    "trace.jsonl exists",
+    "trace.jsonl lines parse as JSON",
+    "step_logs contain at least one step result",
+    "1.json evidence maps to touched files",
+    "done_criteria is non-empty",
+    "final_outputs is non-empty",
+    "final output exists: flask_config_patch.diff",
+    "final output exists: thinking_plan.md",
+    "final_status.json validated"
+  ],
+  "failed_checks": [],
+  "artifact_hashes": {
+    "flask_config_patch.diff": "bfcb00a6cd0363c2d6d505dd43d336ac1b029f52134274c391291f761366efd4",
+    "thinking_plan.md": "a3d4b56455c733082f549f519ccae2318e7b4367c41db50657a165b9f5ed1d4d"
+  },
+  "audit_chain_valid": true,
+  "generated_by": "agentic-pi-certifier-v0.3.6",
+  "timestamp": "2026-05-10T06:22:26.801988+00:00"
+}

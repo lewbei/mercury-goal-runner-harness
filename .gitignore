@@ -31,6 +31,8 @@ artifacts/
 !.agentic-pi/diagnostics/evaluation/**/artifacts/**
 .agentic-pi/memory/learning_records/*.json
 .pi/tasks/
+modules/ace-main/
+modules/mempalace-develop/
 
 # Deferred planner/runtime prototypes; v0.5 Pi integration is prompt contracts only.
 .agentic-pi/runtime/branch_selector.py
@@ -51,3 +53,5 @@ artifacts/
 # OS junk
 .DS_Store
 Thumbs.db
+nul
+modules/

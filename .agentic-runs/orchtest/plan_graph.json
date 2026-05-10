@@ -1,0 +1,22 @@
+{
+  "nodes": [
+    {
+      "node_id": "step1",
+      "type": "task",
+      "task_id": "step1"
+    },
+    {
+      "node_id": "is_prime.py",
+      "type": "artifact",
+      "path": "is_prime.py",
+      "artifact_id": "is_prime.py"
+    }
+  ],
+  "edges": [
+    {
+      "source": "step1",
+      "target": "is_prime.py",
+      "type": "produces"
+    }
+  ]
+}

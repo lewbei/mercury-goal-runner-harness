@@ -1,0 +1,20 @@
+{
+  "run_id": "ablate_mixed",
+  "raw_user_prompt": "Create a URL shortener with POST /shorten and GET /<code>. Flask, in-memory storage. Error handling for invalid URLs and missing codes.",
+  "intent": "URL shortener service",
+  "cleaned_goal": "Create Flask URL shortener with two endpoints",
+  "final_outputs": [
+    "app.py",
+    "requirements.txt"
+  ],
+  "done_criteria": [
+    "app.py runs",
+    "POST returns JSON with short_url",
+    "GET redirects",
+    "400 on invalid URL",
+    "404 on missing code"
+  ],
+  "complexity_level": "MEDIUM",
+  "max_steps": 8,
+  "execution_prompt": "Create app.py and requirements.txt for Flask URL shortener"
+}

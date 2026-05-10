@@ -1,0 +1,1 @@
+{"run_id":"orchtest","raw_user_prompt":"Write a Python function that checks if a number is prime","intent":"Prime checker","final_outputs":["is_prime.py"],"done_criteria":["is_prime.py exists"],"complexity_level":"EASY","max_steps":2}

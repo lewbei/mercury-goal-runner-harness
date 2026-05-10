@@ -1,0 +1,16 @@
+{
+  "steps": [
+    {
+      "task_id": "T1",
+      "action": "create_file",
+      "path": "find_closest_elements.py",
+      "requires": [],
+      "produces": [
+        {
+          "artifact_id": "A.001",
+          "path": "find_closest_elements.py"
+        }
+      ]
+    }
+  ]
+}

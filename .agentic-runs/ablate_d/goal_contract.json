@@ -1,0 +1,17 @@
+{
+  "run_id": "ablate_d",
+  "raw_user_prompt": "Create a URL shortener with POST /shorten and GET /<code>. Flask, in-memory, error handling.",
+  "final_outputs": [
+    "app.py",
+    "requirements.txt"
+  ],
+  "done_criteria": [
+    "app.py runs",
+    "POST returns JSON",
+    "GET redirects",
+    "400 on bad URL",
+    "404 on missing"
+  ],
+  "complexity_level": "MEDIUM",
+  "max_steps": 8
+}

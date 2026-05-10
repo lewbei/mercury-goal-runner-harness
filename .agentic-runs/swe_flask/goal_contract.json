@@ -1,0 +1,18 @@
+{
+  "run_id": "swe_flask",
+  "raw_user_prompt": "Add a file mode parameter to flask.Config.from_file(). Python 3.11 introduced native TOML support with tomllib. tomllib.load() reads binary mode, but from_file() opens in text mode. Add a mode parameter (default \"rt\") so users can pass mode=\"rb\" for TOML.",
+  "intent": "Add mode parameter to flask.Config.from_file()",
+  "cleaned_goal": "Modify flask.Config.from_file() to accept a mode parameter for file opening mode.",
+  "final_outputs": [
+    "flask_config_patch.diff",
+    "thinking_plan.md"
+  ],
+  "done_criteria": [
+    "flask_config_patch.diff exists",
+    "Patch adds mode parameter to from_file()",
+    "Default mode is \"rt\" for backward compatibility"
+  ],
+  "complexity_level": "MEDIUM",
+  "max_steps": 8,
+  "execution_prompt": "Create a patch for flask.Config.from_file() that adds a mode parameter. Default to \"rt\". Write the patch to flask_config_patch.diff. Also produce a thinking plan."
+}

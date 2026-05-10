@@ -1,0 +1,48 @@
+{
+  "artifact_id": "F.FIXTEST",
+  "run_id": "fixtest",
+  "target_artifact": "factorial.py",
+  "kind": "formal_verification",
+  "source": "harness_formal_verifier",
+  "provenance_level": "P2",
+  "depends_on_solution": false,
+  "same_worker_as_solution": false,
+  "executes_code": true,
+  "assertion_count": 2,
+  "mock_ratio_percent": 0,
+  "smell_flags": [],
+  "authority": "certifying",
+  "solution_exists_at_creation": true,
+  "created_at": "2026-05-10T09:18:05.093181+00:00",
+  "created_at_phase": "post_solution",
+  "author_agent": "harness_contract_verifier",
+  "author_model": "deterministic",
+  "verdict": "PASS",
+  "formal_verification_detail": {
+    "verdict": "PASS",
+    "confidence": 0.5,
+    "checks_total": 2,
+    "checks_passed": 1,
+    "checks_failed": 1,
+    "checks": [
+      {
+        "check_id": "F1",
+        "name": "has_formal_annotations",
+        "passed": false,
+        "detail": "Found 0 annotations"
+      },
+      {
+        "check_id": "F2",
+        "name": "module_importable",
+        "passed": true,
+        "detail": "Module loaded, functions: ['factorial']"
+      }
+    ],
+    "annotations_found": {
+      "requires": 0,
+      "ensures": 0,
+      "invariants": 0
+    },
+    "target_file": "factorial.py"
+  }
+}

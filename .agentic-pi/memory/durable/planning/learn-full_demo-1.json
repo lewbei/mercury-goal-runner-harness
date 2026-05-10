@@ -1,0 +1,8 @@
+{
+  "card_id": "learn-full_demo-1",
+  "content": "Subagent planner-minimal in full_demo: Created roman_to_int.py with roman_to_int function implementing right-to-left iteration, round-trip validation, and proper error handling (TypeError for non-string, ValueError for invalid characters/s",
+  "source": "step_log",
+  "agent": "planner-minimal",
+  "outcome": "NOT_DONE",
+  "stored_at": "2026-05-10T09:00:55.794615+00:00"
+}

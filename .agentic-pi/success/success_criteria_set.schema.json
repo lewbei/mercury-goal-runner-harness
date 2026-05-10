@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "success_criteria_set_v1",
+  "description": "A set of success criteria derived from a goal contract. The set is created by the success criteria compiler before any implementation begins.",
+  "type": "object",
+  "required": ["schema_version", "run_id", "criteria", "compilation_timestamp"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["success_criteria_set_v1"]
+    },
+    "run_id": { "type": "string" },
+    "source_goal_id": { "type": "string" },
+    "criteria": {
+      "type": "array",
+      "items": {
+        "$ref": "success_criteria.schema.json"
+      },
+      "minItems": 1
+    },
+    "compilation_timestamp": { "type": "string" },
+    "compilation_strategy": {
+      "type": "string",
+      "enum": ["extracted", "derived", "manual"]
+    }
+  },
+  "additionalProperties": false
+}

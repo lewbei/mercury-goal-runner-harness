@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "final_status",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "run_id",
+    "status",
+    "status_source",
+    "final_status_authority",
+    "can_certify_done",
+    "policy_decision_path",
+    "certification_path",
+    "generated_at"
+  ],
+  "properties": {
+    "schema_version": {"type": "string", "enum": ["final_status_v1"]},
+    "run_id": {"type": "string"},
+    "status": {"type": "string", "enum": ["DONE_PASS", "DONE_FAIL", "NOT_DONE", "PROVISIONAL_DONE", "CERTIFIED_DONE"]},
+    "status_source": {"type": "string", "enum": ["certification.json", "policy_decision.json"]},
+    "final_status_authority": {"type": "string", "enum": ["certifier_only"]},
+    "can_certify_done": {"type": "boolean"},
+    "policy_decision_path": {"type": "string"},
+    "certification_path": {"type": "string"},
+    "generated_at": {"type": "string"}
+  },
+  "additionalProperties": true
+}

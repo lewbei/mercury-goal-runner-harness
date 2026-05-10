@@ -1,0 +1,72 @@
+{
+  "schema_version": "validator_registry_v1",
+  "description": "Registry of all validators known to the harness, including Mercury-generated and core validators.",
+  "entries": [
+    {
+      "validator_id": "V.CORE.SCHEMA",
+      "authority_level": "V4_CORE_TRUSTED",
+      "description": "Core JSON schema validator",
+      "check_type": "json_schema",
+      "source": "handwritten",
+      "certified": true,
+      "certified_at": "built-in"
+    },
+    {
+      "validator_id": "V.CORE.PATH_CHECK",
+      "authority_level": "V4_CORE_TRUSTED",
+      "description": "Core path escape checker",
+      "check_type": "structural",
+      "source": "handwritten",
+      "certified": true,
+      "certified_at": "built-in"
+    },
+    {
+      "validator_id": "V.CORE.PROTECTED_FILE",
+      "authority_level": "V4_CORE_TRUSTED",
+      "description": "Core protected-file guard",
+      "check_type": "structural",
+      "source": "handwritten",
+      "certified": true,
+      "certified_at": "built-in"
+    },
+    {
+      "validator_id": "V.CORE.POLICY",
+      "authority_level": "V4_CORE_TRUSTED",
+      "description": "Core policy engine",
+      "check_type": "behavioral",
+      "source": "handwritten",
+      "certified": true,
+      "certified_at": "built-in"
+    },
+    {
+      "validator_id": "V.CORE.CERTIFIER",
+      "authority_level": "V4_CORE_TRUSTED",
+      "description": "Core certifier",
+      "check_type": "behavioral",
+      "source": "handwritten",
+      "certified": true,
+      "certified_at": "built-in"
+    },
+    {
+      "validator_id": "V.CORE.REPLAY",
+      "authority_level": "V4_CORE_TRUSTED",
+      "description": "Core replay checker",
+      "check_type": "replay",
+      "source": "handwritten",
+      "certified": true,
+      "certified_at": "built-in"
+    }
+  ],
+  "authority_claim": "Only V4_CORE_TRUSTED validators are trusted by default. Generated validators start at V0_PROPOSED and must pass certification to reach V1 or V2.",
+  "certification_requirements": {
+    "V0_PROPOSED": {
+      "to_reach_V1": ["meta_check_passed", "positive_fixtures_passed"],
+      "to_reach_V2": ["V1", "negative_fixtures_passed", "mutation_tests_passed", "safety_scan_passed"]
+    },
+    "V1_LOCAL_TESTED": { "to_reach_V2": ["negative_fixtures_passed", "mutation_tests_passed", "safety_scan_passed"] },
+    "V2_INDEPENDENT_TESTED": { "is_terminal_for_generated": true },
+    "V3_EXTERNAL_TRUSTED": { "human_or_external_only": true },
+    "V4_CORE_TRUSTED": { "core_only": true }
+  },
+  "updated_at": "2026-05-08T00:00:00Z"
+}

@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "work_packet_v1",
+  "description": "A bounded work packet dispatched to a fresh-context agent by the supervisor ledger. Only the kernel may create or advance the status of a work packet.",
+  "type": "object",
+  "required": [
+    "work_packet_id",
+    "phase",
+    "role",
+    "task",
+    "status",
+    "allowed_write_paths",
+    "forbidden_write_paths",
+    "max_model_calls",
+    "max_repair_attempts",
+    "output_schema",
+    "status_claim_allowed"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["work_packet_v1"]
+    },
+    "work_packet_id": { "type": "string" },
+    "phase": { "type": "string" },
+    "role": {
+      "type": "string",
+      "enum": [
+        "Questioner", "Researcher", "Designer", "Structurer",
+        "Planner", "Engineer", "ValidatorDesigner",
+        "ValidatorEngineer", "Critic", "Reporter",
+        "MemoryClerk"
+      ]
+    },
+    "task": { "type": "string" },
+    "input_artifacts": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "input_summaries": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    },
+    "allowed_write_paths": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "forbidden_write_paths": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "PENDING", "DISPATCHED", "RESULT_RECEIVED", "VALIDATING",
+        "ACCEPTED", "REJECTED", "REPAIR_REQUESTED", "REPAIRING",
+        "BLOCKED", "CANCELLED"
+      ]
+    },
+    "max_model_calls": { "type": "integer", "minimum": 0 },
+    "max_repair_attempts": { "type": "integer", "minimum": 0 },
+    "repair_attempt_count": { "type": "integer", "minimum": 0 },
+    "output_schema": { "type": "string" },
+    "status_claim_allowed": { "type": "boolean" },
+    "result_path": { "type": "string" },
+    "validation_result_path": { "type": "string" },
+    "error": { "type": "string" },
+    "dispatch_timestamp": { "type": "string" },
+    "result_timestamp": { "type": "string" },
+    "created_at": { "type": "string" },
+    "updated_at": { "type": "string" },
+    "dependencies": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false
+}

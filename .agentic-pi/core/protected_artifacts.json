@@ -1,0 +1,43 @@
+{
+  "schema_version": "protected_artifacts_v1",
+  "description": "Glob patterns and explicit paths that agents may never write. Only the certifier, policy engine, replay checker, and kernel may write these.",
+  "protected_paths": {
+    "exact": [
+      ".agentic-pi/state.json",
+      ".agentic-pi/core/trusted_core_manifest.json",
+      ".agentic-pi/core/core_authority_policy.json",
+      ".agentic-pi/core/protected_artifacts.json",
+      ".agentic-pi/core/status_lattice.json",
+      ".agentic-pi/run_kernel/transition_rules.json",
+      ".agentic-pi/run_kernel/phase_registry.json",
+      ".agentic-pi/run_kernel/phase_budget.json",
+      ".agentic-pi/run_kernel/run_state.schema.json",
+      ".agentic-pi/run_kernel/work_packet.schema.json",
+      ".agentic-pi/run_kernel/phase_queue.schema.json"
+    ],
+    "patterns": [
+      ".agentic-runs/**/final_status.json",
+      ".agentic-runs/**/final_status.md",
+      ".agentic-runs/**/certification.json",
+      ".agentic-runs/**/policy_decision.json",
+      ".agentic-runs/**/replay_report.json",
+      ".agentic-runs/**/evidence_freeze.json",
+      ".agentic-runs/**/run_state.json",
+      ".agentic-runs/**/phase_queue.json",
+      ".agentic-runs/**/dispatch_log.jsonl",
+      ".agentic-runs/**/trace.jsonl"
+    ]
+  },
+  "allowed_writers": {
+    "final_status.json": ["Certifier"],
+    "final_status.md": ["Certifier"],
+    "certification.json": ["Certifier"],
+    "policy_decision.json": ["PolicyJudge"],
+    "replay_report.json": ["ReplayJudge"],
+    "evidence_freeze.json": ["Critic"],
+    "run_state.json": ["RunKernel"],
+    "phase_queue.json": ["RunKernel"],
+    "dispatch_log.jsonl": ["RunKernel"]
+  },
+  "updated_at": "2026-05-08T00:00:00Z"
+}

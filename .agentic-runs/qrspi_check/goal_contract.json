@@ -1,0 +1,34 @@
+{
+  "run_id": "qrspi_check",
+  "raw_user_prompt": "Test",
+  "intent": "Create a README file from a raw user goal.",
+  "cleaned_goal": "Create README.md explaining the harness.",
+  "final_outputs": [
+    "README.md"
+  ],
+  "explicit_constraints": [
+    "Keep it minimal.",
+    "Write only inside the run folder."
+  ],
+  "inferred_constraints": [
+    "Use deterministic prepared-run execution."
+  ],
+  "forbidden_actions": [
+    "Do not modify protected files.",
+    "Do not certify DONE in the compiler."
+  ],
+  "ambiguities": [],
+  "risk_level": "LOW",
+  "complexity_level": "SIMPLE",
+  "done_criteria": [
+    "README.md exists.",
+    "README.md contains the word 'harness'."
+  ],
+  "failure_criteria": [
+    "README.md missing.",
+    "README.md does not mention 'harness'."
+  ],
+  "ask_user_conditions": [],
+  "max_steps": 5,
+  "execution_prompt": "Create README.md for the harness. Do not touch protected files."
+}

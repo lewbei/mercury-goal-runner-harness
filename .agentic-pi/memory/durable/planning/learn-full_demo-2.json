@@ -1,0 +1,8 @@
+{
+  "card_id": "learn-full_demo-2",
+  "content": "Subagent planner-minimal in full_demo: Test file placeholder - tests run by verifier agent",
+  "source": "step_log",
+  "agent": "planner-minimal",
+  "outcome": "NOT_DONE",
+  "stored_at": "2026-05-10T09:00:55.795324+00:00"
+}

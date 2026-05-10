@@ -1,0 +1,7 @@
+{
+  "schema_version": "run_manifest_v1",
+  "run_id": "swe_flask",
+  "created_at": "2026-05-10T06:20:30.785738+00:00",
+  "kernel_version": "rpg_harness_v5_kernel_v1",
+  "goal_contract_path": null
+}

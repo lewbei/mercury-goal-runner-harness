@@ -1,0 +1,16 @@
+{
+  "requirements": [
+    {
+      "file": "calculator.py",
+      "must_define": ["add", "subtract", "multiply", "divide"],
+      "error_handling": ["divide must raise ValueError on division by zero"]
+    },
+    {
+      "file": "test_calculator.py",
+      "must_include_tests_for": ["add", "subtract", "multiply", "divide", "division_by_zero"]
+    },
+    {
+      "run_id": "qrspi_final"
+    }
+  ]
+}

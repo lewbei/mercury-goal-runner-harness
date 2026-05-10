@@ -57,6 +57,7 @@ def is_dependency_handoff_goal(contract, target_output):
 def main():
     parser = argparse.ArgumentParser(description="Route goal contract to appropriate planners")
     parser.add_argument("--run-id", required=True, help="Run identifier")
+    parser.add_argument("--skill-context", default=None, help="Path to skill_context.json (QRSPI skills)")
     args = parser.parse_args()
     run_dir = Path(".agentic-runs") / args.run_id
     contract = load_contract(run_dir)

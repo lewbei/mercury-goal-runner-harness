@@ -22,6 +22,8 @@ def load_json(path: Path):
 
 
 def resolve_run_path(run_dir: Path, raw_path: str) -> Path:
+    if not raw_path:
+        return run_dir / "unknown"
     candidate = Path(raw_path)
     if candidate.is_absolute():
         raise ValueError(f"absolute artifact path is not allowed: {raw_path}")

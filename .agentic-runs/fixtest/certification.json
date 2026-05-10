@@ -1,0 +1,39 @@
+{
+  "run_id": "fixtest",
+  "status": "CERTIFIED_DONE",
+  "passed_checks": [
+    "verifier_contract.json exists",
+    "verifier_contract.json parses as JSON",
+    "goal_contract.json exists",
+    "goal_contract.json parses as JSON",
+    "trace.jsonl exists",
+    "trace.jsonl lines parse as JSON",
+    "step_logs contain at least one step result",
+    "1.json evidence maps to touched files",
+    "PlanGraph validation passed",
+    "done_criteria is non-empty",
+    "final_outputs is non-empty",
+    "final output exists: factorial.py",
+    "Python module factorial.py imports cleanly",
+    "verifier target artifact exists: factorial.py",
+    "verifier_artifacts contain 2 artifact(s)",
+    "verifier smell scan recorded: F.FIXTEST",
+    "verifier smell scan recorded: V.FIXTEST",
+    "verifier strength score recorded: F.FIXTEST=gating",
+    "verifier strength score recorded: V.FIXTEST=certifying",
+    "policy_decision.json validates",
+    "policy engine status: CERTIFIED_DONE",
+    "evidence_index.json validates",
+    "evidence_freeze.json validates",
+    "formal_verification: F_FIXTEST PASS (confidence=0.50)",
+    "crypto_signature: factorial.py AUTHENTIC",
+    "final_status.json validated"
+  ],
+  "failed_checks": [],
+  "artifact_hashes": {
+    "factorial.py": "7361e41b67937bf43ccbaa719740429f850ad73a4454bb0e9d55454e0a713dec"
+  },
+  "audit_chain_valid": true,
+  "generated_by": "agentic-pi-certifier-v0.3.6",
+  "timestamp": "2026-05-10T09:19:38.908765+00:00"
+}

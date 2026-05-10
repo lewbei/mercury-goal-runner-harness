@@ -1,0 +1,8 @@
+{
+  "card_id": "learn-full_demo-0",
+  "content": "Subagent planner-minimal in full_demo: # Thinking Plan: Roman Numeral to Integer Converter\n\n## Architecture\n\nWe will implement a single module `roman_to_int.py` that contains a function `roman_to_int` converting a Roman numeral string to a",
+  "source": "thinking_plan",
+  "agent": "planner-minimal",
+  "outcome": "NOT_DONE",
+  "stored_at": "2026-05-10T09:00:55.793853+00:00"
+}

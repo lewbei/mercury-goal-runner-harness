@@ -4,6 +4,9 @@
 This is not the external Pi agent. The real Pi agent is launched by typing
 `pi` in a terminal. This helper is intentionally thin: it dispatches to
 deterministic harness tools and does not certify DONE itself.
+
+All subprocess calls are routed through gateway_dispatch.py so runtime
+enforcement is the default path, not only a smoke-only path.
 """
 import argparse
 import re
@@ -16,6 +19,20 @@ ROOT = Path(__file__).resolve().parents[2]
 RUN_ROOT = ROOT / ".agentic-runs"
 RUN_ID_RE = re.compile(r"^[A-Za-z0-9_.-]+$")
 
+# gateway dispatch (lazy-loaded)
+_gateway_dispatch = None
+
+
+def _load_gateway():
+    global _gateway_dispatch
+    if _gateway_dispatch is None:
+        import importlib.util
+        gw_path = ROOT / ".agentic-pi" / "runtime" / "gateway_dispatch.py"
+        spec = importlib.util.spec_from_file_location("gateway_dispatch", gw_path)
+        _gateway_dispatch = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(_gateway_dispatch)
+    return _gateway_dispatch
+
 
 def require_run_id(run_id: str) -> str:
     if not RUN_ID_RE.match(run_id):
@@ -27,7 +44,14 @@ def run_dir_for(run_id: str) -> Path:
     return RUN_ROOT / require_run_id(run_id)
 
 
-def run_cmd(args: list[str]) -> int:
+def run_cmd(args: list[str], run_id: str | None = None) -> int:
+    """Run a subprocess command, routed through gateway dispatch when possible."""
+    if run_id:
+        gw = _load_gateway()
+        exit_code, stdout = gw.dispatch(args, run_id)
+        print(stdout, end="")
+        return exit_code
+    # Fallback: direct execution (for commands without a run_id)
     result = subprocess.run(
         [sys.executable, *args],
         cwd=ROOT,
@@ -48,7 +72,8 @@ def require_existing_run(run_id: str) -> Path:
 
 def goal_init(args) -> int:
     require_run_id(args.run_id)
-    return run_cmd([".agentic-pi/runtime/init_run.py", "--run-id", args.run_id])
+    return run_cmd([".agentic-pi/runtime/init_run.py", "--run-id", args.run_id],
+                   run_id=args.run_id)
 
 
 def goal_compile(args) -> int:
@@ -62,7 +87,8 @@ def goal_compile(args) -> int:
             args.goal,
             "--mode",
             args.mode,
-        ]
+        ],
+        run_id=args.run_id,
     )
 
 
@@ -77,32 +103,40 @@ def goal_run(args) -> int:
     ]
     if args.skip_memory_update:
         cmd.append("--skip-memory-update")
-    return run_cmd(cmd)
+    return run_cmd(cmd, run_id=args.run_id)
 
 
 def goal_plan_proof(args) -> int:
     require_existing_run(args.run_id)
-    return run_cmd([".agentic-pi/runtime/planning_proof_runner.py", args.run_id])
+    return run_cmd([".agentic-pi/runtime/planning_proof_runner.py", args.run_id],
+                   run_id=args.run_id)
 
 
 def goal_strategy_proof(args) -> int:
     require_existing_run(args.run_id)
-    return run_cmd([".agentic-pi/runtime/strategy_proof_runner.py", args.run_id])
+    return run_cmd([".agentic-pi/runtime/strategy_proof_runner.py", args.run_id],
+                   run_id=args.run_id)
 
 
 def goal_milestone_proof(args) -> int:
     require_existing_run(args.run_id)
-    return run_cmd([".agentic-pi/runtime/milestone_proof_runner.py", args.run_id])
+    return run_cmd([".agentic-pi/runtime/milestone_proof_runner.py", args.run_id],
+                   run_id=args.run_id)
 
 
 def goal_drift_proof(args) -> int:
     require_existing_run(args.run_id)
-    return run_cmd([".agentic-pi/runtime/drift_proof_runner.py", args.run_id])
+    return run_cmd([".agentic-pi/runtime/drift_proof_runner.py", args.run_id],
+                   run_id=args.run_id)
 
 
 def goal_certify(args) -> int:
-    run_dir = require_existing_run(args.run_id)
-    return run_cmd([".agentic-pi/validators/certify_run.py", str(run_dir)])
+    require_existing_run(args.run_id)
+    # Route through gateway dispatch for enforcement (default path)
+    gw = _load_gateway()
+    exit_code, stdout = gw.certifier_command(args.run_id)
+    print(stdout, end="")
+    return exit_code
 
 
 def goal_status(args) -> int:
@@ -132,26 +166,28 @@ def goal_status(args) -> int:
 
 
 def goal_replay(args) -> int:
-    run_dir = require_existing_run(args.run_id)
-    return run_cmd([".agentic-pi/runtime/replay_run.py", str(run_dir)])
+    require_existing_run(args.run_id)
+    return run_cmd([".agentic-pi/runtime/replay_run.py", str(require_existing_run(args.run_id))],
+                   run_id=args.run_id)
 
 
 def goal_audit(args) -> int:
-    run_dir = require_existing_run(args.run_id)
-    return run_cmd([".agentic-pi/runtime/audit_run.py", str(run_dir)])
+    require_existing_run(args.run_id)
+    return run_cmd([".agentic-pi/runtime/audit_run.py", str(require_existing_run(args.run_id))],
+                   run_id=args.run_id)
 
 
 def goal_rollback(args) -> int:
-    run_dir = require_existing_run(args.run_id)
+    require_existing_run(args.run_id)
     cmd = [
         ".agentic-pi/runtime/rollback_run.py",
-        str(run_dir),
+        str(require_existing_run(args.run_id)),
         "--file",
         args.file,
     ]
     if args.apply:
         cmd.append("--apply")
-    return run_cmd(cmd)
+    return run_cmd(cmd, run_id=args.run_id)
 
 
 def build_parser() -> argparse.ArgumentParser:

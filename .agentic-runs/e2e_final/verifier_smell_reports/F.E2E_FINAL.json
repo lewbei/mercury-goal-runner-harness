@@ -1,0 +1,8 @@
+{
+  "artifact_id": "F.E2E_FINAL",
+  "smell_flags": [
+    "post_solution_test"
+  ],
+  "disqualifying": false,
+  "authority_penalty": 1
+}

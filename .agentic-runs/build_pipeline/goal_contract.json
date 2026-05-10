@@ -1,0 +1,13 @@
+{
+  "run_id": "build_pipeline",
+  "raw_user_prompt": "Build a single-command pipeline script at .agentic-pi/runtime/orchestrate_pipeline.py that spawns all QRSPI phases in sequence: 1) init run 2) compile goal contract 3) spawn planner-minimal agent 4) spawn guarded-worker agent 5) spawn verifier-generator agent 6) run formal verification 7) run cryptographic signing 8) run certify_run.py. The script uses subprocess to call existing harness tools. Must handle errors, verify files exist after each phase, and report final status.",
+  "intent": "Single-command pipeline orchestrator",
+  "final_outputs": [
+    "orchestrate_pipeline.py"
+  ],
+  "done_criteria": [
+    "orchestrate_pipeline.py exists in .agentic-pi/runtime/"
+  ],
+  "complexity_level": "MEDIUM",
+  "max_steps": 1
+}

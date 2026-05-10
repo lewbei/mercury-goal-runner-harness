@@ -1,0 +1,11 @@
+{
+  "schema_version": "final_status_v1",
+  "run_id": "he_h81",
+  "status": "CERTIFIED_DONE",
+  "status_source": "policy_decision.json",
+  "final_status_authority": "certifier_only",
+  "can_certify_done": false,
+  "policy_decision_path": "policy_decision.json",
+  "certification_path": "certification.json",
+  "generated_at": "2026-05-10T07:22:45.464939+00:00"
+}

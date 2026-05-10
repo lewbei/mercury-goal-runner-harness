@@ -1,0 +1,1 @@
+{"run_id":"fixtest","raw_user_prompt":"Write a Python function that returns the factorial of a number","intent":"Factorial function","final_outputs":["factorial.py"],"done_criteria":["factorial.py exists"],"complexity_level":"EASY","max_steps":2}

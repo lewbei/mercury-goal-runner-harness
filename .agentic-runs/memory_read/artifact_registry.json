@@ -1,0 +1,14 @@
+[
+  {
+    "artifact_id": "planner-minimal.md",
+    "producer_task": "step0",
+    "path": "planner-minimal.md",
+    "type": "txt",
+    "required_by": [],
+    "validation": {
+      "exists": false,
+      "json_valid": false,
+      "required_fields": []
+    }
+  }
+]

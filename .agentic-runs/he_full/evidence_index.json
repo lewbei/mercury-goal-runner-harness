@@ -1,0 +1,71 @@
+{
+  "schema_version": "evidence_index_v1",
+  "run_id": "he_full",
+  "frozen": true,
+  "freeze_id": "freeze_0001",
+  "generated_at": "2026-05-10T07:45:37.645768+00:00",
+  "items": [
+    {
+      "evidence_id": "ev_trace_trace_jsonl",
+      "kind": "TRACE",
+      "path": "trace.jsonl",
+      "sha256": "955ef8df33eb3cb3131efe809adb1ea80aa632f8a25672d03df8a620c6d9e362",
+      "producer": "guarded_worker",
+      "producer_command_id": "cmd_trace",
+      "trust_level": "L2_EXECUTION_EVIDENCE",
+      "created_before_freeze": true
+    },
+    {
+      "evidence_id": "ev_step_log_step_logs_1_json",
+      "kind": "STEP_LOG",
+      "path": "step_logs/1.json",
+      "sha256": "5b82486dab82d7a7323e2cbe4be73bfb45633efd49834086a9c630803c53136a",
+      "producer": "guarded_worker",
+      "producer_command_id": "cmd_step_log",
+      "trust_level": "L2_EXECUTION_EVIDENCE",
+      "created_before_freeze": true
+    },
+    {
+      "evidence_id": "ev_verifier_artifact_verifier_artifacts_V_HE_FULL_json",
+      "kind": "VERIFIER_ARTIFACT",
+      "path": "verifier_artifacts/V.HE_FULL.json",
+      "sha256": "8a874cb034d919f772bfe2f19555d2d939dc19215dd9da608418777a1c10fd3a",
+      "producer": "verifier_provenance",
+      "producer_command_id": "cmd_verifier_artifact",
+      "trust_level": "L3_VERIFIER_EVIDENCE",
+      "created_before_freeze": true,
+      "artifact_id": "V.HE_FULL",
+      "cited_by_policy": true
+    },
+    {
+      "evidence_id": "ev_verifier_smell_report_verifier_smell_reports_V_HE_FULL_json",
+      "kind": "VERIFIER_SMELL_REPORT",
+      "path": "verifier_smell_reports/V.HE_FULL.json",
+      "sha256": "a5556a0c6420596b218cf3d807ba536e519a408547486b02046f0190fa69ae56",
+      "producer": "smell_scanner",
+      "producer_command_id": "cmd_smell_scan",
+      "trust_level": "L3_VERIFIER_QUALITY",
+      "created_before_freeze": true
+    },
+    {
+      "evidence_id": "ev_verifier_strength_report_verifier_strength_reports_V_HE_FULL_json",
+      "kind": "VERIFIER_STRENGTH_REPORT",
+      "path": "verifier_strength_reports/V.HE_FULL.json",
+      "sha256": "2cb14f15aab71226cdb8145e4ff2449a43c727467f11305a1021b04555875c9d",
+      "producer": "strength_scorer",
+      "producer_command_id": "cmd_strength_score",
+      "trust_level": "L3_VERIFIER_QUALITY",
+      "created_before_freeze": true
+    },
+    {
+      "evidence_id": "ev_policy_decision_policy_decision_json",
+      "kind": "POLICY_DECISION",
+      "path": "policy_decision.json",
+      "sha256": "b31e99ee9be002b055d4d711556dd745f6da6d0425ad028b83175dca8d608d4a",
+      "producer": "policy_engine",
+      "producer_command_id": "cmd_policy_decision",
+      "trust_level": "L4_AUTHORITY",
+      "created_before_freeze": true
+    }
+  ]
+}

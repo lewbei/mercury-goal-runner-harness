@@ -1,0 +1,26 @@
+{
+  "run_id": "swetest_m",
+  "status": "DONE_PASS",
+  "passed_checks": [
+    "goal_contract.json exists",
+    "goal_contract.json parses as JSON",
+    "trace.jsonl exists",
+    "trace.jsonl lines parse as JSON",
+    "step_logs contain at least one step result",
+    "1.json evidence maps to touched files",
+    "artifact_tests present",
+    "artifact_test CLI_SUMMARY_TEST passed",
+    "done_criteria is non-empty",
+    "final_outputs is non-empty",
+    "final output exists: cli_tool.py",
+    "Done criterion delegated to artifact_tests: When run with a sample CSV, it prints at least two lines of summary.",
+    "final_status.json validated"
+  ],
+  "failed_checks": [],
+  "artifact_hashes": {
+    "cli_tool.py": "2bedcd712a7e835842806d127dcc9262d37935bcb9537a548a0224babeb44f4b"
+  },
+  "audit_chain_valid": true,
+  "generated_by": "agentic-pi-certifier-v0.3.6",
+  "timestamp": "2026-05-10T05:52:23.718788+00:00"
+}

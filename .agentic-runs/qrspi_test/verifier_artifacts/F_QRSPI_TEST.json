@@ -1,0 +1,54 @@
+{
+  "artifact_id": "F.QRSPI_TEST",
+  "run_id": "qrspi_test",
+  "target_artifact": "is_perfect_square.py",
+  "kind": "formal_verification",
+  "source": "harness_formal_verifier",
+  "provenance_level": "P2",
+  "depends_on_solution": false,
+  "same_worker_as_solution": false,
+  "executes_code": true,
+  "assertion_count": 3,
+  "mock_ratio_percent": 0,
+  "smell_flags": [],
+  "authority": "certifying",
+  "solution_exists_at_creation": true,
+  "created_at": "2026-05-10T10:47:40.540825+00:00",
+  "created_at_phase": "post_solution",
+  "author_agent": "harness_contract_verifier",
+  "author_model": "deterministic",
+  "verdict": "FAIL",
+  "formal_verification_detail": {
+    "verdict": "FAIL",
+    "confidence": 0.6667,
+    "checks_total": 3,
+    "checks_passed": 2,
+    "checks_failed": 1,
+    "checks": [
+      {
+        "check_id": "F1",
+        "name": "has_formal_annotations",
+        "passed": true,
+        "detail": "Found 2 annotations"
+      },
+      {
+        "check_id": "F2",
+        "name": "module_importable",
+        "passed": true,
+        "detail": "Module loaded, functions: ['Any', 'is_perfect_square']"
+      },
+      {
+        "check_id": "F3_2",
+        "name": "requires_none_input",
+        "passed": false,
+        "detail": "Crashes on None (no guard) \u2014 contract violated: TypeError"
+      }
+    ],
+    "annotations_found": {
+      "requires": 1,
+      "ensures": 1,
+      "invariants": 0
+    },
+    "target_file": "is_perfect_square.py"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Learning Candidate",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "run_id",
+    "source_run_id",
+    "candidate_id",
+    "created_at",
+    "candidate_type",
+    "principle",
+    "evidence_refs",
+    "memory_scope",
+    "durable",
+    "retrievable_by_future_runs",
+    "authority_level",
+    "final_status_authority",
+    "can_certify_done"
+  ],
+  "properties": {
+    "schema_version": {"type": "string", "enum": ["learning_candidate_v1"]},
+    "run_id": {"type": "string", "minLength": 1},
+    "source_run_id": {"type": "string", "minLength": 1},
+    "candidate_id": {"type": "string", "minLength": 1},
+    "created_at": {"type": "string", "minLength": 1},
+    "candidate_type": {"type": "string", "minLength": 1},
+    "principle": {"type": "string", "minLength": 1},
+    "evidence_refs": {"type": "array", "items": {"type": "string"}},
+    "memory_scope": {"type": "string", "enum": ["quarantine"]},
+    "durable": {"type": "boolean", "enum": [false]},
+    "retrievable_by_future_runs": {"type": "boolean", "enum": [false]},
+    "authority_level": {"type": "string", "enum": ["advisory_only"]},
+    "final_status_authority": {"type": "string", "enum": ["certifier_only"]},
+    "can_certify_done": {"type": "boolean", "enum": [false]}
+  },
+  "additionalProperties": false
+}

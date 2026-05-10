@@ -1,0 +1,14 @@
+[
+  {
+    "artifact_id": "validate_email.py",
+    "path": "validate_email.py",
+    "producer_task": "step1",
+    "type": "py",
+    "required_by": [],
+    "validation": {
+      "exists": true,
+      "json_valid": true,
+      "required_fields": []
+    }
+  }
+]

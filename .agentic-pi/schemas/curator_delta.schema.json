@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "curator_delta",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "run_id",
+    "source_run_id",
+    "delta_id",
+    "generated_at",
+    "action",
+    "card",
+    "reason",
+    "can_write_durable_memory",
+    "final_status_authority",
+    "can_certify_done"
+  ],
+  "properties": {
+    "schema_version": {"type": "string", "enum": ["curator_delta_v1"]},
+    "run_id": {"type": "string", "minLength": 1},
+    "source_run_id": {"type": "string", "minLength": 1},
+    "delta_id": {"type": "string", "minLength": 1},
+    "generated_at": {"type": "string", "minLength": 1},
+    "action": {"type": "string", "enum": ["create", "update", "deprecate", "reject"]},
+    "card": {"type": "object"},
+    "reason": {"type": "string", "minLength": 1},
+    "can_write_durable_memory": {"type": "boolean", "enum": [false]},
+    "final_status_authority": {"type": "string", "enum": ["certifier_only"]},
+    "can_certify_done": {"type": "boolean", "enum": [false]}
+  },
+  "additionalProperties": false
+}

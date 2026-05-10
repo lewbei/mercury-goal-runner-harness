@@ -1,0 +1,19 @@
+{
+  "artifact_id": "V.HE_FULL",
+  "run_id": "he_full",
+  "score": 8,
+  "strength_level": "certifying",
+  "positive_factors": [
+    "executes_target_artifact",
+    "has_assertions",
+    "multiple_assertions",
+    "p2_or_p3_authority",
+    "independent_authority"
+  ],
+  "penalties": [
+    "post_solution_test"
+  ],
+  "smell_flags_used": [
+    "post_solution_test"
+  ]
+}

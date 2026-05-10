@@ -1,0 +1,11 @@
+{
+  "schema_version": "final_status_v1",
+  "run_id": "swetest_m",
+  "status": "DONE_PASS",
+  "status_source": "certification.json",
+  "final_status_authority": "certifier_only",
+  "can_certify_done": false,
+  "policy_decision_path": "",
+  "certification_path": "certification.json",
+  "generated_at": "2026-05-10T05:52:23.719409+00:00"
+}

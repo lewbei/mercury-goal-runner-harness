@@ -1,0 +1,18 @@
+{
+  "steps": [
+    {
+      "task_id": "step1",
+      "action": "write",
+      "path": "roman_to_int.py",
+      "requires": [],
+      "produces": ["roman_to_int.py"]
+    },
+    {
+      "task_id": "step2",
+      "action": "write",
+      "path": "test_roman_to_int.py",
+      "requires": ["roman_to_int.py"],
+      "produces": ["test_roman_to_int.py"]
+    }
+  ]
+}

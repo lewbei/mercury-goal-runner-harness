@@ -15,6 +15,8 @@ def write_json(path: Path, obj):
 
 
 def resolve_run_path(run_dir: Path, raw_path: str) -> Path:
+    if not raw_path:
+        raise ValueError("empty or None path in artifact graph")
     candidate = Path(raw_path)
     if candidate.is_absolute():
         raise ValueError(f"absolute artifact path is not allowed: {raw_path}")
@@ -26,6 +28,8 @@ def resolve_run_path(run_dir: Path, raw_path: str) -> Path:
 
 
 def infer_type(path_str: str) -> str:
+    if not path_str:
+        return "unknown"
     suffix = Path(path_str).suffix.lower()
     if suffix == ".json":
         return "json"
@@ -66,8 +70,10 @@ def build_registry(run_dir: Path, graph: dict):
     for node in nodes:
         if node.get("type") != "artifact":
             continue
-        artifact_id = node.get("artifact_id")
-        path = node.get("path")
+        artifact_id = node.get("artifact_id") or node.get("node_id")
+        path = node.get("path") or node.get("task_id")
+        if not path:
+            continue  # skip nodes with no path
         artifact_type = infer_type(path)
         resolved_path = resolve_run_path(run_dir, path)
         artifacts.append({
@@ -88,6 +94,7 @@ def build_registry(run_dir: Path, graph: dict):
 def main():
     parser = argparse.ArgumentParser(description="Build artifact_registry.json for a run")
     parser.add_argument("run_id")
+    parser.add_argument("--skill-context", default=None, help="Path to skill_context.json (QRSPI skills)")
     args = parser.parse_args()
 
     run_dir = Path(".agentic-runs") / args.run_id

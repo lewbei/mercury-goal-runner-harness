@@ -1,0 +1,26 @@
+{
+  "run_id": "he_full",
+  "generated_by": "experience-extractor-v1.7",
+  "generated_at": "2026-05-10T07:45:37.901952+00:00",
+  "task_type": "unknown",
+  "strategy_id": "",
+  "outcome_status": "CERTIFIED_DONE",
+  "outcome_kind": "success",
+  "principle": "For unknown tasks, selected strategy worked when certifier status was CERTIFIED_DONE.",
+  "do_not_use_when": [
+    "task signals differ from source run",
+    "post_solution_test"
+  ],
+  "weak_verifier_patterns": [
+    "post_solution_test"
+  ],
+  "drift_causes": [],
+  "tool_use_issues": [],
+  "evidence_files": [
+    "goal_contract.json",
+    "certification.json",
+    "policy_decision.json"
+  ],
+  "final_status_authority": "certifier_only",
+  "can_certify_done": false
+}

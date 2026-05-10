@@ -713,3 +713,4 @@
 {"run_id": "sample_run_001", "passed": "done_criteria is non-empty", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
 {"run_id": "sample_run_001", "passed": "final_outputs is non-empty", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
 {"run_id": "sample_run_001", "passed": "final output exists: README.md", "timestamp": "2026-05-06T09:05:16.750212+00:00"}
+{"timestamp": "2026-05-10T08:58:53.311403+00:00", "pattern": "algorithm_design: right-to-left iteration for one-pass string parsing", "from_run": "full_demo", "agent": "planner-minimal"}

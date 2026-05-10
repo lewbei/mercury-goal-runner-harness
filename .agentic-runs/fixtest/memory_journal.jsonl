@@ -1,0 +1,3 @@
+{"timestamp": "2026-05-10T09:20:18.136293+00:00", "agent": "planner-minimal", "run_id": "fixtest", "action": "memory_capture", "reflection": "2 helpful / 0 harmful", "learning_candidates": 2, "outcome": "CERTIFIED_DONE"}
+{"timestamp": "2026-05-10T09:20:18.290589+00:00", "agent": "guarded-worker", "run_id": "fixtest", "action": "memory_capture", "reflection": "2 helpful / 0 harmful", "learning_candidates": 2, "outcome": "CERTIFIED_DONE"}
+{"timestamp": "2026-05-10T09:20:18.447460+00:00", "agent": "verifier-generator", "run_id": "fixtest", "action": "memory_capture", "reflection": "2 helpful / 0 harmful", "learning_candidates": 2, "outcome": "CERTIFIED_DONE"}

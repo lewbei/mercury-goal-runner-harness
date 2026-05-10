@@ -449,6 +449,15 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("confidence_intervals_bps", doc)
         self.assertIn("The aggregator cannot certify DONE", doc)
 
+    def test_v350_doc_records_authority_artifact_boundary(self):
+        doc = read(ROOT / "docs" / "V3_5_0_AUTHORITY_ARTIFACT_PREREQUISITE.md")
+
+        self.assertIn("AUTHORITY ARTIFACT PREREQUISITE IMPLEMENTED", doc)
+        self.assertIn("final_status.json = machine-readable authority", doc)
+        self.assertIn("final_status.md   = derived human-readable view", doc)
+        self.assertIn("Markdown cannot upgrade JSON authority", doc)
+        self.assertIn("Do not claim that", doc)
+
     def test_framework_doc_is_linked_from_status_docs(self):
         readme = read(ROOT / "README.md")
         status = read(ROOT / "PROJECT_STATUS.md")
@@ -490,6 +499,7 @@ class PiIntegrationContractTests(unittest.TestCase):
         self.assertIn("V3_2_RUNTIME_ENFORCEMENT_PROOF.md", readme)
         self.assertIn("RPG_HARNESS_TEST_FORM.md", readme)
         self.assertIn("V3_4_RPG_TEST_AGGREGATION.md", readme)
+        self.assertIn("V3_5_0_AUTHORITY_ARTIFACT_PREREQUISITE.md", readme)
         self.assertIn("V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md", readme)
         self.assertIn("V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md", status)
 

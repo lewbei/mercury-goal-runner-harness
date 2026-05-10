@@ -1,0 +1,20 @@
+{
+  "tasks": [
+    {
+      "task_id": "step0",
+      "title": "step0",
+      "requires": [],
+      "produces": [
+        "planner-minimal.md"
+      ],
+      "pass_condition": []
+    }
+  ],
+  "dependencies": [
+    {
+      "from": "step0",
+      "to": "planner-minimal.md",
+      "type": "produces"
+    }
+  ]
+}

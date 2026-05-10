@@ -1,0 +1,1 @@
+{"run_id":"qrspi_test","raw_user_prompt":"Write a Python function that checks if a number is a perfect square","intent":"Perfect square checker","final_outputs":["is_perfect_square.py"],"done_criteria":["is_perfect_square.py exists"],"complexity_level":"EASY","max_steps":1}

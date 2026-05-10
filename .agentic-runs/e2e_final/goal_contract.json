@@ -1,0 +1,1 @@
+{"run_id":"e2e_final","raw_user_prompt":"Write a Python function that counts vowels in a string","intent":"Vowel counter","final_outputs":["count_vowels.py"],"done_criteria":["count_vowels.py exists"],"complexity_level":"EASY","max_steps":1}

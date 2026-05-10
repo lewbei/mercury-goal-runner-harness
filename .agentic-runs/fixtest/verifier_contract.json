@@ -1,0 +1,16 @@
+{
+  "run_id": "fixtest",
+  "target_goal": "Write a Python function that returns the factorial of a number",
+  "target_artifacts": ["factorial.py"],
+  "required_verifier_level": "P2",
+  "allow_self_generated_only": false,
+  "required_behaviors": [
+    "Computes factorial of positive integers correctly (e.g., factorial(5) == 120)",
+    "Returns 1 for factorial(0) (edge case: zero input)",
+    "Raises ValueError for negative input"
+  ],
+  "forbidden_verifier_patterns": ["self-test only", "file existence only"],
+  "minimum_strength_level": "gating",
+  "certifying_authority_levels": ["P2", "P3"],
+  "provisional_authority_levels": ["P0", "P1"]
+}

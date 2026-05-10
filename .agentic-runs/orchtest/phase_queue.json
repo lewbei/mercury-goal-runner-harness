@@ -1,0 +1,168 @@
+{
+  "schema_version": "phase_queue_v1",
+  "run_id": "orchtest",
+  "phases": [
+    {
+      "phase": "INTAKE",
+      "status": "PENDING",
+      "order": 0,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": null,
+      "completed_at": null
+    },
+    {
+      "phase": "QUESTIONING",
+      "status": "PENDING",
+      "order": 1,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": null,
+      "completed_at": null
+    },
+    {
+      "phase": "RESEARCHING",
+      "status": "PENDING",
+      "order": 2,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": null,
+      "completed_at": null
+    },
+    {
+      "phase": "DESIGNING",
+      "status": "PENDING",
+      "order": 3,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": null,
+      "completed_at": null
+    },
+    {
+      "phase": "STRUCTURING",
+      "status": "PENDING",
+      "order": 4,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": null,
+      "completed_at": null
+    },
+    {
+      "phase": "PLANNING",
+      "status": "PENDING",
+      "order": 5,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": null,
+      "completed_at": null
+    },
+    {
+      "phase": "WORKTREE_READY",
+      "status": "PENDING",
+      "order": 6,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": null,
+      "completed_at": null
+    },
+    {
+      "phase": "IMPLEMENTING",
+      "status": "PENDING",
+      "order": 7,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": null,
+      "completed_at": null
+    },
+    {
+      "phase": "VALIDATOR_BUILDING",
+      "status": "PENDING",
+      "order": 8,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": null,
+      "completed_at": null
+    },
+    {
+      "phase": "VALIDATING",
+      "status": "PENDING",
+      "order": 9,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": null,
+      "completed_at": null
+    },
+    {
+      "phase": "EVIDENCE_INDEXING",
+      "status": "PENDING",
+      "order": 10,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": null,
+      "completed_at": null
+    },
+    {
+      "phase": "POLICY_DECIDING",
+      "status": "PENDING",
+      "order": 11,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": null,
+      "completed_at": null
+    },
+    {
+      "phase": "REPLAYING",
+      "status": "PENDING",
+      "order": 12,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": null,
+      "completed_at": null
+    },
+    {
+      "phase": "CERTIFYING",
+      "status": "PENDING",
+      "order": 13,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": null,
+      "completed_at": null
+    },
+    {
+      "phase": "REPORTING",
+      "status": "PENDING",
+      "order": 14,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": null,
+      "completed_at": null
+    },
+    {
+      "phase": "MEMORY_CONSOLIDATING",
+      "status": "PENDING",
+      "order": 15,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": null,
+      "completed_at": null
+    }
+  ],
+  "created_at": "2026-05-10T09:26:53.427916+00:00",
+  "updated_at": "2026-05-10T09:26:53.427916+00:00"
+}

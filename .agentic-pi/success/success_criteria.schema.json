@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "success_criterion_v1",
+  "description": "A single measurable success criterion that can determine whether a goal is met.",
+  "type": "object",
+  "required": ["criterion_id", "description", "measurable_indicator", "required"],
+  "properties": {
+    "criterion_id": { "type": "string" },
+    "description": { "type": "string" },
+    "measurable_indicator": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "file_exists",
+            "file_contains",
+            "command_passes",
+            "test_passes",
+            "metric_threshold",
+            "schema_valid",
+            "oracle_output"
+          ]
+        },
+        "target_path": { "type": "string" },
+        "expected_value": { "type": "string" },
+        "command": { "type": "string" },
+        "threshold": { "type": "number" },
+        "schema_path": { "type": "string" },
+        "oracle_type": { "type": "string" }
+      }
+    },
+    "required": { "type": "boolean" },
+    "priority": {
+      "type": "string",
+      "enum": ["CRITICAL", "HIGH", "MEDIUM", "LOW"]
+    },
+    "oracle_types": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "STRUCTURAL_ORACLE",
+          "BEHAVIORAL_ORACLE",
+          "SEMANTIC_ORACLE",
+          "COMPARATIVE_ORACLE",
+          "NEGATIVE_ORACLE",
+          "REPLAY_ORACLE",
+          "EXTERNAL_ORACLE"
+        ]
+      },
+      "minItems": 1
+    },
+    "minimum_oracle_strength": {
+      "type": "string",
+      "enum": ["P0_SELF", "P1_VISIBLE", "P2_INDEPENDENT", "P3_EXTERNAL"]
+    }
+  },
+  "additionalProperties": false
+}

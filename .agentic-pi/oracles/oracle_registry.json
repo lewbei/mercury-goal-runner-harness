@@ -1,0 +1,49 @@
+{
+  "schema_version": "oracle_registry_v1",
+  "description": "Registry of all oracle types recognized by the harness. Each oracle type describes a class of verifier evidence that can assess whether a success criterion is met.",
+  "oracles": [
+    {
+      "oracle_type": "STRUCTURAL_ORACLE",
+      "description": "Checks that expected files, directories, and structural elements exist at the correct paths. Does not verify content correctness.",
+      "can_certify_semantic_success": false,
+      "default_minimum_strength": "P0_SELF"
+    },
+    {
+      "oracle_type": "BEHAVIORAL_ORACLE",
+      "description": "Checks that the goal output behaves correctly through commands, test execution, or runtime checks.",
+      "can_certify_semantic_success": true,
+      "default_minimum_strength": "P1_VISIBLE"
+    },
+    {
+      "oracle_type": "SEMANTIC_ORACLE",
+      "description": "Checks that the output has correct meaning, content, or structure through semantic analysis, diff, or validation.",
+      "can_certify_semantic_success": true,
+      "default_minimum_strength": "P2_INDEPENDENT"
+    },
+    {
+      "oracle_type": "COMPARATIVE_ORACLE",
+      "description": "Compares the output against a known-good reference, baseline, or alternative implementation.",
+      "can_certify_semantic_success": true,
+      "default_minimum_strength": "P2_INDEPENDENT"
+    },
+    {
+      "oracle_type": "NEGATIVE_ORACLE",
+      "description": "Checks that certain failure modes, error patterns, or unsafe behaviors do NOT occur in the output.",
+      "can_certify_semantic_success": false,
+      "default_minimum_strength": "P1_VISIBLE"
+    },
+    {
+      "oracle_type": "REPLAY_ORACLE",
+      "description": "Re-runs the certification decision from frozen evidence to verify the original result is reproducible.",
+      "can_certify_semantic_success": true,
+      "default_minimum_strength": "P2_INDEPENDENT"
+    },
+    {
+      "oracle_type": "EXTERNAL_ORACLE",
+      "description": "Uses an external trusted system (human review, benchmark suite, third-party tool) to verify the outcome.",
+      "can_certify_semantic_success": true,
+      "default_minimum_strength": "P3_EXTERNAL"
+    }
+  ],
+  "updated_at": "2026-05-08T00:00:00Z"
+}

@@ -1,0 +1,11 @@
+{
+  "schema_version": "final_status_v1",
+  "run_id": "pi_clean",
+  "status": "DONE_PASS",
+  "status_source": "certification.json",
+  "final_status_authority": "certifier_only",
+  "can_certify_done": false,
+  "policy_decision_path": "",
+  "certification_path": "certification.json",
+  "generated_at": "2026-05-10T06:16:39.054325+00:00"
+}

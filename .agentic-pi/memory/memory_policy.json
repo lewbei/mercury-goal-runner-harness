@@ -1,0 +1,64 @@
+{
+  "schema_version": "memory_policy_v1",
+  "description": "Memory system policy defining three memory types, their authority rules, and lifecycle gates.",
+  "memory_types": [
+    {
+      "type": "run_local",
+      "description": "Working memory for the current run. Written during the run. Helps repair and context. Cannot certify or affect final status.",
+      "storage_path": ".agentic-pi/memory/run_local/",
+      "writers": ["MemoryClerk"],
+      "can_certify_run": false,
+      "can_affect_final_status": false,
+      "lifetime": "current_run",
+      "promotion_required_for_durability": true
+    },
+    {
+      "type": "quarantine",
+      "description": "Candidate lessons and observations. Promoted to durable only through memory_write_gate.py after final status is locked.",
+      "storage_path": ".agentic-pi/memory/quarantine/",
+      "writers": ["MemoryClerk", "MemoryWriter"],
+      "can_certify_run": false,
+      "can_affect_final_status": false,
+      "lifetime": "until_promoted_or_cleaned",
+      "promotion_required_for_durability": true
+    },
+    {
+      "type": "durable",
+      "description": "Cross-run advisory memory. Written only after final status is locked. Advisory only — cannot replace evidence or influence certification.",
+      "storage_path": ".agentic-pi/memory/durable/",
+      "writers": ["MemoryWriter"],
+      "can_certify_run": false,
+      "can_affect_final_status": false,
+      "lifetime": "permanent",
+      "promotion_required_for_durability": false
+    }
+  ],
+  "authority_rules": [
+    {
+      "rule_id": "memory_is_not_evidence",
+      "description": "Memory artifacts are excluded from evidence indexing. Memory paths must not appear in evidence_hash_manifest.json or evidence_freeze.json.",
+      "excluded_from_evidence": [
+        ".agentic-pi/memory/",
+        ".agentic-runs/**/run_local_memory/",
+        ".agentic-runs/**/memory_journal.jsonl"
+      ]
+    },
+    {
+      "rule_id": "no_memory_certification",
+      "description": "Memory can suggest, advise, and inform. Memory cannot certify DONE, write final_status.json, or override policy decisions.",
+      "enforced_by": ["validate_memory_authority.py", "certify_run.py"]
+    },
+    {
+      "rule_id": "durable_write_gate",
+      "description": "Durable memory is written only after final_status.json is locked. The memory_write_gate.py enforces this delay.",
+      "required_final_status_before_write": true,
+      "enforced_by": ["memory_write_gate.py"]
+    },
+    {
+      "rule_id": "run_local_is_ephemeral",
+      "description": "Run-local memory is cleared or archived when the run transitions to DONE. It is never promoted to evidence.",
+      "enforced_by": ["run_memory_clerk.py"]
+    }
+  ],
+  "updated_at": "2026-05-08T00:00:00Z"
+}

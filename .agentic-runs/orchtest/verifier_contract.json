@@ -1,0 +1,17 @@
+{
+  "run_id": "orchtest",
+  "target_goal": "Write a Python function that checks if a number is prime",
+  "target_artifacts": ["is_prime.py"],
+  "required_verifier_level": "P2",
+  "allow_self_generated_only": false,
+  "required_behaviors": [
+    "Correctly identifies prime numbers (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 97)",
+    "Correctly rejects composite numbers (0, 1, 4, 6, 8, 9, 10, 16, 20, 24, 100)",
+    "Returns False for numbers less than 2",
+    "Raises TypeError for non-integer input (float, string)"
+  ],
+  "forbidden_verifier_patterns": ["self-test only", "file existence only"],
+  "minimum_strength_level": "gating",
+  "certifying_authority_levels": ["P2", "P3"],
+  "provisional_authority_levels": ["P0", "P1"]
+}

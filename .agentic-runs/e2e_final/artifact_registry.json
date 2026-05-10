@@ -1,0 +1,14 @@
+[
+  {
+    "artifact_id": "count_vowels.py",
+    "producer_task": "step1",
+    "path": "count_vowels.py",
+    "type": "py",
+    "required_by": [],
+    "validation": {
+      "exists": true,
+      "json_valid": false,
+      "required_fields": []
+    }
+  }
+]

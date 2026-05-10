@@ -1,0 +1,32 @@
+{
+  "run_id": "memtest",
+  "target_goal": "Write a Python function that checks if a string is a valid email address",
+  "target_artifacts": [
+    "validate_email.py"
+  ],
+  "required_verifier_level": "P2",
+  "allow_self_generated_only": false,
+  "required_behaviors": [
+    "is_valid_email returns True for syntactically valid RFC-5322-like email addresses",
+    "is_valid_email returns False for syntactically invalid strings",
+    "is_valid_email handles None input gracefully by returning False",
+    "is_valid_email handles empty string input by returning False",
+    "is_valid_email returns False for non-string types (int, list, dict)",
+    "is_valid_email strips surrounding whitespace before validating"
+  ],
+  "forbidden_verifier_patterns": [
+    "mock_or_patch_internals",
+    "monkey_patch_solution",
+    "regex_pattern_copy_from_solution",
+    "dependency_on_private_helpers_prefixed_with_underscore",
+    "assertion_on_non_public_implementation_details"
+  ],
+  "minimum_strength_level": "gating",
+  "certifying_authority_levels": [
+    "P2",
+    "P3"
+  ],
+  "provisional_authority_levels": [
+    "P1"
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "schema_version": "oracle_strength_rules_v1",
+  "description": "Rules for oracle strength levels. Strength determines what provenance evidence is required for certification.",
+  "strength_levels": [
+    {
+      "level": "P0_SELF",
+      "rank": 0,
+      "description": "Self-test only. The agent checked its own output without independent verification.",
+      "required_evidence": ["step_log", "agent_claim"],
+      "allowed_status": ["PROVISIONAL_DONE"],
+      "requires_independent_verifier": false
+    },
+    {
+      "level": "P1_VISIBLE",
+      "rank": 1,
+      "description": "Visible/local check. A basic structural or behavioral check that is visible to the agent but deterministic.",
+      "required_evidence": ["step_log", "test_output", "verifier_artifact"],
+      "allowed_status": ["PROVISIONAL_DONE"],
+      "requires_independent_verifier": false
+    },
+    {
+      "level": "P2_INDEPENDENT",
+      "rank": 2,
+      "description": "Independent certifying verifier. A validator that is independently run and cannot be influenced by the producing agent.",
+      "required_evidence": ["step_log", "test_output", "verifier_artifact", "verifier_smell_report", "verifier_strength_report"],
+      "allowed_status": ["CERTIFIED_DONE"],
+      "requires_independent_verifier": true
+    },
+    {
+      "level": "P3_EXTERNAL",
+      "rank": 3,
+      "description": "External trusted verification. Human review, benchmark authority, or third-party trusted tool.",
+      "required_evidence": ["step_log", "test_output", "verifier_artifact", "external_attestation"],
+      "allowed_status": ["CERTIFIED_DONE"],
+      "requires_independent_verifier": true
+    }
+  ],
+  "structural_oracle_limitation": {
+    "description": "STRUCTURAL_ORACLE alone cannot certify semantic success regardless of strength. A BEHAVIORAL_ORACLE or higher must also pass.",
+    "max_allowed_status": "PROVISIONAL_DONE"
+  },
+  "updated_at": "2026-05-08T00:00:00Z"
+}

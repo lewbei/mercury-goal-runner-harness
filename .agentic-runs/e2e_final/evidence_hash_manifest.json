@@ -1,0 +1,71 @@
+{
+  "schema_version": "evidence_hash_manifest_v1",
+  "run_id": "e2e_final",
+  "freeze_id": "freeze_0001",
+  "generated_at": "2026-05-10T10:41:24.210434+00:00",
+  "items": [
+    {
+      "evidence_id": "ev_trace_trace_jsonl",
+      "kind": "TRACE",
+      "path": "trace.jsonl",
+      "sha256": "955ef8df33eb3cb3131efe809adb1ea80aa632f8a25672d03df8a620c6d9e362",
+      "producer": "guarded_worker"
+    },
+    {
+      "evidence_id": "ev_step_log_step_logs_1_json",
+      "kind": "STEP_LOG",
+      "path": "step_logs/1.json",
+      "sha256": "60f672b6e1979dff6faef4fb231ce67a3f5a33a0fa5b69acb922315e1ef71d4d",
+      "producer": "guarded_worker"
+    },
+    {
+      "evidence_id": "ev_verifier_artifact_verifier_artifacts_F_E2E_FINAL_json",
+      "kind": "VERIFIER_ARTIFACT",
+      "path": "verifier_artifacts/F_E2E_FINAL.json",
+      "sha256": "100b19ded28cd3cced26df21ef99720ec4d027affba7c1afb756379d690515f6",
+      "producer": "verifier_provenance"
+    },
+    {
+      "evidence_id": "ev_verifier_artifact_verifier_artifacts_V_E2E_FINAL_json",
+      "kind": "VERIFIER_ARTIFACT",
+      "path": "verifier_artifacts/V.E2E_FINAL.json",
+      "sha256": "e93932a7b838c19fce9f620c86be167c0211fdf6ee1e3c4938e8b500145b4c30",
+      "producer": "verifier_provenance"
+    },
+    {
+      "evidence_id": "ev_verifier_smell_report_verifier_smell_reports_F_E2E_FINAL_json",
+      "kind": "VERIFIER_SMELL_REPORT",
+      "path": "verifier_smell_reports/F.E2E_FINAL.json",
+      "sha256": "63301fa043d23edc313ca42f86ffe6c25aa24971fd5285cca05b5fb9a903b5ad",
+      "producer": "smell_scanner"
+    },
+    {
+      "evidence_id": "ev_verifier_smell_report_verifier_smell_reports_V_E2E_FINAL_json",
+      "kind": "VERIFIER_SMELL_REPORT",
+      "path": "verifier_smell_reports/V.E2E_FINAL.json",
+      "sha256": "966290f97a947bc4d6c3c01dbca69fb9907f8597093f0bf414d2d4fa5e6d0afb",
+      "producer": "smell_scanner"
+    },
+    {
+      "evidence_id": "ev_verifier_strength_report_verifier_strength_reports_F_E2E_FINAL_json",
+      "kind": "VERIFIER_STRENGTH_REPORT",
+      "path": "verifier_strength_reports/F.E2E_FINAL.json",
+      "sha256": "7523071763a3e77326d833ce0b05be9aa955413f730e1433aa7c345b45c53583",
+      "producer": "strength_scorer"
+    },
+    {
+      "evidence_id": "ev_verifier_strength_report_verifier_strength_reports_V_E2E_FINAL_json",
+      "kind": "VERIFIER_STRENGTH_REPORT",
+      "path": "verifier_strength_reports/V.E2E_FINAL.json",
+      "sha256": "25e824ded1b737310792a512374c6e9fc052b5c70609716853e2a4a67aee7920",
+      "producer": "strength_scorer"
+    },
+    {
+      "evidence_id": "ev_policy_decision_policy_decision_json",
+      "kind": "POLICY_DECISION",
+      "path": "policy_decision.json",
+      "sha256": "d694dd740f46cc1f79e4e667d94c63c0fd778b9b5044990d89285c8ba2ab8a65",
+      "producer": "policy_engine"
+    }
+  ]
+}

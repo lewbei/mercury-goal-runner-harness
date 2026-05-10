@@ -1,0 +1,171 @@
+{
+  "schema_version": "core_authority_policy_v1",
+  "description": "Authority policy for the trusted core: which roles may write which artifact types.",
+  "rules": [
+    {
+      "role": "Questioner",
+      "may_write_types": ["question_contract.json", "goal_contract.json"],
+      "may_not_write_types": [
+        "final_status.json", "final_status.md", "certification.json",
+        "policy_decision.json", "replay_report.json",
+        "evidence_freeze.json", "run_state.json", "phase_queue.json"
+      ],
+      "may_certify": false,
+      "may_claim_done": false
+    },
+    {
+      "role": "Researcher",
+      "may_write_types": ["research_pack.md"],
+      "may_not_write_types": [
+        "final_status.json", "final_status.md", "certification.json",
+        "policy_decision.json", "replay_report.json",
+        "evidence_freeze.json", "run_state.json", "phase_queue.json"
+      ],
+      "may_certify": false,
+      "may_claim_done": false
+    },
+    {
+      "role": "Designer",
+      "may_write_types": ["design_options.json"],
+      "may_not_write_types": [
+        "final_status.json", "final_status.md", "certification.json",
+        "policy_decision.json", "replay_report.json",
+        "evidence_freeze.json", "run_state.json", "phase_queue.json"
+      ],
+      "may_certify": false,
+      "may_claim_done": false
+    },
+    {
+      "role": "Structurer",
+      "may_write_types": ["structure_outline.json"],
+      "may_not_write_types": [
+        "final_status.json", "final_status.md", "certification.json",
+        "policy_decision.json", "replay_report.json",
+        "evidence_freeze.json", "run_state.json", "phase_queue.json"
+      ],
+      "may_certify": false,
+      "may_claim_done": false
+    },
+    {
+      "role": "Planner",
+      "may_write_types": ["plan_graph.json", "milestone_plan.json", "local_step_plan.json"],
+      "may_not_write_types": [
+        "final_status.json", "final_status.md", "certification.json",
+        "policy_decision.json", "replay_report.json",
+        "evidence_freeze.json", "run_state.json", "phase_queue.json"
+      ],
+      "may_certify": false,
+      "may_claim_done": false
+    },
+    {
+      "role": "Engineer",
+      "may_write_types": ["source_file", "test_file", "artifact", "workspace_manifest.json"],
+      "may_not_write_types": [
+        "final_status.json", "final_status.md", "certification.json",
+        "policy_decision.json", "replay_report.json",
+        "verifier_artifacts/*", "evidence_freeze.json",
+        "run_state.json", "phase_queue.json"
+      ],
+      "may_certify": false,
+      "may_claim_done": false
+    },
+    {
+      "role": "ValidatorDesigner",
+      "may_write_types": ["validator_spec.json"],
+      "may_not_write_types": [
+        "final_status.json", "final_status.md", "certification.json",
+        "policy_decision.json", "replay_report.json",
+        "evidence_freeze.json", "run_state.json", "phase_queue.json"
+      ],
+      "may_certify": false,
+      "may_claim_done": false
+    },
+    {
+      "role": "ValidatorEngineer",
+      "may_write_types": ["validator_script.py", "fixture_suite.json"],
+      "may_not_write_types": [
+        "final_status.json", "final_status.md", "certification.json",
+        "policy_decision.json", "replay_report.json",
+        "evidence_freeze.json", "run_state.json", "phase_queue.json"
+      ],
+      "may_certify": false,
+      "may_claim_done": false
+    },
+    {
+      "role": "Critic",
+      "may_write_types": ["verifier_artifacts/*", "verifier_smell_reports/*", "verifier_strength_reports/*"],
+      "may_not_write_types": [
+        "final_status.json", "final_status.md", "certification.json",
+        "policy_decision.json", "replay_report.json",
+        "evidence_freeze.json", "run_state.json", "phase_queue.json"
+      ],
+      "may_certify": false,
+      "may_claim_done": false
+    },
+    {
+      "role": "Reporter",
+      "may_write_types": ["pi_report.md", "pr_summary.md"],
+      "may_not_write_types": [
+        "final_status.json", "final_status.md", "certification.json",
+        "policy_decision.json", "replay_report.json",
+        "evidence_freeze.json", "run_state.json", "phase_queue.json"
+      ],
+      "may_certify": false,
+      "may_claim_done": false
+    },
+    {
+      "role": "PolicyJudge",
+      "may_write_types": ["policy_decision.json"],
+      "may_not_write_types": [
+        "final_status.json", "final_status.md", "certification.json",
+        "replay_report.json", "evidence_freeze.json",
+        "run_state.json", "phase_queue.json"
+      ],
+      "may_certify": false,
+      "may_claim_done": false
+    },
+    {
+      "role": "ReplayJudge",
+      "may_write_types": ["replay_report.json"],
+      "may_not_write_types": [
+        "final_status.json", "final_status.md", "certification.json",
+        "policy_decision.json", "evidence_freeze.json",
+        "run_state.json", "phase_queue.json"
+      ],
+      "may_certify": false,
+      "may_claim_done": false
+    },
+    {
+      "role": "Certifier",
+      "may_write_types": ["certification.json", "final_status.json", "final_status.md"],
+      "may_not_write_types": [],
+      "may_certify": true,
+      "may_claim_done": true,
+      "note": "Certifier is the only role that may write final_status.json and claim DONE."
+    },
+    {
+      "role": "MemoryClerk",
+      "may_write_types": ["run_journal_entry.json", "learning_candidate.json"],
+      "may_not_write_types": [
+        "final_status.json", "final_status.md", "certification.json",
+        "policy_decision.json", "replay_report.json",
+        "evidence_freeze.json", "run_state.json", "phase_queue.json"
+      ],
+      "may_certify": false,
+      "may_claim_done": false
+    },
+    {
+      "role": "MemoryWriter",
+      "may_write_types": ["memory_write_proposal.json"],
+      "may_not_write_types": [
+        "final_status.json", "final_status.md", "certification.json",
+        "policy_decision.json", "replay_report.json",
+        "evidence_freeze.json", "run_state.json", "phase_queue.json"
+      ],
+      "may_certify": false,
+      "may_claim_done": false
+    }
+  ],
+  "authority_claim": "Only the Certifier role may write final status artifacts. All other roles may propose, generate, inspect, critique, and report — but may not certify DONE.",
+  "updated_at": "2026-05-08T00:00:00Z"
+}

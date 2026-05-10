@@ -54,6 +54,14 @@ class V2ProofPackageTests(unittest.TestCase):
         self.assertEqual(self.validate_schema(matrix, "proof_matrix.schema.json"), [])
         claim_ids = {entry["claim_id"] for entry in matrix["entries"]}
         for claim_id in [
+            "final_status_json_authority",
+            "evidence_freeze",
+            "run_local_quarantine_memory",
+            "quarantine_memory",
+            "mempalace_card_governance",
+            "mempalace_context_pack",
+            "ace_reflector_curator",
+            "ace_memory_write_gate",
             "domain_packs",
             "workflow_search",
             "diagnostic_evaluation",
@@ -91,6 +99,14 @@ class V2ProofPackageTests(unittest.TestCase):
         self.assertFalse(proof_result["can_certify_done"])
         self.assertEqual(proof_result["final_status_authority"], "certifier_only")
         claim_ids = {entry["claim_id"] for entry in proof_result["entries"]}
+        self.assertIn("final_status_json_authority", claim_ids)
+        self.assertIn("evidence_freeze", claim_ids)
+        self.assertIn("run_local_quarantine_memory", claim_ids)
+        self.assertIn("quarantine_memory", claim_ids)
+        self.assertIn("mempalace_card_governance", claim_ids)
+        self.assertIn("mempalace_context_pack", claim_ids)
+        self.assertIn("ace_reflector_curator", claim_ids)
+        self.assertIn("ace_memory_write_gate", claim_ids)
         self.assertIn("domain_packs", claim_ids)
         self.assertIn("workflow_search", claim_ids)
         self.assertIn("direct_pi_mercury_behavior", claim_ids)

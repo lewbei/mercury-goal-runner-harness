@@ -1,0 +1,12 @@
+{
+  "tasks": [
+    {
+      "task_id": "T1",
+      "title": "Step 1",
+      "requires": [],
+      "produces": [],
+      "pass_condition": []
+    }
+  ],
+  "dependencies": []
+}
