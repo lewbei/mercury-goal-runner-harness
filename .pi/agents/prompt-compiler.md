@@ -14,7 +14,7 @@ extensions: false
 
 ## STEP 1: Read (MANDATORY)
 ```
-read .pi/skills/question-contract/SKILL.md
+read skills/question-contract/SKILL.md
 read .agentic-runs/<run_id>/goal_contract.json
 ```
 

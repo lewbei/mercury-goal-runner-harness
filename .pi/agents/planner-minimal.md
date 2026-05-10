@@ -20,7 +20,7 @@ Understand the goal. Read the question-contract skill, then the goal contract.
 If the contract references a project directory, read the project map first:
 
 ```
-read .pi/skills/question-contract/SKILL.md
+read skills/question-contract/SKILL.md
 read .agentic-runs/<run_id>/goal_contract.json
 ```
 
@@ -36,7 +36,7 @@ If the project map exists, use it to understand existing files, imports, and ent
 Explore approaches. Read the research-pack skill. Consider algorithms, edge cases, tradeoffs. What options exist? Which fit best?
 
 ```
-read .pi/skills/research-pack/SKILL.md
+read skills/research-pack/SKILL.md
 ```
 
 ## PHASE S: Structure
@@ -44,8 +44,8 @@ read .pi/skills/research-pack/SKILL.md
 Map components. Read design-options and structure-outline skills. Design the file layout, dependencies, data flow. Write plan_graph.json:
 
 ```
-read .pi/skills/design-options/SKILL.md
-read .pi/skills/structure-outline/SKILL.md
+read skills/design-options/SKILL.md
+read skills/structure-outline/SKILL.md
 write .agentic-runs/<run_id>/plan_graph.json
 ```
 
@@ -68,7 +68,7 @@ Rules: node_id = task_id (not "n0"). artifact nodes need path + artifact_id. edg
 Read root-plan skill. Write the thinking plan with reasoning and COMPLETE code templates. Write merged_plan.json:
 
 ```
-read .pi/skills/root-plan/SKILL.md
+read skills/root-plan/SKILL.md
 write .agentic-runs/<run_id>/thinking_plan.md
 write .agentic-runs/<run_id>/merged_plan.json
 ```

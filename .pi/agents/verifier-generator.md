@@ -14,9 +14,9 @@ extensions: false
 
 ## STEP 1: Read skills (MANDATORY)
 ```
-read .pi/skills/harness-grill/SKILL.md
-read .pi/skills/harness-tdd/SKILL.md
-read .pi/skills/harness-diagnose/SKILL.md
+read skills/harness-grill/SKILL.md
+read skills/harness-tdd/SKILL.md
+read skills/harness-diagnose/SKILL.md
 ```
 
 ## STEP 2: Read implementation
