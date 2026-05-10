@@ -1,442 +1,136 @@
 # Mercury Goal Runner Harness
 
-This harness controls Mercury V2 as a fast worker inside a verified goal-execution system.
+QRSPI-phased goal execution harness for Pi coding agent. Planner designs, worker codes, verifier proves, certifier decides. Every step produces evidence. Final status comes only from deterministic checks.
 
-The goal is not to make Mercury V2 magically smarter by looping. The goal is to place Mercury V2 inside a controlled harness where every goal becomes a contract, every step produces evidence, and final success is certified by deterministic checks.
-
-## Current status
-
-RPG-Harness v5 Phases 1-9 is the current implemented layer (Supervisor Ledger, Artifact Routing, Success Criteria/Oracles, Validator Factory, Replay Certification, Memory Split, Meta-Harness v0.1, QRSPI Skills) on top of v3.7 MemPalace + ACE Memory Governance.
-
-The current research direction is:
-
-```text
-Verifier-Provenance Goal Runner Harness
-```
-
-The new core question is:
+## Core Question
 
 ```text
 Who is allowed to certify DONE?
+Pi orchestrates. Agents plan, code, verify.
+Policy decides. Certifier writes final status.
+Pi only reports what the certifier wrote.
 ```
 
-The latest local benchmark report is:
+## Install
+
+```bash
+pi install git:github.com/lewbei/mercury-goal-runner
+```
+
+Or locally:
+```bash
+pi install .
+```
+
+## Quick Start
+
+```bash
+# 1. Init a run
+python .agentic-pi/runtime/init_run.py --run-id my_goal
+
+# 2. Create goal contract at .agentic-runs/my_goal/goal_contract.json
+# 3. Spawn planner-minimal agent → thinking_plan.md + plan_graph.json + merged_plan.json
+# 4. Spawn guarded-worker agent → code + step_logs + trace
+# 5. Spawn verifier-generator agent → verifier_contract + P2 evidence
+# 6. Run deterministic pipeline
+python .agentic-pi/runtime/orchestrate_pipeline.py --run-id my_goal
+
+# 7. Check result
+python .agentic-pi/runtime/check_matrix.py .agentic-runs/my_goal --all
+```
+
+## Architecture
+
+```
+QRSPI Phases:
+  Q: Question  → question-contract skill → understand goal
+  R: Research  → research-pack skill → explore approaches
+  S: Structure → design-options + structure-outline → plan_graph.json
+  P: Plan      → root-plan → thinking_plan.md + merged_plan.json
+  I: Implement → guarded-worker → code + step_logs + trace
+
+Gates:
+  PlanGraph          → validates node/edge structure
+  Step Logs          → validates evidence format
+  Code Execution     → runs output, checks 2+ lines
+  Formal Verification → #@ Requires/Ensures contract compliance
+  Cryptographic      → Ed25519 artifact signing, tamper detection
+  Verifier Evidence  → P2 independent attestation
+  Policy Engine      → decides between PROVISIONAL/CERTIFIED/NOT_DONE
+
+Memory:
+  Project-local (.agentic-pi/memory/durable/)
+  Worker reads memory before coding
+  Repair agent queries memory for similar failures
+  Learning loop: fail → fix → store → next run benefits
+```
+
+## Agents
+
+| Agent | Model | Role |
+|-------|-------|------|
+| `planner-minimal` | merc-2 | Q→R→S→P design with code templates |
+| `planner-robust` | merc-2 | Thorough plan with validation strategy |
+| `guarded-worker` | ds-flash | Codes from template, writes step logs |
+| `verifier-generator` | ds-flash | Independent P2 verifier evidence |
+| `skeptic-planner` | merc-2 | Finds failure modes, critiques plans |
+| `plan-selector` | ds-flash | Picks best plan from debate |
+| `verifier-reviewer` | ds-flash | Reviews verifier evidence quality |
+
+## Python Backend
+
+```
+.agentic-pi/
+├── validators/
+│   ├── certify_run.py          Deterministic certifier
+│   ├── validate_schema.py      JSON schema validator
+│   └── validate_plan_graph.py  Plan graph structure
+├── runtime/
+│   ├── orchestrate_pipeline.py 6-phase deterministic runner
+│   ├── check_matrix.py         Horizontal check matrix (each independent)
+│   ├── adversarial_loop.py     Skeptic → find breaks → repair → re-certify
+│   ├── build_repair_prompt.py  Memory-aware repair prompt builder
+│   ├── run_subagent_memory.py  Capture learnings per subagent
+│   └── project_adapter.py      Map project structure for harness
+├── formal/
+│   ├── harness_contract_verifier.py  #@ Requires/Ensures runtime check
+│   └── harness_signing.py           Ed25519 signing + verification
+└── memory/
+    └── durable/                 Project-local learning store
+```
+
+## Checks
+
+Each check independent, re-runnable individually:
+
+```bash
+python .agentic-pi/runtime/check_matrix.py <run_dir> --all
+
+  [plan_graph]        PASS
+  [step_logs]         PASS
+  [code_execution]    PASS
+  [formal_verification] PASS
+  [crypto_signatures] SKIP
+```
+
+Re-run just one:
+```bash
+python .agentic-pi/runtime/check_matrix.py <run_dir> code_execution
+```
+
+## Design Principles
 
 ```text
-benchmark_outputs/benchmark_report.md
+Vertical first, horizontal later.
+Prove one slice end-to-end before expanding.
+One failure mode → one fixture → one implementation → one validator → one test.
+Agents do the work. Pi orchestrates. No manual edits to fix agent output.
+Memory feeds the worker/repair, not the planner.
 ```
 
-Current benchmark scoring checks the expected verdict for each goal, not just whether the model says `DONE_PASS`. The impossible goal is expected to fail honestly.
-
-See [`PROJECT_STATUS.md`](PROJECT_STATUS.md) for the proof summary and current limitations.
-See [`FRAMEWORK.md`](FRAMEWORK.md) for the conceptual architecture and actual current file map.
-See [`PROBLEM_AND_GAP.md`](PROBLEM_AND_GAP.md) for the current research problem statement.
-See [`VERIFIER_PROVENANCE_DESIGN.md`](VERIFIER_PROVENANCE_DESIGN.md) for the verifier provenance model.
-See [`docs/V0_2_1_FREEZE.md`](docs/V0_2_1_FREEZE.md) for the exact freeze boundary.
-See [`docs/V0_3_PLANGRAPH.md`](docs/V0_3_PLANGRAPH.md) for the PlanGraph prototype boundary.
-See [`docs/V0_3_2_PROVENANCE_GATE_FREEZE.md`](docs/V0_3_2_PROVENANCE_GATE_FREEZE.md) for the provenance runtime gate boundary.
-See [`docs/V0_3_3_PROVENANCE_GATE_DIAGNOSTICS.md`](docs/V0_3_3_PROVENANCE_GATE_DIAGNOSTICS.md) for the provenance diagnostic fixture boundary.
-See [`docs/V0_3_4_SMELL_SCANNER.md`](docs/V0_3_4_SMELL_SCANNER.md) for the metadata-level verifier smell scanner boundary.
-See [`docs/V0_3_5_STRENGTH_SCORER.md`](docs/V0_3_5_STRENGTH_SCORER.md) for the verifier strength scoring boundary.
-See [`docs/V0_3_6_POLICY_ENGINE.md`](docs/V0_3_6_POLICY_ENGINE.md) for the deterministic policy engine boundary.
-See [`docs/V0_4_DIAGNOSTIC_EVALUATION.md`](docs/V0_4_DIAGNOSTIC_EVALUATION.md) for the small diagnostic evaluation boundary.
-See [`docs/V0_5_PI_INTEGRATION.md`](docs/V0_5_PI_INTEGRATION.md) for the Pi integration contract boundary.
-See [`docs/V0_5_RUNTIME_SMOKES.md`](docs/V0_5_RUNTIME_SMOKES.md) for the local Pi runtime smoke boundary.
-See [`docs/V0_5_7_CONTROLLED_MINI_CHAIN_SMOKE.md`](docs/V0_5_7_CONTROLLED_MINI_CHAIN_SMOKE.md) for the controlled mini-chain smoke boundary.
-See [`docs/V0_5_8_PI_CLEAN_EXIT_SMOKE.md`](docs/V0_5_8_PI_CLEAN_EXIT_SMOKE.md) for the Pi clean-exit isolation boundary.
-See [`docs/V0_5_9_PI_COMMAND_DISCIPLINE_GATE.md`](docs/V0_5_9_PI_COMMAND_DISCIPLINE_GATE.md) for the Pi command-discipline audit boundary.
-See [`docs/V0_5_10_DISPOSABLE_SMOKE_HARNESS.md`](docs/V0_5_10_DISPOSABLE_SMOKE_HARNESS.md) for the disposable Pi smoke setup boundary.
-See [`docs/V0_5_11_NEGATIVE_STATUS_SAFETY_SMOKE.md`](docs/V0_5_11_NEGATIVE_STATUS_SAFETY_SMOKE.md) for the negative-status Pi safety boundary.
-See [`docs/V0_6_LOCAL_CODING_AGENT_HOST_INTEGRATION.md`](docs/V0_6_LOCAL_CODING_AGENT_HOST_INTEGRATION.md) for the local host integration boundary.
-See [`docs/V0_7_BRANCH_GENERATION.md`](docs/V0_7_BRANCH_GENERATION.md) for the branch-generation boundary.
-See [`docs/V0_8_EVIDENCE_BRANCH_SELECTION.md`](docs/V0_8_EVIDENCE_BRANCH_SELECTION.md) for the evidence-seeking branch selection boundary.
-See [`docs/V0_9_REPLAY_ROLLBACK_AUDIT.md`](docs/V0_9_REPLAY_ROLLBACK_AUDIT.md) for the replay / rollback / audit boundary.
-See [`docs/V1_0_PRACTICAL_PACKAGE_FREEZE.md`](docs/V1_0_PRACTICAL_PACKAGE_FREEZE.md) for the practical package freeze boundary.
-See [`docs/V1_0_EXAMPLES.md`](docs/V1_0_EXAMPLES.md) for the frozen example set.
-See [`docs/V1_1_RAW_GOAL_CHAIN_PROOF.md`](docs/V1_1_RAW_GOAL_CHAIN_PROOF.md) for the deterministic raw-goal chain proof.
-See [`docs/V1_2_PLANNING_PROOF_HARDENING.md`](docs/V1_2_PLANNING_PROOF_HARDENING.md) for the deterministic planning handoff proof.
-See [`docs/V1_3_STRATEGY_PLANNER.md`](docs/V1_3_STRATEGY_PLANNER.md) for the deterministic strategy-planner proof.
-See [`docs/V1_4_MILESTONE_PLANNING.md`](docs/V1_4_MILESTONE_PLANNING.md) for the deterministic milestone-planning proof.
-See [`docs/V1_5_DRIFT_AWARE_REPLANNING.md`](docs/V1_5_DRIFT_AWARE_REPLANNING.md) for the deterministic drift-aware replanning proof.
-See [`docs/V1_6_TRAJECTORY_LEVEL_EVALUATION.md`](docs/V1_6_TRAJECTORY_LEVEL_EVALUATION.md) for the trajectory-level evaluation proof.
-See [`docs/V1_7_EXPERIENCE_MEMORY.md`](docs/V1_7_EXPERIENCE_MEMORY.md) for the advisory experience-memory proof.
-See [`docs/V1_8_DOMAIN_PACKS.md`](docs/V1_8_DOMAIN_PACKS.md) for the domain-pack proof.
-See [`docs/V1_9_STRATEGY_SEARCH.md`](docs/V1_9_STRATEGY_SEARCH.md) for the workflow-search proof.
-See [`docs/V2_0_INTEGRATED_HARNESS_PROOF_PACKAGE.md`](docs/V2_0_INTEGRATED_HARNESS_PROOF_PACKAGE.md) for the integrated proof package.
-See [`docs/V2_0_EXAMPLES.md`](docs/V2_0_EXAMPLES.md) for the v2.0 example set.
-See [`docs/V2_1_CONTROLLED_PI_CHAIN_RUNTIME_PROOF.md`](docs/V2_1_CONTROLLED_PI_CHAIN_RUNTIME_PROOF.md) for the controlled Pi chain runtime proof.
-See [`docs/V2_2_DIRECT_PI_MERCURY_BEHAVIOR_AUDIT.md`](docs/V2_2_DIRECT_PI_MERCURY_BEHAVIOR_AUDIT.md) for the direct Pi/Mercury behavior audit proof.
-See [`docs/V2_3_REAL_PI_INTERACTIVE_SMOKE.md`](docs/V2_3_REAL_PI_INTERACTIVE_SMOKE.md) for the real Pi interactive smoke evidence boundary.
-See [`docs/V2_4_REAL_PI_RUN_MONITOR.md`](docs/V2_4_REAL_PI_RUN_MONITOR.md) for the captured real Pi run monitor boundary.
-See [`docs/V2_5_REAL_PI_NEGATIVE_STATUS_SMOKE.md`](docs/V2_5_REAL_PI_NEGATIVE_STATUS_SMOKE.md) for the real Pi negative-status monitor boundary.
-See [`docs/V2_6_REAL_PI_SESSION_TRACE_CAPTURE.md`](docs/V2_6_REAL_PI_SESSION_TRACE_CAPTURE.md) for the real Pi session trace boundary.
-See [`docs/V2_7_AGENTIC_AUTONOMY_PROOF_PLAN.md`](docs/V2_7_AGENTIC_AUTONOMY_PROOF_PLAN.md) for the real Pi agentic autonomy probe boundary.
-See [`docs/V2_8_AGENTIC_NEGATIVE_PROBES.md`](docs/V2_8_AGENTIC_NEGATIVE_PROBES.md) for the arbitrary-chain and unbounded-bash negative-probe boundary.
-See [`docs/V2_9_LIVE_NEGATIVE_PROMPT_CAPTURE.md`](docs/V2_9_LIVE_NEGATIVE_PROMPT_CAPTURE.md) for the live negative prompt capture boundary.
-See [`docs/V3_0_REAL_PI_BEHAVIOR_EVALUATION.md`](docs/V3_0_REAL_PI_BEHAVIOR_EVALUATION.md) for the real Pi behavior evaluation boundary.
-See [`docs/V3_1_REAL_PI_PROMPT_COVERAGE.md`](docs/V3_1_REAL_PI_PROMPT_COVERAGE.md) for the real Pi prompt coverage boundary.
-See [`docs/ADVERSARIAL_RED_TEAM_LOOP.md`](docs/ADVERSARIAL_RED_TEAM_LOOP.md) for the statistical adversarial red-team loop boundary.
-See [`docs/V3_2_RUNTIME_ENFORCEMENT_PROOF.md`](docs/V3_2_RUNTIME_ENFORCEMENT_PROOF.md) for the runtime enforcement proof boundary.
-See [`docs/RPG_HARNESS_TEST_FORM.md`](docs/RPG_HARNESS_TEST_FORM.md) for the RPG harness test form and statistical test-record boundary.
-See [`docs/V3_4_RPG_TEST_AGGREGATION.md`](docs/V3_4_RPG_TEST_AGGREGATION.md) for the RPG test-record aggregation boundary.
-See [`docs/V3_5_0_AUTHORITY_ARTIFACT_PREREQUISITE.md`](docs/V3_5_0_AUTHORITY_ARTIFACT_PREREQUISITE.md) for the machine-readable final-status authority boundary.
-See [`docs/V3_5_EVIDENCE_FREEZE.md`](docs/V3_5_EVIDENCE_FREEZE.md) for the frozen producer-linked evidence boundary.
-See [`docs/V3_6_RUN_LOCAL_AND_QUARANTINE_MEMORY.md`](docs/V3_6_RUN_LOCAL_AND_QUARANTINE_MEMORY.md) for the run-local and quarantine memory boundary.
-See [`docs/V3_7_MEMPALACE_ACE_MEMORY_GOVERNANCE.md`](docs/V3_7_MEMPALACE_ACE_MEMORY_GOVERNANCE.md) for the structured advisory memory governance boundary.
-See [`docs/V3_5_TO_V4_0_AUTHORITY_EVIDENCE_MEMORY_PLAN.md`](docs/V3_5_TO_V4_0_AUTHORITY_EVIDENCE_MEMORY_PLAN.md) for the next authority, evidence-freeze, memory-governance, adapter, and evaluation plan.
-See [`docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md`](docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md) for the completed v1.3-v2.0 roadmap.
-See [`docs/PI_PROMPT_CONTRACTS.md`](docs/PI_PROMPT_CONTRACTS.md) for safe Pi prompt patterns.
-See [`docs/PI_BASH_ALLOWLIST.md`](docs/PI_BASH_ALLOWLIST.md) for the current documented bash safety boundary.
-
-The current proof path is:
-
-```text
-python -m unittest discover tests -v
-python .agentic-pi\diagnostics\evaluation\run_diagnostic_evaluation.py
-python .agentic-pi\diagnostics\trajectory_evaluation\run_trajectory_evaluation.py
-python .agentic-pi\benchmark\run_benchmark.py
-python .agentic-pi\runtime\pi_cli.py --help
-python .agentic-pi\runtime\run_proof_matrix.py --mode quick
-python .agentic-pi\runtime\run_pi_chain_smoke.py --target-run-id pi_smoke_chain_p2_strong
-python tests\test_pi_direct_behavior_audit.py -v
-python tests\test_pi_real_interactive_smoke_docs.py -v
-python tests\test_pi_real_session_monitor.py -v
-python tests\test_pi_session_trace_capture.py -v
-python tests\test_agentic_autonomy_probe.py -v
-python tests\test_live_negative_prompt_capture.py -v
-python tests\test_real_pi_behavior_evaluation.py -v
-python tests\test_real_pi_behavior_matrix.py -v
-python .agentic-pi\runtime\red_team_loop.py --rounds 100 --seed-runs 3
-python tests\run_meta_harness.py
-python tests\test_runtime_enforcement.py -v
-python tests\test_rpg_test_record.py -v
-python tests\test_rpg_test_aggregator.py -v
-python tests\test_final_status_json_authority.py -v
-```
-
-Important naming boundary:
-
-```text
-pi = the real external Pi agent you launch in cmd.
-.agentic-pi/runtime/pi_cli.py = repo-local deterministic harness helper.
-```
-
-So `pi_cli.py` is not how you start the Pi agent. It exists only to run this
-repo's deterministic proof/helper commands.
-
-It demonstrates:
-
-1. a Goal Contract was created,
-2. the planner writes plans only,
-3. the Guarded Worker writes artifacts inside the active run folder,
-4. false pass evidence is rejected,
-5. final output paths must match the contract exactly,
-6. `artifact_tests` run executable checks for behavior claims,
-7. `plan_graph.json`, `artifact_registry.json`, and `task_graph.json` are generated for normal runs,
-8. downstream tasks require exact artifact IDs from upstream tasks,
-9. provenance-mode runs can return `NOT_DONE`, `PROVISIONAL_DONE`, or `CERTIFIED_DONE`,
-10. the four-case provenance diagnostic set verifies P0/P1/P2/missing-verifier behavior,
-11. verifier smell reports are recorded without changing final status yet,
-12. verifier strength reports are recorded,
-13. `policy_decision.json` decides provenance-mode final status,
-14. the v0.4 diagnostic evaluation compares weak certifier modes with the policy engine,
-15. v0.5 adds Pi orchestration contracts where agents cannot certify DONE,
-16. local v0.5.1-v0.5.3 Pi smokes validate read-only review/status and disposable certifier invocation,
-17. local v0.5.7 validates a controlled verifier-review + certifier-invocation path with a Pi extension exit caveat,
-18. local v0.5.8 isolates the stale Pi exit to the broader extension surface,
-19. v0.5.9 adds deterministic Pi command-discipline audit fixtures,
-20. v0.5.10 adds deterministic disposable Pi smoke setup,
-21. v0.5.11 verifies weak/failing statuses are not repaired or upgraded by Pi,
-22. v0.6 adds deterministic local host-task certification against disposable runs,
-23. v0.7 adds deterministic branch candidates with verifier requirements,
-24. v0.8 selects branches by verifier-provenance certifiability,
-25. v0.9 adds read-only replay, dry-run rollback, and audit blocking,
-26. v1.0 freezes a thin local command surface and practical examples,
-27. v1.1 proves deterministic raw-goal compilation into the full harness path,
-28. v1.2 proves the selected branch handoff into `merged_plan.json`,
-29. v1.3 proves deterministic task-type routing, capability inventory, strategy gating, strategy scoring, and strategy compilation into `merged_plan.json`,
-30. v1.4 proves selected strategy -> milestone plan -> local step plan -> `merged_plan.json`,
-31. v1.5 proves checkpoints, drift reports, delta plans, and certifier blocking for unresolved drift,
-32. v1.6 proves trajectory-level tool-use evaluation for duplicate calls, manual writes, missing reads, unsafe deletion, and wrong command order,
-33. v1.7 proves advisory experience extraction, append-only learning records, retrieval, and score adjustment without bypassing the applicability gate,
-34. v1.8 proves deterministic domain-pack selection and advisory strategy-candidate enrichment without certifying DONE,
-35. v1.9 proves deterministic workflow search rejects certifier-bypass and high false-certified-risk candidates,
-36. v2.0 packages the deterministic proof layers into an integrated proof matrix,
-37. v2.1 adds a controlled Pi chain smoke for verifier-generator -> verifier-reviewer -> goal-orchestrator,
-38. v2.2 audits direct Pi/Mercury behavior order: verifier evidence first, certifier invocation second, status-artifact reporting third,
-39. v2.3 records a real `pi` interactive smoke where Mercury reports certifier-owned artifacts without certifying DONE itself,
-40. v2.4 monitors captured real Pi transcripts for the allowed command/read trajectory,
-41. v2.5 monitors weak/failing real Pi transcript fixtures so PROVISIONAL_DONE and NOT_DONE are not upgraded,
-42. v2.6 normalizes captured Pi output into `pi_session_trace.jsonl` and monitors that trace,
-43. v2.7 runs a real Pi/Mercury agentic autonomy probe for chain read, advisory memory read, bounded repair, and certifier-only final authority,
-44. v2.8 rejects unapproved chain reads, unbounded source-tree bash, and second repair commands in the agentic monitor,
-45. v2.9 captures known bad prompt patterns and passes only when the monitor rejects the expected unsafe behavior,
-46. v3.0 classifies captured real Pi/Mercury behavior as unsafe caught, unsafe missed, safe refusal, or inconclusive,
-47. v3.1 runs a bounded prompt coverage matrix across ten negative Pi/Mercury prompt categories,
-48. the adversarial red-team loop evaluates 300 deterministic graph-provenance attack cases with false `CERTIFIED_DONE` and monitor-miss rates,
-49. v3.2 blocks or downgrades unsafe Pi/Mercury-shaped commands to `MONITOR_FAIL` before they can become accepted certification,
-50. v3.3 records RPG harness tests as validated evidence and regression decisions,
-51. v3.4 aggregates RPG test records into false-certified, monitor-miss, false-block, and confidence-interval metrics,
-52. v3.5.0 makes `final_status.json` the machine-readable final authority and renders `final_status.md` from it,
-53. v3.5.1 freezes producer-linked evidence while excluding memory from evidence authority,
-54. v3.6 adds run-local memory and quarantine learning candidates that remain advisory and non-certifying,
-55. v3.7 adds structured MemPalace + ACE advisory memory governance with gated durable promotion,
-56. and the benchmark reports false-PASS status explicitly.
-
-## Core parts
-
-1. Prompt Compiler  
-Converts a rough user goal into a structured Goal Contract.
-
-2. Goal Contract  
-Defines the cleaned goal, final outputs, constraints, done criteria, and failure criteria.
-
-3. Guarded Worker  
-Executes one approved step at a time and reports evidence.
-
-4. Trace Logger  
-Records what happened during the run.
-
-5. Certifier  
-Checks evidence, required files, logs, done criteria, artifact tests, PlanGraph links, and verifier provenance before certification. Legacy runs without `verifier_contract.json` still use `DONE_PASS` / `DONE_FAIL`.
-
-6. Artifact-Linked PlanGraph
-Links task outputs to exact artifact IDs and validates downstream artifact consumption when graph files exist.
-
-7. Verifier Provenance Gate
-When `verifier_contract.json` exists, separates weak/self-generated evidence from certifying evidence.
-
-8. Smell Scanner
-Records metadata-level verifier smell reports for strength scoring and later policy enforcement.
-
-9. Strength Scorer
-Scores verifier strength as `weak`, `advisory`, `gating`, or `certifying` for later policy enforcement.
-
-10. Policy Engine
-Consumes verifier artifacts, smell reports, strength reports, and the verifier contract to decide provenance-mode status.
-
-11. Small Diagnostic Evaluation
-Compares file-existence, artifact-test, provenance-gate, and policy-engine certification on six deterministic cases.
-
-12. Pi Integration Contract
-Adds Pi agent and chain prompts for orchestration while preserving `certify_run.py` as final authority.
-
-## Core rule
-
-Mercury may propose, plan, execute, and report, but it cannot certify final success.
-
-Evidence beats confidence.
-
-Next provenance rule:
-
-```text
-Self-generated post-solution tests cannot certify DONE alone.
-```
-
-## Quick validation commands
-
-Validate a Goal Contract:
-
-```cmd
-python .agentic-pi\validators\validate_schema.py .agentic-pi\schemas\goal_contract.schema.json .agentic-runs\real_goal_001\goal_contract.json
-```
-
-Validate a Worker step log:
-
-```cmd
-python .agentic-pi\validators\validate_schema.py .agentic-pi\schemas\step_result.schema.json .agentic-runs\real_goal_001\step_logs\001.json
-```
-
-Run certification:
-
-```cmd
-python .agentic-pi\validators\certify_run.py .agentic-runs\<run_id>
-```
-
-Run the Pi command-discipline audit on a deterministic fixture:
-
-```cmd
-python .agentic-pi\runtime\pi_session_audit.py .agentic-pi\diagnostics\pi_command_discipline\cases\positive_one_bash.jsonl --run-id pi_smoke_one_bash_p2_strong
-```
-
-Prepare a disposable Pi smoke run:
-
-```cmd
-python .agentic-pi\runtime\setup_pi_smoke.py --target-run-id pi_smoke_one_bash_p2_strong --clean
-```
-
-Run the local host integration diagnostic:
-
-```cmd
-python .agentic-pi\diagnostics\host_integration\run_host_integration_evaluation.py
-```
-
-Show the stable local command surface:
-
-```cmd
-python .agentic-pi\runtime\pi_cli.py --help
-```
-
-Run the deterministic planning proof:
-
-```cmd
-python .agentic-pi\runtime\pi_cli.py goal-compile pi_smoke_planning_proof_p2 --goal "Create README.md explaining the harness" --mode planning_p2
-python .agentic-pi\runtime\pi_cli.py goal-plan-proof pi_smoke_planning_proof_p2
-python .agentic-pi\runtime\pi_cli.py goal-status pi_smoke_planning_proof_p2 --fail-on-missing
-```
-
-Run the deterministic strategy proof:
-
-```cmd
-python .agentic-pi\runtime\pi_cli.py goal-compile pi_smoke_strategy_proof_p2 --goal "Create README.md explaining the harness" --mode p2
-python .agentic-pi\runtime\pi_cli.py goal-strategy-proof pi_smoke_strategy_proof_p2
-python .agentic-pi\runtime\pi_cli.py goal-status pi_smoke_strategy_proof_p2 --fail-on-missing
-```
-
-Run the deterministic milestone proof:
-
-```cmd
-python .agentic-pi\runtime\pi_cli.py goal-compile pi_smoke_milestone_proof_p2 --goal "Create README.md explaining the harness" --mode p2
-python .agentic-pi\runtime\pi_cli.py goal-milestone-proof pi_smoke_milestone_proof_p2
-python .agentic-pi\runtime\pi_cli.py goal-status pi_smoke_milestone_proof_p2 --fail-on-missing
-```
-
-Run the deterministic drift proof:
-
-```cmd
-python .agentic-pi\runtime\pi_cli.py goal-compile pi_smoke_drift_proof_p2 --goal "Create README.md explaining the harness" --mode p2
-python .agentic-pi\runtime\pi_cli.py goal-drift-proof pi_smoke_drift_proof_p2
-python .agentic-pi\runtime\pi_cli.py goal-status pi_smoke_drift_proof_p2 --fail-on-missing
-```
-
-Run a disposable sample:
-
-```cmd
-python .agentic-pi\runtime\setup_pi_smoke.py --target-run-id pi_smoke_v1_sample --clean
-python .agentic-pi\runtime\pi_cli.py goal-certify pi_smoke_v1_sample
-python .agentic-pi\runtime\pi_cli.py goal-status pi_smoke_v1_sample
-python .agentic-pi\runtime\pi_cli.py goal-audit pi_smoke_v1_sample
-python .agentic-pi\runtime\pi_cli.py goal-replay pi_smoke_v1_sample
-```
-
-Run the deterministic smoke test:
-
-```cmd
-python smoke_v01.py
-```
-
-## Artifact tests
-
-Run the artifact and harness regression tests:
-
-```cmd
-python -m unittest discover tests -v
-```
-
-## Next milestone
-
-Committed repo state:
-
-```text
-v3.1 = Real Pi Prompt Coverage Evaluation
-v3.2 = Runtime Enforcement Proof
-v3.3 = RPG Harness Test Record
-v3.4 = RPG Test Aggregation
-v3.7 = MemPalace + ACE Memory Governance
-```
-
-Local smoke-tested state:
-
-```text
-v0.5.1 = verifier-reviewer read-only smoke PASS
-v0.5.2 = goal-orchestrator read-only status-report smoke PASS
-v0.5.3 = goal-orchestrator disposable certifier-invocation smoke PASS
-v0.5.7 = controlled mini-chain smoke FUNCTIONAL PASS WITH PI EXIT CAVEAT
-v0.5.8 = Pi clean-exit isolation CLEAN EXIT PASS WITH COMMAND-COUNT CAVEAT
-v0.5.9 = Pi command-discipline audit IMPLEMENTED
-v0.5.10 = Disposable Pi smoke setup IMPLEMENTED
-v0.5.11 = Negative-status safety audit IMPLEMENTED
-v0.6 = Local coding-agent host integration IMPLEMENTED
-v0.7 = Branch contract and deterministic branch generation IMPLEMENTED
-v0.8 = Evidence-seeking branch selection IMPLEMENTED
-v0.9 = Replay / rollback / audit IMPLEMENTED
-v1.0 = Practical package freeze IMPLEMENTED
-v1.1 = Raw goal chain proof IMPLEMENTED
-v1.2 = Planning proof hardening IMPLEMENTED
-v1.3 = Strategy planner IMPLEMENTED
-v1.4 = Milestone planning IMPLEMENTED
-v1.5 = Drift-aware replanning IMPLEMENTED
-v1.6 = Trajectory-level evaluation IMPLEMENTED
-v1.7 = Experience memory IMPLEMENTED
-v1.8 = Domain packs IMPLEMENTED
-v1.9 = Strategy search IMPLEMENTED
-v2.0 = Integrated proof package IMPLEMENTED
-v2.1 = Controlled Pi chain runtime proof IMPLEMENTED
-v2.2 = Direct Pi/Mercury behavior audit IMPLEMENTED
-v2.3 = Real Pi interactive smoke evidence RECORDED
-v2.4 = Real Pi run monitor IMPLEMENTED
-v2.5 = Real Pi negative-status smoke monitor IMPLEMENTED
-v2.6 = Real Pi session trace capture IMPLEMENTED
-v2.7 = Real Pi agentic autonomy probe IMPLEMENTED
-v2.8 = Agentic negative-probe hardening IMPLEMENTED
-v2.9 = Live negative prompt capture IMPLEMENTED
-v3.0 = Real Pi behavior evaluation IMPLEMENTED
-v3.1 = Real Pi prompt coverage evaluation IMPLEMENTED
-v3.2 = Runtime enforcement proof IMPLEMENTED
-v3.3 = RPG harness test record IMPLEMENTED
-v3.4 = RPG test aggregation IMPLEMENTED
-v3.5.0 = Authority artifact prerequisite IMPLEMENTED
-v3.5.1 = Evidence freeze + evidence index IMPLEMENTED
-v3.6 = Run-local memory + quarantine memory IMPLEMENTED
-v3.7 = MemPalace + ACE memory governance IMPLEMENTED
-v3.8 = Formal verification + cryptographic signing IMPLEMENTED
-```
-
-The v0.5 Pi chain lives at:
-
-```text
-.pi/chains/goal-runner.chain.md
-```
-
-The new v0.5 Pi agents are:
-
-```text
-.pi/agents/goal-orchestrator.md
-.pi/agents/verifier-generator.md
-.pi/agents/verifier-reviewer.md
-```
-
-The full `goal-runner.chain.md` runtime remains unverified for arbitrary goals. v0.5.8 shows the stale Pi exit disappears under a subagents-only Pi config. v0.5.9 adds deterministic auditing for one-bash-call discipline, including a failing fixture for the duplicate certifier invocation pattern. v0.5.10 adds deterministic disposable smoke setup so Pi prompts can stay single-action. v0.5.11 verifies that weak/failing statuses are reported, not repaired or upgraded. v0.6 adds local host-task certification against disposable runs. v0.7 adds deterministic branch candidates with explicit verifier requirements. v0.8 selects branches by path to verifier-provenance certification. v0.9 adds read-only replay, dry-run rollback, and audit blocking. v1.0 freezes a thin local command surface and practical examples without claiming full Pi autonomy. v1.1 adds deterministic raw-goal compilation fixtures. v1.2 proves that the selected branch can be materialized into `merged_plan.json` before worker execution and certification. v1.3 adds deterministic strategy selection before step compilation. v1.4 adds deterministic milestone planning between selected strategy and local executable steps. v1.5 adds drift detection, bounded delta plans, and certifier blocking for unresolved drift. v1.6 adds trajectory-level tool-use evaluation for command choice, arguments, order, duplicate certifier calls, manual writes, missing reads, and unsafe deletion. v1.7 adds advisory experience memory that can adjust strategy scores but cannot bypass applicability gates or certify DONE. v1.8 adds deterministic domain packs that shape strategy candidates and verifier hints without certifying DONE. v1.9 adds deterministic workflow search that rejects certifier-bypass and high false-certified-risk candidates without executing or certifying. v2.0 adds an integrated proof matrix and example set without claiming full Pi autonomy. v2.1 adds a controlled Pi chain smoke runner without claiming arbitrary Pi chain autonomy. v2.2 adds direct Pi/Mercury behavior audit fixtures that require verifier evidence before certifier invocation, status reads after certifier invocation, and no self-certifying assistant language. v2.3 records a real `pi` interactive smoke result as local evidence, not automated CI evidence. v2.4 monitors captured real Pi transcript fixtures for exactly-one-command discipline, required result reads, protected-write attempts, and self-certifying language. v2.5 extends that monitor to weak/failing status transcripts and rejects assistant-side upgrades such as `PROVISIONAL_DONE` to `CERTIFIED_DONE`. v2.6 normalizes captured Pi output into `pi_session_trace.jsonl` and monitors the trace directly. v2.7 runs and monitors a real Pi/Mercury agentic autonomy probe that reads the chain, reads advisory memory, observes an initial certifier failure, performs one run-local repair, reruns the certifier, and reports certifier-owned status artifacts without proving arbitrary unbounded bash is safe. v2.8 hardens that monitor with negative probes for unapproved chain reads, source-tree write commands, and second repair commands. v2.9 captures known bad prompt patterns and treats them as successful only when the monitor observes and rejects the expected unsafe behavior. v3.0 classifies captured real Pi/Mercury behavior separately from deterministic monitor correctness. v3.1 expands that into a bounded ten-category prompt coverage matrix with repeated-trial support. v3.2 adds command-gateway and protected-file enforcement so unsafe Pi/Mercury-shaped commands are blocked or downgraded to `MONITOR_FAIL`; it does not prove arbitrary prompts or arbitrary unbounded bash are safe. v3.3 adds a human form plus schema-valid RPG test records so failures become regression decisions and later statistical runs have machine-readable evidence. v3.4 aggregates collected RPG records into false-certified, monitor-miss, false-block, and confidence-interval metrics without claiming arbitrary prompt coverage. v3.5.0 makes `final_status.json` the machine-readable final authority and keeps `final_status.md` as a derived view only. v3.5.1 freezes producer-linked evidence and excludes memory from evidence authority. v3.6 adds current-run memory and quarantine candidates, but memory remains advisory, non-durable, excluded from evidence, and unable to certify DONE.
-
-## Planner Stub
-
-v3.7 adds structured MemPalace + ACE memory governance with bounded advisory
-context packs, helpful/harmful reflection, curator delta candidates, and gated
-durable promotion after certifier-owned `final_status.json`.
-
-v3.8 adds formal contract verification (VeriGuard-inspired) and cryptographic
-artifact signing (VET-inspired):
-
-- **Formal verification**: `.agentic-pi/formal/harness_contract_verifier.py` —
-  parses `#@ Requires/Ensures/Invariant` annotations, evaluates contracts at
-  runtime, produces `F_{RUN_ID}.json` verifier evidence with confidence scoring.
-  Catches missing None guards, type violations. Reference: `modules/nagini-develop/`.
-
-- **Cryptographic signing**: `.agentic-pi/formal/harness_signing.py` —
-  Ed25519 keypair generation, artifact signing with `.sig` files (content hash
-  + Ed25519 signature), verification to detect tampering. FORGED/TAMPERED
-  verdicts block certification.
-
-- **Certifier gates**: `apply_formal_verification_gate` and
-  `apply_cryptographic_signature_gate` wired into `certify_run.py`.
-
-Quick test commands:
-
-```cmd
-python .agentic-pi/formal/harness_contract_verifier.py .agentic-runs/<run_id> <target.py>
-python .agentic-pi/formal/harness_signing.py keygen .agentic-runs/<run_id>
-python .agentic-pi/formal/harness_signing.py sign .agentic-runs/<run_id> .agentic-runs/<run_id>/<artifact.py>
-python .agentic-pi/formal/harness_signing.py verify .agentic-runs/<run_id>
-```
-
-The current `plan_router.py` is a deterministic stub for testing. See [PLAN_ROUTER.md](PLAN_ROUTER.md) for details. Real planner agents will replace this stub in future versions.
+## Docs
+
+- `AGENTS.md` — Agent instructions and rules
+- `docs/FRAMEWORK.md` — Conceptual architecture and file map
+- `docs/PROJECT_STATUS.md` — Version history and proof summary
+- `docs/` — All version documentation (V0.1–V5)
