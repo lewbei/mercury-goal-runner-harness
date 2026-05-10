@@ -41,3 +41,5 @@ Thumbs.db
 
 # Pi sessions
 .pi/sessions/
+.pytest_cache/
+__pycache__/
