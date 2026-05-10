@@ -14,11 +14,11 @@ extensions: false
 
 Read ALL accumulated QRSPI skills for the PLANNING phase:
 ```
-read .agentic-pi/skills/question-contract/SKILL.md
-read .agentic-pi/skills/research-pack/SKILL.md
-read .agentic-pi/skills/design-options/SKILL.md
-read .agentic-pi/skills/structure-outline/SKILL.md
-read .agentic-pi/skills/root-plan/SKILL.md
+read .pi/skills/question-contract/SKILL.md
+read .pi/skills/research-pack/SKILL.md
+read .pi/skills/design-options/SKILL.md
+read .pi/skills/structure-outline/SKILL.md
+read .pi/skills/root-plan/SKILL.md
 ```
 
 Read the goal contract from `.agentic-runs/<run_id>/goal_contract.json`.

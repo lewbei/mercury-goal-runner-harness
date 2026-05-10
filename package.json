@@ -1,37 +1,11 @@
 {
   "name": "mercury-goal-runner",
-  "version": "0.1.0",
-  "description": "QRSPI-phased goal execution harness with verifier-provenance evidence, policy/replay/certification gating, and advisory local memory",
-  "main": "extension/index.ts",
+  "version": "0.2.0",
+  "description": "QRSPI-phased goal execution harness — planner → worker → verifier → certify with formal verification, cryptographic signing, and memory-aware repair",
+  "keywords": ["pi-package"],
   "pi": {
-    "extensions": {
-      "mercury-goal-runner": "extension/index.ts"
-    },
-    "agents": [
-      ".pi/agents/planner-minimal.md",
-      ".pi/agents/planner-robust.md",
-      ".pi/agents/guarded-worker.md",
-      ".pi/agents/verifier-generator.md",
-      ".pi/agents/verifier-reviewer.md",
-      ".pi/agents/prompt-compiler.md",
-      ".pi/agents/plan-selector.md",
-      ".pi/agents/plan-merger.md",
-      ".pi/agents/goal-orchestrator.md"
-    ],
-    "skills": [
-      ".agentic-pi/skills/question-contract",
-      ".agentic-pi/skills/research-pack",
-      ".agentic-pi/skills/design-options",
-      ".agentic-pi/skills/structure-outline",
-      ".agentic-pi/skills/root-plan",
-      ".agentic-pi/skills/artifact-contract",
-      ".agentic-pi/skills/path-grounding",
-      ".agentic-pi/skills/harness-grill",
-      ".agentic-pi/skills/harness-tdd",
-      ".agentic-pi/skills/harness-diagnose",
-      ".agentic-pi/skills/harness-certify",
-      ".agentic-pi/skills/harness-repair",
-      ".agentic-pi/skills/write-memory"
-    ]
+    "extensions": ["./extension/index.ts"],
+    "skills": [".pi/skills"],
+    "prompts": []
   }
 }

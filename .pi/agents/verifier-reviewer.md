@@ -15,9 +15,9 @@ extensions: false
 BEFORE reviewing, read the QRSPI validation skills:
 
 ```
-read .agentic-pi/skills/harness-grill/SKILL.md
-read .agentic-pi/skills/harness-tdd/SKILL.md
-read .agentic-pi/skills/harness-diagnose/SKILL.md
+read .pi/skills/harness-grill/SKILL.md
+read .pi/skills/harness-tdd/SKILL.md
+read .pi/skills/harness-diagnose/SKILL.md
 ```
 
 Apply the skills to challenge weak verifier evidence before final certification.
