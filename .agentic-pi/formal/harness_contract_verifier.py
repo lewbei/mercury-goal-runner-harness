@@ -30,11 +30,12 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 def _has_none_guard(source: str) -> bool:
-    """Check if source code has explicit None guard pattern."""
+    """Check if source code has explicit guard against invalid input."""
     patterns = [
         "if " in source and " is None" in source and ("raise" in source or "return" in source),
-        "if " in source and " is not None" in source,
+        "if " in source and "isinstance" in source and "raise" in source,
         "assert " in source and " is not None" in source,
+        "assert " in source and "isinstance" in source,
     ]
     return any(patterns)
 
