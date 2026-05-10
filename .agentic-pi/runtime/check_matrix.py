@@ -181,10 +181,18 @@ class CodeExecutionCheck(Check):
             try:
                 abs_path = str(path.resolve())
                 result = subprocess.run(
-                    [sys.executable, abs_path],
+                    [sys.executable, abs_path, "100"],  # Default arg for CLI tools
                     capture_output=True, text=True, timeout=5
                 )
                 lines = [l for l in result.stdout.splitlines() if l.strip()]
+                
+                # If exit=2 (argparse error), try without arg (pure module)
+                if result.returncode == 2 and ("arguments are required" in result.stderr or "the following arguments" in result.stderr):
+                    result = subprocess.run(
+                        [sys.executable, abs_path],
+                        capture_output=True, text=True, timeout=5
+                    )
+                    lines = [l for l in result.stdout.splitlines() if l.strip()]
                 if result.returncode == 0 and len(lines) >= 2:
                     results.append({"file": output, "status": "PASS",
                                    "detail": f"{len(lines)} lines of output"})
