@@ -17,6 +17,7 @@
     { "from": "POLICY_DECIDING", "to": "REPLAYING" },
     { "from": "REPLAYING", "to": "CERTIFYING" },
     { "from": "CERTIFYING", "to": "REPORTING" },
+    { "from": "CERTIFYING", "to": "BLOCKED_BY_CHECK_FAILURE" },
     { "from": "REPORTING", "to": "MEMORY_CONSOLIDATING" },
     { "from": "REPORTING", "to": "DONE" },
     { "from": "MEMORY_CONSOLIDATING", "to": "DONE" },
@@ -38,6 +39,7 @@
     { "from": "BLOCKED_BY_EVIDENCE_GAP", "to": "REPAIRING_EVIDENCE" },
     { "from": "BLOCKED_BY_REPLAY_MISMATCH", "to": "REPAIRING_EVIDENCE" },
     { "from": "BLOCKED_BY_AUTHORITY_VIOLATION", "to": "REPAIRING_PLAN" },
+    { "from": "BLOCKED_BY_CHECK_FAILURE", "to": "REPAIRING_IMPLEMENTATION" },
 
     { "from": "REPAIRING_PLAN", "to": "PLANNING" },
     { "from": "REPAIRING_ARTIFACT_ROUTING", "to": "WORKTREE_READY" },
@@ -45,5 +47,5 @@
     { "from": "REPAIRING_EVIDENCE", "to": "EVIDENCE_INDEXING" },
     { "from": "REPAIRING_IMPLEMENTATION", "to": "IMPLEMENTING" }
   ],
-  "updated_at": "2026-05-08T00:00:00Z"
+  "updated_at": "2026-05-11T00:00:00Z"
 }

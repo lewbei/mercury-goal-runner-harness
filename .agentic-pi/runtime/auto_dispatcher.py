@@ -179,7 +179,7 @@ def _update_spawn_entry(
     return queue
 
 # ---------------------------------------------------------------------------
-# Durable‑agent helper functions (new)
+# Durable‑agent helper functions
 # ---------------------------------------------------------------------------
 
 def _packet_dir(run_dir: Path, packet_id: str) -> Path:
@@ -285,8 +285,124 @@ def _update_checkpoint_for_packet(pkt_dir: Path) -> None:
     steps = _scan_step_logs(pkt_dir)
     _write_checkpoint(pkt_dir, steps)
 
+
 # ---------------------------------------------------------------------------
-# Core event processing (augmented with durable logic)
+# Post-certify check: detect FAILED_CHECK and create repair packet
+# ---------------------------------------------------------------------------
+
+def _append_jsonl(path: Path, record: Dict[str, Any]) -> None:
+    """Append a single JSON line to a JSONL file, creating it if necessary."""
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with path.open("a", encoding="utf-8") as f:
+            f.write(json.dumps(record, ensure_ascii=False) + "\n")
+    except Exception as exc:
+        logging.error("Failed to append to %s: %s", path, exc)
+
+
+def _post_certify_check(run_dir: Path) -> None:
+    """Check final_status.json after CERTIFYING phase completes.
+
+    If the status is FAILED_CHECK, create a REPAIR work packet with the error message.
+    """
+    # Locate the final status file produced by the CERTIFYING phase
+    status_path = run_dir / "final_status.json"
+    if not status_path.is_file():
+        # No status file – nothing to do
+        return
+
+    try:
+        final_status = json.loads(status_path.read_text(encoding="utf-8"))
+    except Exception:
+        # Corrupt or unreadable status – abort the check
+        return
+
+    if final_status.get("status") == "DONE_PASS":
+        return  # All good
+
+    # Check if there are actual failures to repair
+    failed = final_status.get("failed_checks", [])
+    if not failed:
+        return
+
+    error_msg = "; ".join(failed)
+
+    # ---------------------------------------------------------------------
+    # Create a new work packet JSON file for the REPAIRING_IMPLEMENTATION phase
+    # ---------------------------------------------------------------------
+    packets_dir = run_dir / "work_packets"
+    packets_dir.mkdir(parents=True, exist_ok=True)
+    existing = list(packets_dir.glob("WP.REPAIRING_IMPLEMENTATION.*.json"))
+    seq = len(existing) + 1
+    packet_id = f"WP.REPAIRING_IMPLEMENTATION.{seq:03d}"
+
+    packet = {
+        "schema_version": "work_packet_v1",
+        "work_packet_id": packet_id,
+        "phase": "REPAIRING_IMPLEMENTATION",
+        "role": "repair",
+        "task": f"Repair after certification failure: {error_msg}",
+        "subagent_type": "guarded-worker",
+        "model": "deepseek/deepseek-v4-flash",
+        "prompt": f"run_id={run_dir.name}. Repair: {error_msg}. Read the existing files first, then fix the issue. Write step_logs and trace.jsonl.",
+        "input_artifacts": [],
+        "input_summaries": {},
+        "allowed_write_paths": [],
+        "forbidden_write_paths": [
+            "final_status.json",
+            "final_status.md",
+            "certification.json",
+            "policy_decision.json",
+            "evidence_freeze.json",
+            "run_state.json",
+            "phase_queue.json",
+        ],
+        "status": "PENDING",
+        "max_model_calls": 3,
+        "max_repair_attempts": 2,
+        "repair_attempt_count": 0,
+        "output_schema": "default_result.schema.json",
+        "status_claim_allowed": False,
+        "result_path": None,
+        "validation_result_path": None,
+        "error": None,
+        "dispatch_timestamp": None,
+        "result_timestamp": None,
+        "dependencies": [],
+        "accumulated_skills_context": None,
+        "created_at": _now_iso(),
+        "updated_at": _now_iso(),
+    }
+
+    packet_path = packets_dir / f"{packet_id}.json"
+    packet_path.write_text(json.dumps(packet, indent=2), encoding="utf-8")
+
+    # ---------------------------------------------------------------------
+    # Log the creation of the repair packet so the kernel can pick it up
+    # ---------------------------------------------------------------------
+    _append_jsonl(
+        run_dir / "dispatch_log.jsonl",
+        {
+            "event": "work_packet_created",
+            "run_id": run_dir.name,
+            "work_packet_id": packet_id,
+            "phase": "REPAIRING_IMPLEMENTATION",
+            "role": "repair",
+            "timestamp": _now_iso(),
+        },
+    )
+
+    logging.info(
+        "Post-certify check created repair packet %s for run %s",
+        packet_id,
+        run_dir.name,
+    )
+
+    # No return value – the function's side‑effects are the packet file and log entry
+
+
+# ---------------------------------------------------------------------------
+# Core event processing (augmented with durable logic + phase_transition hook)
 # ---------------------------------------------------------------------------
 
 def _process_new_events(
@@ -298,6 +414,7 @@ def _process_new_events(
 
     For each `work_packet_created` event, extract config and add a pending entry.
     For each `work_packet_result_received` event, mark the entry as completed.
+    For each `phase_transition` event, trigger post‑certify checks when CERTIFYING completes.
     """
     for event in new_events:
         ev_type = event.get("event")
@@ -370,6 +487,15 @@ def _process_new_events(
             logging.info(
                 "Updated spawn entry %s to status %s", packet_id, new_status
             )
+
+        elif ev_type == "phase_transition":
+            # New handling: after CERTIFYING finishes, run the post‑certify check
+            from_phase = event.get("from_phase")
+            to_phase = event.get("to_phase")
+            if from_phase == "CERTIFYING" and to_phase != "CERTIFYING":
+                # The CERTIFYING phase has just completed
+                _post_certify_check(run_dir)
+
         # Other events are ignored for now.
     return spawn_queue
 
