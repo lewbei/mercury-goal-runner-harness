@@ -36,7 +36,7 @@ Final status is owned by:
 .agentic-pi/runtime/policy_engine.py
 ```
 
-`final_status.json` is the machine-readable authority artifact. `final_status.md` is a derived human-readable view.
+`final_status.json` is the machine-readable authority artifact. `final_status.md` is a derived human-readable view. In the normal provenance path, `final_status.json` cites `policy_decision.json`; when a later certifier gate blocks the run, it cites `certification.json` and records a blocking status.
 
 ## Repo-local helper path
 
@@ -54,11 +54,11 @@ A prepared run uses:
 
 ```cmd
 python .agentic-pi/runtime/init_run.py --run-id <run_id>
-python .agentic-pi/runtime/run_goal.py "<goal text>" --run-id <run_id>
-python .agentic-pi/validators/certify_run.py .agentic-runs/<run_id>
+# create planner/verifier-owned prerequisites listed below
+python .agentic-pi/runtime/full_verify.py .agentic-runs/<run_id>
 ```
 
-`run_goal.py` is orchestration glue. It now treats missing strict proof inputs as failure, not as permission to create generated compatibility artifacts. Treat it as prepared-run automation, not proof that arbitrary natural-language Pi autonomy is safe.
+`full_verify.py` is the recommended strict local command path. `run_goal.py` is orchestration glue around prepared runs; it treats missing strict proof inputs as failure, not as permission to create generated compatibility artifacts. Treat either command as prepared-run automation, not proof that arbitrary natural-language Pi autonomy is safe.
 
 Before the strict verification phase, the run must already contain planner/verifier-owned inputs such as:
 
@@ -87,8 +87,8 @@ The following files contain smoke, compatibility, or proof-slice behavior and sh
 The default runtime files below are intended to fail closed rather than create generated substitute proof artifacts:
 
 ```text
-.agentic-pi/runtime/full_verify.py       requires existing proof artifacts; no synthesized plans/contracts
-.agentic-pi/runtime/orchestrate_pipeline.py fails on any phase failure
+.agentic-pi/runtime/full_verify.py       recommended strict path; requires existing proof artifacts; no synthesized plans/contracts
+.agentic-pi/runtime/orchestrate_pipeline.py lower-level deterministic phase runner; fails on any phase failure
 .agentic-pi/runtime/plan_router.py       checks for existing plans/*_plan.json only
 .agentic-pi/runtime/plan_selector.py     selects among valid existing planner plans only
 .agentic-pi/runtime/plan_merger.py       writes merged_plan.json from selected_plan.json only

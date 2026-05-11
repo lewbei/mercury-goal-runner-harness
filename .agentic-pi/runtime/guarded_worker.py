@@ -13,6 +13,45 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 
+PROTECTED_WORKER_FILENAMES = {
+    "certification.json",
+    "final_status.json",
+    "final_status.md",
+    "policy_decision.json",
+    "replay_report.json",
+    "evidence_freeze.json",
+    "evidence_index.json",
+    "evidence_hash_manifest.json",
+    "run_state.json",
+    "phase_queue.json",
+    "trace.jsonl",
+    "goal_contract.json",
+    "expected_artifacts.json",
+    "selected_plan.json",
+    "merged_plan.json",
+    "plan_graph.json",
+    "verifier_contract.json",
+    "validator_certification.json",
+}
+
+PROTECTED_WORKER_PREFIXES = {
+    "verifier_artifacts/",
+    "verifier_smell_reports/",
+    "verifier_strength_reports/",
+}
+
+
+def enforce_worker_write_scope(relative_path: str) -> None:
+    """Reject merged-plan writes to authority/provenance artifacts."""
+    normalized = relative_path.replace("\\", "/").strip("/")
+    filename = normalized.split("/")[-1]
+    if filename in PROTECTED_WORKER_FILENAMES:
+        raise RuntimeError(f"guarded_worker refuses authority/provenance write: {relative_path}")
+    for prefix in PROTECTED_WORKER_PREFIXES:
+        if normalized == prefix.rstrip("/") or normalized.startswith(prefix):
+            raise RuntimeError(f"guarded_worker refuses protected directory write: {relative_path}")
+
+
 def sha256_file(path: Path) -> str:
     h = hashlib.sha256()
     with path.open("rb") as f:
@@ -108,6 +147,7 @@ def main():
 
             # ── path-grounding: validate against expected_artifacts ────
             relative_path = run_relative(run_dir, full_path)
+            enforce_worker_write_scope(relative_path)
             if expected_artifacts:
                 expected_paths = [a.get("expected_path", "") for a in expected_artifacts.get("artifacts", [])]
                 if expected_paths and relative_path not in expected_paths:

@@ -22,18 +22,19 @@ No Pi agent may certify DONE.
 3. `verifier-generator` proposes verifier requirements before worker execution.
 4. `guarded-worker` executes approved worker steps inside `.agentic-runs/<run_id>/`.
 5. `verifier-reviewer` reviews verifier artifacts, smell reports, strength reports, and policy risk.
-6. `goal-orchestrator` invokes the deterministic certifier:
+6. `goal-orchestrator` invokes the strict proof-artifact verifier and certifier path:
 
 ```cmd
-python .agentic-pi/validators/certify_run.py .agentic-runs/<run_id>
+python .agentic-pi/runtime/full_verify.py .agentic-runs/<run_id>
 ```
 
 7. `goal-orchestrator` reports only the status written by the certifier:
 
 ```text
-final_status.md
+final_status.json
 certification.json
 policy_decision.json
+final_status.md
 ```
 
 ## Outputs

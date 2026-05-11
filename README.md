@@ -41,10 +41,10 @@ python .agentic-pi/runtime/plan_graph_builder.py my_goal
 python .agentic-pi/runtime/guarded_worker.py --run-id my_goal
 
 # 6. Add verifier_contract.json and verifier_artifacts/*.json
-# 7. Run deterministic pipeline / certifier path
-python .agentic-pi/runtime/orchestrate_pipeline.py --run-id my_goal
+# 7. Run the strict proof-artifact verifier and certifier path
+python .agentic-pi/runtime/full_verify.py .agentic-runs/my_goal
 
-# 8. Read certifier-owned status artifacts; do not self-certify DONE
+# 8. Read certifier-owned final_status.json; do not self-certify DONE
 ```
 
 ## Architecture
@@ -96,8 +96,8 @@ Memory:
 │   ├── validate_schema.py      JSON schema validator
 │   └── validate_plan_graph.py  Plan graph structure
 ├── runtime/
-│   ├── orchestrate_pipeline.py Strict deterministic runner; fails on phase failure
-│   ├── full_verify.py          Strict proof-artifact verifier; no synthesized proof files
+│   ├── full_verify.py          Recommended strict proof-artifact verifier; no synthesized proof files
+│   ├── orchestrate_pipeline.py Lower-level deterministic phase runner; fails on phase failure
 │   ├── plan_router.py          Requires existing plans/*_plan.json
 │   ├── plan_merger.py          Writes merged_plan.json from selected_plan.json
 │   ├── check_matrix.py         Horizontal check matrix (each independent)

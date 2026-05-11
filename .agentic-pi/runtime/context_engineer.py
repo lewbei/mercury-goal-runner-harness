@@ -11,6 +11,7 @@ from typing import List, Dict, Any, Set, Tuple
 
 # Local imports – keep the original injector unchanged
 import context_injector
+import run_memory_clerk
 import smart_memory
 
 # ---------------------------------------------------------------------------
@@ -19,8 +20,10 @@ import smart_memory
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.INFO)
 
-STATE_PATH = Path(__file__).resolve().parents[2] / ".agentic-pi" / "runtime" / "context_state.json"
-USAGE_REPORT_DIR = Path(__file__).resolve().parents[2] / ".agentic-pi" / "runtime"
+ROOT = Path(__file__).resolve().parents[2]
+STATE_PATH = ROOT / ".agentic-pi" / "runtime" / "context_state.json"
+USAGE_REPORT_DIR = ROOT / ".agentic-pi" / "runtime"
+RUNS_DIR = ROOT / ".agentic-runs"
 
 # ---------------------------------------------------------------------------
 # Exceptions
@@ -33,6 +36,15 @@ class StateLoadError(ContextEngineerError):
 
 class UsageTrackingError(ContextEngineerError):
     """Raised when usage tracking fails."""
+
+
+def validate_run_id(run_id: str) -> str:
+    """Return a filesystem-safe run id or raise TypeError."""
+    if not isinstance(run_id, str):
+        raise TypeError("run_id must be a string")
+    if run_id in {"", ".", ".."} or not re.fullmatch(r"[A-Za-z0-9_.-]+", run_id):
+        raise TypeError("run_id must contain only letters, numbers, dot, underscore, or hyphen")
+    return run_id
 
 # ---------------------------------------------------------------------------
 # Helper functions – state handling
@@ -242,13 +254,13 @@ def enrich_prompt(run_id: str, packet: Dict[str, Any]) -> Dict[str, Any]:
 # Public API – usage tracking
 # ---------------------------------------------------------------------------
 def track_usage(run_id: str, agent_output_text: str) -> None:
-    """Analyse `agent_output_text` for card references and update usage metadata.
+    """Analyse `agent_output_text` for card references without mutating durable memory.
 
-    The function updates each durable card file (`usage_count` and `last_used`) and writes a per‑run
-    `usage_report.json` containing a summary of all cards referenced in this run.
+    Usage observations are written to generated reports and, when the run
+    directory exists, to run-local advisory memory. Durable cards are never
+    edited here; durable promotion remains owned by memory_write_gate.py.
     """
-    if not isinstance(run_id, str):
-        raise TypeError("run_id must be a string")
+    safe_run_id = validate_run_id(run_id)
     if not isinstance(agent_output_text, str):
         raise TypeError("agent_output_text must be a string")
 
@@ -272,33 +284,37 @@ def track_usage(run_id: str, agent_output_text: str) -> None:
         # Union of both detection methods
         referenced_ids = explicit_ids.union(snippet_matches)
 
-        used_cards: List[str] = []
+        observed_cards = sorted(cid for cid in referenced_ids if cid in card_by_id)
+        unknown_cards = sorted(referenced_ids - set(observed_cards))
         now_iso = datetime.now(timezone.utc).isoformat()
-        for cid in referenced_ids:
-            card = card_by_id.get(cid)
-            if not card:
-                continue
-            # Update usage fields – durable cards are stored as JSON files
-            card_path = memory_root / f"{cid}.json"
-            try:
-                raw = json.loads(card_path.read_text(encoding="utf-8"))
-                raw["usage_count"] = raw.get("usage_count", 0) + 1
-                raw["last_used"] = now_iso
-                card_path.write_text(json.dumps(raw, indent=2, ensure_ascii=False), encoding="utf-8")
-                used_cards.append(cid)
-            except Exception as exc:
-                LOGGER.warning("Failed to update usage for %s: %s", cid, exc)
 
-        # Write a per‑run usage report
+        # Write a per-run usage report. This is generated telemetry, not durable memory.
         report = {
-            "run_id": run_id,
+            "run_id": safe_run_id,
             "timestamp": now_iso,
-            "referenced_card_ids": list(referenced_ids),
-            "updated_card_ids": used_cards,
-            "summary": f"{len(used_cards)} cards usage‑tracked"
+            "referenced_card_ids": sorted(referenced_ids),
+            "observed_card_ids": observed_cards,
+            "unknown_card_ids": unknown_cards,
+            "updated_card_ids": [],
+            "durable_mutation_performed": False,
+            "summary": f"{len(observed_cards)} durable cards observed; no durable card was modified"
         }
-        report_path = USAGE_REPORT_DIR / f"usage_report_{run_id}.json"
+        report_path = USAGE_REPORT_DIR / f"usage_report_{safe_run_id}.json"
         report_path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+
+        run_dir = RUNS_DIR / safe_run_id
+        if run_dir.is_dir() and observed_cards:
+            run_memory_clerk.append_run_memory(
+                run_dir,
+                "memory_usage",
+                f"Observed advisory memory references: {', '.join(observed_cards)}",
+                details={
+                    "observed_card_ids": observed_cards,
+                    "unknown_card_ids": unknown_cards,
+                    "durable_mutation_performed": False,
+                    "usage_report": report_path.relative_to(ROOT).as_posix(),
+                },
+            )
         LOGGER.info("Usage report written to %s", report_path)
     except Exception as exc:
         raise UsageTrackingError(f"Failed during usage tracking: {exc}") from exc

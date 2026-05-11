@@ -68,6 +68,39 @@ def write_json(path: Path, obj):
     path.write_text(json.dumps(obj, indent=2, ensure_ascii=False), encoding="utf-8")
 
 
+def status_after_failures(status: str, provenance_mode: bool, failed: list) -> str:
+    """Return the certifier-safe status after all blocking checks are known."""
+    if failed:
+        return "NOT_DONE" if provenance_mode else "DONE_FAIL"
+    return status
+
+
+def build_final_status_data(
+    run_id: str,
+    status: str,
+    provenance_mode: bool,
+    passed: list,
+    failed: list,
+) -> dict:
+    total = len(passed) + len(failed)
+    confidence = len(passed) / total if total > 0 else 0.0
+    return {
+        "schema_version": "final_status_v1",
+        "run_id": run_id,
+        "status": status,
+        "status_source": "policy_decision.json" if provenance_mode and not failed else "certification.json",
+        "final_status_authority": "certifier_only",
+        "can_certify_done": False,
+        "policy_decision_path": "policy_decision.json" if provenance_mode else "",
+        "certification_path": "certification.json",
+        "confidence_score": round(confidence, 4),
+        "checks_passed": len(passed),
+        "checks_failed": len(failed),
+        "checks_total": total,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+    }
+
+
 def load_local_module(name: str, path: Path):
     spec = importlib.util.spec_from_file_location(name, path)
     module = importlib.util.module_from_spec(spec)
@@ -1249,6 +1282,7 @@ def main():
     status = apply_formal_verification_gate(run_dir, provenance_mode, failed, passed, status)
     status = apply_cryptographic_signature_gate(run_dir, provenance_mode, failed, passed, status)
 
+    status = status_after_failures(status, provenance_mode, failed)
     certification = {
         "run_id": run_id,
         "status": status,
@@ -1261,35 +1295,28 @@ def main():
     }
 
     cert_path = run_dir / "certification.json"
-    write_json(cert_path, certification)
-
-    total = len(passed) + len(failed)
-    confidence = len(passed) / total if total > 0 else 0.0
-    final_status_data = {
-        "schema_version": "final_status_v1",
-        "run_id": run_id,
-        "status": status,
-        "status_source": "policy_decision.json" if provenance_mode else "certification.json",
-        "final_status_authority": "certifier_only",
-        "can_certify_done": False,
-        "policy_decision_path": "policy_decision.json" if provenance_mode else "",
-        "certification_path": "certification.json",
-        "confidence_score": round(confidence, 4),
-        "checks_passed": len(passed),
-        "checks_failed": len(failed),
-        "checks_total": total,
-        "generated_at": datetime.now(timezone.utc).isoformat(),
-    }
     final_status_path = run_dir / "final_status.json"
-    write_json(final_status_path, final_status_data)
+    write_json(cert_path, certification)
+    write_json(
+        final_status_path,
+        build_final_status_data(run_id, status, provenance_mode, passed, failed),
+    )
 
     validator_path = Path(__file__).resolve().parents[1] / "validators" / "validate_final_status.py"
     validator = load_local_module("validate_final_status", validator_path)
     validator.validate(final_status_path, run_dir, passed, failed)
+
+    status = status_after_failures(status, provenance_mode, failed)
+    certification["status"] = status
     certification["passed_checks"] = passed
     certification["failed_checks"] = failed
     certification["audit_chain_valid"] = not failed
+    certification["timestamp"] = datetime.now(timezone.utc).isoformat()
     write_json(cert_path, certification)
+    write_json(
+        final_status_path,
+        build_final_status_data(run_id, status, provenance_mode, passed, failed),
+    )
 
     renderer_path = Path(__file__).resolve().parents[1] / "runtime" / "final_status_renderer.py"
     renderer = load_local_module("final_status_renderer", renderer_path)

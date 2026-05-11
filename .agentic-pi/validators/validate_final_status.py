@@ -58,13 +58,18 @@ def validate_data(final_status: dict, run_dir: Path) -> list[str]:
         errors.append("certification.json missing for final_status.json validation")
 
     policy_path = run_dir / "policy_decision.json"
+    status_source = final_status.get("status_source")
     if policy_path.is_file():
         policy = load_json(policy_path)
-        if policy.get("status") != status:
-            errors.append("policy_decision.json status does not match final_status.json status")
-        if final_status.get("status_source") != "policy_decision.json":
-            errors.append("provenance run final_status.json must cite policy_decision.json")
-    elif final_status.get("status_source") != "certification.json":
+        if status_source == "policy_decision.json":
+            if policy.get("status") != status:
+                errors.append("policy_decision.json status does not match final_status.json status")
+        elif status_source == "certification.json":
+            if status not in {"NOT_DONE", "DONE_FAIL"}:
+                errors.append("certifier-sourced final_status.json with policy_decision.json must be blocking")
+        else:
+            errors.append("provenance run final_status.json must cite policy_decision.json or certification.json")
+    elif status_source != "certification.json":
         errors.append("non-provenance run final_status.json must cite certification.json")
 
     return errors
