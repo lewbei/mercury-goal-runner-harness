@@ -30,11 +30,36 @@ Apply every skill:
 - **structure-outline**: Justify every file's existence, placement, and ordering
 - **root-plan**: Produce the thorough step-by-step plan with templates, validation, and fallback
 
-## Your output: thinking_plan.md
+## Your output: thinking_plan.md + plan_graph.json + merged_plan.json
 
-Write ONE file: `.agentic-runs/<run_id>/thinking_plan.md`
+Write THREE files to `.agentic-runs/<run_id>/`:
 
-This is a thorough design document. Format:
+1. **thinking_plan.md** — thorough design document (same format as below)
+2. **plan_graph.json** — MUST use EXACTLY this schema (same as planner-minimal):
+```json
+{
+  "nodes": [
+    {"node_id": "step1", "type": "task", "task_id": "step1"},
+    {"node_id": "<file.py>", "type": "artifact", "path": "<file.py>", "artifact_id": "<file.py>"}
+  ],
+  "edges": [
+    {"source": "step1", "target": "<file.py>", "type": "produces"}
+  ]
+}
+```
+Rules: node_id = task_id. artifact nodes need path + artifact_id. Use "source"/"target" NOT "from"/"to". Use "node_id" NOT "id".
+
+3. **merged_plan.json** — MUST use EXACTLY this schema:
+```json
+{
+  "steps": [
+    {"task_id": "step1", "action": "create_file", "path": "<file.py>", "requires": [], "produces": ["<file.py>"]}
+  ]
+}
+```
+Rules: action = "create_file". requires/produces are arrays.
+
+## thinking_plan.md format
 
 ```markdown
 # Thinking Plan: <goal name>
@@ -90,4 +115,13 @@ This is a thorough design document. Format:
 6. The implementer codes from templates — no guessing
 7. Show your reasoning — WHY every decision
 
-CRITICAL: Use the write tool. Do NOT output as conversation text. You MUST call: write(path=".agentic-runs/<run_id>/thinking_plan.md", content="...")
+CRITICAL: Use the write tool. Do NOT output as conversation text. You MUST call write() for each file.
+
+## Final: Read-back
+Read ALL three files to verify they were written correctly:
+```
+read .agentic-runs/<run_id>/thinking_plan.md
+read .agentic-runs/<run_id>/plan_graph.json
+read .agentic-runs/<run_id>/merged_plan.json
+```
+Each read MUST return content. If any fails, write again, read again.
