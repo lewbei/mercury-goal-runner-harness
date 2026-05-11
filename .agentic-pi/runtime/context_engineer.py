@@ -198,15 +198,14 @@ def enrich_prompt(run_id: str, packet: Dict[str, Any]) -> Dict[str, Any]:
 
     try:
         # 1. Load all durable cards (re‑use smart_memory loader)
-        memory_root = Path(__file__).resolve().parents[2] / "memory" / "durable"
+        memory_root = Path(__file__).resolve().parents[1] / "memory" / "durable"
         all_cards = smart_memory._load_cards(memory_root)
 
         # 2. Load freshness state – which cards have been seen before?
         state = _load_context_state()
         seen_ids = set()
         for past_run, ids in state.items():
-            if past_run != run_id:
-                seen_ids.update(ids)
+            seen_ids.update(ids)  # block ALL previously seen, including current run
 
         # 3. Filter out previously‑seen cards and mark new ones
         fresh_cards = _filter_fresh_cards(all_cards, seen_ids, run_id)
@@ -235,7 +234,7 @@ def enrich_prompt(run_id: str, packet: Dict[str, Any]) -> Dict[str, Any]:
 
         return packet
     except Exception as exc:
-        LOGGER.error("Context enrichment failed: %s", exc)
+        LOGGER.error("Context enrichment failed: %s", exc, exc_info=True)
         # Return the original packet unchanged – downstream components can still run
         return packet
 
@@ -255,7 +254,7 @@ def track_usage(run_id: str, agent_output_text: str) -> None:
 
     try:
         # Load all cards once – cheap compared to per‑card I/O
-        memory_root = Path(__file__).resolve().parents[2] / "memory" / "durable"
+        memory_root = Path(__file__).resolve().parents[1] / "memory" / "durable"
         all_cards = smart_memory._load_cards(memory_root)
         card_by_id = {c.card_id: c for c in all_cards}
 

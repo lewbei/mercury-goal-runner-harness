@@ -229,10 +229,13 @@ def _success_rate(card: Card) -> float:
         "CERTIFIED_DONE": 1.0,
         "DONE_FAIL": 0.5,
         "NOT_DONE": 0.0,
-        "UNKNOWN": 0.0
+        "UNKNOWN": 0.5
     }
     return success_map.get(card.outcome.upper(), 0.0)
 
+#@ Requires(lambda cards: isinstance(cards, list) and all(isinstance(c, Card) for c in cards), "cards must be a list of Card objects")
+#@ Requires(lambda keywords: isinstance(keywords, list) and all(isinstance(k, str) for k in keywords), "keywords must be a list of strings")
+#@ Ensures(lambda result: isinstance(result, list) and all(isinstance(sc, ScoredCard) for sc in result), "result must be a list of ScoredCard objects")
 
 def score_cards(cards: List[Card], keywords: List[str]) -> List[ScoredCard]:
     """Assign a composite score to each card.
@@ -244,7 +247,7 @@ def score_cards(cards: List[Card], keywords: List[str]) -> List[ScoredCard]:
     max_age = max(ages) if ages else 1.0
     scored: List[ScoredCard] = []
     for c in cards:
-        recency = 1 - (c.age_seconds() / max_age) if max_age > 0 else 0.0
+        recency = 0.5 ** (c.age_seconds() / 604800.0)
         relevance = _relevance_score(c, keywords)
         success = _success_rate(c)
         score = recency * relevance * success
