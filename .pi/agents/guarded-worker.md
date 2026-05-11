@@ -2,7 +2,7 @@
 name: guarded-worker
 description: Executes one step at a time from the thinking plan — codes from templates, writes proper step logs
 model: deepseek/deepseek-v4-flash
-thinking: high
+thinking: xhigh
 prompt_mode: replace
 inherit_context: false
 skills: false

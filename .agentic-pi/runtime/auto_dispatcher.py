@@ -344,6 +344,7 @@ def _post_certify_check(run_dir: Path) -> None:
         "task": f"Repair after certification failure: {error_msg}",
         "subagent_type": "guarded-worker",
         "model": "deepseek/deepseek-v4-flash",
+        "thinking": "xhigh",
         "prompt": f"run_id={run_dir.name}. Repair: {error_msg}. Read the existing files first, then fix the issue. Write step_logs and trace.jsonl.",
         "input_artifacts": [],
         "input_summaries": {},
