@@ -13,6 +13,14 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(mess
 # Constants
 _MEMORY_ROOT = Path(__file__).resolve().parents[1] / "memory" / "durable"
 _MAX_CARDS = 3
+# Simple static stopword list -- extend as needed
+_STOPWORDS = {
+    "a", "an", "the", "and", "or", "but", "if", "else", "for", "while",
+    "write", "function", "to", "of", "in", "on", "as", "is", "are", "be", "by",
+    "with", "from", "that", "this", "it", "its", "at", "not", "do", "does", "did",
+    "has", "have", "had", "will", "shall", "should", "could", "would", "can", "may",
+    "might", "must"
+}
 
 
 class ContextInjectorError(Exception):
@@ -27,8 +35,17 @@ class MemoryCardReadError(ContextInjectorError):
     """Raised when a memory card cannot be read or parsed."""
 
 
+#@ Requires(lambda run_id: isinstance(run_id, str), "run_id must be a string")
+#@ Ensures(lambda result: isinstance(result, dict), "Result must be a dict")
 def _load_goal_contract(run_id: str) -> Dict[str, Any]:
-    """Load goal contract JSON for the given run."""
+    """Load goal contract JSON for the given run.
+
+    Args:
+        run_id: Identifier of the run whose contract we need.
+
+    Returns:
+        Parsed contract dictionary.
+    """
     contract_path = Path(__file__).resolve().parents[2] / ".agentic-runs" / run_id / "goal_contract.json"
     if not contract_path.is_file():
         raise GoalContractError(f"Goal contract not found at {contract_path}")
@@ -38,63 +55,89 @@ def _load_goal_contract(run_id: str) -> Dict[str, Any]:
         raise GoalContractError(f"Failed to parse goal contract: {exc}") from exc
 
 
+#@ Requires(lambda: True, "No preconditions")
+#@ Ensures(lambda cards: isinstance(cards, list), "Result must be a list of cards")
 def _collect_memory_cards() -> List[Dict[str, Any]]:
-    """Recursively load all JSON memory cards under the durable memory root."""
-    cards = []
+    """Recursively load all JSON memory cards under the durable memory root.
+
+    The function now accepts both legacy (``content``, ``stored_at``) and newer (``learnings``, ``timestamp``)
+    field names.
+    """
+    cards: List[Dict[str, Any]] = []
     if not _MEMORY_ROOT.is_dir():
         logging.warning("Memory root not found: %s", _MEMORY_ROOT)
         return cards
     for json_path in _MEMORY_ROOT.rglob("*.json"):
         try:
             card = json.loads(json_path.read_text(encoding="utf-8"))
-            # Ensure required fields exist
-            for field in ("card_id", "content", "stored_at"):
-                if field not in card:
-                    raise MemoryCardReadError(f"Missing field {field} in {json_path}")
+            # Retrieve content -- try both possible keys
+            content = card.get("content") or card.get("learnings")
+            if content is None:
+                raise MemoryCardReadError(f"Missing content field in {json_path}")
+            # Retrieve timestamp -- try both possible keys
+            stored_at = card.get("stored_at") or card.get("timestamp")
+            if stored_at is None:
+                raise MemoryCardReadError(f"Missing timestamp field in {json_path}")
+            # Normalise fields for downstream code
+            card["content"] = content
+            card["stored_at"] = stored_at
             cards.append(card)
         except Exception as exc:
             logging.warning("Skipping unreadable card %s: %s", json_path, exc)
     return cards
 
 
+#@ Requires(lambda goal_contract: isinstance(goal_contract, dict), "goal_contract must be a dict")
+#@ Ensures(lambda result: isinstance(result, list), "Result must be a list of keywords")
 def _extract_keywords(goal_contract: Dict[str, Any]) -> List[str]:
-    """Derive a list of keywords from the goal contract for relevance matching."""
+    """Derive a list of keywords from the goal contract for relevance matching.
+
+    Stopwords defined in ``_STOPWORDS`` are filtered out.
+    """
     keywords = set()
     # raw_user_prompt may contain many words; split and lower
     raw = goal_contract.get("raw_user_prompt", "")
     for token in raw.split():
         token = token.strip(".,!?:;\"'()[]{}<>-_\n\t")
-        if token:
-            keywords.add(token.lower())
+        low = token.lower()
+        if low and low not in _STOPWORDS:
+            keywords.add(low)
     # final_outputs contains list of file/artifact names
     outputs = goal_contract.get("final_outputs", [])
     if isinstance(outputs, list):
         for item in outputs:
             for token in str(item).split():
                 token = token.strip(".,!?:;\"'()[]{}<>-_\n\t")
-                if token:
-                    keywords.add(token.lower())
+                low = token.lower()
+                if low and low not in _STOPWORDS:
+                    keywords.add(low)
     # done_criteria contains list of goal criteria phrases
     criteria = goal_contract.get("done_criteria", [])
     if isinstance(criteria, list):
         for item in criteria:
             for token in str(item).split():
                 token = token.strip(".,!?:;\"'()[]{}<>-_\n\t")
-                if token:
-                    keywords.add(token.lower())
+                low = token.lower()
+                if low and low not in _STOPWORDS:
+                    keywords.add(low)
     return list(keywords)
 
 
+#@ Requires(lambda card: isinstance(card, dict), "card must be a dict")
+#@ Requires(lambda keywords: isinstance(keywords, list), "keywords must be a list")
+#@ Ensures(lambda result: isinstance(result, tuple) and len(result) == 2, "Result must be a (relevance, recency) tuple")
 def _score_card(card: Dict[str, Any], keywords: List[str]) -> Tuple[int, int]:
     """Score a memory card by keyword relevance and recency.
 
-    Returns a tuple (relevance_score, recency_score) where higher relevance
-    is better and higher recency (lower seconds) is better.
+    A card is considered relevant only when it contains **two or more** keyword matches.
+    Returns a tuple (relevance_score, recency_score) where higher relevance is better
+    and higher recency (lower seconds) is better.
     """
     content = card.get("content", "")
-    relevance = 0
-    for kw in keywords:
-        relevance += content.lower().count(kw)
+    # Count keyword occurrences
+    matches = sum(content.lower().count(kw) for kw in keywords)
+    # Enforce minimum of 2 matches
+    relevance = matches if matches >= 2 else 0
 
     # Calculate recency in seconds from stored_at timestamp
     stored_at_str = card.get("stored_at", "")
@@ -110,6 +153,8 @@ def _score_card(card: Dict[str, Any], keywords: List[str]) -> Tuple[int, int]:
     return (relevance, -recency)  # negative recency so newer cards sort higher
 
 
+#@ Requires(lambda selected_cards: isinstance(selected_cards, list), "selected_cards must be a list")
+#@ Ensures(lambda result: isinstance(result, str), "Result must be a string")
 def _format_context_block(selected_cards: List[Dict[str, Any]]) -> str:
     """Format selected memory cards into a CONTEXT block string.
 
@@ -132,9 +177,12 @@ def _format_context_block(selected_cards: List[Dict[str, Any]]) -> str:
     return "\n".join(lines)
 
 
+#@ Requires(lambda packet: isinstance(packet, dict), "packet must be a dict")
+#@ Requires(lambda run_id: isinstance(run_id, str), "run_id must be a string")
+#@ Ensures(lambda result: isinstance(result, dict), "Result must be a dict (the enriched packet)")
 def enrich_prompt_with_context(packet: dict, run_id: str) -> dict:
-    """Load goal contract, scan durable memory cards, rank by relevance &
-    recency, and prepend a CONTEXT section to a work packet's prompt.
+    """Load goal contract, scan durable memory cards, rank by relevance & recency,
+    and prepend a CONTEXT section to a work packet's prompt.
 
     Args:
         packet: The work packet dictionary. Must contain a "prompt" key.
@@ -175,8 +223,8 @@ def enrich_prompt_with_context(packet: dict, run_id: str) -> dict:
         # Sort by relevance desc, then recency desc (newer first)
         scored.sort(key=lambda x: (x[0], x[1]), reverse=True)
 
-        # 6. Pick top cards
-        top_cards = [item[2] for item in scored[:_MAX_CARDS]]
+        # 6. Pick top cards (only those with relevance > 0 will survive due to scoring rule)
+        top_cards = [item[2] for item in scored[:_MAX_CARDS] if item[0] > 0]
 
         # 7. Build context block
         context_block = _format_context_block(top_cards)
@@ -206,6 +254,8 @@ def enrich_prompt_with_context(packet: dict, run_id: str) -> dict:
         return packet
 
 
+#@ Requires(lambda: True, "No preconditions")
+#@ Ensures(lambda: True, "No return value")
 def _cli_entry_point() -> None:
     """CLI entry point for manual testing.
 
@@ -230,7 +280,15 @@ def _cli_entry_point() -> None:
         sys.exit(1)
 
     result = enrich_prompt_with_context(packet, run_id)
-    print(json.dumps(result, indent=2, ensure_ascii=False))
+
+    # Write the enriched packet to the runtime directory using a deterministic name
+    output_path = Path(__file__).resolve().parent / f"enriched_packet_{run_id}.json"
+    try:
+        output_path.write_text(json.dumps(result, indent=2, ensure_ascii=False), encoding="utf-8")
+        print(f"Enriched packet written to {output_path}")
+    except Exception as exc:
+        print(f"Failed to write enriched packet: {exc}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
