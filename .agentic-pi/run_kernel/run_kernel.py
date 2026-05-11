@@ -250,6 +250,29 @@ def _gate_plan_completeness(run_dir: Path) -> None:
                 f"PLANNING blocked: plan incomplete. Gaps: {'; '.join(gaps[:5])}"
             )
 
+    # Schema drift check: validate plan_graph.json format
+    plan_graph_path = run_dir / "plan_graph.json"
+    if plan_graph_path.is_file():
+        pg = _load_json(plan_graph_path)
+        nodes = pg.get("nodes", [])
+        edges = pg.get("edges", [])
+        # Nodes must have node_id + type fields
+        for n in nodes:
+            if isinstance(n, dict):
+                if "node_id" not in n and "id" not in n:
+                    raise RuntimeError(
+                        f"PLANNING blocked: plan_graph node missing node_id/id: {n}"
+                    )
+        # Edges must have source + target (or from + to)
+        for e in edges:
+            if isinstance(e, dict):
+                has_v1 = "source" in e and "target" in e
+                has_v2 = "from" in e and "to" in e
+                if not has_v1 and not has_v2:
+                    raise RuntimeError(
+                        f"PLANNING blocked: plan_graph edge missing source/target: {e}"
+                    )
+
 
 def _gate_vertical_slice_selected(run_dir: Path) -> None:
     """Run Vertical Slice Selector. Blocks if no slice was selected."""
