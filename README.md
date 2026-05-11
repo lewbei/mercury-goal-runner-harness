@@ -31,6 +31,10 @@ This is a prepared-run harness. The runtime is strict: it does not create missin
 python .agentic-pi/runtime/init_run.py --run-id my_goal
 
 # 2. Create goal_contract.json and expected_artifacts.json under .agentic-runs/my_goal/
+#    If prompt-compiler creates goal_contract.json, also record prompt provenance:
+python .agentic-pi/runtime/prompt_provenance.py .agentic-runs/my_goal
+python .agentic-pi/validators/validate_prompt_provenance.py .agentic-runs/my_goal
+
 # 3. Create planner-owned plan JSON at .agentic-runs/my_goal/plans/<planner>_plan.json
 # 4. Select and merge the plan
 python .agentic-pi/runtime/plan_selector.py --run-id my_goal
@@ -66,6 +70,11 @@ Gates:
   Verifier Evidence  → P2 independent attestation
   Policy Engine      → decides between PROVISIONAL/CERTIFIED/NOT_DONE
 
+Prompt provenance:
+  .agentic-runs/<run_id>/prompt_provenance/prompt_compiler.prompt.json
+  Records raw_user_prompt -> execution_prompt hashes and prompt-compiler file hashes
+  Provenance only; cannot certify DONE or replace verifier evidence
+
 Memory:
   Project-local (.agentic-pi/memory/durable/)
   Advisory only; memory cannot certify DONE
@@ -79,6 +88,7 @@ Memory:
 
 | Agent | Model | Role |
 |-------|-------|------|
+| `prompt-compiler` | mercury-2 | Converts raw prompt into measurable goal contract + execution prompt |
 | `planner-minimal` | merc-2 | Q→R→S→P design with code templates |
 | `planner-robust` | merc-2 | Thorough plan with validation strategy |
 | `guarded-worker` | ds-flash | Codes from template, writes step logs |
@@ -92,12 +102,16 @@ Memory:
 ```
 .agentic-pi/
 ├── validators/
-│   ├── certify_run.py          Deterministic certifier
-│   ├── validate_schema.py      JSON schema validator
-│   └── validate_plan_graph.py  Plan graph structure
+│   ├── certify_run.py                 Deterministic certifier
+│   ├── validate_schema.py             JSON schema validator
+│   ├── validate_plan_graph.py         Plan graph structure
+│   ├── validate_prompt_eval_case.py   Prompt compiler seed eval fixtures
+│   └── validate_prompt_provenance.py  Prompt provenance authority boundary
 ├── runtime/
-│   ├── full_verify.py          Recommended strict proof-artifact verifier; no synthesized proof files
-│   ├── orchestrate_pipeline.py Lower-level deterministic phase runner; fails on phase failure
+│   ├── full_verify.py                 Recommended strict proof-artifact verifier; no synthesized proof files
+│   ├── prompt_provenance.py           Records raw prompt -> execution_prompt provenance
+│   ├── run_prompt_compiler_eval.py    Scores prompt-compiler seed eval cases
+│   ├── orchestrate_pipeline.py        Lower-level deterministic phase runner; fails on phase failure
 │   ├── plan_router.py          Requires existing plans/*_plan.json
 │   ├── plan_merger.py          Writes merged_plan.json from selected_plan.json
 │   ├── check_matrix.py         Horizontal check matrix (each independent)

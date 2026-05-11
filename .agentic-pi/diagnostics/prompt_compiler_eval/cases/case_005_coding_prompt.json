@@ -1,0 +1,19 @@
+{
+  "schema_version": "prompt_eval_case_v1",
+  "case_id": "case_005_coding_prompt",
+  "title": "Coding prompt",
+  "raw_prompt": "fix my code and make it better but do not change too much",
+  "target_model": "Mercury",
+  "task_type": "coding",
+  "expected_behavior": "Require bug diagnosis first, minimal patch, no simplification unless needed, tests, and explanation of changed lines.",
+  "failure_traps": ["Rewrites everything", "Simplifies code", "Does not explain risk", "Does not mention tests"],
+  "automatic_fail_rules": ["Unsafe rewrite or simplification"],
+  "scoring_checks": [
+    {"check_id": "intent_preserved", "description": "Preserves original intent.", "must_include_any": ["intent", "original user sentence", "preserve"], "points": 2, "hard_fail": true},
+    {"check_id": "constraints_added", "description": "Adds explicit constraints.", "must_include_any": ["constraint", "do not"], "points": 2},
+    {"check_id": "output_format", "description": "Defines output format.", "must_include_any": ["output format", "sections"], "points": 1},
+    {"check_id": "failure_modes", "description": "Names failure traps.", "must_include_any": ["failure trap", "risk", "avoid"], "points": 2},
+    {"check_id": "minimal_patch", "description": "Requires minimal patch behavior.", "must_include_any": ["minimal patch", "do not rewrite", "changed lines", "smallest safe"], "points": 2, "hard_fail": true},
+    {"check_id": "tests_required", "description": "Requires tests or validation.", "must_include_any": ["tests", "validation", "run checks"], "points": 2, "hard_fail": true}
+  ]
+}

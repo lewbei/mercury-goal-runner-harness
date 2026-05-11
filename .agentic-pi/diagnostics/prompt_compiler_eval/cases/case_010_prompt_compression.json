@@ -1,0 +1,19 @@
+{
+  "schema_version": "prompt_eval_case_v1",
+  "case_id": "case_010_prompt_compression",
+  "title": "Prompt compression",
+  "raw_prompt": "You are the best expert and must never fail. Be super detailed and concise. Follow all possible instructions.",
+  "target_model": "Mercury",
+  "task_type": "prompt compression",
+  "expected_behavior": "Remove useless roleplay, impossible claims, and contradictions while keeping accuracy and verification.",
+  "failure_traps": ["Keeps hype wording", "Adds more fluff", "Does not define task"],
+  "automatic_fail_rules": ["Keeps impossible claims as requirements"],
+  "scoring_checks": [
+    {"check_id": "intent_preserved", "description": "Preserves original intent.", "must_include_any": ["intent", "original user sentence", "preserve"], "points": 2, "hard_fail": true},
+    {"check_id": "constraints_added", "description": "Adds explicit constraints.", "must_include_any": ["constraint", "do not"], "points": 2},
+    {"check_id": "output_format", "description": "Defines output format.", "must_include_any": ["output format", "sections"], "points": 1},
+    {"check_id": "failure_modes", "description": "Names failure traps.", "must_include_any": ["failure trap", "avoid"], "points": 2},
+    {"check_id": "compression", "description": "Removes hype and impossible claims.", "must_include_any": ["compact", "hype", "impossible", "realistic"], "points": 3, "hard_fail": true},
+    {"check_id": "task_defined", "description": "Defines concrete task despite compression.", "must_include_any": ["goal", "task type", "success criteria"], "points": 2}
+  ]
+}

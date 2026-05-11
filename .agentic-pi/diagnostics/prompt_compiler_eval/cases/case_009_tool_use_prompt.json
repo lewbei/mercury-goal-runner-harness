@@ -1,0 +1,19 @@
+{
+  "schema_version": "prompt_eval_case_v1",
+  "case_id": "case_009_tool_use_prompt",
+  "title": "Tool-use prompt",
+  "raw_prompt": "use tools and solve it",
+  "target_model": "Mercury",
+  "task_type": "agent/tool use",
+  "expected_behavior": "Define when tools are allowed, how to record evidence, when to stop, and how to handle tool failure.",
+  "failure_traps": ["Tool spam", "No tool-use policy", "No evidence ledger", "No fallback rule"],
+  "automatic_fail_rules": ["No tool-use policy"],
+  "scoring_checks": [
+    {"check_id": "intent_preserved", "description": "Preserves original intent.", "must_include_any": ["intent", "original user sentence", "preserve"], "points": 2, "hard_fail": true},
+    {"check_id": "constraints_added", "description": "Adds explicit constraints.", "must_include_any": ["constraint", "do not"], "points": 2},
+    {"check_id": "output_format", "description": "Defines output format.", "must_include_any": ["output format", "sections"], "points": 1},
+    {"check_id": "failure_modes", "description": "Names failure traps.", "must_include_any": ["failure trap", "tool failure", "avoid"], "points": 2},
+    {"check_id": "tool_policy", "description": "Defines tool-use policy.", "must_include_any": ["tool policy", "tools are allowed", "when tools", "tool failure"], "points": 3, "hard_fail": true},
+    {"check_id": "evidence_ledger", "description": "Requires evidence ledger or tool log.", "must_include_any": ["evidence ledger", "record evidence", "tool log", "logs"], "points": 2}
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "schema_version": "prompt_eval_case_v1",
+  "case_id": "case_002_contradiction",
+  "title": "Contradictory instruction cleanup",
+  "raw_prompt": "Be very short but explain everything in full detail. Do not ask questions, but ask me before every step. Finish fast but verify everything deeply.",
+  "target_model": "Mercury",
+  "task_type": "instruction cleanup",
+  "expected_behavior": "Detect contradictions and repair them with explicit priority rules.",
+  "failure_traps": ["Keeps all contradictions", "Pretends there is no conflict", "Removes important verification"],
+  "automatic_fail_rules": ["Contradiction not detected"],
+  "scoring_checks": [
+    {"check_id": "intent_preserved", "description": "Preserves original intent.", "must_include_any": ["intent", "original user sentence", "preserve"], "points": 2, "hard_fail": true},
+    {"check_id": "constraints_added", "description": "Adds explicit constraints.", "must_include_any": ["constraint", "priority rule", "do not"], "points": 2},
+    {"check_id": "output_format", "description": "Defines output format.", "must_include_any": ["output format", "sections"], "points": 1},
+    {"check_id": "failure_modes", "description": "Names failure traps.", "must_include_any": ["failure trap", "avoid"], "points": 2},
+    {"check_id": "verification", "description": "Requires verification.", "must_include_any": ["verification", "verify", "evidence"], "points": 2, "hard_fail": true},
+    {"check_id": "contradiction_handled", "description": "Detects conflicting instructions.", "must_include_any": ["conflict", "contradiction", "priority rules", "priority rule"], "points": 2, "hard_fail": true}
+  ]
+}

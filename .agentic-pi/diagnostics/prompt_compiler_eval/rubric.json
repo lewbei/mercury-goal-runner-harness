@@ -1,0 +1,20 @@
+{
+  "schema_version": "prompt_eval_rubric_v1",
+  "score_scale": "0-10",
+  "passing_threshold": 7,
+  "dimensions": [
+    {"name": "intent_preserved", "points": 2},
+    {"name": "shorter_or_more_efficient", "points": 1},
+    {"name": "missing_constraints_added", "points": 2},
+    {"name": "output_format_clear", "points": 1},
+    {"name": "failure_modes_handled", "points": 2},
+    {"name": "verification_done_criteria_included", "points": 2}
+  ],
+  "automatic_fail_rules": [
+    "false DONE risk is not handled",
+    "user intent is changed",
+    "user voice is erased when voice preservation is requested",
+    "candidate invents hidden context as fact"
+  ],
+  "claim_boundary": "Seed eval rubric only; not proof of arbitrary prompt coverage or general prompt-improver superiority."
+}

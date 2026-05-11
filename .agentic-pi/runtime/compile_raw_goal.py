@@ -6,6 +6,7 @@ small explicit harness goals so the raw-goal path can be tested without letting
 Pi or Mercury certify DONE.
 """
 import argparse
+import importlib.util
 import json
 import re
 import sys
@@ -39,6 +40,19 @@ def append_trace(run_dir: Path, event: str, data: dict) -> None:
     }
     with trace_path.open("a", encoding="utf-8") as f:
         f.write(json.dumps(payload, ensure_ascii=False) + "\n")
+
+
+def record_prompt_provenance(run_dir: Path) -> None:
+    provenance_path = ROOT / ".agentic-pi" / "runtime" / "prompt_provenance.py"
+    spec = importlib.util.spec_from_file_location("prompt_provenance", provenance_path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    module.record_prompt_provenance(
+        run_dir,
+        source_agent="compile_raw_goal.py",
+        source_model="deterministic-local-fixture",
+        source_phase="raw_goal_compilation",
+    )
 
 
 def goal_contract(run_id: str, raw_goal: str, complexity_level: str = "SIMPLE") -> dict:
@@ -131,6 +145,7 @@ def compile_raw_goal(run_id: str, raw_goal: str, mode: str) -> Path:
     )
     complexity_level = "HARD" if mode == "planning_p2" else "SIMPLE"
     write_json(run_dir / "goal_contract.json", goal_contract(run_id, raw_goal, complexity_level))
+    record_prompt_provenance(run_dir)
 
     if mode in {"p2", "missing_verifier", "planning_p2"}:
         write_json(run_dir / "verifier_contract.json", verifier_contract(run_id, raw_goal))

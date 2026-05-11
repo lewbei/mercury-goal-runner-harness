@@ -1,0 +1,19 @@
+{
+  "schema_version": "prompt_eval_case_v1",
+  "case_id": "case_006_planning_prompt",
+  "title": "Planning prompt",
+  "raw_prompt": "give me full plan from end to end and tell me if it is good",
+  "target_model": "Mercury",
+  "task_type": "planning",
+  "expected_behavior": "Force assumption checking, missing component detection, milestones, risks, dependencies, and final corrected plan.",
+  "failure_traps": ["Just agrees", "Gives motivational plan", "No risk analysis", "No dependency check"],
+  "automatic_fail_rules": ["No skeptical risk review"],
+  "scoring_checks": [
+    {"check_id": "intent_preserved", "description": "Preserves original intent.", "must_include_any": ["intent", "original user sentence", "preserve"], "points": 2, "hard_fail": true},
+    {"check_id": "constraints_added", "description": "Adds explicit constraints.", "must_include_any": ["constraint", "do not", "priority"], "points": 2},
+    {"check_id": "output_format", "description": "Defines output format.", "must_include_any": ["output format", "sections"], "points": 1},
+    {"check_id": "failure_modes", "description": "Names failure traps.", "must_include_any": ["failure trap", "avoid"], "points": 2},
+    {"check_id": "skeptical_review", "description": "Requires skepticism and risk analysis.", "must_include_any": ["risk", "assumption", "dependency", "skeptical"], "points": 2, "hard_fail": true},
+    {"check_id": "milestones", "description": "Breaks plan into milestones.", "must_include_any": ["milestone", "phase", "dependency"], "points": 1}
+  ]
+}

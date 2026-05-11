@@ -1,0 +1,19 @@
+{
+  "schema_version": "prompt_eval_case_v1",
+  "case_id": "case_004_research_prompt",
+  "title": "Research prompt",
+  "raw_prompt": "please search latest paper and tell me what is best",
+  "target_model": "Mercury",
+  "task_type": "research",
+  "expected_behavior": "Define search scope, recency, inclusion criteria, evidence table, comparison method, and uncertainty.",
+  "failure_traps": ["Gives generic answer", "No source quality rule", "No date rule", "No comparison criteria"],
+  "automatic_fail_rules": ["No source/evidence requirement"],
+  "scoring_checks": [
+    {"check_id": "intent_preserved", "description": "Preserves original intent.", "must_include_any": ["intent", "original user sentence", "preserve"], "points": 2, "hard_fail": true},
+    {"check_id": "constraints_added", "description": "Adds explicit constraints.", "must_include_any": ["constraint", "scope"], "points": 2},
+    {"check_id": "output_format", "description": "Defines output format.", "must_include_any": ["output format", "table", "sections"], "points": 1},
+    {"check_id": "failure_modes", "description": "Names failure traps.", "must_include_any": ["failure trap", "avoid"], "points": 2},
+    {"check_id": "research_scope", "description": "Defines scope and recency.", "must_include_any": ["search scope", "recency", "date", "latest"], "points": 2},
+    {"check_id": "source_quality", "description": "Requires source quality and uncertainty handling.", "must_include_any": ["source quality", "citations", "uncertainty", "evidence table"], "points": 2, "hard_fail": true}
+  ]
+}

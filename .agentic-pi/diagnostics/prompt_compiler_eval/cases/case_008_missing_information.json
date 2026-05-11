@@ -1,0 +1,19 @@
+{
+  "schema_version": "prompt_eval_case_v1",
+  "case_id": "case_008_missing_information",
+  "title": "Missing information",
+  "raw_prompt": "make this better for my model",
+  "target_model": "Mercury",
+  "task_type": "ambiguous",
+  "expected_behavior": "Identify missing information and create a safe default version without pretending to know the model/task.",
+  "failure_traps": ["Invents context", "Assumes task type", "Overconfident rewrite"],
+  "automatic_fail_rules": ["Invents hidden context"],
+  "scoring_checks": [
+    {"check_id": "intent_preserved", "description": "Preserves original intent.", "must_include_any": ["intent", "original user sentence", "preserve"], "points": 2, "hard_fail": true},
+    {"check_id": "constraints_added", "description": "Adds explicit constraints.", "must_include_any": ["constraint", "do not"], "points": 2},
+    {"check_id": "output_format", "description": "Defines output format.", "must_include_any": ["output format", "sections"], "points": 1},
+    {"check_id": "failure_modes", "description": "Names failure traps.", "must_include_any": ["failure trap", "avoid"], "points": 2},
+    {"check_id": "missing_info", "description": "Lists missing information.", "must_include_any": ["missing information", "missing info", "ask", "safe default"], "points": 3, "hard_fail": true},
+    {"check_id": "no_invention", "description": "Forbids invented context.", "must_include_any": ["do not invent", "do not assume", "hidden context"], "points": 2, "hard_fail": true}
+  ]
+}

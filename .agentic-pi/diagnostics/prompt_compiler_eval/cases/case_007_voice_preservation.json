@@ -1,0 +1,19 @@
+{
+  "schema_version": "prompt_eval_case_v1",
+  "case_id": "case_007_voice_preservation",
+  "title": "User voice preservation",
+  "raw_prompt": "help me check this idea, do not agree with me, be honest, say wrong if wrong, keep my sentence but repair weak part",
+  "target_model": "Mercury",
+  "task_type": "review",
+  "expected_behavior": "Preserve skeptical review style and include classification: Correct, Partially correct, Weak, Wrong, Not enough evidence.",
+  "failure_traps": ["Removes user review style", "Becomes too polite", "Does not classify", "Rewrites user voice away"],
+  "automatic_fail_rules": ["User voice erased"],
+  "scoring_checks": [
+    {"check_id": "intent_preserved", "description": "Preserves original intent.", "must_include_any": ["intent", "original user sentence", "preserve"], "points": 2, "hard_fail": true},
+    {"check_id": "constraints_added", "description": "Adds explicit constraints.", "must_include_any": ["constraint", "do not"], "points": 2},
+    {"check_id": "output_format", "description": "Defines output format.", "must_include_any": ["output format", "sections"], "points": 1},
+    {"check_id": "failure_modes", "description": "Names failure traps.", "must_include_any": ["failure trap", "avoid"], "points": 2},
+    {"check_id": "voice_preserved", "description": "Preserves user voice and skeptical style.", "must_include_any": ["user voice", "voice", "skeptical", "honest"], "points": 3, "hard_fail": true},
+    {"check_id": "classification_required", "description": "Requires classification labels.", "must_include_any": ["correct", "partially correct", "weak", "wrong", "not enough evidence"], "points": 2, "hard_fail": true}
+  ]
+}

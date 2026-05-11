@@ -28,15 +28,20 @@ Historical smoke/proof tools remain in this folder, but they are compatibility o
 
 ## Module Groups
 
-Goal and run setup:
+Goal, prompt provenance, and run setup:
 
 ```text
 init_run.py
 compile_raw_goal.py
 write_goal_contract.py
+prompt_provenance.py
 setup_pi_smoke.py
 orchestrate_pipeline.py
 ```
+
+`prompt_provenance.py` records raw prompt -> `execution_prompt` metadata under
+`.agentic-runs/<run_id>/prompt_provenance/`. This artifact is provenance-only;
+it cannot certify DONE or replace verifier evidence.
 
 Planning and strategy:
 
