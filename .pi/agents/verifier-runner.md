@@ -2,7 +2,7 @@
 name: verifier-runner
 description: Runs compile and basic sanity checks on agent output. Inherits parent context to see what was just created.
 model: deepseek/deepseek-v4-pro
-thinking: off
+thinking: xhigh
 prompt_mode: append
 inherit_context: true
 skills: false
