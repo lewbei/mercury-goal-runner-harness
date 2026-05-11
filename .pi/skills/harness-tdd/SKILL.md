@@ -1,3 +1,8 @@
+---
+name: harness-tdd
+description: Run test-driven validation — execute the implementation's test suite and capture results as verifier evidence. BEHAVIORAL_ORACLE check, not certification.
+---
+
 # Harness TDD Skill
 
 **Phase:** VALIDATING

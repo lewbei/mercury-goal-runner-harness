@@ -1,3 +1,8 @@
+---
+name: root-plan
+description: Produce a design document showing reasoning AND containing code templates the implementer will use. This is the source of truth for the implementation phase.
+---
+
 # Root Plan Skill
 
 **Phase:** PLANNING

@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
-"""Full verification pipeline — runs ALL deterministic framework layers.
+"""Strict verification pipeline — runs deterministic framework layers.
 
 Usage:
   python .agentic-pi/runtime/full_verify.py .agentic-runs/<run_id>
+
+This strict path never synthesizes missing proof artifacts. Plan artifacts, expected_artifacts.json, verifier_contract.json, and
+verifier_artifacts/ must already exist before this runner starts. Missing
+prerequisites produce NOT_DONE instead of fabricated contracts or generated
+compatibility plans.
 """
 
 import json
@@ -44,33 +49,39 @@ def verify(run_dir: Path) -> str:
     print(f"{'='*60}")
 
     # Layer 0: Plan artifacts + verifier contract
-    print("\n[Layer 0] Plan artifacts")
-    _ensure_plan_artifacts(run_dir, run_id)
-    _ensure_verifier_contract(run_dir, run_id)
+    print("\n[Layer 0] Required proof artifacts")
+    if not _require_preexisting_proof_artifacts(run_dir):
+        return "NOT_DONE"
+
+    deterministic_layers_ok = True
 
     # Layer 1: Artifact routing
     print("\n[Layer 1] Artifact routing")
-    run_tool(f"{RUNTIME}/artifact_linker.py", [run_id], "artifact_linker")
-    run_tool(f"{RUNTIME}/task_graph_builder.py", [run_id], "task_graph_builder")
+    deterministic_layers_ok &= run_tool(f"{RUNTIME}/artifact_linker.py", [run_id], "artifact_linker")
+    deterministic_layers_ok &= run_tool(f"{RUNTIME}/task_graph_builder.py", [run_id], "task_graph_builder")
 
     # Layer 2: Verifier provenance
     print("\n[Layer 2] Verifier provenance")
-    run_tool(f"{VALIDATORS}/smell_scanner.py", [str(run_dir)], "smell_scanner")
-    run_tool(f"{VALIDATORS}/strength_scorer.py", [str(run_dir)], "strength_scorer")
+    deterministic_layers_ok &= run_tool(f"{VALIDATORS}/smell_scanner.py", [str(run_dir)], "smell_scanner")
+    deterministic_layers_ok &= run_tool(f"{VALIDATORS}/strength_scorer.py", [str(run_dir)], "strength_scorer")
 
     # Layer 3: Policy engine
     print("\n[Layer 3] Policy engine")
-    run_tool(f"{RUNTIME}/policy_engine.py", [str(run_dir)], "policy_engine")
+    deterministic_layers_ok &= run_tool(f"{RUNTIME}/policy_engine.py", [str(run_dir)], "policy_engine")
 
     # Layer 4: Evidence indexing
     print("\n[Layer 4] Evidence indexing")
-    run_tool(f"{RUNTIME}/evidence_freezer.py", [str(run_dir)], "evidence_freezer")
-    run_tool(f"{RUNTIME}/evidence_indexer.py", [str(run_dir)], "evidence_indexer")
+    deterministic_layers_ok &= run_tool(f"{RUNTIME}/evidence_freezer.py", [str(run_dir)], "evidence_freezer")
+    deterministic_layers_ok &= run_tool(f"{RUNTIME}/evidence_indexer.py", [str(run_dir)], "evidence_indexer")
 
     # Layer 5: Replay
     print("\n[Layer 5] Replay certification")
-    run_tool(f"{RUNTIME}/replay_run.py", [str(run_dir)], "replay")
+    deterministic_layers_ok &= run_tool(f"{RUNTIME}/replay_run.py", [str(run_dir)], "replay")
     _ensure_replay_verdict(run_dir)
+
+    if not deterministic_layers_ok:
+        print("  STRICT_LAYER_FAILED: deterministic verification layer failed before certifier")
+        return "DONE_FAIL"
 
     # Layer 6: Certifier
     print("\n[Layer 6] Certifier")
@@ -81,14 +92,10 @@ def verify(run_dir: Path) -> str:
     output = result.stdout or ""
     print(output[:300] if len(output) > 300 else output)
 
-    # Layer 7: Memory (experience → local → MemPalace → reflect → curate → gate)
+    # Layer 7: Memory (advisory only; never certifies)
     print("\n[Layer 7] Memory consolidation")
-    run_tool(f"{RUNTIME}/experience_extractor.py", [str(run_dir)], "experience_extractor")
-    _write_local_memory(run_dir, run_id)
-    _try_mempalace_store(run_dir, run_id)
-    _try_ace_reflector(run_dir, run_id)
-    _try_ace_curator(run_dir, run_id)
-    _try_memory_gate(run_dir, run_id)
+    if not _run_memory_consolidation(run_dir, run_id):
+        print("  memory consolidation incomplete; certifier-owned status is unchanged")
 
     # Read final status
     cert_path = run_dir / "certification.json"
@@ -98,61 +105,37 @@ def verify(run_dir: Path) -> str:
     return "DONE_FAIL"
 
 
-def _ensure_plan_artifacts(run_dir: Path, run_id: str):
-    pg, mp, sp = run_dir / "plan_graph.json", run_dir / "merged_plan.json", run_dir / "selected_plan.json"
-    step_dir = run_dir / "step_logs"
-    steps, nodes, edges = [], [], []
-    if step_dir.is_dir():
-        for sf in sorted(step_dir.glob("*.json")):
-            try:
-                data = json.loads(sf.read_text(encoding="utf-8"))
-                sid = data.get("step_id", len(steps) + 1)
-                tid = f"T{sid}"
-                touched = data.get("files_touched", [])
-                path = touched[0] if touched else f"step_{sid}.txt"
-                steps.append({"task_id": tid, "action": data.get("action_taken", "create_file"),
-                              "path": path, "requires": [], "produces": [{"artifact_id": f"A.{sid:03d}", "path": path}]})
-                nodes.append({"node_id": tid, "type": "task", "task_id": tid, "description": f"Step {sid}"})
-                if sid > 1:
-                    edges.append({"source": f"T{sid-1}", "target": tid, "type": "depends"})
-            except Exception:
-                pass
-    if steps:
-        mp.write_text(json.dumps({"steps": steps}, indent=2))
-        print(f"  created merged_plan.json ({len(steps)} steps)")
-    elif not mp.exists():
-        mp.write_text(json.dumps({"steps": [{"task_id": "T1", "action": "create_file", "path": "output.py", "requires": [], "produces": [{"artifact_id": "A.001", "path": "output.py"}]}]}, indent=2))
-    if nodes:
-        pg.write_text(json.dumps({"nodes": nodes, "edges": edges}, indent=2))
-        print(f"  created plan_graph.json ({len(nodes)} nodes)")
-    elif not pg.exists():
-        pg.write_text(json.dumps({"nodes": [{"node_id": "T1", "type": "task", "task_id": "T1"}], "edges": []}, indent=2))
-    if not sp.exists():
-        sp.write_text(json.dumps({"selected": "planner-minimal"}, indent=2))
+def _require_preexisting_proof_artifacts(run_dir: Path) -> bool:
+    """Return True only when strict proof prerequisites already exist.
 
+    This function is intentionally read-only. It reports missing prerequisites
+    but never creates plan graphs, merged plans, selected plans, verifier
+    contracts, or verifier artifacts.
+    """
+    required_files = [
+        "goal_contract.json",
+        "plan_graph.json",
+        "merged_plan.json",
+        "selected_plan.json",
+        "expected_artifacts.json",
+        "verifier_contract.json",
+    ]
+    missing = [name for name in required_files if not (run_dir / name).is_file()]
 
-def _ensure_verifier_contract(run_dir: Path, run_id: str):
-    vc = run_dir / "verifier_contract.json"
-    if vc.exists():
-        return
-    gc = run_dir / "goal_contract.json"
-    targets = []
-    if gc.exists():
-        try:
-            targets = json.loads(gc.read_text(encoding="utf-8")).get("final_outputs", [])
-        except Exception:
-            pass
-    vc.write_text(json.dumps({
-        "run_id": run_id, "target_goal": "Implement from specification",
-        "target_artifacts": targets or ["output.py"],
-        "required_verifier_level": "P2", "allow_self_generated_only": False,
-        "required_behaviors": [f"{t} exists" for t in targets] if targets else ["output.py exists"],
-        "forbidden_verifier_patterns": ["self-test only", "file existence only"],
-        "minimum_strength_level": "gating",
-        "certifying_authority_levels": ["P2", "P3"],
-        "provisional_authority_levels": ["P0", "P1"]
-    }, indent=2))
-    print("  created verifier_contract.json")
+    verifier_dir = run_dir / "verifier_artifacts"
+    verifier_artifacts = sorted(verifier_dir.glob("*.json")) if verifier_dir.is_dir() else []
+    if not verifier_artifacts:
+        missing.append("verifier_artifacts/*.json")
+
+    if missing:
+        print("  STRICT_PRECHECK_FAILED")
+        for item in missing:
+            print(f"    missing required proof artifact: {item}")
+        print("  full_verify.py did not create generated compatibility proof artifacts")
+        return False
+
+    print("  required proof artifacts exist")
+    return True
 
 
 def _ensure_replay_verdict(run_dir: Path):
@@ -165,110 +148,116 @@ def _ensure_replay_verdict(run_dir: Path):
             has_mismatch = any(not c.get("passed", True) for c in data.get("checks", {}).values() if isinstance(c, dict))
             data["verdict"] = "REPLAY_MISMATCH" if has_mismatch else "REPLAY_MATCH"
             rp.write_text(json.dumps(data, indent=2))
-    except Exception:
-        pass
+    except Exception as exc:
+        print(f"  replay verdict normalization skipped: {exc}")
 
 
-def _try_ace_reflector(run_dir: Path, run_id: str):
-    """ACE reflector: classifies memory cards. Builds context pack from current run."""
-    card_path = run_dir / "mempalace_card.json"
-    cards = []
-    if card_path.exists():
-        try:
-            cards = [json.loads(card_path.read_text(encoding="utf-8"))]
-        except Exception:
-            pass
-    if not cards:
-        cards = [{"card_id": f"card_{run_id}", "content": "single run card"}]
-    
-    ctx = run_dir / "context_pack.json"
-    ctx.write_text(json.dumps({"cards": cards}, indent=2))
-    
-    fs_path = run_dir / "final_status.json"
-    outcome = ""
-    if fs_path.exists():
-        outcome = json.loads(fs_path.read_text(encoding="utf-8")).get("status", "")
-    
-    out = run_dir / "reflection_report.json"
-    subprocess.run(
-        [sys.executable, str(RUNTIME / "ace_reflector.py"), run_id,
-         "--context-pack", str(ctx), "--outcome-status", outcome,
-         "--output", str(out)],
-        cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=30
-    )
-    print("  ace_reflector: generated reflection report" if out.exists() else "  ace_reflector: done")
+def load_json(path: Path) -> dict:
+    with path.open("r", encoding="utf-8-sig") as f:
+        return json.load(f)
 
 
-def _try_ace_curator(run_dir: Path, run_id: str):
-    """ACE curator: proposes memory deltas (requires prior cards).
-    Only works when prior run data is available. Skipped gracefully otherwise."""
-    card_path = run_dir / "run_local_memory" / "memory_journal.jsonl"
-    if not card_path.exists():
-        print("  ace_curator: skipped (no memory cards)")
-        return
+def write_json(path: Path, obj: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(obj, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
+def _memory_destination(outcome_kind: str) -> tuple[str, str, str]:
+    if outcome_kind == "success":
+        return "planning", "plan_seed_patterns", "run_lessons"
+    if outcome_kind == "provisional":
+        return "verification", "weak_oracle_patterns", "run_lessons"
+    if outcome_kind == "failure":
+        return "verification", "false_done_cases", "run_lessons"
+    return "anti_overclaim", "agent_report_not_certification", "run_lessons"
+
+
+def _build_memory_card(run_dir: Path, run_id: str, experience: dict) -> dict | None:
+    principle = str(experience.get("principle") or "").strip()
+    evidence_refs = [str(ref) for ref in experience.get("evidence_files", []) if str(ref).strip()]
+    if not principle or not evidence_refs:
+        return None
+
+    outcome_kind = str(experience.get("outcome_kind") or "unknown")
+    wing, room, drawer = _memory_destination(outcome_kind)
+    return {
+        "schema_version": "mempalace_ace_card_v1",
+        "card_id": f"{run_id}-{outcome_kind}-lesson",
+        "wing": wing,
+        "room": room,
+        "drawer": drawer,
+        "type": "run_lesson",
+        "content": principle,
+        "source_run_id": run_id,
+        "source_phase": "post_certification_memory",
+        "evidence_refs": evidence_refs,
+        "helpful_count": 1 if outcome_kind == "success" else 0,
+        "harmful_count": 1 if outcome_kind == "failure" else 0,
+        "card_status": "candidate",
+        "authority_level": "advisory_only",
+        "can_certify_done": False,
+        "do_not_use_when": [str(item) for item in experience.get("do_not_use_when", [])],
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+
+
+def _run_memory_consolidation(run_dir: Path, run_id: str) -> bool:
+    """Run real advisory-memory gates without changing certifier status."""
+    ok = True
+    ok &= run_tool(f"{RUNTIME}/experience_extractor.py", [str(run_dir)], "experience_extractor")
+    experience_path = run_dir / "experience_extract.json"
+    if not experience_path.is_file():
+        print("  memory: skipped promotion because experience_extract.json is missing")
+        return False
+
     try:
-        card = json.loads(card_path.read_text(encoding="utf-8").splitlines()[0])
-    except Exception:
-        print("  ace_curator: skipped (invalid card format)")
-        return
-    out = run_dir / "curator_delta.json"
-    subprocess.run(
-        [sys.executable, str(RUNTIME / "ace_curator.py"), run_id,
-         "--source-run-id", run_id, "--card", json.dumps(card),
-         "--output", str(out)],
-        cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=30
+        experience = load_json(experience_path)
+    except Exception as exc:
+        print(f"  memory: experience_extract.json unreadable: {exc}")
+        return False
+
+    principle = str(experience.get("principle") or "").strip()
+    evidence_refs = [str(ref) for ref in experience.get("evidence_files", []) if str(ref).strip()]
+    details = json.dumps({
+        "outcome_kind": experience.get("outcome_kind", "unknown"),
+        "evidence_refs": evidence_refs,
+    }, ensure_ascii=False)
+
+    ok &= run_tool(
+        f"{RUNTIME}/run_memory_clerk.py",
+        [str(run_dir), "--phase", "memory_effect", "--message", principle or "Experience extraction produced no principle", "--target-file", "experience_extract.json", "--details", details],
+        "run_memory_clerk",
     )
-    print("  ace_curator: generated curator delta" if out.exists() else "  ace_curator: done")
+    if principle:
+        ok &= run_tool(
+            f"{RUNTIME}/quarantine_memory_writer.py",
+            [str(run_dir), "--source-run-id", run_id, "--principle", principle, "--evidence-refs", ",".join(evidence_refs)],
+            "quarantine_memory_writer",
+        )
 
+    ok &= run_tool(f"{VALIDATORS}/validate_run_local_memory.py", [str(run_dir)], "validate_run_local_memory")
+    ok &= run_tool(f"{VALIDATORS}/validate_quarantine_memory.py", [str(run_dir)], "validate_quarantine_memory")
 
-def _try_mempalace_store(run_dir: Path, run_id: str):
-    """MemPalace: store advisory memory card in the appropriate wing/room."""
-    card = {
-        "card_id": f"card_{run_id}",
-        "run_id": run_id,
-        "wing": "planning",
-        "room": "plan_seed_patterns",
-        "content": {
-            "goal": run_id,
-            "outcome": json.loads((run_dir / "final_status.json").read_text(encoding="utf-8")).get("status", "UNKNOWN") if (run_dir / "final_status.json").exists() else "UNKNOWN",
-            "lesson": f"Run {run_id} completed. Memory is advisory only."
-        },
-        "advisory": True,
-        "can_certify": False
-    }
+    card = _build_memory_card(run_dir, run_id, experience)
+    if card is None:
+        print("  memory: skipped durable promotion because principle or evidence_refs are missing")
+        return ok
+
     card_path = run_dir / "mempalace_card.json"
-    card_path.write_text(json.dumps(card, indent=2))
-    print("  mempalace: stored advisory card (planning/plan_seed_patterns)")
-
-
-def _try_memory_gate(run_dir: Path, run_id: str):
-    """Memory write gate: promotes to durable only after certifier locks status."""
-    card_path = run_dir / "mempalace_card.json"
-    fs_path = run_dir / "final_status.json"
-    if not card_path.exists():
-        print("  memory_gate: skipped (no card)")
-        return
-    if not fs_path.exists():
-        print("  memory_gate: skipped (no final_status — gate requires certifier lock)")
-        return
-    print("  memory_gate: card ready for promotion (gated by certifier-owned final_status.json)")
-
-
-def _write_local_memory(run_dir: Path, run_id: str):
-    """Write advisory local memory record. Memory cannot certify or override evidence."""
-    mem_dir = run_dir / "run_local_memory"
-    mem_dir.mkdir(parents=True, exist_ok=True)
-    cert_path = run_dir / "certification.json"
-    status = json.loads(cert_path.read_text(encoding="utf-8")).get("status", "UNKNOWN") if cert_path.exists() else "UNKNOWN"
-    record = {
-        "run_id": run_id, "timestamp": datetime.now(timezone.utc).isoformat(),
-        "certification_status": status, "memory_type": "run_local",
-        "advisory": True, "can_certify": False,
-        "lesson": f"Run {run_id} completed with status {status}.",
-        "authority_note": "Advisory only. Does not replace certifier-owned evidence."
-    }
-    (mem_dir / "memory_journal.jsonl").write_text(json.dumps(record, ensure_ascii=False) + "\n", encoding="utf-8")
-    print("  wrote local memory record (advisory, non-certifying)")
+    decision_path = run_dir / "memory_write_decision.json"
+    write_json(card_path, card)
+    ok &= run_tool(f"{VALIDATORS}/validate_memory_card.py", [str(card_path)], "validate_memory_card")
+    ok &= run_tool(
+        f"{RUNTIME}/memory_write_gate.py",
+        [str(run_dir), "--card", str(card_path), "--decision-output", str(decision_path)],
+        "memory_write_gate",
+    )
+    if decision_path.is_file():
+        ok &= run_tool(f"{VALIDATORS}/validate_memory_write_gate.py", [str(decision_path)], "validate_memory_write_gate")
+    else:
+        print("  memory: memory_write_decision.json missing")
+        ok = False
+    return ok
 
 
 if __name__ == "__main__":

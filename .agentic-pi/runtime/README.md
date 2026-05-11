@@ -9,6 +9,23 @@ tests for every affected entrypoint.
 Final status comes only from `certify_run.py` and `policy_engine.py`. Runtime
 helpers can prepare, execute, trace, replay, or audit, but they cannot certify DONE by themselves.
 
+## Current Strict Runtime Boundary
+
+The default runtime path is fail-closed:
+
+```text
+full_verify.py       requires existing proof artifacts; it does not create missing plans or verifier contracts
+plan_router.py       requires existing plans/*_plan.json; it does not synthesize SIMPLE/MEDIUM/HARD plans
+plan_selector.py     validates and selects among existing planner-owned plans
+plan_merger.py       writes merged_plan.json from selected_plan.json only
+guarded_worker.py    executes create_file steps only; unsupported actions fail
+orchestrate_pipeline.py returns failure when any phase fails
+run_subagent_memory.py writes run-local/quarantine memory only; no direct durable writes
+memory_write_gate.py is the only durable-memory promotion path
+```
+
+Historical smoke/proof tools remain in this folder, but they are compatibility or evidence slices, not the current authority path.
+
 ## Module Groups
 
 Goal and run setup:
@@ -18,6 +35,7 @@ init_run.py
 compile_raw_goal.py
 write_goal_contract.py
 setup_pi_smoke.py
+orchestrate_pipeline.py
 ```
 
 Planning and strategy:
@@ -49,6 +67,8 @@ Verifier provenance, policy, and certification support:
 ```text
 verifier_provenance.py
 policy_engine.py
+full_verify.py
+verify_agent_outputs.py
 ```
 
 Pi and Mercury proof tools:
@@ -73,6 +93,11 @@ Memory, domain, and workflow search:
 experience_*.py
 learning_record_writer.py
 strategy_memory.py
+run_memory_clerk.py
+quarantine_memory_writer.py
+memory_write_gate.py
+mempalace_adapter.py
+context_pack_builder.py
 domain_pack_selector.py
 workflow_search.py
 ```

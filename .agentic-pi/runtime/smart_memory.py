@@ -2,6 +2,7 @@
 """Smart memory pipeline: compression, scoring, deduplication, truncation, and quality tracking.
 """
 
+import importlib.util
 import json
 import logging
 from collections import defaultdict
@@ -10,7 +11,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import List, Dict, Any, Tuple, Set
 
-# Optional tokenisation – fallback to simple split if nltk unavailable
+# Optional tokenisation – use simple split if nltk unavailable
 def _tokenize(txt: str):
     try:
         import nltk
@@ -119,34 +120,38 @@ def _extract_keywords(contract: Dict[str, Any]) -> List[str]:
 
 
 def _load_cards(root: Path) -> List[Card]:
-    """Recursively load all JSON cards under ``root`` and normalise fields.
+    """Load gated durable MemPalace JSONL cards and normalise fields."""
+    memory_root = root if root.name != "durable" else root.parent
+    if not memory_root.is_dir():
+        logging.warning("Memory root %s does not exist", memory_root)
+        return []
+    adapter_path = Path(__file__).resolve().parent / "mempalace_adapter.py"
+    spec = importlib.util.spec_from_file_location("mempalace_adapter", adapter_path)
+    adapter = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(adapter)
 
-    Returns a list of :class:`Card` objects.
-    """
     cards: List[Card] = []
-    if not root.is_dir():
-        logging.warning("Memory root %s does not exist", root)
-        return cards
-    for p in root.rglob("*.json"):
-        try:
-            raw = json.loads(p.read_text(encoding="utf-8"))
-            # Normalise field names
-            content = raw.get("content") or raw.get("learnings") or ""
-            stored_at = raw.get("stored_at") or raw.get("timestamp") or ""
-            card = Card(
-                card_id=raw.get("card_id", p.stem),
+    for raw in adapter.load_durable_cards(memory_root):
+        if raw.get("authority_level") != "advisory_only" or raw.get("can_certify_done") is not False:
+            continue
+        if raw.get("card_status") in {"deprecated", "rejected"}:
+            continue
+        content = str(raw.get("content") or "")
+        if not content.strip():
+            continue
+        cards.append(
+            Card(
+                card_id=raw.get("card_id", ""),
                 content=content,
-                source=raw.get("source", ""),
-                agent=raw.get("agent", ""),
-                outcome=raw.get("outcome", "UNKNOWN"),
-                stored_at=stored_at,
-                weight=float(raw.get("weight", 1.0)),
-                failure_pattern=raw.get("failure_pattern", ""),
-                goal_type=raw.get("goal_type", "")
+                source=raw.get("source_phase", ""),
+                agent="memory_write_gate",
+                outcome=raw.get("card_status", "UNKNOWN"),
+                stored_at=raw.get("promoted_at") or raw.get("created_at", ""),
+                weight=float(raw.get("helpful_count", 0) + 1),
+                failure_pattern=";".join(raw.get("do_not_use_when", [])),
+                goal_type=raw.get("type", ""),
             )
-            cards.append(card)
-        except Exception as exc:
-            logging.warning("Skipping unreadable card %s: %s", p, exc)
+        )
     return cards
 
 
@@ -331,14 +336,14 @@ def build_context_block(run_id: str, token_budget: int = 2000) -> str:
     1. Load goal contract → extract keywords.
     2. Load all durable cards.
     3. Compress → dedup → score → truncate.
-    4. Return a formatted block (``--- RELEVANT PAST LEARNINGS ---`` … ``--- END RELEVANT PAST LEARNINGS ---``).
+    4. Return a formatted advisory-memory block.
 
     If any step fails, an empty string is returned and the error is logged.
     """
     try:
         contract = _load_goal_contract(run_id)
         keywords = _extract_keywords(contract)
-        root = Path(__file__).resolve().parents[2] / ".agentic-pi" / "memory" / "durable"
+        root = Path(__file__).resolve().parents[2] / ".agentic-pi" / "memory"
         cards = _load_cards(root)
         if not cards:
             logging.info("No memory cards found for %s", run_id)
@@ -355,7 +360,7 @@ def build_context_block(run_id: str, token_budget: int = 2000) -> str:
         # 5) Format
         if not selected:
             return ""
-        lines = ["--- RELEVANT PAST LEARNINGS ---"]
+        lines = ["--- RELEVANT ADVISORY MEMORY (NOT CERTIFICATION) ---"]
         for i, c in enumerate(selected):
             content = c.content.strip()
             if not content:
@@ -363,7 +368,7 @@ def build_context_block(run_id: str, token_budget: int = 2000) -> str:
             if i > 0:
                 lines.append("---")
             lines.append(content)
-        lines.append("--- END RELEVANT PAST LEARNINGS ---")
+        lines.append("--- END RELEVANT ADVISORY MEMORY ---")
         return "\n".join(lines)
     except SmartMemoryError as exc:
         logging.error("Smart memory error: %s", exc)

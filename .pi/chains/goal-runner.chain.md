@@ -49,11 +49,15 @@ The chain may report:
 
 The chain must not produce its own final status.
 
+## Memory Boundary
+
+The chain may read a prepared `.agentic-runs/<run_id>/context_pack.json` when it already exists. That context pack is advisory only and must contain `can_certify_done: false`. The chain must not read or write removed flat memory stores and must not promote durable memory directly.
+
 ## Deferred
 
 This chain does not add:
 
-- memory behavior,
+- direct durable-memory promotion,
 - new PlanGraph features,
 - real Mercury planner changes,
 - SWE-bench integration,

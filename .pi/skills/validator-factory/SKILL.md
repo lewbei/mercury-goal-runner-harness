@@ -1,3 +1,8 @@
+---
+name: validator-factory
+description: Generate a validator spec and code for a specific success criterion. The validator must be testable with positive and negative fixtures through the V0_PROPOSED lifecycle.
+---
+
 # Validator Factory Skill
 
 **Phase:** VALIDATOR_BUILDING

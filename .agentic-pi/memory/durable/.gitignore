@@ -1,0 +1,5 @@
+# Generated legacy flat JSON memory cards from local runs.
+# Durable memory now uses gated MemPalace JSONL drawers under wing/room folders.
+*.json
+repair-*.json
+learn-*.json

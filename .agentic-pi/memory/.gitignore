@@ -1,0 +1,5 @@
+# Legacy flat memory stores were removed from the strict runtime path.
+# Use run-local memory under .agentic-runs/<run_id>/memory/ and gated
+# durable MemPalace JSONL drawers under durable/<wing>/<room>/.
+successful_patterns.jsonl
+failure_patterns.jsonl

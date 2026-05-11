@@ -37,21 +37,23 @@ Committed state (v3.4 RPG Test Aggregation):
 RPG-Harness v5 Phases 1-9 = Supervisor Ledger + Artifact Routing + Success Criteria/Oracles + Validator Factory + Replay Certification + Memory Split + Meta-Harness v0.1 + QRSPI Skills on top of v3.4 RPG Test Aggregation
 ```
 
-Local proof slices ahead of committed (v3.5–v3.7):
+Local proof slices ahead of committed (v3.5–v3.7) plus current strict runtime cleanup:
 
 ```text
 v3.5 = authority artifact (final_status.json), evidence freeze/index
 v3.6 = run-local memory, quarantine memory
 v3.7 = MemPalace + ACE memory governance (proof slices only; not fully
        wired into the default end-to-end runtime path)
+strict runtime cleanup = no placeholder plans, synthesized verifier contracts,
+       fallback worker artifacts, or silent success after verification failure
 v3.8 = Formal contract verification (VeriGuard-inspired) + cryptographic
        artifact signing (VET-inspired) — both wired as certifier gates
 ```
 
-The deterministic raw-goal proof cases are:
+The deterministic raw-goal proof cases are historical proof records. They should not be read as permission for the current strict runtime to synthesize missing proof artifacts:
 
 ```text
-raw_simple_legacy -> DONE_PASS
+raw_simple_historical_compatibility -> DONE_PASS
 raw_p2_provenance -> CERTIFIED_DONE
 raw_missing_verifier -> NOT_DONE
 ```
@@ -600,6 +602,8 @@ top-level folders. The implemented files are:
 .agentic-pi/runtime/guarded_worker.py
 .agentic-pi/runtime/verifier_provenance.py
 .agentic-pi/runtime/policy_engine.py
+.agentic-pi/runtime/full_verify.py
+.agentic-pi/runtime/orchestrate_pipeline.py
 .agentic-pi/runtime/audit_run.py
 .agentic-pi/runtime/replay_run.py
 .agentic-pi/runtime/rollback_run.py
@@ -774,12 +778,12 @@ Pi cannot forge verifier_artifacts/.
 
 ## Proven Behavior
 
-Currently proven:
+Previously recorded deterministic proof slices:
 
 ```text
-prepared legacy full run through Pi -> DONE_PASS
+prepared historical-compatibility full run through Pi -> DONE_PASS
 prepared provenance full run through Pi -> CERTIFIED_DONE
-deterministic raw-goal legacy fixture -> DONE_PASS
+deterministic raw-goal historical-compatibility fixture -> DONE_PASS
 deterministic raw-goal P2 fixture -> CERTIFIED_DONE
 deterministic raw-goal missing verifier fixture -> NOT_DONE
 deterministic planning proof fixture -> selected branch -> merged_plan.json -> CERTIFIED_DONE

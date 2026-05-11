@@ -1,8 +1,0 @@
-{
-  "card_id": "learn-fixtest-guarded-worker-1",
-  "content": "Subagent guarded-worker in fixtest: Created factorial.py with iterative factorial function that handles negative input via ValueError and returns correct results for n=0, n=1, and positive n",
-  "source": "step_log",
-  "agent": "guarded-worker",
-  "outcome": "CERTIFIED_DONE",
-  "stored_at": "2026-05-10T09:20:18.289902+00:00"
-}

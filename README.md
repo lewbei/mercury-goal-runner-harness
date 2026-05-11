@@ -24,19 +24,27 @@ pi install .
 
 ## Quick Start
 
+This is a prepared-run harness. The runtime is strict: it does not create missing planner or verifier proof artifacts for you.
+
 ```bash
 # 1. Init a run
 python .agentic-pi/runtime/init_run.py --run-id my_goal
 
-# 2. Create goal contract at .agentic-runs/my_goal/goal_contract.json
-# 3. Spawn planner-minimal agent → thinking_plan.md + plan_graph.json + merged_plan.json
-# 4. Spawn guarded-worker agent → code + step_logs + trace
-# 5. Spawn verifier-generator agent → verifier_contract + P2 evidence
-# 6. Run deterministic pipeline
+# 2. Create goal_contract.json and expected_artifacts.json under .agentic-runs/my_goal/
+# 3. Create planner-owned plan JSON at .agentic-runs/my_goal/plans/<planner>_plan.json
+# 4. Select and merge the plan
+python .agentic-pi/runtime/plan_selector.py --run-id my_goal
+python .agentic-pi/runtime/plan_merger.py --run-id my_goal
+python .agentic-pi/runtime/plan_graph_builder.py my_goal
+
+# 5. Execute approved create_file steps and write evidence
+python .agentic-pi/runtime/guarded_worker.py --run-id my_goal
+
+# 6. Add verifier_contract.json and verifier_artifacts/*.json
+# 7. Run deterministic pipeline / certifier path
 python .agentic-pi/runtime/orchestrate_pipeline.py --run-id my_goal
 
-# 7. Check result
-python .agentic-pi/runtime/check_matrix.py .agentic-runs/my_goal --all
+# 8. Read certifier-owned status artifacts; do not self-certify DONE
 ```
 
 ## Architecture
@@ -45,8 +53,8 @@ python .agentic-pi/runtime/check_matrix.py .agentic-runs/my_goal --all
 QRSPI Phases:
   Q: Question  → question-contract skill → understand goal
   R: Research  → research-pack skill → explore approaches
-  S: Structure → design-options + structure-outline → plan_graph.json
-  P: Plan      → root-plan → thinking_plan.md + merged_plan.json
+  S: Structure → design-options + structure-outline → planner-owned plan JSON
+  P: Plan      → selected_plan.json + merged_plan.json + plan_graph.json
   I: Implement → guarded-worker → code + step_logs + trace
 
 Gates:
@@ -60,9 +68,11 @@ Gates:
 
 Memory:
   Project-local (.agentic-pi/memory/durable/)
-  Worker reads memory before coding
-  Repair agent queries memory for similar failures
-  Learning loop: fail → fix → store → next run benefits
+  Advisory only; memory cannot certify DONE
+  Worker may read memory before coding
+  Run-local and quarantine memory are validated under .agentic-runs/<run_id>/memory/
+  Durable memory promotion goes through memory_write_gate.py after certifier lock
+  Learning records stay outside final-status authority
 ```
 
 ## Agents
@@ -86,11 +96,14 @@ Memory:
 │   ├── validate_schema.py      JSON schema validator
 │   └── validate_plan_graph.py  Plan graph structure
 ├── runtime/
-│   ├── orchestrate_pipeline.py 6-phase deterministic runner
+│   ├── orchestrate_pipeline.py Strict deterministic runner; fails on phase failure
+│   ├── full_verify.py          Strict proof-artifact verifier; no synthesized proof files
+│   ├── plan_router.py          Requires existing plans/*_plan.json
+│   ├── plan_merger.py          Writes merged_plan.json from selected_plan.json
 │   ├── check_matrix.py         Horizontal check matrix (each independent)
-│   ├── adversarial_loop.py     Skeptic → find breaks → repair → re-certify
+│   ├── adversarial_loop.py     Diagnostic repair loop tool; not certification authority
 │   ├── build_repair_prompt.py  Memory-aware repair prompt builder
-│   ├── run_subagent_memory.py  Capture learnings per subagent
+│   ├── run_subagent_memory.py  Capture advisory learnings per subagent
 │   └── project_adapter.py      Map project structure for harness
 ├── formal/
 │   ├── harness_contract_verifier.py  #@ Requires/Ensures runtime check
@@ -101,21 +114,12 @@ Memory:
 
 ## Checks
 
-Each check independent, re-runnable individually:
+Use checks as evidence, not as self-certification. Final status still comes from certifier-owned artifacts.
 
 ```bash
 python .agentic-pi/runtime/check_matrix.py <run_dir> --all
-
-  [plan_graph]        PASS
-  [step_logs]         PASS
-  [code_execution]    PASS
-  [formal_verification] PASS
-  [crypto_signatures] SKIP
-```
-
-Re-run just one:
-```bash
-python .agentic-pi/runtime/check_matrix.py <run_dir> code_execution
+python .agentic-pi/runtime/full_verify.py <run_dir>
+python .agentic-pi/validators/certify_run.py <run_dir>
 ```
 
 ## Design Principles
@@ -124,13 +128,16 @@ python .agentic-pi/runtime/check_matrix.py <run_dir> code_execution
 Vertical first, horizontal later.
 Prove one slice end-to-end before expanding.
 One failure mode → one fixture → one implementation → one validator → one test.
-Agents do the work. Pi orchestrates. No manual edits to fix agent output.
-Memory feeds the worker/repair, not the planner.
+Agents do the work. Pi orchestrates. No manual edits to final status artifacts.
+Memory can advise worker/repair, but cannot certify DONE.
 ```
 
 ## Docs
 
 - `AGENTS.md` — Agent instructions and rules
-- `docs/FRAMEWORK.md` — Conceptual architecture and file map
-- `docs/PROJECT_STATUS.md` — Version history and proof summary
-- `docs/` — All version documentation (V0.1–V5)
+- `docs/CURRENT_RUNTIME_PATH.md` — current strict runtime boundary and compatibility map
+- `docs/PLAN_ROUTER.md` — current plan-router boundary; no generated substitute planning
+- `docs/FRAMEWORK.md` — conceptual architecture and file map
+- `docs/PROJECT_STATUS.md` — version history, local status, and proof-slice limits
+- `docs/workspace_index.md` — source-of-truth file map and cleanup debt
+- `docs/` — versioned historical records plus current architecture docs; old V0/V1 docs are not the default runtime contract

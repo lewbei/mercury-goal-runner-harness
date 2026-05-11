@@ -18,17 +18,26 @@ def main():
     plans_dir = run_dir / "plans"
     if not plans_dir.is_dir():
         raise FileNotFoundError(f"Plans directory not found at {plans_dir}")
-    plan_files = list(plans_dir.glob("*.json"))
+    plan_files = sorted(plans_dir.glob("*_plan.json"))
     if not plan_files:
-        raise FileNotFoundError("No plan JSON files found in plans directory")
+        raise FileNotFoundError("No planner-owned *_plan.json files found in plans directory")
     best_plan = None
     best_score = None
     for pf in plan_files:
         with open(pf, "r", encoding="utf-8") as f:
             plan = json.load(f)
-        steps = plan.get("steps", [])
+        steps = plan.get("steps")
+        if not isinstance(steps, list) or not steps:
+            raise ValueError(f"{pf} must contain a non-empty steps list")
+        for idx, step in enumerate(steps, start=1):
+            if not isinstance(step, dict):
+                raise ValueError(f"{pf} steps[{idx}] must be an object")
+            if not isinstance(step.get("task_id"), str) or not step.get("task_id", "").strip():
+                raise ValueError(f"{pf} steps[{idx}] missing task_id")
+            if not isinstance(step.get("action"), str) or not step.get("action", "").strip():
+                raise ValueError(f"{pf} steps[{idx}] missing action")
         score = len(steps)
-        # Simple heuristic: fewer steps is better
+        # Simple deterministic heuristic: fewer steps is better
         if best_score is None or score < best_score:
             best_score = score
             best_plan = plan

@@ -20,7 +20,6 @@ Usage:
 import base64
 import hashlib
 import json
-import os
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -52,7 +51,7 @@ class HarnessSigner:
     def generate_keypair(self) -> dict:
         """Generate a new Ed25519 keypair."""
         if not HAS_CRYPTO:
-            return self._fallback_keypair()
+            raise RuntimeError("cryptography package is required for Ed25519 signing")
 
         private_key = ed25519.Ed25519PrivateKey.generate()
         public_key = private_key.public_key()
@@ -91,32 +90,6 @@ class HarnessSigner:
         self._private_key = private_key
         return key_data
 
-    def _fallback_keypair(self) -> dict:
-        """Generate a fallback HMAC-based keypair when cryptography lib unavailable."""
-        random_bytes = os.urandom(32)
-        salt = os.urandom(16)
-
-        key_data = {
-            "algorithm": "HMAC-SHA256-FALLBACK",
-            "secret_key_b64": base64.b64encode(random_bytes).decode("utf-8"),
-            "salt_b64": base64.b64encode(salt).decode("utf-8"),
-            "generated_at": datetime.now(timezone.utc).isoformat(),
-            "generated_by": "harness_signing",
-            "note": "cryptography library not installed — using HMAC fallback"
-        }
-
-        pub_data = {
-            "algorithm": "HMAC-SHA256-FALLBACK",
-            "verification_key_b64": base64.b64encode(salt).decode("utf-8"),
-            "generated_at": datetime.now(timezone.utc).isoformat(),
-            "generated_by": "harness_signing",
-            "note": "cryptography library not installed — using HMAC fallback"
-        }
-
-        self.key_path.write_text(json.dumps(key_data, indent=2))
-        self.pub_path.write_text(json.dumps(pub_data, indent=2))
-        return key_data
-
     def load_key(self) -> bool:
         """Load existing keypair from run_dir."""
         if not self.key_path.exists():
@@ -128,9 +101,6 @@ class HarnessSigner:
             private_bytes = base64.b64decode(key_data["private_key_b64"])
             self._private_key = ed25519.Ed25519PrivateKey.from_private_bytes(private_bytes)
             return True
-        elif key_data.get("algorithm") == "HMAC-SHA256-FALLBACK":
-            return True  # Fallback signer uses key_data directly
-
         return False
 
     def sign_file(self, filepath: Path) -> dict:
@@ -141,18 +111,11 @@ class HarnessSigner:
         content = filepath.read_bytes()
         content_hash = hashlib.sha256(content).digest()
 
-        if self._private_key and HAS_CRYPTO:
-            signature = self._private_key.sign(content_hash)
-            sig_b64 = base64.b64encode(signature).decode("utf-8")
-            algorithm = "Ed25519"
-        else:
-            # Fallback HMAC
-            key_data = json.loads(self.key_path.read_text(encoding="utf-8"))
-            secret = base64.b64decode(key_data["secret_key_b64"])
-            salt = base64.b64decode(key_data["salt_b64"])
-            hmac = self._hmac_sha256(secret, content_hash, salt)
-            sig_b64 = base64.b64encode(hmac).decode("utf-8")
-            algorithm = "HMAC-SHA256"
+        if not self._private_key or not HAS_CRYPTO:
+            raise RuntimeError("Ed25519 private key is required before signing")
+        signature = self._private_key.sign(content_hash)
+        sig_b64 = base64.b64encode(signature).decode("utf-8")
+        algorithm = "Ed25519"
 
         sig_data = {
             "artifact": str(filepath.relative_to(self.run_dir)),
@@ -219,25 +182,6 @@ class HarnessSigner:
                     "reason": f"Verification error: {e}",
                     "artifact": str(filepath.relative_to(self.run_dir))
                 }
-        elif sig_data["algorithm"] == "HMAC-SHA256":
-            # Verify fallback HMAC
-            key_data = json.loads(self.key_path.read_text(encoding="utf-8"))
-            secret = base64.b64decode(key_data["secret_key_b64"])
-            salt = base64.b64decode(key_data["salt_b64"])
-            expected = self._hmac_sha256(secret, content_hash, salt)
-            actual = base64.b64decode(sig_data["signature_b64"])
-            if hashlib.sha256(expected).digest() == hashlib.sha256(actual).digest():
-                return {
-                    "verdict": "AUTHENTIC",
-                    "reason": "HMAC verified (fallback)",
-                    "artifact": str(filepath.relative_to(self.run_dir))
-                }
-            else:
-                return {
-                    "verdict": "FORGED",
-                    "reason": "HMAC mismatch",
-                    "artifact": str(filepath.relative_to(self.run_dir))
-                }
 
         return {
             "verdict": "UNKNOWN",
@@ -262,13 +206,6 @@ class HarnessSigner:
             pub = json.loads(self.pub_path.read_text(encoding="utf-8"))
             return hashlib.sha256(pub["public_key_b64"].encode()).hexdigest()[:16]
         return "unknown"
-
-    @staticmethod
-    def _hmac_sha256(key: bytes, data: bytes, salt: bytes) -> bytes:
-        """HMAC-SHA256 fallback."""
-        import hmac
-        return hmac.new(key, data + salt, hashlib.sha256).digest()
-
 
 def main():
     if len(sys.argv) < 3:
@@ -311,9 +248,8 @@ def main():
 
     elif cmd == "verify":
         if not signer.pub_path.exists():
-            # Generate key for fresh verification
-            if not signer.load_key():
-                signer.generate_keypair()
+            print(f"Error: public key not found at {signer.pub_path}")
+            sys.exit(1)
 
         results = signer.verify_all()
         if not results:

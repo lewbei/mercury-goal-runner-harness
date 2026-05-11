@@ -59,7 +59,7 @@
     "cost_estimate": { "type": "integer" },
     "verifier_strength_path": {
       "type": "string",
-      "enum": ["none", "advisory", "gating", "certifying", "legacy"]
+      "enum": ["none", "advisory", "gating", "certifying"]
     },
     "drift_history_risk": { "type": "integer" },
     "domain_pack_used": { "type": "string" },

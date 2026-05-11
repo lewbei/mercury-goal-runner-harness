@@ -115,7 +115,7 @@ def decompose_goal(contract: Dict[str, Any]) -> List[SubGoal]:
     if not description:
         raise DecompositionError("Contract description is empty.")
 
-    # Simple heuristic – split description into sentences (fallback to whole text)
+    # Simple heuristic – split description into sentences (otherwise use whole text)
     sentences = [s.strip() for s in description.split(".") if s.strip()]
     # Ensure at least one sentence per phase; if not enough, repeat the description.
     phases = ["Analyze", "Design", "Implement", "Validate"]

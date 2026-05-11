@@ -39,7 +39,7 @@
       "description": "Memory artifacts are excluded from evidence indexing. Memory paths must not appear in evidence_hash_manifest.json or evidence_freeze.json.",
       "excluded_from_evidence": [
         ".agentic-pi/memory/",
-        ".agentic-runs/**/run_local_memory/",
+        ".agentic-runs/**/memory/",
         ".agentic-runs/**/memory_journal.jsonl"
       ]
     },

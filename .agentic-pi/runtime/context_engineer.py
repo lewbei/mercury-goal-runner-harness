@@ -308,7 +308,7 @@ def track_usage(run_id: str, agent_output_text: str) -> None:
 # ---------------------------------------------------------------------------
 if __name__ == "__main__":
     import argparse
-    parser = argparse.ArgumentParser(description="Context engineer demo")
+    parser = argparse.ArgumentParser(description="Context engineer CLI")
     parser.add_argument("run_id", help="Run identifier")
     parser.add_argument("packet", help="Path to JSON packet file")
     parser.add_argument("--track", action="store_true", help="Run usage tracking on a text file")

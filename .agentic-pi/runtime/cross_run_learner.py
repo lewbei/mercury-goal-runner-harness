@@ -5,29 +5,67 @@ Utility to learn patterns across runs and provide context for new runs.
 
 from __future__ import annotations
 
+import inspect
 import json
 import sys
+from functools import wraps
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
 # ---------------------------------------------------------------------------
-# Helper decorators (no‑op placeholders for static analysis tools)
+# Lightweight runtime contract decorators
 # ---------------------------------------------------------------------------
 
+def _call_condition(condition, *args, **kwargs) -> bool:
+    """Call a contract condition with only the arguments it declares."""
+    try:
+        signature = inspect.signature(condition)
+    except (TypeError, ValueError):
+        return bool(condition(*args, **kwargs))
+
+    params = list(signature.parameters.values())
+    if any(p.kind in (p.VAR_POSITIONAL, p.VAR_KEYWORD) for p in params):
+        return bool(condition(*args, **kwargs))
+
+    positional_params = [
+        p for p in params
+        if p.kind in (p.POSITIONAL_ONLY, p.POSITIONAL_OR_KEYWORD)
+    ]
+    keyword_params = [
+        p for p in params
+        if p.kind in (p.KEYWORD_ONLY, p.POSITIONAL_OR_KEYWORD)
+    ]
+    selected_args = args[:len(positional_params)]
+    selected_kwargs = {
+        p.name: kwargs[p.name]
+        for p in keyword_params
+        if p.name in kwargs and p.name not in {q.name for q in positional_params[:len(selected_args)]}
+    }
+    return bool(condition(*selected_args, **selected_kwargs))
+
+
 def Requires(condition, message=""):
-    """Placeholder for a pre‑condition decorator.
-    In production this could be replaced by a runtime validator.
-    """
+    """Enforce a pre-condition before executing the wrapped function."""
     def decorator(func):
-        return func
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            if not _call_condition(condition, *args, **kwargs):
+                raise ValueError(message or f"Pre-condition failed for {func.__name__}")
+            return func(*args, **kwargs)
+        return wrapper
     return decorator
 
 
 def Ensures(condition, message=""):
-    """Placeholder for a post‑condition decorator.
-    """
+    """Enforce a post-condition after executing the wrapped function."""
     def decorator(func):
-        return func
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            result = func(*args, **kwargs)
+            if not _call_condition(condition, result, *args, **kwargs):
+                raise AssertionError(message or f"Post-condition failed for {func.__name__}")
+            return result
+        return wrapper
     return decorator
 
 # ---------------------------------------------------------------------------

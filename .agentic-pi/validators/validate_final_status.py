@@ -65,7 +65,7 @@ def validate_data(final_status: dict, run_dir: Path) -> list[str]:
         if final_status.get("status_source") != "policy_decision.json":
             errors.append("provenance run final_status.json must cite policy_decision.json")
     elif final_status.get("status_source") != "certification.json":
-        errors.append("legacy run final_status.json must cite certification.json")
+        errors.append("non-provenance run final_status.json must cite certification.json")
 
     return errors
 

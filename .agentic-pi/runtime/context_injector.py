@@ -1,6 +1,7 @@
 # .agentic-pi/runtime/context_injector.py
 """Context injector for enriching agent prompts with relevant past learnings."""
 
+import importlib.util
 import json
 import logging
 from datetime import datetime, timezone
@@ -11,7 +12,8 @@ from typing import List, Dict, Any, Tuple
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
 # Constants
-_MEMORY_ROOT = Path(__file__).resolve().parents[1] / "memory" / "durable"
+_MEMORY_ROOT = Path(__file__).resolve().parents[1] / "memory"
+_ADAPTER_PATH = Path(__file__).resolve().parent / "mempalace_adapter.py"
 _MAX_CARDS = 3
 # Simple static stopword list -- extend as needed
 _STOPWORDS = {
@@ -55,36 +57,31 @@ def _load_goal_contract(run_id: str) -> Dict[str, Any]:
         raise GoalContractError(f"Failed to parse goal contract: {exc}") from exc
 
 
+def _load_adapter():
+    spec = importlib.util.spec_from_file_location("mempalace_adapter", _ADAPTER_PATH)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
 #@ Requires(lambda: True, "No preconditions")
 #@ Ensures(lambda cards: isinstance(cards, list), "Result must be a list of cards")
 def _collect_memory_cards() -> List[Dict[str, Any]]:
-    """Recursively load all JSON memory cards under the durable memory root.
-
-    The function now accepts both legacy (``content``, ``stored_at``) and newer (``learnings``, ``timestamp``)
-    field names.
-    """
-    cards: List[Dict[str, Any]] = []
+    """Load gated durable MemPalace JSONL cards."""
     if not _MEMORY_ROOT.is_dir():
         logging.warning("Memory root not found: %s", _MEMORY_ROOT)
-        return cards
-    for json_path in _MEMORY_ROOT.rglob("*.json"):
-        try:
-            card = json.loads(json_path.read_text(encoding="utf-8"))
-            # Retrieve content -- try both possible keys
-            content = card.get("content") or card.get("learnings")
-            if content is None:
-                raise MemoryCardReadError(f"Missing content field in {json_path}")
-            # Retrieve timestamp -- try both possible keys
-            stored_at = card.get("stored_at") or card.get("timestamp")
-            if stored_at is None:
-                raise MemoryCardReadError(f"Missing timestamp field in {json_path}")
-            # Normalise fields for downstream code
-            card["content"] = content
-            card["stored_at"] = stored_at
-            cards.append(card)
-        except Exception as exc:
-            logging.warning("Skipping unreadable card %s: %s", json_path, exc)
-    return cards
+        return []
+    try:
+        cards = _load_adapter().load_durable_cards(_MEMORY_ROOT)
+    except Exception as exc:
+        raise MemoryCardReadError(f"Failed to load durable memory cards: {exc}") from exc
+    return [
+        card for card in cards
+        if card.get("authority_level") == "advisory_only"
+        and card.get("can_certify_done") is False
+        and card.get("card_status") not in {"deprecated", "rejected"}
+        and str(card.get("content", "")).strip()
+    ]
 
 
 #@ Requires(lambda goal_contract: isinstance(goal_contract, dict), "goal_contract must be a dict")
@@ -139,8 +136,8 @@ def _score_card(card: Dict[str, Any], keywords: List[str]) -> Tuple[int, int]:
     # Enforce minimum of 2 matches
     relevance = matches if matches >= 2 else 0
 
-    # Calculate recency in seconds from stored_at timestamp
-    stored_at_str = card.get("stored_at", "")
+    # Calculate recency in seconds from created_at/promoted_at timestamp
+    stored_at_str = card.get("promoted_at") or card.get("created_at", "")
     try:
         stored_dt = datetime.fromisoformat(stored_at_str)
         if stored_dt.tzinfo is None:
@@ -163,7 +160,7 @@ def _format_context_block(selected_cards: List[Dict[str, Any]]) -> str:
     if not selected_cards:
         return ""
 
-    lines = ["--- RELEVANT PAST LEARNINGS ---"]
+    lines = ["--- RELEVANT ADVISORY MEMORY (NOT CERTIFICATION) ---"]
     for i, card in enumerate(selected_cards):
         content = card.get("content", "").strip()
         if not content:
@@ -173,7 +170,7 @@ def _format_context_block(selected_cards: List[Dict[str, Any]]) -> str:
         if i > 0:
             lines.append("---")
         lines.append(content)
-    lines.append("--- END RELEVANT PAST LEARNINGS ---")
+    lines.append("--- END RELEVANT ADVISORY MEMORY ---")
     return "\n".join(lines)
 
 
@@ -181,7 +178,7 @@ def _format_context_block(selected_cards: List[Dict[str, Any]]) -> str:
 #@ Requires(lambda run_id: isinstance(run_id, str), "run_id must be a string")
 #@ Ensures(lambda result: isinstance(result, dict), "Result must be a dict (the enriched packet)")
 def enrich_prompt_with_context(packet: dict, run_id: str) -> dict:
-    """Load goal contract, scan durable memory cards, rank by relevance & recency,
+    """Load goal contract, scan gated durable memory cards, rank by relevance & recency,
     and prepend a CONTEXT section to a work packet's prompt.
 
     Args:

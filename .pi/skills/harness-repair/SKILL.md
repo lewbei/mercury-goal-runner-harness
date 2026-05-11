@@ -1,3 +1,8 @@
+---
+name: harness-repair
+description: Read certifier failure messages and repair specific issues identified. Fix only what the certifier flagged — do not rewrite everything or touch authority files.
+---
+
 # Harness Repair Skill
 
 **Phase:** REPAIRING (any repair phase)

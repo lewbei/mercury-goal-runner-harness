@@ -1,3 +1,8 @@
+---
+name: harness-grill
+description: Run existing validators against implementation artifacts and produce verifier evidence. Each verifier artifact records the check, input, expected output, and actual result.
+---
+
 # Harness Grill Skill
 
 **Phase:** VALIDATING

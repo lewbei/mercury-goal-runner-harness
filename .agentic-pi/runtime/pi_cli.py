@@ -209,8 +209,9 @@ def build_parser() -> argparse.ArgumentParser:
     p_compile.add_argument("--goal", required=True)
     p_compile.add_argument(
         "--mode",
-        choices=["legacy", "p2", "missing_verifier", "planning_p2"],
-        default="legacy",
+        choices=["p2", "missing_verifier", "planning_p2"],
+        default="p2",
+        help="strict raw-goal proof fixture mode",
     )
     p_compile.set_defaults(func=goal_compile)
 

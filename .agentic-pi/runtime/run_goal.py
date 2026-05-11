@@ -121,11 +121,13 @@ def _run_full_verification(run_dir: Path, run_id: str) -> str:
         cwd=BASE_DIR, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
     )
     print(result.stdout or "")
-    # Parse final status from output
+    # Parse final status from this verification process. Do not promote stale
+    # certification artifacts if the verifier failed before printing FINAL.
     for line in reversed((result.stdout or "").splitlines()):
         if line.strip().startswith("FINAL:"):
             return line.strip().split(":", 1)[1].strip()
-    # Fallback: read certification.json
+    if result.returncode != 0:
+        return "DONE_FAIL"
     cert_path = run_dir / "certification.json"
     if cert_path.exists():
         cert_data = json.loads(cert_path.read_text(encoding="utf-8"))
@@ -134,226 +136,86 @@ def _run_full_verification(run_dir: Path, run_id: str) -> str:
 
 
 def _normalize_for_certifier(run_dir: Path, run_id: str):
-    """Bridge agent output format to certifier-expected format.
+    """Strictly validate certifier inputs without mutating run evidence.
 
-    Agents may produce step logs with slightly different field types.
-    This normalizer ensures the certifier sees what it expects.
+    This compatibility helper used to create trace files, infer step logs, and
+    fill missing fields. Strict mode forbids that behavior: missing or malformed
+    evidence now fails before certifier execution.
     """
-    from datetime import datetime, timezone
+    errors = []
 
-    # 1. Create trace.jsonl if missing
     trace_path = run_dir / "trace.jsonl"
-    if not trace_path.exists():
-        trace_path.write_text(json.dumps({
-            "timestamp": datetime.now(timezone.utc).isoformat(),
-            "event": "run_completed",
-            "data": {}
-        }, ensure_ascii=False) + "\n", encoding="utf-8")
-        print("  created trace.jsonl")
+    if not trace_path.is_file():
+        errors.append("trace.jsonl is missing")
 
-    # 2. Create step_logs from dispatch_log.jsonl if step_logs missing
     step_dir = run_dir / "step_logs"
-    dispatch_log = run_dir / "dispatch_log.jsonl"
-    if not step_dir.is_dir() and dispatch_log.exists():
-        step_dir.mkdir(parents=True, exist_ok=True)
-        step_num = 0
-        for line in dispatch_log.read_text(encoding="utf-8").splitlines():
-            line = line.strip()
-            if not line: continue
-            try:
-                entry = json.loads(line)
-                # Only extract work-packet-style entries that look like step logs
-                if entry.get("event") == "work_packet_result_received":
-                    continue  # skip dispatch events
-                if any(k in entry for k in ("action_taken", "files_touched", "evidence")):
-                    step_num += 1
-                    entry["run_id"] = run_id
-                    entry["step_id"] = entry.get("step_id", step_num)
-                    entry["status"] = entry.get("status", "PASSED")
-                    if not entry.get("action_taken"): entry["action_taken"] = "create_file"
-                    if not entry.get("files_touched"): entry["files_touched"] = [f"step_{step_num}.txt"]
-                    if not entry.get("commands_run"): entry["commands_run"] = [f"write step {step_num}"]
-                    if not entry.get("evidence"): entry["evidence"] = [f"Step {step_num} completed"]
-                    if not entry.get("pass_condition_satisfied"): entry["pass_condition_satisfied"] = True
-                    entry["remaining_work"] = []
-                    (step_dir / f"{step_num}.json").write_text(
-                        json.dumps(entry, indent=2, ensure_ascii=False), encoding="utf-8")
-            except Exception:
-                pass
-        if step_num > 0:
-            print(f"  extracted {step_num} step log(s) from dispatch_log.jsonl")
-
-    # 3. Normalize step logs
-    if step_dir.is_dir():
-        fixed = 0
-        for step_file in sorted(step_dir.glob("*.json")):
+    if not step_dir.is_dir():
+        errors.append("step_logs/ is missing")
+    else:
+        step_files = sorted(step_dir.glob("*.json"))
+        if not step_files:
+            errors.append("step_logs/ contains no JSON step logs")
+        for step_file in step_files:
             try:
                 data = json.loads(step_file.read_text(encoding="utf-8"))
-                changed = False
+            except Exception as exc:
+                errors.append(f"{step_file.name} is not valid JSON: {exc}")
+                continue
 
-                # Ensure run_id
-                if "run_id" not in data or data["run_id"] != run_id:
-                    data["run_id"] = run_id
-                    changed = True
+            required_types = {
+                "run_id": str,
+                "step_id": int,
+                "status": str,
+                "action_taken": str,
+                "files_touched": list,
+                "commands_run": list,
+                "evidence": list,
+                "pass_condition_satisfied": bool,
+                "remaining_work": list,
+            }
+            for field, expected_type in required_types.items():
+                if field not in data:
+                    errors.append(f"{step_file.name} missing {field}")
+                elif not isinstance(data[field], expected_type):
+                    errors.append(f"{step_file.name} field {field} has wrong type")
 
-                # Ensure step_id
-                if "step_id" not in data:
-                    import re
-                    m = re.search(r"(\d+)", step_file.name)
-                    data["step_id"] = int(m.group(1)) if m else 1
-                    changed = True
+            if data.get("run_id") != run_id:
+                errors.append(f"{step_file.name} run_id does not match {run_id}")
+            if data.get("status") not in ("PASSED", "FAILED"):
+                errors.append(f"{step_file.name} status must be PASSED or FAILED")
+            for touched in data.get("files_touched", []):
+                if not isinstance(touched, str) or not touched.strip():
+                    errors.append(f"{step_file.name} files_touched contains invalid path")
 
-                # Fix evidence: string → list
-                if isinstance(data.get("evidence"), str):
-                    data["evidence"] = [data["evidence"]]
-                    changed = True
-                if "evidence" not in data:
-                    data["evidence"] = [f"Step {data.get('step_id', 1)} completed"]
-                    changed = True
-
-                # Fix files_touched: missing, string → list, absolute → relative
-                if "files_touched" not in data or not data.get("files_touched"):
-                    # Find actual files created in run dir (not kernel-managed)
-                    kernel_files = {"run_state.json", "phase_queue.json", "run_manifest.json",
-                                   "dispatch_log.jsonl", "certification.json", "final_status.json",
-                                   "final_status.md", "policy_decision.json"}
-                    actual_files = []
-                    for f in sorted(run_dir.rglob("*")):
-                        if f.is_file() and f.name not in kernel_files:
-                            rel = str(f.relative_to(run_dir)).replace("\\", "/")
-                            if not rel.startswith("step_logs/") and not rel.startswith("repair_"):
-                                actual_files.append(rel)
-                    data["files_touched"] = actual_files[:5] if actual_files else [f"step_{data.get('step_id', 1)}.txt"]
-                    changed = True
-                elif isinstance(data.get("files_touched"), str):
-                    data["files_touched"] = [data["files_touched"]]
-                    changed = True
-                if isinstance(data.get("files_touched"), list):
-                    fixed_paths = []
-                    for p in data["files_touched"]:
-                        # Convert absolute paths to run-relative
-                        p_str = str(p).replace("\\", "/")
-                        run_prefix = f".agentic-runs/{run_id}/"
-                        if run_prefix in p_str:
-                            p_str = p_str.split(run_prefix, 1)[1]
-                        # Also strip leading .agentic-runs/ if present
-                        elif p_str.startswith(f".agentic-runs/{run_id}/"):
-                            p_str = p_str[len(f".agentic-runs/{run_id}/"):]
-                        fixed_paths.append(p_str)
-                    data["files_touched"] = fixed_paths
-                    changed = True
-
-                # Fix commands_run: string → list
-                if isinstance(data.get("commands_run"), str):
-                    data["commands_run"] = [data["commands_run"]]
-                    changed = True
-
-                # Fix status
-                if data.get("status") not in ("PASSED", "FAILED"):
-                    data["status"] = "PASSED"
-                    changed = True
-
-                # Fix action_taken
-                if not data.get("action_taken"):
-                    data["action_taken"] = "create_file"
-                    changed = True
-
-                # Fix pass_condition_satisfied
-                if "pass_condition_satisfied" not in data:
-                    data["pass_condition_satisfied"] = True
-                    changed = True
-
-                # Fix remaining_work — must be empty list for PASSED steps
-                if "remaining_work" not in data or data.get("remaining_work") or not isinstance(data.get("remaining_work"), list):
-                    data["remaining_work"] = []
-                    changed = True
-
-                if changed:
-                    step_file.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
-                    fixed += 1
-            except Exception:
-                pass
-        if fixed:
-            print(f"  normalized {fixed} step log(s)")
+    if errors:
+        preview = "; ".join(errors[:10])
+        if len(errors) > 10:
+            preview += f"; ... {len(errors) - 10} more"
+        raise RuntimeError(f"Strict certifier precheck failed: {preview}")
 
 
 def _certify_with_repair(run_dir: Path, run_id: str, max_repairs: int = 3) -> str:
-    """Run certifier with repair loop. Returns final status string.
+    """Compatibility wrapper around the certifier with strict no-repair behavior."""
+    if max_repairs:
+        print("  strict mode: automatic repair loop disabled; max_repairs ignored")
 
-    If the certifier fails, extract error messages and feed them to a
-    repair agent. Repeat up to max_repairs times.
-    """
-    for attempt in range(1, max_repairs + 2):  # 1 initial + max_repairs retries
-        if attempt > 1:
-            print(f"  Repair attempt {attempt - 1}/{max_repairs}...")
+    _normalize_for_certifier(run_dir, run_id)
 
-        # Normalize format before each attempt (format bridge)
-        _normalize_for_certifier(run_dir, run_id)
+    result = subprocess.run(
+        [sys.executable, ".agentic-pi/validators/certify_run.py", str(run_dir)],
+        cwd=BASE_DIR, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
+    )
+    output = result.stdout or ""
+    print(output[:500] if len(output) > 500 else output)
 
-        # Run certifier
-        result = subprocess.run(
-            [sys.executable, ".agentic-pi/validators/certify_run.py", str(run_dir)],
-            cwd=BASE_DIR, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
-        )
-        output = result.stdout or ""
-        print(output[:500] if len(output) > 500 else output)
-
-        # Parse status
-        if "DONE_PASS" in output and "FAILED_CHECK" not in output:
-            return "DONE_PASS"
-        if "CERTIFIED_DONE" in output:
-            return "CERTIFIED_DONE"
-        if "PROVISIONAL_DONE" in output:
-            return "PROVISIONAL_DONE"
-
-        # Extract failures for repair
-        failures = [l.strip() for l in output.splitlines() if "FAILED_CHECK" in l]
-        if not failures:
-            return "DONE_FAIL"  # no specific failures to repair
-
-        # Don't repair if out of attempts
-        if attempt > max_repairs:
-            print(f"  Repair budget exhausted after {max_repairs} attempt(s)")
-            return "DONE_FAIL"
-
-        # Feed failures to worker for repair via Pi
-        failure_text = "\n".join(failures[:10])
-        repair_prompt = (
-            f"The certifier found these issues in run {run_id}:\n"
-            f"{failure_text}\n\n"
-            f"Fix EVERY issue. Read the current step logs from "
-            f".agentic-runs/{run_id}/step_logs/ and fix them in place. "
-            f"Read files from .agentic-runs/{run_id}/ to understand what was created. "
-            f"Write corrected files using the write tool. "
-            f"Do NOT touch certification.json or final_status.json."
-        )
-        print(f"  Invoking repair agent: {failure_text[:150]}...")
-        try:
-            prompt_path = run_dir / "repair_prompt.txt"
-            prompt_path.write_text(repair_prompt, encoding="utf-8")
-            # Try pi CLI first, fall back to guarded_worker
-            repair_output = ""
-            try:
-                result = subprocess.run(
-                    ["pi", "--model", "deepseek/deepseek-v4-flash",
-                     "--thinking", "high", f"@{prompt_path}"],
-                    cwd=BASE_DIR, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                    text=True, timeout=120
-                )
-                repair_output = result.stdout or ""
-            except (FileNotFoundError, OSError):
-                # pi CLI not available — use guarded_worker as fallback
-                result = subprocess.run(
-                    [sys.executable, ".agentic-pi/runtime/guarded_worker.py",
-                     "--run-id", run_id, "--skill-context", str(prompt_path)],
-                    cwd=BASE_DIR, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                    text=True, timeout=120
-                )
-                repair_output = result.stdout or ""
-            print(f"  Repair output: {repair_output[:200]}")
-        except Exception as e:
-            print(f"  Repair agent failed: {e}")
-
+    if "DONE_PASS" in output and "FAILED_CHECK" not in output:
+        return "DONE_PASS"
+    if "CERTIFIED_DONE" in output:
+        return "CERTIFIED_DONE"
+    if "PROVISIONAL_DONE" in output:
+        return "PROVISIONAL_DONE"
+    if result.returncode != 0:
+        return "DONE_FAIL"
     return "DONE_FAIL"
 
 
@@ -381,18 +243,11 @@ def main():
     rk = _load_rk()
     try:
         state = rk.get_run_state(args.run_id)
-    except FileNotFoundError:
-        # Auto-repair: create kernel state if init was skipped or failed
-        print(f"  run_state.json missing for '{args.run_id}'; auto-initializing via Run Kernel...")
-        try:
-            rk.create_run(args.run_id)
-            state = rk.get_run_state(args.run_id)
-            print(f"  kernel auto-initialized; current phase: {state['current_phase']}")
-        except Exception as e:
-            raise RuntimeError(
-                f"Run '{args.run_id}' has no run_state.json and auto-repair failed: {e}. "
-                f"Use 'pi_cli.py goal-init {args.run_id}' first."
-            ) from e
+    except FileNotFoundError as exc:
+        raise RuntimeError(
+            f"Run '{args.run_id}' has no run_state.json. Strict prepared-run mode requires "
+            f"explicit initialization first: python .agentic-pi/runtime/init_run.py --run-id {args.run_id}"
+        ) from exc
 
     contract_path = run_dir / "goal_contract.json"
     if not contract_path.is_file():
@@ -436,7 +291,8 @@ def main():
                   ["python", ".agentic-pi/runtime/plan_router.py", "--run-id", args.run_id],
                   skill_context_path=planning_ctx)
     except RuntimeError as e:
-        print(f"  plan_router warning: {e}")
+        print(f"  plan_router failed: {e}")
+        return 1
 
     # 2. Select best plan
     print("Running plan_selector...")
@@ -445,7 +301,8 @@ def main():
                   ["python", ".agentic-pi/runtime/plan_selector.py", "--run-id", args.run_id],
                   skill_context_path=planning_ctx)
     except RuntimeError as e:
-        print(f"  plan_selector warning: {e}")
+        print(f"  plan_selector failed: {e}")
+        return 1
 
     # 3. Merge selected plan
     print("Running plan_merger...")
@@ -454,7 +311,8 @@ def main():
                   ["python", ".agentic-pi/runtime/plan_merger.py", "--run-id", args.run_id],
                   skill_context_path=planning_ctx)
     except RuntimeError as e:
-        print(f"  plan_merger warning: {e}")
+        print(f"  plan_merger failed: {e}")
+        return 1
 
     # 4. Build PlanGraph
     print("Running plan_graph_builder...")
@@ -463,7 +321,8 @@ def main():
                   ["python", ".agentic-pi/runtime/plan_graph_builder.py", args.run_id],
                   skill_context_path=planning_ctx)
     except RuntimeError as e:
-        print(f"  plan_graph_builder warning: {e}")
+        print(f"  plan_graph_builder failed: {e}")
+        return 1
 
     # ── Phase: IMPLEMENTING ───────────────────────────────────────────────
     _maybe_transition(rk, args.run_id, "WORKTREE_READY")
@@ -479,7 +338,8 @@ def main():
                   ["python", ".agentic-pi/runtime/guarded_worker.py", "--run-id", args.run_id],
                   skill_context_path=impl_ctx)
     except RuntimeError as e:
-        print(f"  guarded_worker warning: {e}")
+        print(f"  guarded_worker failed: {e}")
+        return 1
 
     # ── Phase: Post-implementation (EVIDENCE_INDEXING) ────────────────────
     _maybe_transition(rk, args.run_id, "VALIDATOR_BUILDING")
@@ -495,34 +355,27 @@ def main():
         _run_tool(rk, args.run_id, "artifact_linker",
                   ["python", ".agentic-pi/runtime/artifact_linker.py", args.run_id])
     except RuntimeError as e:
-        print(f"  artifact_linker warning: {e}")
+        print(f"  artifact_linker failed: {e}")
+        return 1
 
     print("Running task_graph_builder...")
     try:
         _run_tool(rk, args.run_id, "task_graph_builder",
                   ["python", ".agentic-pi/runtime/task_graph_builder.py", args.run_id])
     except RuntimeError as e:
-        print(f"  task_graph_builder warning: {e}")
+        print(f"  task_graph_builder failed: {e}")
+        return 1
 
     # ── Phase: POLICY / REPLAY / CERTIFYING ─────────────────────────────
     _maybe_transition(rk, args.run_id, "POLICY_DECIDING")
     _maybe_transition(rk, args.run_id, "REPLAYING")
 
-    # Write expected_artifacts.json before certifying (if not already present)
+    # Strict mode does not synthesize expected_artifacts.json before certifying.
     ea_path = run_dir / "expected_artifacts.json"
-    if not ea_path.exists():
-        outputs = contract.get("final_outputs", [])
-        if outputs:
-            ea = {
-                "schema_version": "expected_artifacts_v1",
-                "run_id": args.run_id,
-                "artifacts": [
-                    {"artifact_id": f"A.{i+1:03d}", "expected_path": o, "required": True}
-                    for i, o in enumerate(outputs)
-                ],
-            }
-            ea_path.write_text(json.dumps(ea, indent=2), encoding="utf-8")
-            print(f"  wrote expected_artifacts.json for {len(outputs)} output(s)")
+    outputs = contract.get("final_outputs", [])
+    if outputs and not ea_path.exists():
+        print("  expected_artifacts.json missing; strict mode will not synthesize artifact contracts")
+        return 1
 
     # ── 7. Full verification pipeline ───────────────────────────
     _maybe_transition(rk, args.run_id, "POLICY_DECIDING")
@@ -532,7 +385,7 @@ def main():
     if cert_skills:
         print(f"  QRSPI skills active: {', '.join(cert_skills)}")
     print("Running full verification (artifact routing + provenance + policy + replay + certifier)...")
-    cert_status = _run_full_verification(run_dir, args.run_id)
+    verification_status = _run_full_verification(run_dir, args.run_id)
 
     # ── Phase: REPORTING / MEMORY ─────────────────────────────────────────
     _maybe_transition(rk, args.run_id, "REPORTING")
@@ -543,12 +396,14 @@ def main():
         print("Updating memory from runs...")
         try:
             _run_tool(rk, args.run_id, "update_memory",
-                      ["python", ".agentic-pi/runtime/update_memory_from_runs.py"], cwd=BASE_DIR)
+                      ["python", ".agentic-pi/runtime/update_memory_from_runs.py", "--run-dir", str(run_dir)], cwd=BASE_DIR)
         except RuntimeError as e:
             print(f"  memory update warning: {e}")
 
-    # Read certification status to decide DONE transition and exit code
-    cert_status = None
+    # Read certification status to decide DONE transition and exit code.
+    # If strict verification stopped before certification, keep that failure
+    # status instead of treating missing certification as DONE.
+    cert_status = verification_status
     cert_path = run_dir / "certification.json"
     if cert_path.exists():
         try:
@@ -558,18 +413,18 @@ def main():
         except Exception:
             pass
 
-    # Only transition to DONE when certification passed
-    if cert_status in ("DONE_PASS", "CERTIFIED_DONE", "PROVISIONAL_DONE", None):
+    # Only transition to DONE when certification passed.
+    if cert_status in ("DONE_PASS", "CERTIFIED_DONE", "PROVISIONAL_DONE"):
         _maybe_transition(rk, args.run_id, "DONE")
     else:
         print(f"  certification status is {cert_status}; skipping DONE transition")
 
     print(f"Final state. Kernel phase: {rk.get_run_state(args.run_id)['current_phase']}")
 
-    # Return non-zero when status is NOT_DONE/DONE_FAIL
-    if cert_status in ("NOT_DONE", "DONE_FAIL"):
-        return 1
-    return 0
+    # Return non-zero unless certifier-owned status is a passing status.
+    if cert_status in ("DONE_PASS", "CERTIFIED_DONE", "PROVISIONAL_DONE"):
+        return 0
+    return 1
 
 
 if __name__ == "__main__":

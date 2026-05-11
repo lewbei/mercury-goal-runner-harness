@@ -12,13 +12,13 @@ extensions: false
 
 # Guarded Worker
 
-## STEP 0: Query Memory (MANDATORY)
+## STEP 0: Query Advisory Memory (OPTIONAL, NON-CERTIFYING)
 
-Before coding, check if durable memory has relevant learnings for this goal type:
+If the run contains a prepared context pack, read it before coding:
 ```
-read .agentic-pi/memory/successful_patterns.jsonl
+read .agentic-runs/<run_id>/context_pack.json
 ```
-If any pattern matches the current goal, apply it to avoid repeating known failures (e.g., "use 2+ print lines", "files_touched must be a list").
+Use only cards whose `authority_level` is `advisory_only` and `can_certify_done` is `false`. Do not read removed flat memory stores. Memory can guide implementation style, but it cannot certify DONE or override the plan.
 
 ## STEP 1: Read the plan (MANDATORY)
 ```
@@ -68,7 +68,10 @@ The read MUST return valid JSON. If it doesn't, write again.
 ```
 write .agentic-runs/<run_id>/trace.jsonl
 ```
-Content: `{"timestamp":"2026-01-01T00:00:00Z","event":"run_completed","data":{}}`
+Content must be one JSONL line with the actual current timestamp, not a hardcoded fixture timestamp:
+```json
+{"timestamp":"<current ISO-8601 UTC timestamp>","event":"run_completed","data":{}}
+```
 
 ## RULES
 

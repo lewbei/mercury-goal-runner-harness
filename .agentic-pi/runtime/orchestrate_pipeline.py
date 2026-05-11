@@ -83,8 +83,6 @@ def main() -> int:
         ("certify_run", repo_root / ".agentic-pi" / "validators" / "certify_run.py"),
     ]
 
-    # Non-critical phases — failure produces status files, don't abort
-    critical = {"init_run", "artifact_linker", "task_graph_builder"}
     for name, script in phases:
         if name == "init_run" and run_dir.is_dir():
             print(f"=== Phase {name} === (skipped — run dir exists)")
@@ -92,11 +90,10 @@ def main() -> int:
         try:
             run_phase(script, f"Phase {name}", ["--run-id", run_id] if name == "init_run" else [str(run_dir)] if name in ("harness_contract_verifier", "certify_run") else ["keygen", str(run_dir)] if name == "harness_signing" else [run_id])
         except RuntimeError as e:
-            if name in critical:
-                raise
-            print(f"  Non-critical: {e}")
+            print(f"PIPELINE_FAILED: {e}")
+            return 1
 
-    print("Deterministic pipeline completed successfully.")
+    print("Deterministic pipeline phases completed. Read certifier-owned status artifacts before reporting success.")
     return 0
 
 

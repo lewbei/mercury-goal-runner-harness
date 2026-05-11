@@ -163,18 +163,10 @@ def _update_spawn_entry(
             updated = True
             break
     if not updated:
-        # If entry does not exist, create a placeholder with minimal info.
-        queue.append(
-            {
-                "packet_id": packet_id,
-                "subagent_type": None,
-                "model": None,
-                "prompt": None,
-                "run_id": None,
-                "status": status,
-                "created_at": _now_iso(),
-                "updated_at": _now_iso(),
-            }
+        logging.error(
+            "Cannot update missing spawn queue entry %s to status %s; strict mode will not synthesize queue entries",
+            packet_id,
+            status,
         )
     return queue
 

@@ -1,3 +1,8 @@
+---
+name: path-grounding
+description: Before writing any code, ground the implementation in expected artifact paths from the artifact contract. Every file written must match its declared expected path.
+---
+
 # Path Grounding Skill
 
 **Phase:** IMPLEMENTING (first step)

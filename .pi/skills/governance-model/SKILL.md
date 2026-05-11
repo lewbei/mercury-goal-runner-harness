@@ -1,4 +1,9 @@
-﻿# Governance Model
+---
+name: governance-model
+description: Constitutional executor model defining roles (Constitution, CEO, Planners, Skeptic, Worker, Supervisor, Certifier) and the core rule that Mercury cannot certify itself.
+---
+
+# Governance Model
 
 This harness uses a constitutional executor model.
 

@@ -155,9 +155,9 @@ def main(argv=None) -> int:
     parser.add_argument("--goal", required=True)
     parser.add_argument(
         "--mode",
-        choices=["legacy", "p2", "missing_verifier", "planning_p2"],
-        default="legacy",
-        help="raw-goal proof fixture mode",
+        choices=["p2", "missing_verifier", "planning_p2"],
+        default="p2",
+        help="strict raw-goal proof fixture mode",
     )
     args = parser.parse_args(argv)
 

@@ -43,6 +43,8 @@ on top of v3.7 MemPalace + ACE Memory Governance.
 **PROJECT_STATUS.md** is the source of truth for version. The `workspace_index.md`
 cross-references it. Keep these in sync — the plan should not lag behind.
 
+Current local cleanup note: default runtime scripts are being strictified to fail closed. `full_verify.py` requires existing proof artifacts, `plan_router.py` requires existing planner-owned `plans/*_plan.json`, `plan_merger.py` writes `merged_plan.json` from `selected_plan.json`, and workers must not create fallback artifacts.
+
 ---
 
 ## The full architecture — annotated with current status
@@ -561,7 +563,7 @@ Verify: `python .agentic-pi/validator_factory/runtime/certify_generated_validato
 
 ### Phase 6 — Replay certification ✅ (DONE)
 
-`replay_certification.py` exists and is wired into the kernel. 
+`replay_certification.py` exists and is wired into the kernel.
 Changed evidence hash causes replay mismatch.
 
 Verify: `python .agentic-pi/replay/replay_certification.py --help`

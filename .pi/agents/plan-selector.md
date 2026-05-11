@@ -18,4 +18,4 @@ extensions: false
 
 **Output**: `selected_plan.json` with the chosen plan.
 
-Prefer the robust plan if it has validation and fallback steps. Write the selection file.
+Prefer the robust plan if it has validation and contingency steps. Write the selection file.

@@ -105,7 +105,7 @@ def memory_used(run_dir: Path) -> bool:
 
 def verifier_strength_path(run_dir: Path) -> str:
     if not (run_dir / "verifier_contract.json").is_file():
-        return "legacy"
+        return "none"
     strength_dir = run_dir / "verifier_strength_reports"
     if strength_dir.is_dir():
         for path in sorted(strength_dir.glob("*.json")):
@@ -193,7 +193,6 @@ def strength_points(path: str) -> int:
         "certifying": 20,
         "gating": 10,
         "advisory": 3,
-        "legacy": 5,
         "none": -10,
     }.get(path, -10)
 

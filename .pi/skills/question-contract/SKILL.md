@@ -1,3 +1,8 @@
+---
+name: question-contract
+description: Convert a raw user goal into a structured question contract defining what the goal is, why it matters, and what success looks like in measurable terms.
+---
+
 # Question Contract Skill
 
 **Phase:** INTAKE / QUESTIONING

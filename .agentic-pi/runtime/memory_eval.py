@@ -195,10 +195,10 @@ def write_learning_card(batch_idx: int, goals: List[Goal], results: List[RunResu
 
     The card records the union of all success patterns that were *matched* in the
     assisted runs of the batch, the overall outcome (success count), and a timestamp.
-    The file is stored under ``memory/durable/learning_cards/`` with a name like
-    ``batch_01.json``.
+    The file is stored under ``.agentic-pi/memory/quarantine/evaluation_cards/``
+    with a name like ``batch_01.json``. It is evaluation output, not durable memory.
     """
-    card_dir = Path(__file__).resolve().parents[2] / "memory" / "durable" / "learning_cards"
+    card_dir = Path(__file__).resolve().parents[2] / ".agentic-pi" / "memory" / "quarantine" / "evaluation_cards"
     card_dir.mkdir(parents=True, exist_ok=True)
     matched_patterns: List[str] = []
     success_count = 0

@@ -1,3 +1,8 @@
+---
+name: research-pack
+description: Gather relevant context, dependencies, and prior work related to the goal. The research pack informs design decisions and prevents rework.
+---
+
 # Research Pack Skill
 
 **Phase:** RESEARCHING

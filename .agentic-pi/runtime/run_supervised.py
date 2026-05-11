@@ -230,7 +230,9 @@ def execute_phase(rk, sl, run_id: str, phase: str, run_dir: Path) -> dict:
         pkt_role = pkt.get("role", "")
         matching = [s for s in tool_specs if s["role"] == pkt_role]
         if not matching:
-            matching = tool_specs  # fallback: use first
+            report["packets_failed"] += 1
+            report["errors"].append(f"No tool spec for role {pkt_role!r}")
+            continue
         spec = matching[0]
 
         # Execute the tool

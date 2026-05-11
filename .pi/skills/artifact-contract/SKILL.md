@@ -1,3 +1,8 @@
+---
+name: artifact-contract
+description: Prepare the controlled workspace before implementation begins. Define expected artifacts, their paths, and writing permissions in an explicit artifact contract.
+---
+
 # Artifact Contract Skill
 
 **Phase:** WORKTREE_READY

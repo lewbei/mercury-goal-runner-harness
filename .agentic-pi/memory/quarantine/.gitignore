@@ -1,0 +1,4 @@
+# Generated evaluation/quarantine memory candidates.
+evaluation_cards/
+*.json
+*.jsonl

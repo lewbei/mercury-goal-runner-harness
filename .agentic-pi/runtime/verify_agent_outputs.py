@@ -6,9 +6,8 @@ After each Pi subagent completes, this script verifies that expected output
 files actually exist on disk. Pi's write tool sometimes reports success but
 the file never lands (known infrastructure issue).
 
-If files are missing, it creates minimal stubs from available context so
-the pipeline doesn't break. The stub is marked with a diagnostic flag so
-the certifier knows it was repaired.
+If files are missing, it writes a diagnostic report and exits non-zero.
+It never creates replacement artifacts.
 
 Usage:
     python verify_agent_outputs.py <run_dir> <agent_name> <file1> [file2 ...]

@@ -1,0 +1,7 @@
+# Generated runtime state; source modules live beside these files.
+agent_spawn_queue.json
+auto_dispatcher_state.json
+context_state.json
+cross_run_patterns.json
+enriched_packet_*.json
+usage_report_*.json

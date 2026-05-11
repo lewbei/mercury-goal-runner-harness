@@ -1,8 +1,0 @@
-{
-  "card_id": "learn-orchtest-planner-minimal-0",
-  "content": "Subagent planner-minimal in orchtest: # Thinking Plan: Prime Checker\n\n## Architecture\nThe solution consists of two Python modules:\n- **is_prime.py** \u2013 Implements the core `is_prime` function.\n- **test_is_prime.py** \u2013 Contains unit tests u",
-  "source": "thinking_plan",
-  "agent": "planner-minimal",
-  "outcome": "UNKNOWN",
-  "stored_at": "2026-05-10T09:27:23.701300+00:00"
-}

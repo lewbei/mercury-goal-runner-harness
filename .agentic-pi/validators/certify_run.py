@@ -219,7 +219,10 @@ def validate_against_merged_plan(run_dir, logs, step_by_id, merged_steps, failed
             failed.append(f"missing step log for merged plan step {expected_idx}")
             continue
 
-        expected_action = expected_step.get("action", "placeholder")
+        expected_action = expected_step.get("action")
+        if not isinstance(expected_action, str) or not expected_action.strip():
+            failed.append(f"merged plan step {expected_idx} action is missing")
+            continue
         if actual.get("action_taken") != expected_action:
             failed.append(
                 f"step {expected_idx} action mismatch: expected {expected_action}, got {actual.get('action_taken')}"
@@ -973,11 +976,11 @@ def apply_memory_authority_gate(
         run_dir / "memory_journal.json",
         run_dir / "learning_candidate.json",
     ]
-    # Also scan run_local_memory/ directory if it exists
-    run_local_dir = run_dir / "run_local_memory"
-    if run_local_dir.is_dir():
-        for fpath in run_local_dir.glob("*.json"):
-            memory_paths.append(fpath)
+    # Also scan current run-local/quarantine memory reports.
+    memory_dir = run_dir / "memory"
+    if memory_dir.is_dir():
+        memory_paths.extend(sorted(memory_dir.glob("*.json")))
+        memory_paths.extend(sorted(memory_dir.glob("*.jsonl")))
 
     found_leaks = False
     for mem_path in memory_paths:
@@ -988,7 +991,7 @@ def apply_memory_authority_gate(
                 "validate_memory_authority",
                 Path(__file__).resolve().parents[1] / "validators" / "validate_memory_authority.py",
             )
-            data = vma.load_json(mem_path)
+            data = vma.load_memory_objects(mem_path)
             errors = vma.validate_memory_authority(data)
             if errors:
                 found_leaks = True

@@ -1,12 +1,39 @@
-# Plan Router (Deterministic Stub)
+# Plan Router Boundary
 
-The current `plan_router.py` is a **deterministic stub** used for testing the harness. It does **not** invoke any real Mercury or Pi planner agents. Instead, it generates plan JSON based on the `complexity_level` of the goal contract:
+`.agentic-pi/runtime/plan_router.py` is a strict router, not a plan generator.
 
-- **SIMPLE** - plans a placeholder documentation file at the first `final_outputs` path.
-- **MEDIUM** - plans a placeholder examples file at the first `final_outputs` path.
-- **HARD** - plans a small `cli_tool.py` at the first `final_outputs` path. The script reads `data.csv` from the run folder and prints row and column counts.
-- **RISKY / IMPOSSIBLE** - plans a placeholder output that should fail certification if the contract requires real executable behavior.
+## Current behavior
 
-The router must not create final artifacts. Only the Guarded Worker executes selected plan steps and writes final outputs inside `.agentic-runs/<run_id>/`.
+The strict router only checks that planner-owned plan files already exist:
 
-The stub is intentionally minimal and should be replaced with real planner agents that generate adaptive plans based on the goal contract. Until then, the stub is clearly marked in the source code.
+```text
+.agentic-runs/<run_id>/plans/*_plan.json
+```
+
+If no planner-owned plan exists, it fails closed with:
+
+```text
+STRICT_PLAN_ROUTER_REQUIRES_EXISTING_PLAN
+```
+
+It does not generate SIMPLE / MEDIUM / HARD substitute plans, does not write substitute artifacts, and does not certify DONE.
+
+## Why
+
+The old complexity-based router was useful for early harness slices, but it could make a run look more complete than it really was. The current cleanup direction is stricter:
+
+```text
+Planner agents produce plans.
+Workers execute approved plans.
+Policy decides.
+Certifier writes final status.
+```
+
+## Authority boundary
+
+Plan routing is not certification. Final status still comes only from:
+
+```text
+.agentic-pi/validators/certify_run.py
+.agentic-pi/runtime/policy_engine.py
+```

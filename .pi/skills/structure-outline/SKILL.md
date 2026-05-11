@@ -1,3 +1,8 @@
+---
+name: structure-outline
+description: Define the structural components needed to implement the selected design. Maps design options to concrete files, modules, tests, and configurations.
+---
+
 # Structure Outline Skill
 
 **Phase:** STRUCTURING

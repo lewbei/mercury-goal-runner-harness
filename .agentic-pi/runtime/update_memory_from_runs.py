@@ -1,61 +1,48 @@
 #!/usr/bin/env python3
-"""Update memory files based on past runs.
+"""Validate/initialize advisory memory after a run.
 
-Scans all run directories under .agentic-runs, extracts failed and successful
-checks from certification.json, and appends JSON lines to the appropriate memory
-files.
+This command no longer republishes every historical certification check into
+flat JSONL memory files. Durable memory promotion is owned by memory_write_gate.py,
+and run-local/quarantine memory stays inside each run folder.
 """
-import json
+
+from __future__ import annotations
+
+import argparse
+import subprocess
+import sys
 from pathlib import Path
 
-BASE_DIR = Path(__file__).parent.parent.parent  # project root
-RUNS_DIR = BASE_DIR / ".agentic-runs"
-MEMORY_DIR = BASE_DIR / ".agentic-pi" / "memory"
-
-FAILURE_FILE = MEMORY_DIR / "failure_patterns.jsonl"
-SUCCESS_FILE = MEMORY_DIR / "successful_patterns.jsonl"
+ROOT = Path(__file__).resolve().parents[2]
+RUNTIME = ROOT / ".agentic-pi" / "runtime"
+VALIDATORS = ROOT / ".agentic-pi" / "validators"
+MEMORY_DIR = ROOT / ".agentic-pi" / "memory"
 
 
-def append_jsonl(path: Path, obj: dict):
-    """Append a JSON object as a single line to a .jsonl file."""
-    with path.open("a", encoding="utf-8") as f:
-        f.write(json.dumps(obj, ensure_ascii=False) + "\n")
+def run(cmd: list[str], label: str) -> bool:
+    result = subprocess.run(cmd, cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+    print(f"[{label}] exit={result.returncode}")
+    if result.stdout:
+        print(result.stdout.strip())
+    return result.returncode == 0
 
 
-def main():
-    MEMORY_DIR.mkdir(parents=True, exist_ok=True)
-    # Ensure files exist
-    for f in (FAILURE_FILE, SUCCESS_FILE):
-        f.touch(exist_ok=True)
+def main(argv=None) -> int:
+    parser = argparse.ArgumentParser(description="Validate advisory memory boundaries without flat-store republishing.")
+    parser.add_argument("--run-dir", default="", help="Optional run directory whose memory/ files should be validated")
+    args = parser.parse_args(argv)
 
-    for run_dir in RUNS_DIR.iterdir():
-        if not run_dir.is_dir():
-            continue
-        cert_path = run_dir / "certification.json"
-        if not cert_path.is_file():
-            continue
-        try:
-            cert = json.loads(cert_path.read_text(encoding="utf-8"))
-        except Exception as e:
-            print(f"Failed to read {cert_path}: {e}")
-            continue
-        # Record failures
-        for fail in cert.get("failed_checks", []):
-            entry = {
-                "run_id": cert.get("run_id"),
-                "failure": fail,
-                "timestamp": cert.get("timestamp")
-            }
-            append_jsonl(FAILURE_FILE, entry)
-        # Record successes (passed checks)
-        for passed in cert.get("passed_checks", []):
-            entry = {
-                "run_id": cert.get("run_id"),
-                "passed": passed,
-                "timestamp": cert.get("timestamp")
-            }
-            append_jsonl(SUCCESS_FILE, entry)
-    print(f"Memory updated. Failures written to {FAILURE_FILE}, successes to {SUCCESS_FILE}.")
+    ok = run([sys.executable, str(RUNTIME / "mempalace_adapter.py"), "--memory-root", str(MEMORY_DIR), "--init"], "mempalace_init")
+    ok &= run([sys.executable, str(RUNTIME / "mempalace_adapter.py"), "--memory-root", str(MEMORY_DIR), "--list-cards"], "mempalace_list_cards")
+
+    if args.run_dir:
+        run_dir = Path(args.run_dir)
+        ok &= run([sys.executable, str(VALIDATORS / "validate_run_local_memory.py"), str(run_dir)], "validate_run_local_memory")
+        ok &= run([sys.executable, str(VALIDATORS / "validate_quarantine_memory.py"), str(run_dir)], "validate_quarantine_memory")
+
+    print("Memory update completed without writing removed flat memory stores.")
+    return 0 if ok else 1
+
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

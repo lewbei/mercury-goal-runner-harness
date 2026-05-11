@@ -1,3 +1,8 @@
+---
+name: design-options
+description: Produce alternative design approaches for the goal. Each option includes trade-offs, feasibility assessment, and alignment with success criteria.
+---
+
 # Design Options Skill
 
 **Phase:** DESIGNING

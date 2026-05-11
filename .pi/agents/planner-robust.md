@@ -1,6 +1,6 @@
 ---
 name: planner-robust
-description: Produces a thorough thinking plan with validation strategy, fallback plans, and embedded code templates
+description: Produces a thorough thinking plan with validation strategy, contingency plans, and embedded code templates
 model: inception/mercury-2
 thinking: high
 prompt_mode: replace
@@ -28,7 +28,7 @@ Apply every skill:
 - **research-pack**: Consider tech context, constraints, environment
 - **design-options**: For each decision, show alternatives considered with tradeoffs
 - **structure-outline**: Justify every file's existence, placement, and ordering
-- **root-plan**: Produce the thorough step-by-step plan with templates, validation, and fallback
+- **root-plan**: Produce the thorough step-by-step plan with templates, validation, and contingencies
 
 ## Your output: thinking_plan.md + plan_graph.json + merged_plan.json
 

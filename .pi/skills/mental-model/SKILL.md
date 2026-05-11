@@ -1,4 +1,9 @@
-﻿# Mental Model
+---
+name: mental-model
+description: Mercury V2 mental model — fast worker inside a controlled harness, not the final authority. Evidence beats confidence.
+---
+
+# Mental Model
 
 Mercury V2 is a fast worker inside a controlled harness, not the final authority.
 

@@ -2,7 +2,7 @@
 
 Owner: Mercury Goal Runner Harness
 Status: source-of-truth
-Last verified: 2026-05-08
+Last documentation audit: 2026-05-11 (non-test; no test files read or run)
 
 ## Current Direction
 
@@ -10,6 +10,12 @@ The implemented local layer is RPG-Harness v5 Phase 2-8 (Supervisor Ledger,
 Artifact Routing, Success Criteria/Oracles, Validator Factory, Replay
 Certification, Memory Split, Meta-Harness v0.1) on top of v3.7 MemPalace
 + ACE Memory Governance.
+
+The current default runtime cleanup direction is strict fail-closed behavior:
+runtime tools must not manufacture missing proof artifacts, generated substitute plans,
+substitute status, or direct durable-memory writes. Historical V0/V1 documents
+remain evidence records, not the default runtime contract.
+
 The research direction is Verifier-Provenance Goal Runner Harness,
 centered on:
 
@@ -20,14 +26,19 @@ Who is allowed to certify DONE?
 ## Source-Of-Truth Files
 
 - `README.md` - repository overview and current commands.
-- `PROJECT_STATUS.md` - implementation status and limitations.
-- `FRAMEWORK.md` - conceptual architecture and actual current file map.
+- `PROJECT_STATUS.md` - root compatibility pointer to `docs/PROJECT_STATUS.md`.
+- `FRAMEWORK.md` - root compatibility pointer to `docs/FRAMEWORK.md`.
+- `workspace_index.md` - root compatibility pointer to `docs/workspace_index.md`.
+- `docs/PROJECT_STATUS.md` - implementation status and limitations.
+- `docs/FRAMEWORK.md` - conceptual architecture and actual current file map.
 - `docs/V5_ARCHITECTURE_GUIDE.md` - corrected V5 architecture plan with per-layer build status (✅ exists / 🔧 needs work).
+- `docs/CURRENT_RUNTIME_PATH.md` - current strict runtime boundary and compatibility-pointer map.
+- `docs/PLAN_ROUTER.md` - current plan-router boundary; no generated substitute planning.
 - `.agentic-pi/README.md` - local harness folder ownership map.
 - `.agentic-pi/runtime/README.md` - runtime module ownership map.
 - `.agentic-pi/diagnostics/README.md` - deterministic diagnostic fixture map.
-- `PROBLEM_AND_GAP.md` - current research problem and gap.
-- `VERIFIER_PROVENANCE_DESIGN.md` - verifier authority model and deferred implementation boundary.
+- `docs/PROBLEM_AND_GAP.md` - current research problem and gap.
+- `docs/VERIFIER_PROVENANCE_DESIGN.md` - verifier authority model and deferred implementation boundary.
 - `docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md` - completed v1.3-v2.1 roadmap.
 - `docs/V2_7_AGENTIC_AUTONOMY_PROOF_PLAN.md` - real Pi/Mercury agentic autonomy probe boundary.
 - `docs/V2_8_AGENTIC_NEGATIVE_PROBES.md` - arbitrary-chain and unbounded-bash negative-probe boundary.
@@ -42,16 +53,18 @@ Who is allowed to certify DONE?
 - `docs/V3_6_RUN_LOCAL_AND_QUARANTINE_MEMORY.md` - run-local and quarantine memory boundary.
 - `docs/V3_7_MEMPALACE_ACE_MEMORY_GOVERNANCE.md` - structured advisory memory governance boundary.
 - `docs/V3_5_TO_V4_0_AUTHORITY_EVIDENCE_MEMORY_PLAN.md` - implemented authority-artifact prerequisite plus evidence-freeze, ACE/MemPalace memory, context-board, adapter, and paper-evaluation roadmap.
-- `certification_policy.yaml` - draft static policy vocabulary.
+- `certification_policy.yaml` - planned/deferred draft static policy vocabulary; no live file is currently present.
 
 - `.agentic-pi/run_kernel/` - RPG-Harness v5 Phase 2 supervisor ledger: run kernel, transition validator, phase registry, work packet lifecycle, dispatch ledger, protected core artifacts.
 - `.agentic-pi/core/` - RPG-Harness v5 trusted core: core authority policy, protected artifacts, status lattice, trusted core manifest.
-- `.agentic-pi/artifacts/` - RPG-Harness v5 Phase 3 artifact routing: expected_artifacts schema, artifact contract schema, placement policy, location/misplacement/fallback/satisfaction validators.
+- `.agentic-pi/artifacts/` - RPG-Harness v5 Phase 3 artifact routing: expected_artifacts schema, artifact contract schema, placement policy, location/misplacement/substitute-path/satisfaction validators.
 - `tests/test_supervisor_ledger.py` - 57 deterministic tests for transition validation, run kernel state machine, work packet lifecycle, dependencies, trusted core files, and integration scenarios.
-- `tests/test_artifact_routing.py` - 46 deterministic tests for artifact schema validation, location checking, misplacement detection, fallback detection, content satisfaction, and kernel integration.
+- `tests/test_artifact_routing.py` - deterministic artifact schema validation, location checking, misplacement detection, substitute-path detection, content satisfaction, and kernel integration.
 
 ## Active Supporting Files
 
+- `docs/CURRENT_RUNTIME_PATH.md` - current strict runtime boundary and compatibility-pointer map.
+- `.pi/skills/README.md` - project-local skill tree layout and package-skill boundary.
 - `docs/V0_2_1_FREEZE.md` - fake-DONE baseline boundary.
 - `docs/V0_3_PLANGRAPH.md` - current PlanGraph prototype boundary.
 - `docs/V0_3_2_PROVENANCE_GATE_FREEZE.md` - current provenance runtime gate boundary.
@@ -94,11 +107,11 @@ Who is allowed to certify DONE?
 - `.agentic-pi/prompts/agentic_autonomy_probe.md` - paste-ready real Pi probe prompt.
 - `.agentic-pi/prompts/negative_autonomy/` - paste-ready negative Pi/Mercury prompt templates.
 - `.agentic-pi/prompts/real_behavior_matrix/` - bounded real Pi/Mercury prompt coverage templates.
-- `PLAN_ROUTER.md` - deterministic planner stub note.
+- `docs/PLAN_ROUTER.md` - strict plan-router note; planner outputs must already exist.
 
 ## Known Cleanup Debt
 
-- The certifier still emits `DONE_PASS` / `DONE_FAIL` for legacy runs without `verifier_contract.json`.
+- Direct certifier compatibility may still emit `DONE_PASS` / `DONE_FAIL` for historical runs without `verifier_contract.json`; the current strict `full_verify.py` path requires existing proof artifacts and fails closed when they are missing.
 - Provenance-mode runs can emit `NOT_DONE`, `PROVISIONAL_DONE`, or `CERTIFIED_DONE`.
 - The current provenance diagnostic set is intentionally four deterministic cases, not a broad benchmark.
 - The trajectory diagnostic set is intentionally six deterministic session fixtures, not a proof of full autonomous Pi runtime.
@@ -120,5 +133,5 @@ Who is allowed to certify DONE?
 - The v3.5.0 authority artifact layer makes `final_status.json` machine-readable authority and keeps `final_status.md` derived. It cannot certify DONE beyond `certify_run.py` / `policy_engine.py`.
 - The v3.5.1 evidence-freeze layer indexes and freezes producer-linked evidence while excluding memory paths.
 - The v3.6 run-local/quarantine memory layer can record observations and candidate lessons, but memory remains advisory, non-durable, excluded from evidence, and unable to certify DONE.
-- The v3.7 MemPalace/ACE layer can store durable advisory cards, build bounded context packs, reflect helpful/harmful memory use, and promote cards only through `memory_write_gate.py`; it still cannot certify DONE or replace evidence.
+- The v3.7 MemPalace/ACE layer can store durable advisory cards, build bounded context packs, reflect helpful/harmful memory use, and promote cards only through `memory_write_gate.py`; subagent memory now writes run-local/quarantine candidates first, and memory still cannot certify DONE or replace evidence.
 - The `modules/ace-main/` and `modules/mempalace-develop/` folders are local ignored references only. They informed v3.7 memory governance design, but they are not vendored harness dependencies.

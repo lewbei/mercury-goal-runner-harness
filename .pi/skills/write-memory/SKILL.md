@@ -1,3 +1,8 @@
+---
+name: write-memory
+description: Write advisory durable memory after final status is locked. Records lessons learned, patterns observed, and context for future runs — advisory only, not evidence.
+---
+
 # Write Memory Skill
 
 **Phase:** MEMORY_CONSOLIDATING

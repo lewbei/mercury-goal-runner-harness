@@ -1,6 +1,6 @@
 """goal_persistence.py
 -------------------
-Provides persistence for attempt logging, dead‑end detection, retry‑prompt generation
+Provides persistence for attempt logging, dead-end detection, retry-prompt generation
 and overall goal state tracking.
 """
 
@@ -14,7 +14,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 
-# Optional file‑locking support – if unavailable we fall back to naïve writes.
+# Optional file-locking support - if unavailable we fall back to naive writes.
 try:
     import portalocker  # type: ignore
     _HAS_LOCK = True
@@ -49,7 +49,7 @@ class Attempt:
 
 @dataclass
 class GoalState:
-    """Tracks high‑level execution state for a goal."""
+    """Tracks high-level execution state for a goal."""
     phase: str = "initial"
     attempts_count: int = 0
     approaches_tried: List[str] = None
@@ -89,7 +89,7 @@ class GoalState:
 # ---------------------------------------------------------------------------
 
 class PersistenceError(RuntimeError):
-    """Base class for all persistence‑related errors."""
+    """Base class for all persistence-related errors."""
     pass
 
 class AttemptLogError(PersistenceError):
@@ -142,14 +142,14 @@ class GoalPersistence:
             try:
                 portalocker.lock(f, portalocker.LOCK_EX)
             except Exception as exc:  # pragma: no cover
-                # If locking fails we still return the file – the caller will see
+                # If locking fails we still return the file - the caller will see
                 # the exception and can decide to retry.
                 f.close()
                 raise AttemptLogError(f"Failed to acquire lock on {path}: {exc}")
         return f
 
     # ---------------------------------------------------------------------
-    # Public API – attempt log
+    # Public API - attempt log
     # ---------------------------------------------------------------------
     def log_attempt(
         self,
@@ -165,7 +165,7 @@ class GoalPersistence:
         approach:
             Identifier of the approach that was tried (e.g. a prompt name).
         failure_reason:
-            Human‑readable reason why the attempt failed.
+            Human-readable reason why the attempt failed.
         what_was_tried:
             A short description of the concrete action taken.
         timestamp:
@@ -209,30 +209,30 @@ class GoalPersistence:
         return attempts
 
     # ---------------------------------------------------------------------
-    # Public API – retry prompt
+    # Public API - retry prompt
     # ---------------------------------------------------------------------
     def build_retry_prompt(self, subgoal_id: str) -> str:
         """Construct a retry prompt that lists *all* failed approaches for ``subgoal_id``.
 
         The prompt ends with an explicit instruction **"do NOT try these again"**.
-        The function assumes that the ``approach`` field is prefixed with the sub‑goal
+        The function assumes that the ``approach`` field is prefixed with the sub-goal
         identifier in the form ``"subgoal:{subgoal_id}:{approach_name}"``.
         """
         attempts = self.load_attempts()
-        # Filter attempts that belong to the sub‑goal.
+        # Filter attempts that belong to the sub-goal.
         relevant = [
             a
             for a in attempts
             if a.approach.startswith(f"subgoal:{subgoal_id}:")
         ]
         if not relevant:
-            return f"Retry for sub‑goal {subgoal_id}: No previous failures recorded."
+            return f"Retry for sub-goal {subgoal_id}: No previous failures recorded."
         lines = [
             f"- Approach: {a.approach.split(':')[-1]}\n  Reason: {a.failure_reason}\n  Details: {a.what_was_tried}"
             for a in relevant
         ]
         prompt = (
-            f"You have previously attempted the sub‑goal '{subgoal_id}' and failed.\n"
+            f"You have previously attempted the sub-goal '{subgoal_id}' and failed.\n"
             "The failed attempts are listed below:\n\n"
             + "\n".join(lines)
             + "\n\nPlease propose a new approach, **do NOT try these again**."
@@ -240,29 +240,29 @@ class GoalPersistence:
         return prompt
 
     # ---------------------------------------------------------------------
-    # Public API – dead‑end detection
+    # Public API - dead-end detection
     # ---------------------------------------------------------------------
     def detect_dead_end(self, subgoal_id: str, threshold: int = 3) -> bool:
         """Return ``True`` if the same ``failure_reason`` has occurred ``threshold`` times for ``subgoal_id``.
 
-        The function updates the goal state by marking the sub‑goal as stuck when the
+        The function updates the goal state by marking the sub-goal as stuck when the
         condition is met.
         """
         attempts = self.load_attempts()
-        # Gather failure reasons for the sub‑goal.
+        # Gather failure reasons for the sub-goal.
         reasons: Dict[str, int] = {}
         for a in attempts:
             if a.approach.startswith(f"subgoal:{subgoal_id}:"):
                 reasons[a.failure_reason] = reasons.get(a.failure_reason, 0) + 1
         for reason, count in reasons.items():
             if count >= threshold:
-                # Mark sub‑goal as stuck.
+                # Mark sub-goal as stuck.
                 self.mark_subgoal_stuck(subgoal_id)
                 return True
         return False
 
     # ---------------------------------------------------------------------
-    # Public API – goal state
+    # Public API - goal state
     # ---------------------------------------------------------------------
     def load_state(self) -> GoalState:
         """Load ``goal_state.json`` and return a ``GoalState`` instance.
@@ -290,7 +290,7 @@ class GoalPersistence:
         try:
             with open(tmp_path, "w", encoding="utf-8") as f:
                 json.dump(state.to_dict(), f, ensure_ascii=False, indent=2)
-            # Atomic replace – works on Windows and POSIX.
+            # Atomic replace - works on Windows and POSIX.
             os.replace(tmp_path, self.goal_state_path)
         except Exception as exc:  # pragma: no cover
             raise GoalStateError(f"Failed to save goal state: {exc}")
@@ -327,14 +327,14 @@ class GoalPersistence:
         failure_reason: str,
         what_was_tried: str,
     ) -> None:
-        """High‑level helper that logs a failure and updates the state.
+        """High-level helper that logs a failure and updates the state.
 
-        ``approach_name`` is automatically prefixed with the sub‑goal identifier.
+        ``approach_name`` is automatically prefixed with the sub-goal identifier.
         """
         full_approach = f"subgoal:{subgoal_id}:{approach_name}"
         self.log_attempt(full_approach, failure_reason, what_was_tried)
         self.add_approach(full_approach)
 
     def maybe_mark_stuck(self, subgoal_id: str, threshold: int = 3) -> bool:
-        """Convenient wrapper that checks for dead‑end and returns ``True`` if stuck."""
+        """Convenient wrapper that checks for dead-end and returns ``True`` if stuck."""
         return self.detect_dead_end(subgoal_id, threshold)

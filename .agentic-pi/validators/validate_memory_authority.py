@@ -26,6 +26,18 @@ def load_json(path: Path):
         return json.load(f)
 
 
+def load_memory_objects(path: Path):
+    if path.suffix.lower() == ".jsonl":
+        rows = []
+        with path.open("r", encoding="utf-8") as f:
+            for raw_line in f:
+                line = raw_line.strip()
+                if line:
+                    rows.append(json.loads(line))
+        return rows
+    return load_json(path)
+
+
 def iter_objects(obj):
     yield obj
     if isinstance(obj, dict):
@@ -58,7 +70,7 @@ def main(argv=None) -> int:
     if len(argv) != 1:
         print("Usage: validate_memory_authority.py <memory-object.json>")
         return 2
-    errors = validate_memory_authority(load_json(Path(argv[0])))
+    errors = validate_memory_authority(load_memory_objects(Path(argv[0])))
     if errors:
         print("MEMORY_AUTHORITY_INVALID")
         for error in errors:

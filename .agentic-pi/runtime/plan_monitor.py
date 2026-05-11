@@ -113,7 +113,10 @@ def monitor_run(run_dir: Path) -> dict:
             if protected_violation:
                 fatal.append(f"{log_path.name} {protected_violation}")
 
-        expected_action = expected_step.get("action", "placeholder")
+        expected_action = expected_step.get("action")
+        if not isinstance(expected_action, str) or not expected_action.strip():
+            fatal.append(f"merged plan step {index} action is missing")
+            continue
         if step_log.get("action_taken") != expected_action:
             repairable.append(
                 f"step {index} action mismatch: expected {expected_action}, got {step_log.get('action_taken')}"

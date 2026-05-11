@@ -1,3 +1,8 @@
+---
+name: harness-certify
+description: Write final status artifacts (certification.json, final_status.json, final_status.md). Deterministic core operation reserved for the certifier — not available to Mercury agents.
+---
+
 # Harness Certify Skill
 
 **Phase:** CERTIFYING
