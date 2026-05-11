@@ -29,8 +29,11 @@ read .agentic-runs/<run_id>/thinking_plan.md
 
 For each Step N in the plan:
 1. Find the Template code block
-2. Use write tool to create the file at `.agentic-runs/<run_id>/<filename>`
-3. READ-BACK: Immediately use read tool on `.agentic-runs/<run_id>/<filename>`
+2. Determine the output path:
+   - If the template specifies `.agentic-pi/` path → write to that exact path
+   - If the template specifies a run-relative filename → write to `.agentic-runs/<run_id>/<filename>`
+3. Use write tool to create the file at the determined path
+4. READ-BACK: Immediately use read tool on that same path
    - The read MUST return the file content — not an error, not empty
    - If read fails or shows "File not found", the write was lost. Write AGAIN, then read AGAIN.
    - Do NOT proceed to next step until read-back succeeds.
