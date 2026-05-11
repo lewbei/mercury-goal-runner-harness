@@ -169,6 +169,22 @@ def generate_project_map(project_dir: str, output_path: str = "project_map.json"
         "entry_points": entry_points,
         "test_files": test_files,
         "dependencies": dependencies,
+        "directory_conventions": {
+            "validator": ".agentic-pi/validators",
+            "runtime": ".agentic-pi/runtime",
+            "formal": ".agentic-pi/formal",
+            "schema": ".agentic-pi/schemas",
+            "memory": ".agentic-pi/memory/durable",
+            "fixture": ".agentic-pi/fixtures",
+            "supervisor": ".agentic-pi/supervisor",
+            "planning": ".agentic-pi/planning",
+            "wiring": ".agentic-pi/wiring",
+            "skill": "skills",
+            "agent": ".pi/agents",
+            "test": "tests",
+            "docs": "docs",
+            "run_artifact": ".agentic-runs/<run_id>",
+        }
     }
 
     try:

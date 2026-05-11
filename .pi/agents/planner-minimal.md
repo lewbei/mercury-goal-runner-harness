@@ -26,7 +26,7 @@ read .agentic-runs/<run_id>/goal_contract.json
 
 If `project_dir` is set in the goal contract, generate and read the project map:
 ```
-read .agentic-runs/<run_id>/project_map.json
+read .agentic-runs/<run_id>/project_map.json — use directory_conventions to determine output paths: validators→.agentic-pi/validators, runtime→.agentic-pi/runtime, etc. NEVER put harness modules in the run directory.
 ```
 
 If the project map exists, use it to understand existing files, imports, and entry points before planning.

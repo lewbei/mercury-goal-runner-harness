@@ -30,6 +30,8 @@ read .agentic-runs/<run_id>/thinking_plan.md
 For each Step N in the plan:
 1. Find the Template code block
 2. Determine the output path:
+   - Check `.agentic-runs/<run_id>/project_map.json` directory_conventions
+   - If the artifact type matches a convention (validator/runtime/formal), use that path
    - If the template specifies `.agentic-pi/` path → write to that exact path
    - If the template specifies a run-relative filename → write to `.agentic-runs/<run_id>/<filename>`
 3. Use write tool to create the file at the determined path
