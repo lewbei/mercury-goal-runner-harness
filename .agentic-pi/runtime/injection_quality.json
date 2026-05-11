@@ -1,7 +1,9 @@
 {
   "run_id": "G010",
-  "timestamp": "2026-05-11T00:59:26.830724+00:00",
-  "success": false,
-  "used_card_ids": [],
-  "summary": "failure"
+  "timestamp": "2026-05-11T01:50:18.788316+00:00",
+  "success": true,
+  "used_card_ids": [
+    "card_prime"
+  ],
+  "summary": "success"
 }
