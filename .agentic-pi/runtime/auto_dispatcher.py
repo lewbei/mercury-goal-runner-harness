@@ -7,6 +7,7 @@ Reads kernel work packets and auto-spawns agents by writing a spawn queue.
 
 import json
 import logging
+import os
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -51,7 +52,7 @@ def _save_state(state: Dict[str, int]) -> None:
 
 
 def _read_dispatch_log(run_dir: Path, start_line: int) -> List[Dict[str, Any]]:
-    """Read dispatch_log.jsonl from start_line (0-indexed) and return new records.
+    """Read dispatch_log.jsonl from start_line (0‑indexed) and return new records.
 
     Args:
         run_dir: Path to the run directory.
@@ -177,6 +178,116 @@ def _update_spawn_entry(
         )
     return queue
 
+# ---------------------------------------------------------------------------
+# Durable‑agent helper functions (new)
+# ---------------------------------------------------------------------------
+
+def _packet_dir(run_dir: Path, packet_id: str) -> Path:
+    """Return a dedicated directory for a packet (created on demand)."""
+    pkt_dir = run_dir / "work_packets" / packet_id
+    pkt_dir.mkdir(parents=True, exist_ok=True)
+    return pkt_dir
+
+
+def _load_checkpoint(pkt_dir: Path) -> List[int]:
+    """Load checkpoint.json if it exists and return the list of completed steps.
+
+    Returns an empty list when the file is missing or malformed.
+    """
+    ck_path = pkt_dir / "checkpoint.json"
+    if not ck_path.is_file():
+        return []
+    try:
+        data = json.loads(ck_path.read_text(encoding="utf-8"))
+        steps = data.get("completed_steps", [])
+        # Ensure we only return integers
+        return [int(s) for s in steps if isinstance(s, (int, str)) and str(s).isdigit()]
+    except Exception as exc:
+        logging.error("Failed to read checkpoint %s: %s", ck_path, exc)
+        return []
+
+
+def _write_checkpoint(pkt_dir: Path, completed_steps: List[int]) -> None:
+    """Write checkpoint.json with the given list of completed step numbers.
+    """
+    ck_path = pkt_dir / "checkpoint.json"
+    payload = {"completed_steps": sorted(set(completed_steps))}
+    try:
+        ck_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    except Exception as exc:
+        logging.error("Failed to write checkpoint %s: %s", ck_path, exc)
+
+
+def _scan_step_logs(pkt_dir: Path) -> List[int]:
+    """Inspect <packet_dir>/step_logs for *.json files named like "1.json".
+
+    Returns a sorted list of step numbers that have a corresponding log file.
+    """
+    step_dir = pkt_dir / "step_logs"
+    if not step_dir.is_dir():
+        return []
+    steps = []
+    for entry in step_dir.iterdir():
+        if entry.is_file() and entry.suffix == ".json":
+            stem = entry.stem
+            if stem.isdigit():
+                steps.append(int(stem))
+    return sorted(steps)
+
+
+def _is_output_valid(file_path: Path) -> bool:
+    """Validate that a file exists, is non‑empty, and (for JSON) is parseable.
+    """
+    if not file_path.is_file():
+        return False
+    try:
+        if file_path.stat().st_size == 0:
+            return False
+        if file_path.suffix.lower() == ".json":
+            json.loads(file_path.read_text(encoding="utf-8"))
+        # For non‑JSON files we only require non‑empty content.
+        return True
+    except Exception as exc:
+        logging.error("Invalid output file %s: %s", file_path, exc)
+        return False
+
+
+def _check_idempotent(packet: Dict[str, Any], run_dir: Path) -> bool:
+    """Return True if all files listed in packet["expected_outputs"] are present and valid.
+    """
+    expected = packet.get("expected_outputs", [])
+    if not isinstance(expected, list) or not expected:
+        return False
+    for rel_path in expected:
+        out_path = run_dir / rel_path
+        if not _is_output_valid(out_path):
+            return False
+    return True
+
+
+def _modify_prompt_for_resume(original_prompt: str, completed_steps: List[int]) -> str:
+    """Prefix the original prompt with a concise continuation instruction.
+
+    Example prefix:
+        "CONTINUE from step 3. Steps 1,2 already done. Read existing files before proceeding.\n\n"
+    """
+    if not completed_steps:
+        return original_prompt
+    next_step = max(completed_steps) + 1
+    steps_str = ", ".join(str(s) for s in sorted(completed_steps))
+    prefix = f"CONTINUE from step {next_step}. Steps {steps_str} already done. Read existing files before proceeding.\n\n"
+    return prefix + original_prompt
+
+
+def _update_checkpoint_for_packet(pkt_dir: Path) -> None:
+    """Scan step logs and write the latest checkpoint.
+    """
+    steps = _scan_step_logs(pkt_dir)
+    _write_checkpoint(pkt_dir, steps)
+
+# ---------------------------------------------------------------------------
+# Core event processing (augmented with durable logic)
+# ---------------------------------------------------------------------------
 
 def _process_new_events(
     run_dir: Path,
@@ -198,22 +309,52 @@ def _process_new_events(
             packet = _load_packet(run_dir, packet_id)
             if not packet:
                 continue
+            # ----- Durable‑agent pre‑processing -----
+            pkt_dir = _packet_dir(run_dir, packet_id)
+            # 1) Idempotent check
+            if _check_idempotent(packet, run_dir):
+                # Mark as already completed – no need to spawn.
+                entry = {
+                    "packet_id": packet_id,
+                    "subagent_type": packet.get("subagent_type"),
+                    "model": packet.get("model"),
+                    "prompt": packet.get("prompt"),
+                    "run_id": run_dir.name,
+                    "status": "already_completed",
+                    "created_at": _now_iso(),
+                    "updated_at": _now_iso(),
+                }
+                spawn_queue.append(entry)
+                logging.info("Packet %s is idempotent – skipping dispatch", packet_id)
+                # Still write a checkpoint (all steps considered done)
+                _write_checkpoint(pkt_dir, [])
+                continue
+            # 2) Checkpoint‑based prompt modification
+            completed = _load_checkpoint(pkt_dir)
+            if completed:
+                new_prompt = _modify_prompt_for_resume(packet.get("prompt", ""), completed)
+            else:
+                new_prompt = packet.get("prompt", "")
+            # 3) Extract configuration (subagent_type, model, prompt)
             config = _extract_agent_config(packet)
             if not config:
                 # Missing config – we deliberately do NOT add to the queue.
                 continue
+            # 4) Build spawn entry (use possibly modified prompt)
             entry = {
                 "packet_id": packet_id,
                 "subagent_type": config["subagent_type"],
                 "model": config["model"],
-                "prompt": config["prompt"],
+                "prompt": new_prompt,
                 "run_id": run_dir.name,
                 "status": "pending",
                 "created_at": _now_iso(),
                 "updated_at": _now_iso(),
             }
             spawn_queue.append(entry)
-            logging.info("Queued packet %s for spawning", packet_id)
+            logging.info("Queued packet %s for spawning (status=pending)", packet_id)
+            # 5) Update checkpoint after queuing (captures any step logs already present)
+            _update_checkpoint_for_packet(pkt_dir)
 
         elif ev_type == "work_packet_result_received":
             packet_id = event.get("work_packet_id")
