@@ -311,6 +311,14 @@
       "claim_boundary": "Runtime-readiness fixture evidence only; it does not certify DONE, decide policy, execute goals, or prove arbitrary runtime safety."
     },
     {
+      "claim_id": "stage3_runtime_preflight_gate",
+      "claim": "Runtime preflight consumes Stage 2 and Stage 3 gate reports only when both pass and preserve certifier-only authority.",
+      "mode": "quick",
+      "command": ["python", ".agentic-pi/runtime/stage3_runtime_preflight.py", "--output", ".agentic-runs/proof_matrix_outputs/stage3_runtime_preflight_report_v1.json"],
+      "expected_evidence": ["STAGE3_RUNTIME_PREFLIGHT_PASS", "Stage 2 and Stage 3 reports passed", "runtime may not execute goals", "can_certify_done is false"],
+      "claim_boundary": "Runtime preflight smoke only; it does not execute goals, decide policy, certify DONE, or prove arbitrary runtime safety."
+    },
+    {
       "claim_id": "full_unittest",
       "claim": "The complete local unit suite passes.",
       "mode": "full",
