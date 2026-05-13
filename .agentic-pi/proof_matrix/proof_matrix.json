@@ -303,6 +303,14 @@
       "claim_boundary": "Finalisation gate evidence only; it does not certify DONE, decide policy, prove implementation correctness, or prove arbitrary planning safety."
     },
     {
+      "claim_id": "stage3_runtime_readiness_gate",
+      "claim": "Stage 3 runtime integration rejects fake-DONE shortcuts before consuming Stage 2 planning evidence.",
+      "mode": "quick",
+      "command": ["python", ".agentic-pi/evaluation/stage3_runtime/validate_stage3_runtime_readiness.py", "--output", ".agentic-runs/proof_matrix_outputs/stage3_runtime_readiness_report_v1.json"],
+      "expected_evidence": ["STAGE3_RUNTIME_READINESS_PASS", "fake-DONE traps rejected", "protected authority writes rejected", "can_certify_done is false"],
+      "claim_boundary": "Runtime-readiness fixture evidence only; it does not certify DONE, decide policy, execute goals, or prove arbitrary runtime safety."
+    },
+    {
       "claim_id": "full_unittest",
       "claim": "The complete local unit suite passes.",
       "mode": "full",
