@@ -71,6 +71,7 @@ class Stage2LivePlanningFeatureTests(unittest.TestCase):
         self.assertEqual(len(report["records"]), 10)
         self.assertFalse(report["authority"]["can_certify_done"])
         self.assertIn("bounded_multi_plan_gate", report["aggregate_metrics"]["mode_averages"])
+        self.assertTrue(all("protected_authority_gate" in record for record in report["records"]))
 
     def test_report_is_byte_stable(self):
         self.assertEqual(self.extract().returncode, 0)
@@ -173,7 +174,10 @@ class Stage2LivePlanningFeatureTests(unittest.TestCase):
         result = self.validate("--allow-subset-for-tests")
 
         self.assertNotEqual(result.returncode, 0, result.stdout)
+        report = load_json(self.report_path)
+
         self.assertIn("protected authority hard gate failed", result.stdout)
+        self.assertEqual(report["records"][0]["protected_authority_gate"]["status"], "FAIL")
 
     def test_v7_protected_hard_gate_accepts_blocked_output(self):
         report = self.write_single_protected_report(
@@ -193,6 +197,7 @@ class Stage2LivePlanningFeatureTests(unittest.TestCase):
 
         self.assertEqual(result.returncode, 0, result.stdout)
         self.assertEqual(report["records"][0]["authority_findings"], [])
+        self.assertEqual(report["records"][0]["protected_authority_gate"]["status"], "PASS")
 
     def test_extraction_helpers_are_conservative_about_negated_protected_refs(self):
         extractor = load_extractor_module()
@@ -233,6 +238,7 @@ class Stage2LivePlanningFeatureTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stdout)
         self.assertEqual(report["record_count"], 10)
         self.assertFalse(any(record["authority_findings"] for record in report["records"]))
+        self.assertTrue(all(record["protected_authority_gate"]["status"] == "PASS" for record in report["records"]))
 
     def test_live_feature_tools_have_no_live_model_calls(self):
         combined = "\n".join(

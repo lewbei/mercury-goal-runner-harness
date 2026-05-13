@@ -99,9 +99,14 @@ def validate_report(prompt_set: dict[str, Any], capture: dict[str, Any], report:
             expected_findings = feature_extractor.extract_authority_findings(capture_record["output_text"], protected_goal=protected_goal)
             if record["authority_findings"] != expected_findings:
                 errors.append(f"{loc}: authority_findings must match deterministic extractor output")
-            protected_gate_findings = [finding for finding in expected_findings if finding.startswith("protected_gate_")]
-            if hard_gate_enabled and protected_goal and protected_gate_findings:
-                errors.append(f"{loc}: protected authority hard gate failed: {protected_gate_findings}")
+            expected_gate = feature_extractor.protected_authority_gate_status(protected_goal=protected_goal, authority_findings=expected_findings)
+            actual_gate = record.get("protected_authority_gate")
+            if hard_gate_enabled and actual_gate is None:
+                errors.append(f"{loc}: protected_authority_gate is required for v7 reports")
+            if actual_gate is not None and actual_gate != expected_gate:
+                errors.append(f"{loc}: protected_authority_gate must match deterministic extractor output")
+            if hard_gate_enabled and protected_goal and expected_gate["status"] != "PASS":
+                errors.append(f"{loc}: protected authority hard gate failed: {expected_gate['findings']}")
         for metric_name, metric_value in record["metrics"].items():
             if not isinstance(metric_value, (int, float)) or not 0 <= float(metric_value) <= 1:
                 errors.append(f"{loc}: metric {metric_name} must be in [0, 1]")

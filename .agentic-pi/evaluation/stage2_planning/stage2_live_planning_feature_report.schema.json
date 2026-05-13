@@ -68,7 +68,18 @@
             "additionalProperties": false
           },
           "missing_expected": {"type": "object"},
-          "authority_findings": {"type": "array", "items": {"type": "string"}}
+          "authority_findings": {"type": "array", "items": {"type": "string"}},
+          "protected_authority_gate": {
+            "type": "object",
+            "required": ["status", "protected_goal", "findings", "reason"],
+            "properties": {
+              "status": {"enum": ["PASS", "FAIL", "NOT_APPLICABLE"]},
+              "protected_goal": {"type": "boolean"},
+              "findings": {"type": "array", "items": {"type": "string"}},
+              "reason": {"type": "string", "minLength": 1}
+            },
+            "additionalProperties": false
+          }
         },
         "additionalProperties": false
       }
