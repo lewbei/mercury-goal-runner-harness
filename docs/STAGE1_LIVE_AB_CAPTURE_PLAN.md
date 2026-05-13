@@ -36,8 +36,8 @@ final_status_authority = certifier_only
 Before live capture, generate a deterministic request pack:
 
 ```cmd
-python .agentic-pi\evaluation\stage1_multiframe\generate_live_capture_request_pack.py --output .agentic-pi\evaluation\stage1_multiframe\live_capture_request_pack.json
-python .agentic-pi\evaluation\stage1_multiframe\validate_live_capture_request_pack.py --request-pack .agentic-pi\evaluation\stage1_multiframe\live_capture_request_pack.json
+python .agentic-pi\evaluation\stage1_multiframe\generate_live_capture_request_pack.py --output .agentic-pi\evaluation\stage1_multiframe\live_capture_request_pack_v2.json
+python .agentic-pi\evaluation\stage1_multiframe\validate_live_capture_request_pack.py --request-pack .agentic-pi\evaluation\stage1_multiframe\live_capture_request_pack_v2.json
 ```
 
 The request pack contains 100 tasks:
@@ -48,13 +48,15 @@ The request pack contains 100 tasks:
 
 It contains prompt text, prompt hashes, mode-specific instructions, required return fields, and forbidden actions. It does **not** contain model outputs, output hashes, provider responses, or live evidence.
 
+The v2 multi-frame request adds grounding discipline: known facts from the prompt, assumptions labeled as prompt-supported or speculative, unknowns, claims needing evidence, weak-path attacks, rejected bad frames, and a final direction that separates supported conclusions from unknowns.
+
 ## Mercury subset capture
 
 A small Mercury subset can be captured through the Pi CLI before attempting the full 50-prompt run:
 
 ```cmd
-python .agentic-pi\evaluation\stage1_multiframe\run_mercury_live_capture.py --prompt-limit 5 --output .agentic-pi\evaluation\stage1_multiframe\live_capture_mercury_subset_5.json
-python .agentic-pi\evaluation\stage1_multiframe\validate_stage1_live_capture.py --capture .agentic-pi\evaluation\stage1_multiframe\live_capture_mercury_subset_5.json --allow-subset-for-tests
+python .agentic-pi\evaluation\stage1_multiframe\run_mercury_live_capture.py --prompt-limit 5 --output .agentic-pi\evaluation\stage1_multiframe\live_capture_mercury_subset_5_v2.json
+python .agentic-pi\evaluation\stage1_multiframe\validate_stage1_live_capture.py --capture .agentic-pi\evaluation\stage1_multiframe\live_capture_mercury_subset_5_v2.json --allow-subset-for-tests
 ```
 
 This uses `pi --model inception/mercury-2 --no-tools --no-session`. Pi CLI does not expose temperature, max output tokens, or provider request id in this path, so those runtime parameters are recorded as unavailable rather than guessed.

@@ -24,6 +24,15 @@ PROTECTED_STATUS_VALUES = {"CERTIFIED_DONE", "DONE_PASS", "DONE_FAIL", "PROVISIO
 PROTECTED_STEMS = {"final_status", "certification", "policy_decision"}
 INVISIBLE_CODEPOINTS = {"\u200b", "\u200c", "\u200d", "\ufeff", "\u2060"}
 FORBIDDEN_TASK_KEYS = {"output_text", "output_hash", "captured_at", "provider", "model", "model_version"}
+REQUIRED_MULTIFRAME_GROUNDING_PHRASES = [
+    "Known facts from the prompt only",
+    "prompt-supported or speculative",
+    "Unknowns / unavailable evidence",
+    "Claims needing evidence",
+    "rely on unstated facts",
+    "separates supported conclusions from unknowns",
+    "Do not invent repo state",
+]
 
 
 def load_json(path: Path) -> Any:
@@ -126,6 +135,13 @@ def validate_request_pack(prompt_set: dict[str, Any], request_pack: dict[str, An
             errors.append(f"{loc}: prompt_hash mismatch")
         if prompt["prompt"] not in task["capture_instruction"]:
             errors.append(f"{loc}: capture_instruction must include the exact benchmark prompt")
+        if mode == "multiframe_harness":
+            missing_phrases = [
+                phrase for phrase in REQUIRED_MULTIFRAME_GROUNDING_PHRASES
+                if phrase not in task["capture_instruction"]
+            ]
+            if missing_phrases:
+                errors.append(f"{loc}: multiframe_harness instruction missing grounding phrases {missing_phrases}")
 
     for prompt_id, modes in modes_by_prompt.items():
         if modes != MODES:

@@ -16,6 +16,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_DIR = ROOT / ".agentic-pi" / "evaluation" / "stage1_multiframe"
+DEFAULT_OUTPUT = DEFAULT_DIR / "live_capture_request_pack_v2.json"
 MODES = ("normal_prompt", "multiframe_harness")
 PROTECTED_OUTPUT_NAMES = {"final_status.json", "final_status.md", "certification.json", "policy_decision.json"}
 EXPECTED_CAPTURE_FIELDS = [
@@ -62,8 +63,17 @@ def capture_instruction(prompt_text: str, mode: str) -> str:
     if mode == "multiframe_harness":
         return (
             "Treat the text between <benchmark_prompt> tags as the user question. "
-            "Answer that question using the multi-frame harness. Include distinct frames, assumptions, attacks on weak paths, "
-            "rejected bad frames, and a final direction. Do not restate these instructions. Do not claim completion authority.\n\n"
+            "Answer that question using the grounded multi-frame harness. Do not restate these instructions.\n\n"
+            "Required structure:\n"
+            "1. Known facts from the prompt only.\n"
+            "2. Assumptions, each labeled prompt-supported or speculative.\n"
+            "3. Unknowns / unavailable evidence.\n"
+            "4. Claims needing evidence before they can be trusted.\n"
+            "5. Distinct frames with attacks on weak paths.\n"
+            "6. Rejected bad frames, especially frames that rely on unstated facts.\n"
+            "7. Final direction that separates supported conclusions from unknowns.\n\n"
+            "Do not invent repo state, tool access, citations, benchmark results, product claims, hidden context, "
+            "CI status, dependencies, or live checks. Do not claim completion authority.\n\n"
             f"<benchmark_prompt>\n{prompt_text}\n</benchmark_prompt>"
         )
     raise ValueError(f"unknown mode: {mode}")
@@ -117,8 +127,8 @@ def build_request_pack(prompt_set: dict[str, Any], *, request_pack_id: str) -> d
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Generate Stage 1 live A/B capture request pack")
     parser.add_argument("--prompt-set", default=str(DEFAULT_DIR / "prompt_set.json"))
-    parser.add_argument("--output", default=str(DEFAULT_DIR / "live_capture_request_pack.json"))
-    parser.add_argument("--request-pack-id", default="stage1_live_capture_request_pack_50x2_v1")
+    parser.add_argument("--output", default=str(DEFAULT_OUTPUT))
+    parser.add_argument("--request-pack-id", default="stage1_live_capture_request_pack_50x2_v2")
     args = parser.parse_args(argv)
 
     prompt_set = load_json(Path(args.prompt_set))

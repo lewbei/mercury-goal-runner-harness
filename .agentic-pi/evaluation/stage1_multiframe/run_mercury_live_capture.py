@@ -21,8 +21,8 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_DIR = ROOT / ".agentic-pi" / "evaluation" / "stage1_multiframe"
-DEFAULT_REQUEST_PACK = DEFAULT_DIR / "live_capture_request_pack.json"
-DEFAULT_OUTPUT = DEFAULT_DIR / "live_capture_mercury_subset_5.json"
+DEFAULT_REQUEST_PACK = DEFAULT_DIR / "live_capture_request_pack_v2.json"
+DEFAULT_OUTPUT = DEFAULT_DIR / "live_capture_mercury_subset_5_v2.json"
 DEFAULT_SYSTEM_PROMPT = (
     "You are responding to a Stage 1 A/B benchmark prompt. "
     "Answer the supplied benchmark task only. "
@@ -141,7 +141,7 @@ def build_capture(request_pack: dict[str, Any], tasks: list[dict[str, Any]], *, 
             time.sleep(sleep_seconds)
     return {
         "schema_version": "stage1_live_capture_v1",
-        "capture_id": f"stage1_mercury_live_subset_{len(set(task['prompt_id'] for task in tasks))}_prompts_v1",
+        "capture_id": f"stage1_mercury_live_subset_{len(set(task['prompt_id'] for task in tasks))}_prompts_v2",
         "prompt_set_id": request_pack["prompt_set_id"],
         "capture_scope": "subset_fixture_only",
         "authority": {
@@ -152,7 +152,7 @@ def build_capture(request_pack: dict[str, Any], tasks: list[dict[str, Any]], *, 
         "capture_environment": {
             "captured_by": "pi_cli_mercury_runner",
             "capture_tool": "run_mercury_live_capture.py",
-            "notes": "Live Mercury subset capture. This is not full Stage 1 settlement evidence and not certification.",
+            "notes": "Live Mercury subset capture using grounded multiframe request pack v2. This is not full Stage 1 settlement evidence and not certification.",
         },
         "captures": captures,
     }

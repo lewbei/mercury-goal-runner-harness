@@ -65,6 +65,43 @@ class Stage1LiveCaptureRequestPackTests(unittest.TestCase):
             self.assertNotIn("output_hash", task)
             self.assertIn(task["prompt_text"], task["capture_instruction"])
 
+    def test_multiframe_instruction_contains_grounding_discipline(self):
+        self.assertEqual(self.generate_pack().returncode, 0)
+        pack = load_json(self.pack_path)
+        multiframe_tasks = [task for task in pack["tasks"] if task["mode"] == "multiframe_harness"]
+        self.assertEqual(len(multiframe_tasks), 50)
+        required_phrases = [
+            "Known facts from the prompt only",
+            "prompt-supported or speculative",
+            "Unknowns / unavailable evidence",
+            "Claims needing evidence",
+            "rely on unstated facts",
+            "separates supported conclusions from unknowns",
+            "Do not invent repo state",
+        ]
+        for task in multiframe_tasks:
+            for phrase in required_phrases:
+                with self.subTest(task_id=task["task_id"], phrase=phrase):
+                    self.assertIn(phrase, task["capture_instruction"])
+
+    def test_ungrounded_multiframe_instruction_fails_validation(self):
+        self.assertEqual(self.generate_pack().returncode, 0)
+        pack = load_json(self.pack_path)
+        for task in pack["tasks"]:
+            if task["mode"] == "multiframe_harness":
+                task["capture_instruction"] = (
+                    "Answer the benchmark prompt using the multi-frame harness. Produce distinct frames, "
+                    "state assumptions, attack weak paths, reject bad frames, then give a final direction.\n\n"
+                    f"Benchmark prompt:\n{task['prompt_text']}"
+                )
+                break
+        write_json(self.pack_path, pack)
+
+        result = self.validate_pack()
+
+        self.assertNotEqual(result.returncode, 0, result.stdout)
+        self.assertIn("missing grounding phrases", result.stdout)
+
     def test_duplicate_mode_fails_validation(self):
         self.assertEqual(self.generate_pack().returncode, 0)
         pack = load_json(self.pack_path)
