@@ -31,9 +31,26 @@ can_certify_done = false
 final_status_authority = certifier_only
 ```
 
+## Request pack
+
+Before live capture, generate a deterministic request pack:
+
+```cmd
+python .agentic-pi\evaluation\stage1_multiframe\generate_live_capture_request_pack.py --output .agentic-pi\evaluation\stage1_multiframe\live_capture_request_pack.json
+python .agentic-pi\evaluation\stage1_multiframe\validate_live_capture_request_pack.py --request-pack .agentic-pi\evaluation\stage1_multiframe\live_capture_request_pack.json
+```
+
+The request pack contains 100 tasks:
+
+```text
+50 prompts × 2 modes = 100 capture tasks
+```
+
+It contains prompt text, prompt hashes, mode-specific instructions, required return fields, and forbidden actions. It does **not** contain model outputs, output hashes, provider responses, or live evidence.
+
 ## What is captured
 
-Each capture record stores one model output for one prompt and one mode:
+Each completed capture record stores one model output for one prompt and one mode:
 
 ```text
 prompt_id
