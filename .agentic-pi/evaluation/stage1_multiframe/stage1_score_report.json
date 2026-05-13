@@ -1,40 +1,35 @@
 {
   "aggregate_metrics": {
+    "assumption_recall_relative_improvement": 1.5,
+    "failure_mode_recall_relative_improvement": 1.5,
     "mode_averages": {
       "multiframe_harness": {
         "alternative_recall": 1.0,
         "assumption_recall": 1.0,
         "bad_frame_rejection_rate": 1.0,
-        "composite_score": 0.9656,
+        "composite_score": 0.964,
         "failure_mode_recall": 1.0,
-        "quality_of_final_answer": 0.828
+        "quality_of_final_answer": 0.82
       },
       "normal_prompt": {
-        "alternative_recall": 0.44,
-        "assumption_recall": 0.44,
-        "bad_frame_rejection_rate": 0.4,
-        "composite_score": 0.4536,
+        "alternative_recall": 0.4,
+        "assumption_recall": 0.4,
+        "bad_frame_rejection_rate": 0.33,
+        "composite_score": 0.424,
         "failure_mode_recall": 0.4,
-        "quality_of_final_answer": 0.588
+        "quality_of_final_answer": 0.59
       }
     },
-    "multiframe_prompt_wins": 5
+    "multiframe_prompt_wins": 50
   },
   "authority": {
     "authority_level": "evaluation_only",
     "can_certify_done": false,
     "final_status_authority": "certifier_only"
   },
-  "claim_boundary": "This report tests a deterministic starter fixture only; it cannot certify final DONE or prove general reasoning superiority.",
-  "future_50_prompt_gate_policy": {
-    "minimum_assumption_recall_improvement": 0.2,
-    "minimum_failure_mode_recall_improvement": 0.2,
-    "quality_must_not_decrease": true,
-    "required_prompt_wins": "35/50",
-    "status": "NOT_EVALUATED_BY_STARTER_5"
-  },
+  "claim_boundary": "This report tests deterministic fixtures only; it cannot certify final DONE or prove general reasoning superiority beyond this benchmark.",
   "generated_by": "stage1_multiframe_fixture_scorer_v1",
-  "prompt_count": 5,
+  "prompt_count": 50,
   "prompt_results": [
     {
       "mode_scores": [
@@ -56,105 +51,6 @@
           "assumption_count": 5,
           "assumption_recall": 1.0,
           "bad_frame_rejection_rate": 1.0,
-          "composite_score": 0.964,
-          "failure_mode_recall": 1.0,
-          "failure_modes_found_count": 5,
-          "frame_count": 5,
-          "mode": "multiframe_harness",
-          "quality_of_final_answer": 0.82,
-          "rejected_bad_frames_count": 2
-        }
-      ],
-      "multiframe_beats_normal": true,
-      "prompt_id": "agent_harness_001",
-      "winner": "multiframe_harness"
-    },
-    {
-      "mode_scores": [
-        {
-          "alternative_recall": 0.4,
-          "assumption_count": 2,
-          "assumption_recall": 0.4,
-          "bad_frame_rejection_rate": 0.5,
-          "composite_score": 0.456,
-          "failure_mode_recall": 0.4,
-          "failure_modes_found_count": 2,
-          "frame_count": 2,
-          "mode": "normal_prompt",
-          "quality_of_final_answer": 0.58,
-          "rejected_bad_frames_count": 1
-        },
-        {
-          "alternative_recall": 1.0,
-          "assumption_count": 5,
-          "assumption_recall": 1.0,
-          "bad_frame_rejection_rate": 1.0,
-          "composite_score": 0.968,
-          "failure_mode_recall": 1.0,
-          "failure_modes_found_count": 5,
-          "frame_count": 5,
-          "mode": "multiframe_harness",
-          "quality_of_final_answer": 0.84,
-          "rejected_bad_frames_count": 2
-        }
-      ],
-      "multiframe_beats_normal": true,
-      "prompt_id": "paper_novelty_001",
-      "winner": "multiframe_harness"
-    },
-    {
-      "mode_scores": [
-        {
-          "alternative_recall": 0.4,
-          "assumption_count": 2,
-          "assumption_recall": 0.4,
-          "bad_frame_rejection_rate": 0.5,
-          "composite_score": 0.46,
-          "failure_mode_recall": 0.4,
-          "failure_modes_found_count": 2,
-          "frame_count": 2,
-          "mode": "normal_prompt",
-          "quality_of_final_answer": 0.6,
-          "rejected_bad_frames_count": 1
-        },
-        {
-          "alternative_recall": 1.0,
-          "assumption_count": 5,
-          "assumption_recall": 1.0,
-          "bad_frame_rejection_rate": 1.0,
-          "composite_score": 0.966,
-          "failure_mode_recall": 1.0,
-          "failure_modes_found_count": 5,
-          "frame_count": 5,
-          "mode": "multiframe_harness",
-          "quality_of_final_answer": 0.83,
-          "rejected_bad_frames_count": 2
-        }
-      ],
-      "multiframe_beats_normal": true,
-      "prompt_id": "mercury_coding_001",
-      "winner": "multiframe_harness"
-    },
-    {
-      "mode_scores": [
-        {
-          "alternative_recall": 0.6,
-          "assumption_count": 3,
-          "assumption_recall": 0.6,
-          "bad_frame_rejection_rate": 0.5,
-          "composite_score": 0.548,
-          "failure_mode_recall": 0.4,
-          "failure_modes_found_count": 2,
-          "frame_count": 3,
-          "mode": "normal_prompt",
-          "quality_of_final_answer": 0.64,
-          "rejected_bad_frames_count": 1
-        },
-        {
-          "alternative_recall": 1.0,
-          "assumption_count": 5,
-          "assumption_recall": 1.0,
-          "bad_frame_rejection_rate": 1.0,
           "composite_score": 0.96,
           "failure_mode_recall": 1.0,
           "failure_modes_found_count": 5,
@@ -165,7 +61,7 @@
         }
       ],
       "multiframe_beats_normal": true,
-      "prompt_id": "repo_ready_001",
+      "prompt_id": "agent_harness_001",
       "winner": "multiframe_harness"
     },
     {
@@ -188,28 +84,1622 @@
           "assumption_count": 5,
           "assumption_recall": 1.0,
           "bad_frame_rejection_rate": 1.0,
-          "composite_score": 0.97,
+          "composite_score": 0.962,
           "failure_mode_recall": 1.0,
           "failure_modes_found_count": 5,
           "frame_count": 5,
           "mode": "multiframe_harness",
-          "quality_of_final_answer": 0.85,
+          "quality_of_final_answer": 0.81,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "paper_novelty_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.458,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.59,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.964,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.82,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "mercury_coding_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.0,
+          "composite_score": 0.362,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.61,
+          "rejected_bad_frames_count": 0
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.966,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.83,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "repo_ready_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.466,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.63,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.968,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.84,
           "rejected_bad_frames_count": 2
         }
       ],
       "multiframe_beats_normal": true,
       "prompt_id": "self_improvement_001",
       "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.45,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.55,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.96,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.8,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "authority_split_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.0,
+          "composite_score": 0.354,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.57,
+          "rejected_bad_frames_count": 0
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.962,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.81,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "fake_done_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.458,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.59,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.964,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.82,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "certifier_boundary_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.462,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.61,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.966,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.83,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "role_design_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.0,
+          "composite_score": 0.366,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.63,
+          "rejected_bad_frames_count": 0
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.968,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.84,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "human_review_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.45,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.55,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.96,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.8,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "policy_gate_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.454,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.57,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.962,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.81,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "evidence_freeze_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.0,
+          "composite_score": 0.358,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.59,
+          "rejected_bad_frames_count": 0
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.964,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.82,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "tool_use_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.462,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.61,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.966,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.83,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "unit_tests_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.466,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.63,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.968,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.84,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "refactor_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.0,
+          "composite_score": 0.35,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.55,
+          "rejected_bad_frames_count": 0
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.96,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.8,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "bugfix_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.454,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.57,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.962,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.81,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "dependency_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.458,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.59,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.964,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.82,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "cli_adapter_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.0,
+          "composite_score": 0.362,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.61,
+          "rejected_bad_frames_count": 0
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.966,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.83,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "test_failure_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.466,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.63,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.968,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.84,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "citation_check_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.45,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.55,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.96,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.8,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "benchmark_claim_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.0,
+          "composite_score": 0.354,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.57,
+          "rejected_bad_frames_count": 0
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.962,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.81,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "paper_scope_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.458,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.59,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.964,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.82,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "literature_gap_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.462,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.61,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.966,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.83,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "ablation_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.0,
+          "composite_score": 0.366,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.63,
+          "rejected_bad_frames_count": 0
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.968,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.84,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "reproducibility_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.45,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.55,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.96,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.8,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "release_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.454,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.57,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.962,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.81,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "docs_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.0,
+          "composite_score": 0.358,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.59,
+          "rejected_bad_frames_count": 0
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.964,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.82,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "install_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.462,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.61,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.966,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.83,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "security_scan_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.466,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.63,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.968,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.84,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "issue_triage_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.0,
+          "composite_score": 0.35,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.55,
+          "rejected_bad_frames_count": 0
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.96,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.8,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "cheap_model_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.454,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.57,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.962,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.81,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "largest_model_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.458,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.59,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.964,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.82,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "latency_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.0,
+          "composite_score": 0.362,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.61,
+          "rejected_bad_frames_count": 0
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.966,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.83,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "domain_fit_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.466,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.63,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.968,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.84,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "fallback_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.45,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.55,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.96,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.8,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "prompt_patch_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.0,
+          "composite_score": 0.354,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.57,
+          "rejected_bad_frames_count": 0
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.962,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.81,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "verifier_patch_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.458,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.59,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.964,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.82,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "benchmark_patch_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.462,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.61,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.966,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.83,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "rollback_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.0,
+          "composite_score": 0.366,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.63,
+          "rejected_bad_frames_count": 0
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.968,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.84,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "memory_write_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.45,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.55,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.96,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.8,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "reputation_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.454,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.57,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.962,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.81,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "delegation_trust_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.0,
+          "composite_score": 0.358,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.59,
+          "rejected_bad_frames_count": 0
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.964,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.82,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "collusion_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.462,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.61,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.966,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.83,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "memory_conflict_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.466,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.63,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.968,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.84,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "secret_handling_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.0,
+          "composite_score": 0.35,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.55,
+          "rejected_bad_frames_count": 0
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.96,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.8,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "network_access_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.454,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.57,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.962,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.81,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "sandbox_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.458,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.59,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.964,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.82,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "vague_better_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.0,
+          "composite_score": 0.362,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.61,
+          "rejected_bad_frames_count": 0
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.966,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.83,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "conflict_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.466,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.63,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.968,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.84,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "missing_context_001",
+      "winner": "multiframe_harness"
     }
   ],
-  "run_id": "stage1_multiframe_starter_5",
+  "run_id": "stage1_multiframe_settlement_50",
   "schema_version": "stage1_multiframe_eval_v1",
+  "settlement_50_gate": {
+    "actual_assumption_recall_relative_improvement": 1.5,
+    "actual_failure_mode_recall_relative_improvement": 1.5,
+    "actual_prompt_wins": 50,
+    "minimum_assumption_recall_relative_improvement": 0.2,
+    "minimum_failure_mode_recall_relative_improvement": 0.2,
+    "quality_not_reduced": true,
+    "required_prompt_wins": 35,
+    "status": "SETTLEMENT_50_PASS"
+  },
   "starter_gate": {
-    "actual_prompt_wins": 5,
+    "actual_prompt_wins": 50,
     "assumption_recall_improved": true,
     "failure_mode_recall_improved": true,
     "quality_not_reduced": true,
     "required_prompt_wins": 4,
-    "status": "STARTER_GATE_PASS"
+    "status": "NOT_APPLICABLE"
   }
 }

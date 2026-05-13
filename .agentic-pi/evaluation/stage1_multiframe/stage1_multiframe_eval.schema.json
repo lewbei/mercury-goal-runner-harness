@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Stage1MultiframeEvaluationReport",
   "type": "object",
-  "required": ["schema_version", "run_id", "generated_by", "authority", "prompt_count", "prompt_results", "aggregate_metrics", "starter_gate", "future_50_prompt_gate_policy", "claim_boundary"],
+  "required": ["schema_version", "run_id", "generated_by", "authority", "prompt_count", "prompt_results", "aggregate_metrics", "starter_gate", "settlement_50_gate", "claim_boundary"],
   "properties": {
     "schema_version": {"const": "stage1_multiframe_eval_v1"},
     "run_id": {"type": "string", "minLength": 1},
@@ -59,7 +59,7 @@
       "type": "object",
       "required": ["status", "required_prompt_wins", "actual_prompt_wins", "assumption_recall_improved", "failure_mode_recall_improved", "quality_not_reduced"],
       "properties": {
-        "status": {"enum": ["STARTER_GATE_PASS", "STARTER_GATE_FAIL"]},
+        "status": {"enum": ["STARTER_GATE_PASS", "STARTER_GATE_FAIL", "NOT_APPLICABLE"]},
         "required_prompt_wins": {"type": "integer", "minimum": 1},
         "actual_prompt_wins": {"type": "integer", "minimum": 0},
         "assumption_recall_improved": {"type": "boolean"},
@@ -68,7 +68,21 @@
       },
       "additionalProperties": false
     },
-    "future_50_prompt_gate_policy": {"type": "object"},
+    "settlement_50_gate": {
+      "type": "object",
+      "required": ["status", "required_prompt_wins", "actual_prompt_wins", "minimum_assumption_recall_relative_improvement", "actual_assumption_recall_relative_improvement", "minimum_failure_mode_recall_relative_improvement", "actual_failure_mode_recall_relative_improvement", "quality_not_reduced"],
+      "properties": {
+        "status": {"enum": ["SETTLEMENT_50_PASS", "SETTLEMENT_50_FAIL", "NOT_APPLICABLE"]},
+        "required_prompt_wins": {"type": "integer", "minimum": 1},
+        "actual_prompt_wins": {"type": "integer", "minimum": 0},
+        "minimum_assumption_recall_relative_improvement": {"type": "number", "minimum": 0},
+        "actual_assumption_recall_relative_improvement": {"type": "number"},
+        "minimum_failure_mode_recall_relative_improvement": {"type": "number", "minimum": 0},
+        "actual_failure_mode_recall_relative_improvement": {"type": "number"},
+        "quality_not_reduced": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
     "claim_boundary": {"type": "string", "minLength": 1}
   },
   "additionalProperties": false

@@ -20,6 +20,17 @@ VALIDATE_SCHEMA_PATH = ROOT / ".agentic-pi" / "validators" / "validate_schema.py
 PROTECTED_STEMS = {"final_status", "certification", "policy_decision"}
 PROTECTED_STATUS_VALUES = {"CERTIFIED_DONE", "DONE_PASS", "DONE_FAIL", "PROVISIONAL_DONE", "NOT_DONE"}
 MODES = {"normal_prompt", "multiframe_harness"}
+EXPECTED_50_CATEGORY_DISTRIBUTION = {
+    "harness_governance": 8,
+    "coding_tool_use": 7,
+    "research_paper_novelty": 7,
+    "repo_product_readiness": 6,
+    "model_routing": 6,
+    "self_improvement_evolution": 5,
+    "memory_reputation_trust": 5,
+    "safety_security": 3,
+    "ambiguous_user_intent": 3,
+}
 INVISIBLE_CODEPOINTS = {"\u200b", "\u200c", "\u200d", "\ufeff", "\u2060"}
 
 
@@ -73,19 +84,31 @@ def validate_prompt_set(prompt_set: dict[str, Any]) -> list[str]:
     if prompt_set.get("authority", {}).get("can_certify_done") is not False:
         errors.append("prompt_set.authority.can_certify_done must be false")
     prompts = prompt_set.get("prompts")
-    if not isinstance(prompts, list) or len(prompts) < 5:
-        errors.append("prompt_set.prompts must contain at least 5 prompts")
+    if not isinstance(prompts, list) or len(prompts) not in {5, 50}:
+        errors.append("prompt_set.prompts must contain exactly 5 starter prompts or 50 settlement prompts")
         return errors
     seen = set()
     required_lists = ["expected_frames", "expected_assumptions", "expected_failure_modes", "bad_frames_to_reject"]
+    category_counts: dict[str, int] = {}
     for prompt in prompts:
         prompt_id = prompt.get("prompt_id")
         if not prompt_id or prompt_id in seen:
             errors.append(f"prompt_id must be unique and non-empty, got {prompt_id!r}")
         seen.add(prompt_id)
+        category = prompt.get("category")
+        if len(prompts) == 50:
+            if category not in EXPECTED_50_CATEGORY_DISTRIBUTION:
+                errors.append(f"prompt {prompt_id}: unknown or missing category {category!r}")
+            else:
+                category_counts[category] = category_counts.get(category, 0) + 1
         for field in required_lists:
             if not isinstance(prompt.get(field), list) or not prompt[field]:
                 errors.append(f"prompt {prompt_id}: {field} must be a non-empty list")
+    if len(prompts) == 50 and category_counts != EXPECTED_50_CATEGORY_DISTRIBUTION:
+        errors.append(f"50-prompt category distribution mismatch: expected {EXPECTED_50_CATEGORY_DISTRIBUTION}, got {category_counts}")
+    declared_distribution = prompt_set.get("category_distribution")
+    if len(prompts) == 50 and declared_distribution != EXPECTED_50_CATEGORY_DISTRIBUTION:
+        errors.append("prompt_set.category_distribution must match the documented 50-prompt distribution")
     scan_value(prompt_set, errors, "prompt_set")
     return errors
 
@@ -129,18 +152,43 @@ def validate_report(report: dict[str, Any]) -> list[str]:
     if errors:
         return errors
     prompt_results = report["prompt_results"]
+    prompt_count = report["prompt_count"]
+    if prompt_count not in {5, 50}:
+        errors.append("report.prompt_count must be exactly 5 or 50")
+    if len(prompt_results) != prompt_count:
+        errors.append(f"report.prompt_results length {len(prompt_results)} does not match prompt_count {prompt_count}")
     actual_wins = sum(1 for item in prompt_results if item["multiframe_beats_normal"])
-    gate = report["starter_gate"]
-    if gate["actual_prompt_wins"] != actual_wins:
-        errors.append(f"starter_gate.actual_prompt_wins {gate['actual_prompt_wins']} does not match prompt results {actual_wins}")
-    expected_status = "STARTER_GATE_PASS" if (
-        actual_wins >= gate["required_prompt_wins"]
-        and gate["assumption_recall_improved"]
-        and gate["failure_mode_recall_improved"]
-        and gate["quality_not_reduced"]
-    ) else "STARTER_GATE_FAIL"
-    if gate["status"] != expected_status:
-        errors.append(f"starter_gate.status must be {expected_status}, got {gate['status']}")
+
+    starter_gate = report["starter_gate"]
+    if starter_gate["actual_prompt_wins"] != actual_wins:
+        errors.append(f"starter_gate.actual_prompt_wins {starter_gate['actual_prompt_wins']} does not match prompt results {actual_wins}")
+    if prompt_count == 5:
+        expected_starter_status = "STARTER_GATE_PASS" if (
+            actual_wins >= starter_gate["required_prompt_wins"]
+            and starter_gate["assumption_recall_improved"]
+            and starter_gate["failure_mode_recall_improved"]
+            and starter_gate["quality_not_reduced"]
+        ) else "STARTER_GATE_FAIL"
+    else:
+        expected_starter_status = "NOT_APPLICABLE"
+    if starter_gate["status"] != expected_starter_status:
+        errors.append(f"starter_gate.status must be {expected_starter_status}, got {starter_gate['status']}")
+
+    settlement_gate = report["settlement_50_gate"]
+    if settlement_gate["actual_prompt_wins"] != actual_wins:
+        errors.append(f"settlement_50_gate.actual_prompt_wins {settlement_gate['actual_prompt_wins']} does not match prompt results {actual_wins}")
+    if prompt_count == 50:
+        expected_settlement_status = "SETTLEMENT_50_PASS" if (
+            actual_wins >= settlement_gate["required_prompt_wins"]
+            and settlement_gate["actual_assumption_recall_relative_improvement"] >= settlement_gate["minimum_assumption_recall_relative_improvement"]
+            and settlement_gate["actual_failure_mode_recall_relative_improvement"] >= settlement_gate["minimum_failure_mode_recall_relative_improvement"]
+            and settlement_gate["quality_not_reduced"]
+        ) else "SETTLEMENT_50_FAIL"
+    else:
+        expected_settlement_status = "NOT_APPLICABLE"
+    if settlement_gate["status"] != expected_settlement_status:
+        errors.append(f"settlement_50_gate.status must be {expected_settlement_status}, got {settlement_gate['status']}")
+
     if report["authority"].get("can_certify_done") is not False:
         errors.append("report.authority.can_certify_done must be false")
     return errors

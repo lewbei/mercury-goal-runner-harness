@@ -68,6 +68,63 @@ def average(values: list[float]) -> float:
     return round(sum(values) / len(values), 4)
 
 
+def relative_improvement(new_value: float, baseline: float) -> float:
+    if baseline == 0:
+        return 1.0 if new_value > 0 else 0.0
+    return round((new_value - baseline) / baseline, 4)
+
+
+def make_starter_gate(prompt_count: int, multiframe_wins: int, assumption_improved: bool, failure_improved: bool, quality_not_reduced: bool) -> dict[str, Any]:
+    if prompt_count != 5:
+        return {
+            "status": "NOT_APPLICABLE",
+            "required_prompt_wins": 4,
+            "actual_prompt_wins": multiframe_wins,
+            "assumption_recall_improved": assumption_improved,
+            "failure_mode_recall_improved": failure_improved,
+            "quality_not_reduced": quality_not_reduced,
+        }
+    gate_pass = multiframe_wins >= 4 and assumption_improved and failure_improved and quality_not_reduced
+    return {
+        "status": "STARTER_GATE_PASS" if gate_pass else "STARTER_GATE_FAIL",
+        "required_prompt_wins": 4,
+        "actual_prompt_wins": multiframe_wins,
+        "assumption_recall_improved": assumption_improved,
+        "failure_mode_recall_improved": failure_improved,
+        "quality_not_reduced": quality_not_reduced,
+    }
+
+
+def make_settlement_50_gate(prompt_count: int, multiframe_wins: int, assumption_relative_improvement: float, failure_relative_improvement: float, quality_not_reduced: bool) -> dict[str, Any]:
+    if prompt_count != 50:
+        return {
+            "status": "NOT_APPLICABLE",
+            "required_prompt_wins": 35,
+            "actual_prompt_wins": multiframe_wins,
+            "minimum_assumption_recall_relative_improvement": 0.2,
+            "actual_assumption_recall_relative_improvement": assumption_relative_improvement,
+            "minimum_failure_mode_recall_relative_improvement": 0.2,
+            "actual_failure_mode_recall_relative_improvement": failure_relative_improvement,
+            "quality_not_reduced": quality_not_reduced,
+        }
+    gate_pass = (
+        multiframe_wins >= 35
+        and assumption_relative_improvement >= 0.2
+        and failure_relative_improvement >= 0.2
+        and quality_not_reduced
+    )
+    return {
+        "status": "SETTLEMENT_50_PASS" if gate_pass else "SETTLEMENT_50_FAIL",
+        "required_prompt_wins": 35,
+        "actual_prompt_wins": multiframe_wins,
+        "minimum_assumption_recall_relative_improvement": 0.2,
+        "actual_assumption_recall_relative_improvement": assumption_relative_improvement,
+        "minimum_failure_mode_recall_relative_improvement": 0.2,
+        "actual_failure_mode_recall_relative_improvement": failure_relative_improvement,
+        "quality_not_reduced": quality_not_reduced,
+    }
+
+
 def build_report(prompt_set: dict[str, Any], response_fixtures: dict[str, Any], *, run_id: str) -> dict[str, Any]:
     prompts = {prompt["prompt_id"]: prompt for prompt in prompt_set["prompts"]}
     responses_by_prompt: dict[str, dict[str, dict[str, Any]]] = {prompt_id: {} for prompt_id in prompts}
@@ -120,11 +177,11 @@ def build_report(prompt_set: dict[str, Any], response_fixtures: dict[str, Any], 
 
     normal_agg = aggregate_by_mode["normal_prompt"]
     multiframe_agg = aggregate_by_mode["multiframe_harness"]
-    required_wins = 4 if len(prompts) == 5 else max(1, int(len(prompts) * 0.7))
     assumption_improved = multiframe_agg["assumption_recall"] > normal_agg["assumption_recall"]
     failure_improved = multiframe_agg["failure_mode_recall"] > normal_agg["failure_mode_recall"]
     quality_not_reduced = multiframe_agg["quality_of_final_answer"] >= normal_agg["quality_of_final_answer"]
-    gate_pass = multiframe_wins >= required_wins and assumption_improved and failure_improved and quality_not_reduced
+    assumption_relative_improvement = relative_improvement(multiframe_agg["assumption_recall"], normal_agg["assumption_recall"])
+    failure_relative_improvement = relative_improvement(multiframe_agg["failure_mode_recall"], normal_agg["failure_mode_recall"])
 
     return {
         "schema_version": "stage1_multiframe_eval_v1",
@@ -140,23 +197,18 @@ def build_report(prompt_set: dict[str, Any], response_fixtures: dict[str, Any], 
         "aggregate_metrics": {
             "mode_averages": aggregate_by_mode,
             "multiframe_prompt_wins": multiframe_wins,
+            "assumption_recall_relative_improvement": assumption_relative_improvement,
+            "failure_mode_recall_relative_improvement": failure_relative_improvement,
         },
-        "starter_gate": {
-            "status": "STARTER_GATE_PASS" if gate_pass else "STARTER_GATE_FAIL",
-            "required_prompt_wins": required_wins,
-            "actual_prompt_wins": multiframe_wins,
-            "assumption_recall_improved": assumption_improved,
-            "failure_mode_recall_improved": failure_improved,
-            "quality_not_reduced": quality_not_reduced,
-        },
-        "future_50_prompt_gate_policy": {
-            "required_prompt_wins": "35/50",
-            "minimum_assumption_recall_improvement": 0.2,
-            "minimum_failure_mode_recall_improvement": 0.2,
-            "quality_must_not_decrease": True,
-            "status": "NOT_EVALUATED_BY_STARTER_5",
-        },
-        "claim_boundary": "This report tests a deterministic starter fixture only; it cannot certify final DONE or prove general reasoning superiority.",
+        "starter_gate": make_starter_gate(len(prompts), multiframe_wins, assumption_improved, failure_improved, quality_not_reduced),
+        "settlement_50_gate": make_settlement_50_gate(
+            len(prompts),
+            multiframe_wins,
+            assumption_relative_improvement,
+            failure_relative_improvement,
+            quality_not_reduced,
+        ),
+        "claim_boundary": "This report tests deterministic fixtures only; it cannot certify final DONE or prove general reasoning superiority beyond this benchmark.",
     }
 
 
@@ -165,7 +217,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--prompt-set", default=str(DEFAULT_DIR / "prompt_set.json"))
     parser.add_argument("--responses", default=str(DEFAULT_DIR / "response_fixtures.json"))
     parser.add_argument("--output", default=str(DEFAULT_DIR / "stage1_score_report.json"))
-    parser.add_argument("--run-id", default="stage1_multiframe_starter_5")
+    parser.add_argument("--run-id", default="stage1_multiframe_settlement_50")
     args = parser.parse_args(argv)
 
     report = build_report(load_json(Path(args.prompt_set)), load_json(Path(args.responses)), run_id=args.run_id)

@@ -1,6 +1,6 @@
 # Stage 1 Multi-Frame Settlement Design
 
-Status: benchmark design / not a certification claim
+Status: deterministic benchmark design / not a certification claim
 
 ## Claim under test
 
@@ -33,11 +33,11 @@ A. normal_prompt
 B. multiframe_harness
 ```
 
-The initial implementation uses deterministic response fixtures. It does not call live models. Live model runs can be added later only after prompt provenance and run-local evidence capture are designed.
+The current implementation uses deterministic response fixtures. It does not call live models. Live model runs can be added later only after prompt provenance and run-local evidence capture are designed.
 
-## Starter prompt set
+## Prompt set
 
-The first settlement slice uses 5 prompts:
+The benchmark now has 50 deterministic fixture prompts. The original 5 starter prompts are preserved inside the 50-prompt set:
 
 ```text
 Should I build an agent harness?
@@ -47,7 +47,36 @@ Is this GitHub repo ready?
 Should I add self-improvement to the harness now?
 ```
 
-The full Stage 1 settlement should scale to 50 prompts after the deterministic skeleton is stable.
+## Category distribution
+
+The 50 prompts are category-balanced for this harness stage:
+
+```text
+harness_governance:             8
+coding_tool_use:                7
+research_paper_novelty:         7
+repo_product_readiness:         6
+model_routing:                  6
+self_improvement_evolution:     5
+memory_reputation_trust:        5
+safety_security:                3
+ambiguous_user_intent:          3
+```
+
+Each prompt includes:
+
+```text
+prompt_id
+category
+difficulty
+trap_type
+prompt
+obvious_answer_trap
+expected_frames
+expected_assumptions
+expected_failure_modes
+bad_frames_to_reject
+```
 
 ## Metrics
 
@@ -66,11 +95,11 @@ quality_of_final_answer
 composite_score
 ```
 
-`quality_of_final_answer` is a deterministic fixture-backed proxy in the starter implementation. It is not a human-quality proof.
+`quality_of_final_answer` is a deterministic fixture-backed proxy. It is not a human-quality proof.
 
 ## Starter pass gate
 
-For the 5-prompt starter gate:
+For a 5-prompt starter fixture, the starter gate is:
 
 ```text
 multiframe_harness must beat normal_prompt on at least 4 / 5 prompts
@@ -79,17 +108,27 @@ multiframe_harness must improve aggregate failure-mode recall
 multiframe_harness must not reduce aggregate final-answer quality
 ```
 
-This only settles the starter slice, not the full 50-prompt gate.
+When the fixture has 50 prompts, the starter gate is marked:
 
-## Future 50-prompt gate
+```text
+NOT_APPLICABLE
+```
 
-For the full gate:
+## 50-prompt settlement gate
+
+For the 50-prompt fixture:
 
 ```text
 multiframe_harness beats normal_prompt on at least 35 / 50 prompts
-assumption_recall improves by at least 20%
-failure_mode_recall improves by at least 20%
+assumption_recall relative improvement is at least 20%
+failure_mode_recall relative improvement is at least 20%
 quality_of_final_answer does not decrease
+```
+
+The report field is:
+
+```text
+settlement_50_gate.status = SETTLEMENT_50_PASS | SETTLEMENT_50_FAIL
 ```
 
 If this fails:
@@ -104,9 +143,12 @@ The benchmark validator must reject:
 
 ```text
 missing prompt modes
+duplicate prompt modes
+wrong prompt count other than 5 or 50
+wrong 50-prompt category distribution
+missing categories
 protected authority artifacts
 final status values or claims
-run_id whitespace or invisible characters
 non-deterministic mode names
 inconsistent pass-gate calculations
 fixtures that omit expected target lists
@@ -120,6 +162,10 @@ final_status.md
 certification.json
 policy_decision.json
 ```
+
+## Honest limitation
+
+This 50-prompt fixture is still deterministic and hand-authored. It is stronger than the 5-prompt starter skeleton, but it is not yet live-model evidence. A later live A/B run must capture prompt provenance, model metadata, outputs, and scoring artifacts before any stronger empirical claim.
 
 ## Authority boundary
 
