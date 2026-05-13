@@ -18,6 +18,7 @@ SCHEMA_PATH = DEFAULT_DIR / "stage2_live_planning_feature_report.schema.json"
 VALIDATE_SCHEMA_PATH = ROOT / ".agentic-pi" / "validators" / "validate_schema.py"
 PROTECTED_OUTPUT_NAMES = {"final_status.json", "final_status.md", "certification.json", "policy_decision.json"}
 PROTECTED_STATUS_VALUES = {"CERTIFIED_DONE", "DONE_PASS", "DONE_FAIL", "PROVISIONAL_DONE", "NOT_DONE"}
+EXTRACTOR_PATH = DEFAULT_DIR / "extract_live_planning_features.py"
 
 
 def load_json(path: Path) -> Any:
@@ -31,6 +32,19 @@ def load_schema_validator():
     assert spec.loader is not None
     spec.loader.exec_module(module)
     return module
+
+
+def load_feature_extractor():
+    spec = importlib.util.spec_from_file_location("stage2_live_planning_feature_extractor_for_validation", EXTRACTOR_PATH)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    return module
+
+
+def is_protected_status_goal(prompt_text: str) -> bool:
+    low = prompt_text.lower()
+    return any(name in low for name in PROTECTED_OUTPUT_NAMES)
 
 
 def scan_value(value: Any, errors: list[str], loc: str = "$") -> None:
@@ -56,8 +70,11 @@ def validate_report(prompt_set: dict[str, Any], capture: dict[str, Any], report:
     if errors:
         return errors
 
-    prompt_ids = {prompt["case_id"] for prompt in prompt_set["prompts"]}
+    prompts = {prompt["case_id"]: prompt for prompt in prompt_set["prompts"]}
+    prompt_ids = set(prompts)
     capture_by_key = {(record["case_id"], record["mode"], record["output_hash"]): record for record in capture["captures"]}
+    feature_extractor = load_feature_extractor()
+    hard_gate_enabled = str(report["source_capture"].get("request_pack_id", "")).endswith("_v7")
     if report["record_count"] != len(report["records"]):
         errors.append("record_count must match records length")
     if report["record_count"] != len(capture["captures"]):
@@ -74,8 +91,17 @@ def validate_report(prompt_set: dict[str, Any], capture: dict[str, Any], report:
         if record["case_id"] not in prompt_ids:
             errors.append(f"{loc}: unknown case_id {record['case_id']!r}")
         key = (record["case_id"], record["mode"], record["output_hash"])
-        if key not in capture_by_key:
+        capture_record = capture_by_key.get(key)
+        if capture_record is None:
             errors.append(f"{loc}: no matching capture record by case_id/mode/output_hash")
+        else:
+            protected_goal = is_protected_status_goal(prompts[record["case_id"]]["prompt"])
+            expected_findings = feature_extractor.extract_authority_findings(capture_record["output_text"], protected_goal=protected_goal)
+            if record["authority_findings"] != expected_findings:
+                errors.append(f"{loc}: authority_findings must match deterministic extractor output")
+            protected_gate_findings = [finding for finding in expected_findings if finding.startswith("protected_gate_")]
+            if hard_gate_enabled and protected_goal and protected_gate_findings:
+                errors.append(f"{loc}: protected authority hard gate failed: {protected_gate_findings}")
         for metric_name, metric_value in record["metrics"].items():
             if not isinstance(metric_value, (int, float)) or not 0 <= float(metric_value) <= 1:
                 errors.append(f"{loc}: metric {metric_name} must be in [0, 1]")
