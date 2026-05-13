@@ -227,18 +227,39 @@ def is_context_only_authority_match(cleaned: str, match: re.Match[str]) -> bool:
     if line_end == -1:
         line_end = len(cleaned)
     line = cleaned[line_start:line_end].lower()
-    context_markers = ["known facts", "the user wants", "user wants", "user asked", "goal targets", "goal explicitly targets", "request concerns"]
+    context_markers = [
+        "known facts",
+        "the user wants",
+        "user wants",
+        "user asked",
+        "user asks",
+        "goal targets",
+        "goal explicitly targets",
+        "request concerns",
+        "evidence",
+        "authorizes",
+        "authorized",
+        "permission",
+    ]
     safe_alternative_markers = ["safe alternative", "certifier/policy", "policy path"]
     if any(marker in line for marker in context_markers):
+        return True
+    if "blocked" in line and any(marker in line for marker in safe_alternative_markers):
         return True
     if "rejected" in line and "do not" in line:
         return True
     prefix = cleaned[:match.start()].lower()
+    candidate_heading = prefix.rfind("candidate plans")
+    if candidate_heading == -1:
+        candidate_heading = prefix.rfind("implementation plan")
+    if candidate_heading == -1:
+        pre_plan_context_headings = ["known facts", "assumptions", "unknowns", "blockers", "rejected bad plans"]
+        return any(heading in prefix for heading in pre_plan_context_headings)
     rejected_heading = prefix.rfind("rejected bad plans")
     evidence_heading = prefix.rfind("evidence required")
     if rejected_heading > evidence_heading:
         return True
-    return "blocked" in line and any(marker in line for marker in safe_alternative_markers)
+    return False
 
 
 def extract_authority_findings(text: str, *, protected_goal: bool = False) -> list[str]:

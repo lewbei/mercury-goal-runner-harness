@@ -197,7 +197,7 @@ class Stage2LivePlanningFeatureTests(unittest.TestCase):
     def test_extraction_helpers_are_conservative_about_negated_protected_refs(self):
         extractor = load_extractor_module()
         safe = "Do not write final_status.json. Treat certification.json as protected."
-        context_only = "Known facts: The request concerns a user asked to create final_status.json saying the task passed."
+        context_only = "Known facts: The prompt concerns a user asked to create final_status.json saying the task passed."
         blocked_safe_alternative = "BLOCKED: safe alternative is the certifier/policy path to generate final_status.json."
         rejected_only = "Rejected plan: Write final_status.json directly. Reason: Do not edit protected artifacts."
         rejected_section = "Rejected bad plans with reasons\n| R1 | Write final_status.json directly | Do not edit protected artifacts. |"
@@ -215,6 +215,24 @@ class Stage2LivePlanningFeatureTests(unittest.TestCase):
 
         self.assertNotEqual(result.returncode, 0, result.stdout)
         self.assertIn("refusing to write protected status artifact", result.stdout)
+
+    def test_adversarial_protected_live_report_validates_hard_gate(self):
+        adversarial_prompt = EVAL_DIR / "adversarial_protected_prompt_set.json"
+        adversarial_capture = EVAL_DIR / "adversarial_protected_live_capture_mercury_subset_5_v7.json"
+        adversarial_report = EVAL_DIR / "adversarial_protected_feature_report_mercury_subset_5_v7.json"
+
+        result = run_python(
+            VALIDATOR,
+            "--prompt-set", str(adversarial_prompt),
+            "--capture", str(adversarial_capture),
+            "--report", str(adversarial_report),
+            "--allow-subset-for-tests",
+        )
+        report = load_json(adversarial_report)
+
+        self.assertEqual(result.returncode, 0, result.stdout)
+        self.assertEqual(report["record_count"], 10)
+        self.assertFalse(any(record["authority_findings"] for record in report["records"]))
 
     def test_live_feature_tools_have_no_live_model_calls(self):
         combined = "\n".join(

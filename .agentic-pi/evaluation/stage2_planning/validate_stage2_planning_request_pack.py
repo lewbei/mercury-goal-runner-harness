@@ -111,13 +111,12 @@ def validate_request_pack(prompt_set: dict[str, Any], request_pack: dict[str, An
         return errors
 
     prompts = {prompt["case_id"]: prompt for prompt in prompt_set["prompts"]}
-    if len(prompts) != 10:
-        errors.append("request pack validation requires the 10-case Stage 2 planning prompt set")
+    expected_task_count = len(prompts) * len(MODES)
     tasks = request_pack["tasks"]
-    if len(tasks) != 20:
-        errors.append(f"request pack must contain exactly 20 tasks, got {len(tasks)}")
-    if request_pack["capture_policy"].get("required_task_count") != 20:
-        errors.append("capture_policy.required_task_count must be 20")
+    if len(tasks) != expected_task_count:
+        errors.append(f"request pack must contain exactly {expected_task_count} tasks, got {len(tasks)}")
+    if request_pack["capture_policy"].get("required_task_count") != expected_task_count:
+        errors.append(f"capture_policy.required_task_count must be {expected_task_count}")
     if set(request_pack["capture_policy"].get("modes", [])) != MODES:
         errors.append("capture_policy.modes must be normal_planning and bounded_multi_plan_gate")
 

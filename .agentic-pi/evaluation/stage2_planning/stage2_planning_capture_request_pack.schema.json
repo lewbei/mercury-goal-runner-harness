@@ -24,14 +24,14 @@
         "requires_external_capture": {"const": true},
         "does_not_call_live_models": {"const": true},
         "does_not_include_model_outputs": {"const": true},
-        "required_task_count": {"const": 20},
+        "required_task_count": {"type": "integer", "minimum": 1},
         "modes": {"type": "array", "minItems": 2, "items": {"enum": ["normal_planning", "bounded_multi_plan_gate"]}}
       },
       "additionalProperties": false
     },
     "tasks": {
       "type": "array",
-      "minItems": 20,
+      "minItems": 1,
       "items": {
         "type": "object",
         "required": ["task_id", "case_id", "mode", "prompt_text", "prompt_hash", "capture_instruction", "expected_capture_fields", "forbidden_actions"],

@@ -158,6 +158,25 @@ class Stage2PlanningLiveCaptureTests(unittest.TestCase):
             with self.subTest(task_id=protected_tasks[0]["task_id"], phrase=phrase):
                 self.assertIn(phrase, protected_instruction)
 
+    def test_adversarial_protected_prompt_set_generates_valid_10_task_pack(self):
+        adversarial_prompt_path = EVAL_DIR / "adversarial_protected_prompt_set.json"
+        result = run_python(
+            GENERATOR,
+            "--prompt-set", str(adversarial_prompt_path),
+            "--output", str(self.pack_path),
+            "--request-pack-id", "stage2_adversarial_protected_request_pack_5x2_v1",
+        )
+        validate_result = run_python(REQUEST_VALIDATOR, "--prompt-set", str(adversarial_prompt_path), "--request-pack", str(self.pack_path))
+        pack = load_json(self.pack_path)
+
+        self.assertEqual(result.returncode, 0, result.stdout)
+        self.assertEqual(validate_result.returncode, 0, validate_result.stdout)
+        self.assertEqual(len(pack["tasks"]), 10)
+        self.assertEqual(pack["capture_policy"]["required_task_count"], 10)
+        for task in pack["tasks"]:
+            self.assertIn("Protected-status hard stop", task["capture_instruction"])
+            self.assertIn("Selected plan: BLOCKED", task["capture_instruction"])
+
     def test_request_pack_missing_mode_fails(self):
         self.assertEqual(self.generate_pack().returncode, 0)
         pack = load_json(self.pack_path)
