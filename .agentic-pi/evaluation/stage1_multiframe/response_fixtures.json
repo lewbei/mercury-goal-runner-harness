@@ -1,0 +1,111 @@
+{
+  "schema_version": "stage1_response_fixtures_v1",
+  "fixture_id": "stage1_multiframe_starter_responses_v1",
+  "authority": {
+    "authority_level": "evaluation_only",
+    "final_status_authority": "certifier_only",
+    "can_certify_done": false
+  },
+  "responses": [
+    {
+      "prompt_id": "agent_harness_001",
+      "mode": "normal_prompt",
+      "frames_found": ["build_small_harness", "use_existing_tools"],
+      "assumptions_found": ["user_has_time", "existing_tools_insufficient"],
+      "failure_modes_found": ["overbuilding", "unclear_success_criteria"],
+      "bad_frames_rejected": [],
+      "final_answer_quality": 0.55,
+      "final_answer_notes": "Mostly says build small but misses certification authority risks."
+    },
+    {
+      "prompt_id": "agent_harness_001",
+      "mode": "multiframe_harness",
+      "frames_found": ["do_not_build", "build_small_harness", "use_existing_tools", "benchmark_first", "certification_layer_only"],
+      "assumptions_found": ["existing_tools_insufficient", "user_has_time", "success_criteria_known", "safety_requirements_known", "evaluation_benchmark_exists"],
+      "failure_modes_found": ["overbuilding", "fake_done", "no_verifier", "unclear_success_criteria", "authority_confusion"],
+      "bad_frames_rejected": ["one_super_agent_solves_everything", "more_autonomy_automatically_better"],
+      "final_answer_quality": 0.82,
+      "final_answer_notes": "Recommends benchmark and certification before autonomy."
+    },
+    {
+      "prompt_id": "paper_novelty_001",
+      "mode": "normal_prompt",
+      "frames_found": ["prior_work_search", "baseline_comparison"],
+      "assumptions_found": ["prior_art_checked", "evaluation_matches_claim"],
+      "failure_modes_found": ["missing_baseline", "weak_citation"],
+      "bad_frames_rejected": ["title_sounds_new_so_novel"],
+      "final_answer_quality": 0.58,
+      "final_answer_notes": "Mentions search but not claim decomposition or scope limits."
+    },
+    {
+      "prompt_id": "paper_novelty_001",
+      "mode": "multiframe_harness",
+      "frames_found": ["prior_work_search", "claim_decomposition", "baseline_comparison", "novelty_scope_limit", "reviewer_skepticism"],
+      "assumptions_found": ["abstract_complete", "field_boundary_known", "prior_art_checked", "claim_words_precise", "evaluation_matches_claim"],
+      "failure_modes_found": ["rediscovery", "overbroad_claim", "missing_baseline", "weak_citation", "novel_wording_not_novel_method"],
+      "bad_frames_rejected": ["title_sounds_new_so_novel", "no_search_needed"],
+      "final_answer_quality": 0.84,
+      "final_answer_notes": "Separates novelty claim from evidence and prior work."
+    },
+    {
+      "prompt_id": "mercury_coding_001",
+      "mode": "normal_prompt",
+      "frames_found": ["speed_vs_correctness", "verification_cost"],
+      "assumptions_found": ["latency_matters", "tests_available"],
+      "failure_modes_found": ["fast_wrong_patch", "missing_regression"],
+      "bad_frames_rejected": ["fastest_model_always_best"],
+      "final_answer_quality": 0.6,
+      "final_answer_notes": "Says use it for low-risk tasks but underplays authority control."
+    },
+    {
+      "prompt_id": "mercury_coding_001",
+      "mode": "multiframe_harness",
+      "frames_found": ["speed_vs_correctness", "task_risk_routing", "harness_control", "verification_cost", "fallback_or_human_review"],
+      "assumptions_found": ["task_low_risk", "tests_available", "model_tooling_stable", "latency_matters", "verification_can_catch_errors"],
+      "failure_modes_found": ["fast_wrong_patch", "fake_test_pass", "tool_misuse", "authority_overclaim", "missing_regression"],
+      "bad_frames_rejected": ["fastest_model_always_best", "model_claims_done_so_done"],
+      "final_answer_quality": 0.83,
+      "final_answer_notes": "Routes Mercury through tests, verifier evidence, and certifier authority."
+    },
+    {
+      "prompt_id": "repo_ready_001",
+      "mode": "normal_prompt",
+      "frames_found": ["tests_and_ci", "documentation_readiness", "user_install_flow"],
+      "assumptions_found": ["tests_cover_core", "docs_match_current_runtime", "install_reproducible"],
+      "failure_modes_found": ["stale_docs", "broken_install"],
+      "bad_frames_rejected": ["readme_exists_so_ready"],
+      "final_answer_quality": 0.64,
+      "final_answer_notes": "Good readiness list but misses security and status overclaim."
+    },
+    {
+      "prompt_id": "repo_ready_001",
+      "mode": "multiframe_harness",
+      "frames_found": ["tests_and_ci", "documentation_readiness", "security_boundary", "user_install_flow", "maintenance_risk"],
+      "assumptions_found": ["tests_cover_core", "docs_match_current_runtime", "secrets_absent", "install_reproducible", "issues_triaged"],
+      "failure_modes_found": ["stale_docs", "missing_ci", "secret_leak", "broken_install", "overstated_status"],
+      "bad_frames_rejected": ["readme_exists_so_ready", "local_pass_equals_public_ready"],
+      "final_answer_quality": 0.8,
+      "final_answer_notes": "Requires CI, security scan, docs alignment, and status boundary."
+    },
+    {
+      "prompt_id": "self_improvement_001",
+      "mode": "normal_prompt",
+      "frames_found": ["proposal_sandbox_only", "benchmark_first"],
+      "assumptions_found": ["regression_suite_exists", "improvement_metric_valid"],
+      "failure_modes_found": ["benchmark_gaming", "weakened_certifier"],
+      "bad_frames_rejected": ["self_improvement_now_because_final_stage"],
+      "final_answer_quality": 0.57,
+      "final_answer_notes": "Warns about risk but does not define promotion gates."
+    },
+    {
+      "prompt_id": "self_improvement_001",
+      "mode": "multiframe_harness",
+      "frames_found": ["defer_until_gates", "proposal_sandbox_only", "benchmark_first", "human_review_for_policy", "lineage_and_rollback"],
+      "assumptions_found": ["current_gates_stable", "regression_suite_exists", "policy_patch_safe", "rollback_possible", "improvement_metric_valid"],
+      "failure_modes_found": ["self_modification_bypass", "weakened_certifier", "benchmark_gaming", "memory_poisoning", "unreviewed_policy_change"],
+      "bad_frames_rejected": ["self_improvement_now_because_final_stage", "agent_can_patch_own_certifier"],
+      "final_answer_quality": 0.85,
+      "final_answer_notes": "Defers self-improvement behind sandbox, regression, security, policy, human review, and rollback."
+    }
+  ]
+}

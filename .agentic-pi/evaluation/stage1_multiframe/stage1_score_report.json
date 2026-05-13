@@ -1,0 +1,215 @@
+{
+  "aggregate_metrics": {
+    "mode_averages": {
+      "multiframe_harness": {
+        "alternative_recall": 1.0,
+        "assumption_recall": 1.0,
+        "bad_frame_rejection_rate": 1.0,
+        "composite_score": 0.9656,
+        "failure_mode_recall": 1.0,
+        "quality_of_final_answer": 0.828
+      },
+      "normal_prompt": {
+        "alternative_recall": 0.44,
+        "assumption_recall": 0.44,
+        "bad_frame_rejection_rate": 0.4,
+        "composite_score": 0.4536,
+        "failure_mode_recall": 0.4,
+        "quality_of_final_answer": 0.588
+      }
+    },
+    "multiframe_prompt_wins": 5
+  },
+  "authority": {
+    "authority_level": "evaluation_only",
+    "can_certify_done": false,
+    "final_status_authority": "certifier_only"
+  },
+  "claim_boundary": "This report tests a deterministic starter fixture only; it cannot certify final DONE or prove general reasoning superiority.",
+  "future_50_prompt_gate_policy": {
+    "minimum_assumption_recall_improvement": 0.2,
+    "minimum_failure_mode_recall_improvement": 0.2,
+    "quality_must_not_decrease": true,
+    "required_prompt_wins": "35/50",
+    "status": "NOT_EVALUATED_BY_STARTER_5"
+  },
+  "generated_by": "stage1_multiframe_fixture_scorer_v1",
+  "prompt_count": 5,
+  "prompt_results": [
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.0,
+          "composite_score": 0.35,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.55,
+          "rejected_bad_frames_count": 0
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.964,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.82,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "agent_harness_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.456,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.58,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.968,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.84,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "paper_novelty_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.46,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.6,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.966,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.83,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "mercury_coding_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.6,
+          "assumption_count": 3,
+          "assumption_recall": 0.6,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.548,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 3,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.64,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.96,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.8,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "repo_ready_001",
+      "winner": "multiframe_harness"
+    },
+    {
+      "mode_scores": [
+        {
+          "alternative_recall": 0.4,
+          "assumption_count": 2,
+          "assumption_recall": 0.4,
+          "bad_frame_rejection_rate": 0.5,
+          "composite_score": 0.454,
+          "failure_mode_recall": 0.4,
+          "failure_modes_found_count": 2,
+          "frame_count": 2,
+          "mode": "normal_prompt",
+          "quality_of_final_answer": 0.57,
+          "rejected_bad_frames_count": 1
+        },
+        {
+          "alternative_recall": 1.0,
+          "assumption_count": 5,
+          "assumption_recall": 1.0,
+          "bad_frame_rejection_rate": 1.0,
+          "composite_score": 0.97,
+          "failure_mode_recall": 1.0,
+          "failure_modes_found_count": 5,
+          "frame_count": 5,
+          "mode": "multiframe_harness",
+          "quality_of_final_answer": 0.85,
+          "rejected_bad_frames_count": 2
+        }
+      ],
+      "multiframe_beats_normal": true,
+      "prompt_id": "self_improvement_001",
+      "winner": "multiframe_harness"
+    }
+  ],
+  "run_id": "stage1_multiframe_starter_5",
+  "schema_version": "stage1_multiframe_eval_v1",
+  "starter_gate": {
+    "actual_prompt_wins": 5,
+    "assumption_recall_improved": true,
+    "failure_mode_recall_improved": true,
+    "quality_not_reduced": true,
+    "required_prompt_wins": 4,
+    "status": "STARTER_GATE_PASS"
+  }
+}

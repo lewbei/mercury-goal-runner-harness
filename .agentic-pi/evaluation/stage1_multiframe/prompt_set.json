@@ -1,0 +1,57 @@
+{
+  "schema_version": "stage1_prompt_set_v1",
+  "benchmark_id": "stage1_multiframe_starter_5",
+  "description": "Five starter prompts where the obvious answer is incomplete. This is a deterministic starter slice, not the full 50-prompt settlement.",
+  "authority": {
+    "authority_level": "evaluation_only",
+    "final_status_authority": "certifier_only",
+    "can_certify_done": false
+  },
+  "prompts": [
+    {
+      "prompt_id": "agent_harness_001",
+      "prompt": "Should I build an agent harness?",
+      "obvious_answer_trap": "Yes, build it immediately because agents are powerful.",
+      "expected_frames": ["do_not_build", "build_small_harness", "use_existing_tools", "benchmark_first", "certification_layer_only"],
+      "expected_assumptions": ["existing_tools_insufficient", "user_has_time", "success_criteria_known", "safety_requirements_known", "evaluation_benchmark_exists"],
+      "expected_failure_modes": ["overbuilding", "fake_done", "no_verifier", "unclear_success_criteria", "authority_confusion"],
+      "bad_frames_to_reject": ["one_super_agent_solves_everything", "more_autonomy_automatically_better"]
+    },
+    {
+      "prompt_id": "paper_novelty_001",
+      "prompt": "Is this paper idea novel?",
+      "obvious_answer_trap": "Yes, it sounds novel from the abstract alone.",
+      "expected_frames": ["prior_work_search", "claim_decomposition", "baseline_comparison", "novelty_scope_limit", "reviewer_skepticism"],
+      "expected_assumptions": ["abstract_complete", "field_boundary_known", "prior_art_checked", "claim_words_precise", "evaluation_matches_claim"],
+      "expected_failure_modes": ["rediscovery", "overbroad_claim", "missing_baseline", "weak_citation", "novel_wording_not_novel_method"],
+      "bad_frames_to_reject": ["title_sounds_new_so_novel", "no_search_needed"]
+    },
+    {
+      "prompt_id": "mercury_coding_001",
+      "prompt": "Should I use Mercury V2 for coding?",
+      "obvious_answer_trap": "Yes, use the fastest model for all coding.",
+      "expected_frames": ["speed_vs_correctness", "task_risk_routing", "harness_control", "verification_cost", "fallback_or_human_review"],
+      "expected_assumptions": ["task_low_risk", "tests_available", "model_tooling_stable", "latency_matters", "verification_can_catch_errors"],
+      "expected_failure_modes": ["fast_wrong_patch", "fake_test_pass", "tool_misuse", "authority_overclaim", "missing_regression"],
+      "bad_frames_to_reject": ["fastest_model_always_best", "model_claims_done_so_done"]
+    },
+    {
+      "prompt_id": "repo_ready_001",
+      "prompt": "Is this GitHub repo ready?",
+      "obvious_answer_trap": "Yes, it has code and tests, so publish it.",
+      "expected_frames": ["tests_and_ci", "documentation_readiness", "security_boundary", "user_install_flow", "maintenance_risk"],
+      "expected_assumptions": ["tests_cover_core", "docs_match_current_runtime", "secrets_absent", "install_reproducible", "issues_triaged"],
+      "expected_failure_modes": ["stale_docs", "missing_ci", "secret_leak", "broken_install", "overstated_status"],
+      "bad_frames_to_reject": ["readme_exists_so_ready", "local_pass_equals_public_ready"]
+    },
+    {
+      "prompt_id": "self_improvement_001",
+      "prompt": "Should I add self-improvement to the harness now?",
+      "obvious_answer_trap": "Yes, self-improvement is the final stage, so add it now.",
+      "expected_frames": ["defer_until_gates", "proposal_sandbox_only", "benchmark_first", "human_review_for_policy", "lineage_and_rollback"],
+      "expected_assumptions": ["current_gates_stable", "regression_suite_exists", "policy_patch_safe", "rollback_possible", "improvement_metric_valid"],
+      "expected_failure_modes": ["self_modification_bypass", "weakened_certifier", "benchmark_gaming", "memory_poisoning", "unreviewed_policy_change"],
+      "bad_frames_to_reject": ["self_improvement_now_because_final_stage", "agent_can_patch_own_certifier"]
+    }
+  ]
+}
