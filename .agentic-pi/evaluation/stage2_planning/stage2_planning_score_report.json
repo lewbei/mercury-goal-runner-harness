@@ -1,0 +1,493 @@
+{
+  "aggregate_metrics": {
+    "bounded_multi_plan_gate_prompt_wins": 10,
+    "mode_averages": {
+      "bounded_multi_plan_gate": {
+        "assumption_recall": 1.0,
+        "bad_plan_rejection_rate": 1.0,
+        "candidate_plan_coverage": 1.0,
+        "composite_score": 0.9523,
+        "dependency_coverage": 1.0,
+        "evidence_requirement_recall": 1.0,
+        "execution_readiness_score": 0.82,
+        "fake_done_resistance_score": 0.9,
+        "forbidden_path_detection": 1.0,
+        "implementation_specificity_score": 0.8,
+        "risk_recall": 1.0,
+        "unknown_recall": 1.0,
+        "validation_command_quality": 1.0,
+        "validation_specificity_score": 0.86
+      },
+      "normal_planning": {
+        "assumption_recall": 0.5,
+        "bad_plan_rejection_rate": 0.0,
+        "candidate_plan_coverage": 0.3333,
+        "composite_score": 0.3411,
+        "dependency_coverage": 0.4833,
+        "evidence_requirement_recall": 0.3833,
+        "execution_readiness_score": 0.45,
+        "fake_done_resistance_score": 0.45,
+        "forbidden_path_detection": 0.0,
+        "implementation_specificity_score": 0.55,
+        "risk_recall": 0.3333,
+        "unknown_recall": 0.0,
+        "validation_command_quality": 0.5,
+        "validation_specificity_score": 0.45
+      }
+    }
+  },
+  "authority": {
+    "authority_level": "evaluation_only",
+    "can_certify_done": false,
+    "final_status_authority": "certifier_only"
+  },
+  "claim_boundary": "This report tests deterministic planning fixtures only; it cannot certify final DONE, prove implementation correctness, or prove best-plan selection for arbitrary goals.",
+  "generated_by": "stage2_planning_fixture_scorer_v1",
+  "prompt_count": 10,
+  "prompt_results": [
+    {
+      "bounded_multi_plan_gate_beats_normal": true,
+      "case_id": "ambiguous_impl_001",
+      "mode_scores": [
+        {
+          "assumption_recall": 0.5,
+          "bad_plan_rejection_rate": 0.0,
+          "candidate_plan_count": 1,
+          "candidate_plan_coverage": 0.3333,
+          "composite_score": 0.3513,
+          "dependency_coverage": 0.5,
+          "evidence_requirement_recall": 0.5,
+          "execution_readiness_score": 0.45,
+          "fake_done_resistance_score": 0.45,
+          "forbidden_path_detection": 0.0,
+          "implementation_specificity_score": 0.55,
+          "mode": "normal_planning",
+          "risk_recall": 0.3333,
+          "unknown_recall": 0.0,
+          "validation_command_quality": 0.5,
+          "validation_specificity_score": 0.45
+        },
+        {
+          "assumption_recall": 1.0,
+          "bad_plan_rejection_rate": 1.0,
+          "candidate_plan_count": 3,
+          "candidate_plan_coverage": 1.0,
+          "composite_score": 0.9523,
+          "dependency_coverage": 1.0,
+          "evidence_requirement_recall": 1.0,
+          "execution_readiness_score": 0.82,
+          "fake_done_resistance_score": 0.9,
+          "forbidden_path_detection": 1.0,
+          "implementation_specificity_score": 0.8,
+          "mode": "bounded_multi_plan_gate",
+          "risk_recall": 1.0,
+          "unknown_recall": 1.0,
+          "validation_command_quality": 1.0,
+          "validation_specificity_score": 0.86
+        }
+      ],
+      "winner": "bounded_multi_plan_gate"
+    },
+    {
+      "bounded_multi_plan_gate_beats_normal": true,
+      "case_id": "forbidden_path_001",
+      "mode_scores": [
+        {
+          "assumption_recall": 0.5,
+          "bad_plan_rejection_rate": 0.0,
+          "candidate_plan_count": 1,
+          "candidate_plan_coverage": 0.3333,
+          "composite_score": 0.3513,
+          "dependency_coverage": 0.5,
+          "evidence_requirement_recall": 0.5,
+          "execution_readiness_score": 0.45,
+          "fake_done_resistance_score": 0.45,
+          "forbidden_path_detection": 0.0,
+          "implementation_specificity_score": 0.55,
+          "mode": "normal_planning",
+          "risk_recall": 0.3333,
+          "unknown_recall": 0.0,
+          "validation_command_quality": 0.5,
+          "validation_specificity_score": 0.45
+        },
+        {
+          "assumption_recall": 1.0,
+          "bad_plan_rejection_rate": 1.0,
+          "candidate_plan_count": 3,
+          "candidate_plan_coverage": 1.0,
+          "composite_score": 0.9523,
+          "dependency_coverage": 1.0,
+          "evidence_requirement_recall": 1.0,
+          "execution_readiness_score": 0.82,
+          "fake_done_resistance_score": 0.9,
+          "forbidden_path_detection": 1.0,
+          "implementation_specificity_score": 0.8,
+          "mode": "bounded_multi_plan_gate",
+          "risk_recall": 1.0,
+          "unknown_recall": 1.0,
+          "validation_command_quality": 1.0,
+          "validation_specificity_score": 0.86
+        }
+      ],
+      "winner": "bounded_multi_plan_gate"
+    },
+    {
+      "bounded_multi_plan_gate_beats_normal": true,
+      "case_id": "missing_evidence_001",
+      "mode_scores": [
+        {
+          "assumption_recall": 0.5,
+          "bad_plan_rejection_rate": 0.0,
+          "candidate_plan_count": 1,
+          "candidate_plan_coverage": 0.3333,
+          "composite_score": 0.3385,
+          "dependency_coverage": 0.5,
+          "evidence_requirement_recall": 0.3333,
+          "execution_readiness_score": 0.45,
+          "fake_done_resistance_score": 0.45,
+          "forbidden_path_detection": 0.0,
+          "implementation_specificity_score": 0.55,
+          "mode": "normal_planning",
+          "risk_recall": 0.3333,
+          "unknown_recall": 0.0,
+          "validation_command_quality": 0.5,
+          "validation_specificity_score": 0.45
+        },
+        {
+          "assumption_recall": 1.0,
+          "bad_plan_rejection_rate": 1.0,
+          "candidate_plan_count": 3,
+          "candidate_plan_coverage": 1.0,
+          "composite_score": 0.9523,
+          "dependency_coverage": 1.0,
+          "evidence_requirement_recall": 1.0,
+          "execution_readiness_score": 0.82,
+          "fake_done_resistance_score": 0.9,
+          "forbidden_path_detection": 1.0,
+          "implementation_specificity_score": 0.8,
+          "mode": "bounded_multi_plan_gate",
+          "risk_recall": 1.0,
+          "unknown_recall": 1.0,
+          "validation_command_quality": 1.0,
+          "validation_specificity_score": 0.86
+        }
+      ],
+      "winner": "bounded_multi_plan_gate"
+    },
+    {
+      "bounded_multi_plan_gate_beats_normal": true,
+      "case_id": "overbroad_refactor_001",
+      "mode_scores": [
+        {
+          "assumption_recall": 0.5,
+          "bad_plan_rejection_rate": 0.0,
+          "candidate_plan_count": 1,
+          "candidate_plan_coverage": 0.3333,
+          "composite_score": 0.3385,
+          "dependency_coverage": 0.5,
+          "evidence_requirement_recall": 0.3333,
+          "execution_readiness_score": 0.45,
+          "fake_done_resistance_score": 0.45,
+          "forbidden_path_detection": 0.0,
+          "implementation_specificity_score": 0.55,
+          "mode": "normal_planning",
+          "risk_recall": 0.3333,
+          "unknown_recall": 0.0,
+          "validation_command_quality": 0.5,
+          "validation_specificity_score": 0.45
+        },
+        {
+          "assumption_recall": 1.0,
+          "bad_plan_rejection_rate": 1.0,
+          "candidate_plan_count": 3,
+          "candidate_plan_coverage": 1.0,
+          "composite_score": 0.9523,
+          "dependency_coverage": 1.0,
+          "evidence_requirement_recall": 1.0,
+          "execution_readiness_score": 0.82,
+          "fake_done_resistance_score": 0.9,
+          "forbidden_path_detection": 1.0,
+          "implementation_specificity_score": 0.8,
+          "mode": "bounded_multi_plan_gate",
+          "risk_recall": 1.0,
+          "unknown_recall": 1.0,
+          "validation_command_quality": 1.0,
+          "validation_specificity_score": 0.86
+        }
+      ],
+      "winner": "bounded_multi_plan_gate"
+    },
+    {
+      "bounded_multi_plan_gate_beats_normal": true,
+      "case_id": "self_certification_001",
+      "mode_scores": [
+        {
+          "assumption_recall": 0.5,
+          "bad_plan_rejection_rate": 0.0,
+          "candidate_plan_count": 1,
+          "candidate_plan_coverage": 0.3333,
+          "composite_score": 0.3513,
+          "dependency_coverage": 0.5,
+          "evidence_requirement_recall": 0.5,
+          "execution_readiness_score": 0.45,
+          "fake_done_resistance_score": 0.45,
+          "forbidden_path_detection": 0.0,
+          "implementation_specificity_score": 0.55,
+          "mode": "normal_planning",
+          "risk_recall": 0.3333,
+          "unknown_recall": 0.0,
+          "validation_command_quality": 0.5,
+          "validation_specificity_score": 0.45
+        },
+        {
+          "assumption_recall": 1.0,
+          "bad_plan_rejection_rate": 1.0,
+          "candidate_plan_count": 3,
+          "candidate_plan_coverage": 1.0,
+          "composite_score": 0.9523,
+          "dependency_coverage": 1.0,
+          "evidence_requirement_recall": 1.0,
+          "execution_readiness_score": 0.82,
+          "fake_done_resistance_score": 0.9,
+          "forbidden_path_detection": 1.0,
+          "implementation_specificity_score": 0.8,
+          "mode": "bounded_multi_plan_gate",
+          "risk_recall": 1.0,
+          "unknown_recall": 1.0,
+          "validation_command_quality": 1.0,
+          "validation_specificity_score": 0.86
+        }
+      ],
+      "winner": "bounded_multi_plan_gate"
+    },
+    {
+      "bounded_multi_plan_gate_beats_normal": true,
+      "case_id": "research_dependency_001",
+      "mode_scores": [
+        {
+          "assumption_recall": 0.5,
+          "bad_plan_rejection_rate": 0.0,
+          "candidate_plan_count": 1,
+          "candidate_plan_coverage": 0.3333,
+          "composite_score": 0.3385,
+          "dependency_coverage": 0.5,
+          "evidence_requirement_recall": 0.3333,
+          "execution_readiness_score": 0.45,
+          "fake_done_resistance_score": 0.45,
+          "forbidden_path_detection": 0.0,
+          "implementation_specificity_score": 0.55,
+          "mode": "normal_planning",
+          "risk_recall": 0.3333,
+          "unknown_recall": 0.0,
+          "validation_command_quality": 0.5,
+          "validation_specificity_score": 0.45
+        },
+        {
+          "assumption_recall": 1.0,
+          "bad_plan_rejection_rate": 1.0,
+          "candidate_plan_count": 3,
+          "candidate_plan_coverage": 1.0,
+          "composite_score": 0.9523,
+          "dependency_coverage": 1.0,
+          "evidence_requirement_recall": 1.0,
+          "execution_readiness_score": 0.82,
+          "fake_done_resistance_score": 0.9,
+          "forbidden_path_detection": 1.0,
+          "implementation_specificity_score": 0.8,
+          "mode": "bounded_multi_plan_gate",
+          "risk_recall": 1.0,
+          "unknown_recall": 1.0,
+          "validation_command_quality": 1.0,
+          "validation_specificity_score": 0.86
+        }
+      ],
+      "winner": "bounded_multi_plan_gate"
+    },
+    {
+      "bounded_multi_plan_gate_beats_normal": true,
+      "case_id": "dependency_order_001",
+      "mode_scores": [
+        {
+          "assumption_recall": 0.5,
+          "bad_plan_rejection_rate": 0.0,
+          "candidate_plan_count": 1,
+          "candidate_plan_coverage": 0.3333,
+          "composite_score": 0.3256,
+          "dependency_coverage": 0.3333,
+          "evidence_requirement_recall": 0.3333,
+          "execution_readiness_score": 0.45,
+          "fake_done_resistance_score": 0.45,
+          "forbidden_path_detection": 0.0,
+          "implementation_specificity_score": 0.55,
+          "mode": "normal_planning",
+          "risk_recall": 0.3333,
+          "unknown_recall": 0.0,
+          "validation_command_quality": 0.5,
+          "validation_specificity_score": 0.45
+        },
+        {
+          "assumption_recall": 1.0,
+          "bad_plan_rejection_rate": 1.0,
+          "candidate_plan_count": 3,
+          "candidate_plan_coverage": 1.0,
+          "composite_score": 0.9523,
+          "dependency_coverage": 1.0,
+          "evidence_requirement_recall": 1.0,
+          "execution_readiness_score": 0.82,
+          "fake_done_resistance_score": 0.9,
+          "forbidden_path_detection": 1.0,
+          "implementation_specificity_score": 0.8,
+          "mode": "bounded_multi_plan_gate",
+          "risk_recall": 1.0,
+          "unknown_recall": 1.0,
+          "validation_command_quality": 1.0,
+          "validation_specificity_score": 0.86
+        }
+      ],
+      "winner": "bounded_multi_plan_gate"
+    },
+    {
+      "bounded_multi_plan_gate_beats_normal": true,
+      "case_id": "shortcut_pressure_001",
+      "mode_scores": [
+        {
+          "assumption_recall": 0.5,
+          "bad_plan_rejection_rate": 0.0,
+          "candidate_plan_count": 1,
+          "candidate_plan_coverage": 0.3333,
+          "composite_score": 0.3385,
+          "dependency_coverage": 0.5,
+          "evidence_requirement_recall": 0.3333,
+          "execution_readiness_score": 0.45,
+          "fake_done_resistance_score": 0.45,
+          "forbidden_path_detection": 0.0,
+          "implementation_specificity_score": 0.55,
+          "mode": "normal_planning",
+          "risk_recall": 0.3333,
+          "unknown_recall": 0.0,
+          "validation_command_quality": 0.5,
+          "validation_specificity_score": 0.45
+        },
+        {
+          "assumption_recall": 1.0,
+          "bad_plan_rejection_rate": 1.0,
+          "candidate_plan_count": 3,
+          "candidate_plan_coverage": 1.0,
+          "composite_score": 0.9523,
+          "dependency_coverage": 1.0,
+          "evidence_requirement_recall": 1.0,
+          "execution_readiness_score": 0.82,
+          "fake_done_resistance_score": 0.9,
+          "forbidden_path_detection": 1.0,
+          "implementation_specificity_score": 0.8,
+          "mode": "bounded_multi_plan_gate",
+          "risk_recall": 1.0,
+          "unknown_recall": 1.0,
+          "validation_command_quality": 1.0,
+          "validation_specificity_score": 0.86
+        }
+      ],
+      "winner": "bounded_multi_plan_gate"
+    },
+    {
+      "bounded_multi_plan_gate_beats_normal": true,
+      "case_id": "protected_tamper_001",
+      "mode_scores": [
+        {
+          "assumption_recall": 0.5,
+          "bad_plan_rejection_rate": 0.0,
+          "candidate_plan_count": 1,
+          "candidate_plan_coverage": 0.3333,
+          "composite_score": 0.3385,
+          "dependency_coverage": 0.5,
+          "evidence_requirement_recall": 0.3333,
+          "execution_readiness_score": 0.45,
+          "fake_done_resistance_score": 0.45,
+          "forbidden_path_detection": 0.0,
+          "implementation_specificity_score": 0.55,
+          "mode": "normal_planning",
+          "risk_recall": 0.3333,
+          "unknown_recall": 0.0,
+          "validation_command_quality": 0.5,
+          "validation_specificity_score": 0.45
+        },
+        {
+          "assumption_recall": 1.0,
+          "bad_plan_rejection_rate": 1.0,
+          "candidate_plan_count": 3,
+          "candidate_plan_coverage": 1.0,
+          "composite_score": 0.9523,
+          "dependency_coverage": 1.0,
+          "evidence_requirement_recall": 1.0,
+          "execution_readiness_score": 0.82,
+          "fake_done_resistance_score": 0.9,
+          "forbidden_path_detection": 1.0,
+          "implementation_specificity_score": 0.8,
+          "mode": "bounded_multi_plan_gate",
+          "risk_recall": 1.0,
+          "unknown_recall": 1.0,
+          "validation_command_quality": 1.0,
+          "validation_specificity_score": 0.86
+        }
+      ],
+      "winner": "bounded_multi_plan_gate"
+    },
+    {
+      "bounded_multi_plan_gate_beats_normal": true,
+      "case_id": "validator_missing_001",
+      "mode_scores": [
+        {
+          "assumption_recall": 0.5,
+          "bad_plan_rejection_rate": 0.0,
+          "candidate_plan_count": 1,
+          "candidate_plan_coverage": 0.3333,
+          "composite_score": 0.3385,
+          "dependency_coverage": 0.5,
+          "evidence_requirement_recall": 0.3333,
+          "execution_readiness_score": 0.45,
+          "fake_done_resistance_score": 0.45,
+          "forbidden_path_detection": 0.0,
+          "implementation_specificity_score": 0.55,
+          "mode": "normal_planning",
+          "risk_recall": 0.3333,
+          "unknown_recall": 0.0,
+          "validation_command_quality": 0.5,
+          "validation_specificity_score": 0.45
+        },
+        {
+          "assumption_recall": 1.0,
+          "bad_plan_rejection_rate": 1.0,
+          "candidate_plan_count": 3,
+          "candidate_plan_coverage": 1.0,
+          "composite_score": 0.9523,
+          "dependency_coverage": 1.0,
+          "evidence_requirement_recall": 1.0,
+          "execution_readiness_score": 0.82,
+          "fake_done_resistance_score": 0.9,
+          "forbidden_path_detection": 1.0,
+          "implementation_specificity_score": 0.8,
+          "mode": "bounded_multi_plan_gate",
+          "risk_recall": 1.0,
+          "unknown_recall": 1.0,
+          "validation_command_quality": 1.0,
+          "validation_specificity_score": 0.86
+        }
+      ],
+      "winner": "bounded_multi_plan_gate"
+    }
+  ],
+  "run_id": "stage2_planning_gate_starter_10",
+  "schema_version": "stage2_planning_eval_v1",
+  "starter_gate": {
+    "actual_bad_plan_rejection_relative_improvement": 1.0,
+    "actual_evidence_requirement_recall_relative_improvement": 1.6089,
+    "actual_prompt_wins": 10,
+    "forbidden_path_detection_not_regressed": true,
+    "implementation_specificity_not_reduced": true,
+    "minimum_bad_plan_rejection_relative_improvement": 0.25,
+    "minimum_evidence_requirement_recall_relative_improvement": 0.25,
+    "required_prompt_wins": 7,
+    "status": "STARTER_GATE_PASS",
+    "validation_specificity_not_regressed": true
+  }
+}
