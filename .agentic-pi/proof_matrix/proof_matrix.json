@@ -295,6 +295,14 @@
       "claim_boundary": "Deterministic integration test using in-process tool execution only; not proof of live agent dispatch, network reliability, or arbitrary goal completion."
     },
     {
+      "claim_id": "stage2_finalisation_gate",
+      "claim": "Stage 2 planning evidence is packaged as deterministic evaluation-only handoff evidence for policy/certifier review.",
+      "mode": "quick",
+      "command": ["python", ".agentic-pi/evaluation/stage2_planning/validate_stage2_finalisation.py", "--output", ".agentic-runs/proof_matrix_outputs/stage2_finalisation_gate_report_v1.json"],
+      "expected_evidence": ["STAGE2_FINALISATION_PASS", "authority is evaluation_only", "final_status_authority is certifier_only", "can_certify_done is false"],
+      "claim_boundary": "Finalisation gate evidence only; it does not certify DONE, decide policy, prove implementation correctness, or prove arbitrary planning safety."
+    },
+    {
       "claim_id": "full_unittest",
       "claim": "The complete local unit suite passes.",
       "mode": "full",

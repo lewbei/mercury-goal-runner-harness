@@ -80,6 +80,7 @@ class V2ProofPackageTests(unittest.TestCase):
             "runtime_enforcement",
             "rpg_test_record",
             "rpg_test_aggregation",
+            "stage2_finalisation_gate",
             "full_unittest",
             "benchmark",
         ]:
@@ -122,6 +123,7 @@ class V2ProofPackageTests(unittest.TestCase):
         self.assertIn("runtime_enforcement", claim_ids)
         self.assertIn("rpg_test_record", claim_ids)
         self.assertIn("rpg_test_aggregation", claim_ids)
+        self.assertIn("stage2_finalisation_gate", claim_ids)
         self.assertNotIn("benchmark", claim_ids)
 
     def test_quick_proof_runner_outputs_only_under_agentic_runs(self):
@@ -132,6 +134,7 @@ class V2ProofPackageTests(unittest.TestCase):
             OUTPUT_DIR / "proof_matrix_result.json",
             OUTPUT_DIR / "diagnostic" / "diagnostic_metrics.json",
             OUTPUT_DIR / "trajectory" / "trajectory_metrics.json",
+            OUTPUT_DIR / "stage2_finalisation_gate_report_v1.json",
         ]:
             self.assertTrue(path.is_file(), path)
             self.assertIn(".agentic-runs", path.as_posix())
