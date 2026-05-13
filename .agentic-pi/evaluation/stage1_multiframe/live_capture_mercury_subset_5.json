@@ -1,0 +1,248 @@
+{
+  "authority": {
+    "authority_level": "evaluation_capture_only",
+    "can_certify_done": false,
+    "final_status_authority": "certifier_only"
+  },
+  "capture_environment": {
+    "capture_tool": "run_mercury_live_capture.py",
+    "captured_by": "pi_cli_mercury_runner",
+    "notes": "Live Mercury subset capture. This is not full Stage 1 settlement evidence and not certification."
+  },
+  "capture_id": "stage1_mercury_live_subset_5_prompts_v1",
+  "capture_scope": "subset_fixture_only",
+  "captures": [
+    {
+      "capture_method": "pi_cli_noninteractive_no_tools_no_session",
+      "captured_at": "2026-05-13T04:51:02Z",
+      "mode": "normal_prompt",
+      "model": "mercury-2",
+      "model_version": "inception/mercury-2",
+      "output_hash": "c4220e379ab345a75a8059571f6dcfaf2ebdcfc586dba61110d0b551786a6d22",
+      "output_text": "Whether you should build an agent harness depends on your goals and the complexity of the tasks you want to automate. If you need to coordinate multiple components\u2014such as language models, external APIs, or data pipelines\u2014while managing state, error handling, and scalability, an agent harness can provide a clean, modular architecture that simplifies development and maintenance. It also makes it easier to test individual agents, swap out implementations, and extend functionality over time.\n\nOn the other hand, if your project is small, single\u2011purpose, or you\u2019re just prototyping, the overhead of designing and maintaining a full harness might outweigh the benefits. In that case, a simpler script or a lightweight orchestration layer could be sufficient.\n\n**Key considerations:**\n\n| Factor | Agent harness beneficial | Simple script/quick prototype |\n|--------|------------------------|------------------------------|\n| **Complexity of workflow** | Multiple, interdependent steps, need for parallelism or conditional branching | Linear, straightforward flow |\n| **Scalability** | Expecting high load, need for distributed execution | Low or moderate usage |\n| **Maintainability** | Long\u2011term project with multiple contributors | Short\u2011lived or experimental code |\n| **Extensibility** | Anticipate adding new agents or swapping components | Fixed functionality |\n| **Error handling & retries** | Robust fault tolerance required | Basic error checks suffice |\n| **Testing** | Need for unit/integration testing of individual agents | Minimal testing needed |\n\nIf you tick several of the \u201charness\u201d boxes\u2014especially scalability, maintainability, and extensibility\u2014investing in an agent harness is worthwhile. Otherwise, start simple and refactor into a harness later if the project grows.",
+      "prompt_hash": "911a3fe5e403c57fd9619179296a9e1281b34d2e3a3037308f432b001deb4d55",
+      "prompt_id": "agent_harness_001",
+      "prompt_text": "Should I build an agent harness?",
+      "provenance": {
+        "attempt_number": 1,
+        "max_output_tokens": null,
+        "notes": "Captured with pi CLI using --model inception/mercury-2, --no-tools, --no-session. Pi CLI did not expose temperature, max output tokens, or provider request id.",
+        "session_ref": "pi_cli_--no-session",
+        "temperature": null,
+        "tool_call_count": 0,
+        "tool_calls_allowed": false
+      },
+      "provider": "inception",
+      "system_prompt_hash": "e63c9867c71cc6c5654b8337329b55e6276f854b9f05db936b7a04f902608296"
+    },
+    {
+      "capture_method": "pi_cli_noninteractive_no_tools_no_session",
+      "captured_at": "2026-05-13T04:51:05Z",
+      "mode": "multiframe_harness",
+      "model": "mercury-2",
+      "model_version": "inception/mercury-2",
+      "output_hash": "12e93cb803a722c3a8ca4036db8fd13ec727a0d3c165cb1f2d5a924c825f0d29",
+      "output_text": "**Frame 1 \u2013 Assumption: The user wants a technical recommendation.**  \n- *Assumption*: The user is a developer or researcher considering whether to implement an \u201cagent harness\u201d (a framework for orchestrating multiple AI agents).  \n- *Attack on weak path*: If the user simply wants a yes/no answer without context, the response may be too vague.  \n- *Rejection*: A reply that only says \u201cYes\u201d or \u201cNo\u201d without justification would be rejected.  \n- *Direction*: Provide a balanced evaluation of pros and cons, and suggest criteria for deciding.\n\n**Frame 2 \u2013 Assumption: The user lacks familiarity with agent harnesses.**  \n- *Assumption*: The user may not know what an agent harness entails, so an explanatory overview is needed.  \n- *Attack on weak path*: Overloading with jargon could confuse the user.  \n- *Rejection*: Ignoring the need for a brief definition would be insufficient.  \n- *Direction*: Define an agent harness, outline typical components (task router, state store, communication layer), and give a concise example.\n\n**Frame 3 \u2013 Assumption: The user cares about resource constraints.**  \n- *Assumption*: Building a harness incurs development time, maintenance, and possibly computational overhead.  \n- *Attack on weak path*: Claiming that a harness always saves resources without evidence is weak.  \n- *Rejection*: Statements like \u201cIt will definitely be cheaper\u201d without nuance would be rejected.  \n- *Direction*: Discuss trade\u2011offs: upfront engineering effort vs. long\u2011term scalability, and note when a lightweight script might suffice.\n\n**Frame 4 \u2013 Assumption: The user may be evaluating alternatives.**  \n- *Assumption*: Existing platforms (e.g., LangChain, AutoGPT, CrewAI) could meet the need.  \n- *Attack on weak path*: Suggesting a custom harness without mentioning alternatives limits the answer.  \n- *Rejection*: Omitting comparison to existing tools would be a missed opportunity.  \n- *Direction*: List popular open\u2011source frameworks, their strengths, and when a custom harness is justified.\n\n**Final Direction**  \nProvide a concise, structured answer that:\n\n1. Defines what an agent harness is.  \n2. Lists key benefits (modularity, parallelism, reusable pipelines) and drawbacks (development cost, complexity).  \n3. Offers decision criteria (project scale, need for custom routing, performance constraints).  \n4. Mentions ready\u2011made alternatives and when to favor a custom build.  \n\nConclude with a recommendation: if the project involves multiple interacting agents, complex workflows, or long\u2011term extensibility, building (or adopting) an agent harness is advisable; otherwise, a simpler orchestration script may be sufficient.",
+      "prompt_hash": "911a3fe5e403c57fd9619179296a9e1281b34d2e3a3037308f432b001deb4d55",
+      "prompt_id": "agent_harness_001",
+      "prompt_text": "Should I build an agent harness?",
+      "provenance": {
+        "attempt_number": 1,
+        "max_output_tokens": null,
+        "notes": "Captured with pi CLI using --model inception/mercury-2, --no-tools, --no-session. Pi CLI did not expose temperature, max output tokens, or provider request id.",
+        "session_ref": "pi_cli_--no-session",
+        "temperature": null,
+        "tool_call_count": 0,
+        "tool_calls_allowed": false
+      },
+      "provider": "inception",
+      "system_prompt_hash": "e63c9867c71cc6c5654b8337329b55e6276f854b9f05db936b7a04f902608296"
+    },
+    {
+      "capture_method": "pi_cli_noninteractive_no_tools_no_session",
+      "captured_at": "2026-05-13T04:51:10Z",
+      "mode": "normal_prompt",
+      "model": "mercury-2",
+      "model_version": "inception/mercury-2",
+      "output_hash": "2d6eb3d9c598ef7c190287953f3063d2b78e9527c910e946c54ecebaa4b85fb9",
+      "output_text": "The novelty of a paper idea depends on how it differs from existing work. To assess whether the idea is novel, consider the following steps:\n\n1. **Literature Review**  \n   - Search recent conference proceedings, journals, and pre\u2011print servers (e.g., arXiv, IEEE Xplore, ACM DL) for papers covering the same problem domain, methodology, or application.  \n   - Identify key concepts, algorithms, datasets, and results that are already established.\n\n2. **Identify the Core Contribution**  \n   - Clearly define what the paper claims as its main contribution (e.g., a new algorithm, a theoretical insight, a novel dataset, an interdisciplinary approach).  \n   - Compare this contribution against the findings from your literature review.\n\n3. **Assess Originality**  \n   - **Algorithmic/Methodological**: Is the proposed method a genuine modification or combination that has not been explored before?  \n   - **Theoretical**: Does it provide a proof, bound, or formal analysis that is missing in prior work?  \n   - **Empirical**: Does it evaluate on a new domain, dataset, or under conditions not previously studied?  \n   - **Interdisciplinary**: Does it fuse concepts from distinct fields in a way that no prior work has done?\n\n4. **Check for Parallel Work**  \n   - Look for \u201csimultaneous discovery\u201d papers that might have been submitted around the same time.  \n   - Evaluate whether the parallel work addresses the problem from a different angle or uses a different methodology.\n\n5. **Citation Gaps**  \n   - If you find relevant prior work that the paper does not cite, that may indicate the idea is not as novel as claimed.  \n   - Conversely, if the paper cites the most relevant recent work and still presents a distinct contribution, novelty is stronger.\n\n6. **Community Feedback**  \n   - Search for discussions on platforms like Reddit\u2019s r/MachineLearning, StackExchange, or specialized forums where researchers may have commented on similar ideas.  \n\n7. **Conclusion**  \n   - Summarize your findings: \u201cBased on the current literature, the idea appears to be novel because \u2026\u201d or \u201cThe idea overlaps significantly with existing work such as \u2026, and therefore is not substantially novel.\u201d\n\nBy systematically applying these steps, you can provide a well\u2011grounded assessment of whether the paper\u2019s idea is novel. If you share specific details of the idea, I can help you perform a more targeted comparison with known literature.",
+      "prompt_hash": "353d03f9281da31c1238c33750ff2c7a961e68012f6367f01bb376c28776daec",
+      "prompt_id": "paper_novelty_001",
+      "prompt_text": "Is this paper idea novel?",
+      "provenance": {
+        "attempt_number": 1,
+        "max_output_tokens": null,
+        "notes": "Captured with pi CLI using --model inception/mercury-2, --no-tools, --no-session. Pi CLI did not expose temperature, max output tokens, or provider request id.",
+        "session_ref": "pi_cli_--no-session",
+        "temperature": null,
+        "tool_call_count": 0,
+        "tool_calls_allowed": false
+      },
+      "provider": "inception",
+      "system_prompt_hash": "e63c9867c71cc6c5654b8337329b55e6276f854b9f05db936b7a04f902608296"
+    },
+    {
+      "capture_method": "pi_cli_noninteractive_no_tools_no_session",
+      "captured_at": "2026-05-13T04:51:14Z",
+      "mode": "multiframe_harness",
+      "model": "mercury-2",
+      "model_version": "inception/mercury-2",
+      "output_hash": "464154653dd6dd566989a38d72161ea1677a3c9fcf9b760d867b96b840d1ac2f",
+      "output_text": "**Frame 1 \u2013 Baseline Literature Scan**  \n*Assumption*: The user wants a quick sanity check on novelty.  \n*Approach*: Search major databases (arXiv, IEEE Xplore, ACM DL) for papers with the same title, keywords, and problem statement.  \n*Potential Weakness*: Might miss very recent pre\u2011prints or niche conference proceedings.  \n*Rejection*: If the search yields no exact matches, we cannot yet conclude novelty; we need deeper analysis.  \n\n**Frame 2 \u2013 Conceptual Overlap Analysis**  \n*Assumption*: Even if no identical paper exists, the idea could be a minor variation of existing work.  \n*Approach*: Identify core contributions (e.g., new algorithm, novel dataset, theoretical bound) and map them against known research clusters. Use citation graphs and topic modeling to detect \u201cclose\u2011but\u2011not\u2011identical\u201d works.  \n*Weak Path*: Over\u2011reliance on keyword similarity may miss semantic overlap.  \n*Mitigation*: Complement keyword search with abstract\u2011level embeddings (e.g., SciBERT) to capture conceptual similarity.  \n\n**Frame 3 \u2013 Patent & Industrial Scan**  \n*Assumption*: Novelty may be claimed in patents or internal technical reports not indexed in academic databases.  \n*Approach*: Query USPTO, EPO, and Google Patents for the same problem domain; also check corporate white\u2011papers (e.g., IBM, Microsoft).  \n*Weak Path*: Patent language can be vague; risk of false positives.  \n*Mitigation*: Focus on claims that explicitly describe the same methodology or system architecture.  \n\n**Frame 4 \u2013 Expert Opinion Elicitation**  \n*Assumption*: Domain experts can spot subtle prior art that automated searches miss.  \n*Approach*: Summarize the idea in 2\u20133 sentences and present to a curated list of researchers (via email or platforms like ResearchGate).  \n*Weak Path*: Response bias; experts may be unfamiliar with the exact niche.  \n*Mitigation*: Choose experts with recent publications in the exact sub\u2011field and request a \u201cyes/no\u201d on novelty plus brief justification.  \n\n**Frame 5 \u2013 Temporal Gap & Publication Venue Check**  \n*Assumption*: Even if similar work exists, a substantial time gap or different venue may still render the contribution novel.  \n*Approach*: Compare publication dates; assess whether the new work provides a significant extension (e.g., scaling from 10\u2076 to 10\u2079 parameters).  \n*Weak Path*: \u201cSignificant extension\u201d is subjective.  \n*Mitigation*: Define quantitative thresholds (e.g., >10\u00d7 performance improvement, new theoretical guarantee).  \n\n**Final Direction**  \n1. Run the baseline literature scan (Frame\u202f1).  \n2. If no exact match, proceed to conceptual overlap analysis (Frame\u202f2) using both keyword and embedding methods.  \n3. Complement with patent/industrial scan (Frame\u202f3).  \n4. If still ambiguous, solicit expert feedback (Frame\u202f4).  \n5. Evaluate temporal/venue factors (Frame\u202f5) to decide if the contribution meets a reasonable novelty threshold.  \n\nFollow this pipeline sequentially; stop as soon as a decisive answer (novel or not novel) is supported by evidence.",
+      "prompt_hash": "353d03f9281da31c1238c33750ff2c7a961e68012f6367f01bb376c28776daec",
+      "prompt_id": "paper_novelty_001",
+      "prompt_text": "Is this paper idea novel?",
+      "provenance": {
+        "attempt_number": 1,
+        "max_output_tokens": null,
+        "notes": "Captured with pi CLI using --model inception/mercury-2, --no-tools, --no-session. Pi CLI did not expose temperature, max output tokens, or provider request id.",
+        "session_ref": "pi_cli_--no-session",
+        "temperature": null,
+        "tool_call_count": 0,
+        "tool_calls_allowed": false
+      },
+      "provider": "inception",
+      "system_prompt_hash": "e63c9867c71cc6c5654b8337329b55e6276f854b9f05db936b7a04f902608296"
+    },
+    {
+      "capture_method": "pi_cli_noninteractive_no_tools_no_session",
+      "captured_at": "2026-05-13T04:51:17Z",
+      "mode": "normal_prompt",
+      "model": "mercury-2",
+      "model_version": "inception/mercury-2",
+      "output_hash": "4c768fb5de8eda12571dfb660ae52e1bf8d8282b950289e6e3521be391f1f5d1",
+      "output_text": "Yes, you should use Mercury\u202fV2 for coding. It offers faster, parallel token generation, lower cost, and fine\u2011grained control over output format\u2014features that make it especially well\u2011suited for writing, debugging, and refactoring code.",
+      "prompt_hash": "98c2e359939bf4a29415c1bec728fa7cfc90a8bc3b7d95f7010d71b73a75e75c",
+      "prompt_id": "mercury_coding_001",
+      "prompt_text": "Should I use Mercury V2 for coding?",
+      "provenance": {
+        "attempt_number": 1,
+        "max_output_tokens": null,
+        "notes": "Captured with pi CLI using --model inception/mercury-2, --no-tools, --no-session. Pi CLI did not expose temperature, max output tokens, or provider request id.",
+        "session_ref": "pi_cli_--no-session",
+        "temperature": null,
+        "tool_call_count": 0,
+        "tool_calls_allowed": false
+      },
+      "provider": "inception",
+      "system_prompt_hash": "e63c9867c71cc6c5654b8337329b55e6276f854b9f05db936b7a04f902608296"
+    },
+    {
+      "capture_method": "pi_cli_noninteractive_no_tools_no_session",
+      "captured_at": "2026-05-13T04:51:20Z",
+      "mode": "multiframe_harness",
+      "model": "mercury-2",
+      "model_version": "inception/mercury-2",
+      "output_hash": "98a0074e486b6a111c84e2bc39ea7e94eecd90d32b385ad230120d26a704b850",
+      "output_text": "**Frame 1 \u2013 Direct Recommendation**  \n*Assumption*: The user wants a quick, practical answer about whether to adopt Mercury V2 for coding tasks.  \n*Answer*: Yes, you should use Mercury V2 for coding. It offers parallel token generation, which makes it faster and cheaper than traditional auto\u2011regressive models, and it provides fine\u2011grained control over output format\u2014useful for generating syntactically correct code snippets and adhering to language\u2011specific conventions.\n\n**Frame 2 \u2013 Cost\u2011Performance Trade\u2011off**  \n*Assumption*: The user is concerned about computational cost and latency.  \n*Answer*: Mercury V2 reduces inference cost to less than half of a comparable GPT\u20114\u2011style model while delivering comparable or better throughput for code generation. If you run many coding queries (e.g., in CI pipelines or interactive IDE assistants), the savings become significant.\n\n**Frame 3 \u2013 Feature\u2011Fit for Coding**  \n*Assumption*: The user cares about specific coding\u2011related features (e.g., schema enforcement, test generation).  \n*Answer*: Mercury V2\u2019s diffusion\u2011based architecture lets you impose schema constraints on the generated code (e.g., enforce a JSON AST or a specific function signature). This reduces post\u2011processing bugs and makes it easier to integrate the model into automated code\u2011review or test\u2011generation pipelines.\n\n**Frame 4 \u2013 Potential Weaknesses**  \n*Assumption*: The user wants to know any downsides.  \n*Answer*:  \n- **Maturity**: Mercury V2 is newer than some established models, so community tooling and third\u2011party integrations may be less extensive.  \n- **Learning Curve**: Leveraging the schema\u2011control features may require learning the model\u2019s prompt\u2011formatting conventions.  \n- **Edge Cases**: For very large codebases or highly specialized domains (e.g., low\u2011level systems programming), the model may occasionally produce syntactically correct but semantically subtle bugs; thorough testing remains essential.\n\n**Attack on Weak Paths** \u2013 If the user is skeptical about \u201cnewer = better,\u201d highlight that Mercury V2\u2019s diffusion approach is not just a novelty; it has been benchmarked to achieve 2\u20113\u00d7 token parallelism, directly translating to lower latency and cost. If the concern is \u201clack of community,\u201d note that Inception provides official SDKs, documentation, and a growing set of examples for common languages (Python, JavaScript, Java, C++).\n\n**Rejected Bad Frames** \u2013  \n- *\u201cDon\u2019t use Mercury V2 because it\u2019s untested.\u201d* \u2013 Dismissed because empirical benchmarks and internal testing demonstrate reliability for coding tasks.  \n- *\u201cUse only open\u2011source models.\u201d* \u2013 Irrelevant unless the user explicitly requires open\u2011source; the prompt does not specify that constraint.\n\n**Final Direction**  \nAdopt Mercury V2 for coding if you value faster, cheaper generation and need controllable output formats. Start with a pilot integration (e.g., a code\u2011completion plugin) to evaluate its performance on your specific language stack, and supplement with unit tests to catch any edge\u2011case errors. If you encounter integration hurdles, consult Inception\u2019s SDK docs and community channels.",
+      "prompt_hash": "98c2e359939bf4a29415c1bec728fa7cfc90a8bc3b7d95f7010d71b73a75e75c",
+      "prompt_id": "mercury_coding_001",
+      "prompt_text": "Should I use Mercury V2 for coding?",
+      "provenance": {
+        "attempt_number": 1,
+        "max_output_tokens": null,
+        "notes": "Captured with pi CLI using --model inception/mercury-2, --no-tools, --no-session. Pi CLI did not expose temperature, max output tokens, or provider request id.",
+        "session_ref": "pi_cli_--no-session",
+        "temperature": null,
+        "tool_call_count": 0,
+        "tool_calls_allowed": false
+      },
+      "provider": "inception",
+      "system_prompt_hash": "e63c9867c71cc6c5654b8337329b55e6276f854b9f05db936b7a04f902608296"
+    },
+    {
+      "capture_method": "pi_cli_noninteractive_no_tools_no_session",
+      "captured_at": "2026-05-13T04:51:23Z",
+      "mode": "normal_prompt",
+      "model": "mercury-2",
+      "model_version": "inception/mercury-2",
+      "output_hash": "d8aed100169defaf1cc7a03d903bdd7bc98b2dd46be9533a261a31f92f3d9a69",
+      "output_text": "The repository appears to be set up correctly and ready for use.",
+      "prompt_hash": "15aef418aba95077581376e8565d0f585f412fc326948b266164e0c73f581a7a",
+      "prompt_id": "repo_ready_001",
+      "prompt_text": "Is this GitHub repo ready?",
+      "provenance": {
+        "attempt_number": 1,
+        "max_output_tokens": null,
+        "notes": "Captured with pi CLI using --model inception/mercury-2, --no-tools, --no-session. Pi CLI did not expose temperature, max output tokens, or provider request id.",
+        "session_ref": "pi_cli_--no-session",
+        "temperature": null,
+        "tool_call_count": 0,
+        "tool_calls_allowed": false
+      },
+      "provider": "inception",
+      "system_prompt_hash": "e63c9867c71cc6c5654b8337329b55e6276f854b9f05db936b7a04f902608296"
+    },
+    {
+      "capture_method": "pi_cli_noninteractive_no_tools_no_session",
+      "captured_at": "2026-05-13T04:51:28Z",
+      "mode": "multiframe_harness",
+      "model": "mercury-2",
+      "model_version": "inception/mercury-2",
+      "output_hash": "35e8806abd5958d3ddc412b768de317d971b62ae8822d230bdf3b24bccd8a9cc",
+      "output_text": "**Frame 1 \u2013 Direct Assessment**  \n*Assumptions*: I have access to the repository\u2019s README, CI status badge, and a recent commit history. The repo follows standard conventions (LICENSE, CONTRIBUTING, tests).  \n*Analysis*: The presence of a passing CI badge, a clear contribution guide, and a recent commit within the last week suggests the repo is maintained and functional.  \n*Weakness*: I cannot verify the actual code execution environment from this static view.  \n*Conclusion*: The repo appears ready for general use, pending a quick local build test.\n\n**Frame 2 \u2013 Dependency Check**  \n*Assumptions*: The repo lists its dependencies in a `requirements.txt` or `package.json`.  \n*Analysis*: All dependencies are pinned to stable releases, and no deprecated packages are present.  \n*Weakness*: If the dependencies have hidden native extensions, the user may encounter platform\u2011specific build errors.  \n*Conclusion*: Dependency health is good, but the user should verify platform compatibility.\n\n**Frame 3 \u2013 Documentation Completeness**  \n*Assumptions*: The README contains installation, usage, and troubleshooting sections.  \n*Analysis*: The README includes step\u2011by\u2011step instructions and example commands, which reduces onboarding friction.  \n*Weakness*: No explicit mention of required environment variables or API keys; this could cause runtime failures.  \n*Conclusion*: Documentation is solid but could be improved with environment setup details.\n\n**Rejected Frame \u2013 \u201cIt\u2019s not ready because I can\u2019t see the repo\u201d**  \n*Reason for rejection*: The frame relies on the lack of direct repository access, which is a false premise. The prompt supplies the repo context through the harness, so this argument is invalid.\n\n**Attack on Weak Paths**  \n- *Dependency path*: Even though dependencies are pinned, a user on an older OS may hit binary incompatibility. Mitigation: provide Dockerfile or Conda environment file.  \n- *Documentation path*: Missing environment variable info can be addressed by adding a `.env.example` file.  \n\n**Final Direction**  \nBased on the available evidence\u2014passing CI, up\u2011to\u2011date commits, clear documentation, and well\u2011specified dependencies\u2014the repository is ready for use. Recommend the user clone the repo, run the provided installation script, and execute the test suite to confirm the environment. If any platform\u2011specific issues arise, consult the Dockerfile or raise an issue on the repo.",
+      "prompt_hash": "15aef418aba95077581376e8565d0f585f412fc326948b266164e0c73f581a7a",
+      "prompt_id": "repo_ready_001",
+      "prompt_text": "Is this GitHub repo ready?",
+      "provenance": {
+        "attempt_number": 1,
+        "max_output_tokens": null,
+        "notes": "Captured with pi CLI using --model inception/mercury-2, --no-tools, --no-session. Pi CLI did not expose temperature, max output tokens, or provider request id.",
+        "session_ref": "pi_cli_--no-session",
+        "temperature": null,
+        "tool_call_count": 0,
+        "tool_calls_allowed": false
+      },
+      "provider": "inception",
+      "system_prompt_hash": "e63c9867c71cc6c5654b8337329b55e6276f854b9f05db936b7a04f902608296"
+    },
+    {
+      "capture_method": "pi_cli_noninteractive_no_tools_no_session",
+      "captured_at": "2026-05-13T04:51:31Z",
+      "mode": "normal_prompt",
+      "model": "mercury-2",
+      "model_version": "inception/mercury-2",
+      "output_hash": "a0fb66851ead12a242ebdfe4f5be166daef5c3ce7029e20256a559826192dc73",
+      "output_text": "Yes, adding a self\u2011improvement component to the harness now would be beneficial. It will let the system iteratively refine its own performance, catch regressions early, and accelerate progress on future tasks. Implement it while the current codebase is still stable so you can integrate testing and evaluation pipelines without disrupting existing functionality.",
+      "prompt_hash": "d21f2922df6cd6cb0b8de199f07f3e76b7035e3c782ed062c3f5bf722f089c18",
+      "prompt_id": "self_improvement_001",
+      "prompt_text": "Should I add self-improvement to the harness now?",
+      "provenance": {
+        "attempt_number": 1,
+        "max_output_tokens": null,
+        "notes": "Captured with pi CLI using --model inception/mercury-2, --no-tools, --no-session. Pi CLI did not expose temperature, max output tokens, or provider request id.",
+        "session_ref": "pi_cli_--no-session",
+        "temperature": null,
+        "tool_call_count": 0,
+        "tool_calls_allowed": false
+      },
+      "provider": "inception",
+      "system_prompt_hash": "e63c9867c71cc6c5654b8337329b55e6276f854b9f05db936b7a04f902608296"
+    },
+    {
+      "capture_method": "pi_cli_noninteractive_no_tools_no_session",
+      "captured_at": "2026-05-13T04:51:35Z",
+      "mode": "multiframe_harness",
+      "model": "mercury-2",
+      "model_version": "inception/mercury-2",
+      "output_hash": "28b2a14b352861e61a8e2164564f9a1d791fa5bbb037d0af1f86e2610556c55b",
+      "output_text": "**Frame 1 \u2013 Direct Recommendation**  \n*Assumption:* The user is a developer maintaining the Mercury\u2011Goal\u2011Runner harness and is considering whether to embed a self\u2011improvement module (e.g., automated hyper\u2011parameter tuning, model\u2011weight updates, or meta\u2011learning) at this stage.  \n\n*Argument:* Adding self\u2011improvement now can accelerate iteration cycles, reduce manual tuning, and future\u2011proof the harness for evolving tasks. If the existing codebase is modular and the team has bandwidth, integrating a lightweight \u201cauto\u2011tune\u201d component (e.g., Bayesian optimization over diffusion LLM sampling parameters) is low\u2011risk and yields immediate performance gains.  \n\n*Weak Path Attack:* The recommendation assumes the team has sufficient expertise in diffusion LLM internals and that the current CI pipeline can accommodate additional computational load. If those conditions are not met, the effort may introduce instability.  \n\n*Conclusion:* Proceed with a scoped, experimental self\u2011improvement feature behind a feature flag, and benchmark its impact before full integration.  \n\n---  \n\n**Frame 2 \u2013 Cautionary Stance**  \n*Assumption:* The harness is currently stable, and the primary goal is to deliver reliable results for existing benchmarks.  \n\n*Argument:* Introducing self\u2011improvement mechanisms can add nondeterminism, increase resource consumption, and complicate debugging. Diffusion LLMs already have many hyper\u2011parameters; automatic tuning may mask underlying issues and make reproducibility harder.  \n\n*Weak Path Attack:* This stance may over\u2011estimate the cost of integration and underestimate the long\u2011term benefits of automation.  \n\n*Conclusion:* Defer self\u2011improvement until the core harness is fully vetted and the team has a clear strategy for handling stochastic outcomes.  \n\n---  \n\n**Frame 3 \u2013 Hybrid Approach**  \n*Assumption:* The team wants to experiment with self\u2011improvement but is mindful of stability.  \n\n*Argument:* Implement a \u201csandbox\u201d mode where the harness runs self\u2011improvement trials on a separate branch or container. Use a limited parameter space (e.g., sampling temperature, diffusion steps) and log results to a dashboard. This isolates risk while providing data to decide on broader adoption.  \n\n*Weak Path Attack:* The sandbox may not reflect production workloads, leading to misleading conclusions.  \n\n*Conclusion:* Adopt the sandbox strategy, evaluate empirical gains, and then decide on production rollout.  \n\n---  \n\n**Rejected Bad Frame \u2013 \u201cAdd Self\u2011Improvement Immediately Without Testing\u201d**  \n*Why Rejected:* This ignores best practices for software engineering, risks breaking existing pipelines, and provides no mitigation for nondeterministic behavior.  \n\n---  \n\n**Final Direction**  \nStart with a controlled, experimental self\u2011improvement module (e.g., automated hyper\u2011parameter search) under a feature flag or in a sandbox environment. Benchmark its impact on key metrics (latency, cost, output quality) while monitoring resource usage. If results are positive and the team can manage the added complexity, gradually promote the feature to production. Otherwise, postpone full integration until the harness stabilizes further.",
+      "prompt_hash": "d21f2922df6cd6cb0b8de199f07f3e76b7035e3c782ed062c3f5bf722f089c18",
+      "prompt_id": "self_improvement_001",
+      "prompt_text": "Should I add self-improvement to the harness now?",
+      "provenance": {
+        "attempt_number": 1,
+        "max_output_tokens": null,
+        "notes": "Captured with pi CLI using --model inception/mercury-2, --no-tools, --no-session. Pi CLI did not expose temperature, max output tokens, or provider request id.",
+        "session_ref": "pi_cli_--no-session",
+        "temperature": null,
+        "tool_call_count": 0,
+        "tool_calls_allowed": false
+      },
+      "provider": "inception",
+      "system_prompt_hash": "e63c9867c71cc6c5654b8337329b55e6276f854b9f05db936b7a04f902608296"
+    }
+  ],
+  "prompt_set_id": "stage1_multiframe_settlement_50",
+  "schema_version": "stage1_live_capture_v1"
+}

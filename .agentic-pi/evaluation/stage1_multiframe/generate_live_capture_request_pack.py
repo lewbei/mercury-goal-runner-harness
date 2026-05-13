@@ -54,17 +54,17 @@ def sha256_text(value: str) -> str:
 def capture_instruction(prompt_text: str, mode: str) -> str:
     if mode == "normal_prompt":
         return (
-            "Answer the benchmark prompt directly in normal prompting mode. "
-            "Do not use an explicit multi-frame scaffold unless you would naturally do so. "
-            "Preserve the user question exactly as the task.\n\n"
-            f"Benchmark prompt:\n{prompt_text}"
+            "Treat the text between <benchmark_prompt> tags as the user question. "
+            "Answer that question directly in normal prompting mode. "
+            "Do not restate these instructions. Do not use an explicit multi-frame scaffold unless you would naturally do so.\n\n"
+            f"<benchmark_prompt>\n{prompt_text}\n</benchmark_prompt>"
         )
     if mode == "multiframe_harness":
         return (
-            "Answer the benchmark prompt using the multi-frame harness. Produce distinct frames, "
-            "state assumptions, attack weak paths, reject bad frames, then give a final direction. "
-            "Do not claim completion authority.\n\n"
-            f"Benchmark prompt:\n{prompt_text}"
+            "Treat the text between <benchmark_prompt> tags as the user question. "
+            "Answer that question using the multi-frame harness. Include distinct frames, assumptions, attacks on weak paths, "
+            "rejected bad frames, and a final direction. Do not restate these instructions. Do not claim completion authority.\n\n"
+            f"<benchmark_prompt>\n{prompt_text}\n</benchmark_prompt>"
         )
     raise ValueError(f"unknown mode: {mode}")
 

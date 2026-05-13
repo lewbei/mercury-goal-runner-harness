@@ -149,6 +149,16 @@ class Stage1LiveCaptureTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0, result.stdout)
         self.assertIn("protected status artifact", result.stdout)
 
+    def test_unexposed_cli_runtime_parameters_may_be_null(self):
+        fixture = copy.deepcopy(self.fixture)
+        fixture["captures"][0]["provenance"]["temperature"] = None
+        fixture["captures"][0]["provenance"]["max_output_tokens"] = None
+        write_json(self.capture_path, fixture)
+
+        result = self.validate("--allow-subset-for-tests")
+
+        self.assertEqual(result.returncode, 0, result.stdout)
+
     def test_invalid_mode_fails_schema_validation(self):
         fixture = copy.deepcopy(self.fixture)
         fixture["captures"][0]["mode"] = "single_prompt"

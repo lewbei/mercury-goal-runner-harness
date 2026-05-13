@@ -48,6 +48,19 @@ The request pack contains 100 tasks:
 
 It contains prompt text, prompt hashes, mode-specific instructions, required return fields, and forbidden actions. It does **not** contain model outputs, output hashes, provider responses, or live evidence.
 
+## Mercury subset capture
+
+A small Mercury subset can be captured through the Pi CLI before attempting the full 50-prompt run:
+
+```cmd
+python .agentic-pi\evaluation\stage1_multiframe\run_mercury_live_capture.py --prompt-limit 5 --output .agentic-pi\evaluation\stage1_multiframe\live_capture_mercury_subset_5.json
+python .agentic-pi\evaluation\stage1_multiframe\validate_stage1_live_capture.py --capture .agentic-pi\evaluation\stage1_multiframe\live_capture_mercury_subset_5.json --allow-subset-for-tests
+```
+
+This uses `pi --model inception/mercury-2 --no-tools --no-session`. Pi CLI does not expose temperature, max output tokens, or provider request id in this path, so those runtime parameters are recorded as unavailable rather than guessed.
+
+This subset is live Mercury capture evidence, but it is still not full Stage 1 settlement evidence.
+
 ## What is captured
 
 Each completed capture record stores one model output for one prompt and one mode:
