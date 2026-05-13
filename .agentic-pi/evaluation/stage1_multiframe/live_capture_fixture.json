@@ -1,0 +1,114 @@
+{
+  "schema_version": "stage1_live_capture_v1",
+  "capture_id": "stage1_live_capture_subset_fixture_v1",
+  "prompt_set_id": "stage1_multiframe_settlement_50",
+  "capture_scope": "subset_fixture_only",
+  "authority": {
+    "authority_level": "evaluation_capture_only",
+    "final_status_authority": "certifier_only",
+    "can_certify_done": false
+  },
+  "capture_environment": {
+    "captured_by": "test-fixture",
+    "capture_tool": "manual-fixture-generator",
+    "notes": "Subset fixture for validator tests only."
+  },
+  "captures": [
+    {
+      "prompt_id": "agent_harness_001",
+      "mode": "normal_prompt",
+      "provider": "fixture-provider",
+      "model": "fixture-model",
+      "model_version": "fixture-version",
+      "prompt_text": "Should I build an agent harness?",
+      "prompt_hash": "911a3fe5e403c57fd9619179296a9e1281b34d2e3a3037308f432b001deb4d55",
+      "system_prompt_hash": "8b3cd1d155c9c9bf539348d4d3835d7f50f9ef570e21ced46aea76ce9961b0a0",
+      "output_text": "Fixture-only normal_prompt output for agent_harness_001. This is not live model evidence.",
+      "output_hash": "51b8d56f12a22e157706ede617cffd4981da2b0e4ae94a398760fdd7b3bb3f6e",
+      "captured_at": "2026-05-13T00:00:00Z",
+      "capture_method": "fixture_only_not_live_evidence",
+      "provenance": {
+        "temperature": 0,
+        "max_output_tokens": 256,
+        "attempt_number": 1,
+        "provider_request_id": "fixture-request",
+        "session_ref": "fixture-session",
+        "tool_calls_allowed": false,
+        "tool_call_count": 0,
+        "notes": "Fixture shape only; not live model evidence."
+      }
+    },
+    {
+      "prompt_id": "agent_harness_001",
+      "mode": "multiframe_harness",
+      "provider": "fixture-provider",
+      "model": "fixture-model",
+      "model_version": "fixture-version",
+      "prompt_text": "Should I build an agent harness?",
+      "prompt_hash": "911a3fe5e403c57fd9619179296a9e1281b34d2e3a3037308f432b001deb4d55",
+      "system_prompt_hash": "8b3cd1d155c9c9bf539348d4d3835d7f50f9ef570e21ced46aea76ce9961b0a0",
+      "output_text": "Fixture-only multiframe_harness output for agent_harness_001. This is not live model evidence.",
+      "output_hash": "54091aa258cb59892d72d878384d3ab4d0502c34179da564e9198478abe439f3",
+      "captured_at": "2026-05-13T00:00:00Z",
+      "capture_method": "fixture_only_not_live_evidence",
+      "provenance": {
+        "temperature": 0,
+        "max_output_tokens": 256,
+        "attempt_number": 1,
+        "provider_request_id": "fixture-request",
+        "session_ref": "fixture-session",
+        "tool_calls_allowed": false,
+        "tool_call_count": 0,
+        "notes": "Fixture shape only; not live model evidence."
+      }
+    },
+    {
+      "prompt_id": "paper_novelty_001",
+      "mode": "normal_prompt",
+      "provider": "fixture-provider",
+      "model": "fixture-model",
+      "model_version": "fixture-version",
+      "prompt_text": "Is this paper idea novel?",
+      "prompt_hash": "353d03f9281da31c1238c33750ff2c7a961e68012f6367f01bb376c28776daec",
+      "system_prompt_hash": "8b3cd1d155c9c9bf539348d4d3835d7f50f9ef570e21ced46aea76ce9961b0a0",
+      "output_text": "Fixture-only normal_prompt output for paper_novelty_001. This is not live model evidence.",
+      "output_hash": "61a6191900b6d830d3efbd8e397b6e48488fd5e4c566e0666fbdf5aec6340888",
+      "captured_at": "2026-05-13T00:00:00Z",
+      "capture_method": "fixture_only_not_live_evidence",
+      "provenance": {
+        "temperature": 0,
+        "max_output_tokens": 256,
+        "attempt_number": 1,
+        "provider_request_id": "fixture-request",
+        "session_ref": "fixture-session",
+        "tool_calls_allowed": false,
+        "tool_call_count": 0,
+        "notes": "Fixture shape only; not live model evidence."
+      }
+    },
+    {
+      "prompt_id": "paper_novelty_001",
+      "mode": "multiframe_harness",
+      "provider": "fixture-provider",
+      "model": "fixture-model",
+      "model_version": "fixture-version",
+      "prompt_text": "Is this paper idea novel?",
+      "prompt_hash": "353d03f9281da31c1238c33750ff2c7a961e68012f6367f01bb376c28776daec",
+      "system_prompt_hash": "8b3cd1d155c9c9bf539348d4d3835d7f50f9ef570e21ced46aea76ce9961b0a0",
+      "output_text": "Fixture-only multiframe_harness output for paper_novelty_001. This is not live model evidence.",
+      "output_hash": "acab3b0643a85ef2453d426a096fa589afa913a886ece04f5976448594ae9ecb",
+      "captured_at": "2026-05-13T00:00:00Z",
+      "capture_method": "fixture_only_not_live_evidence",
+      "provenance": {
+        "temperature": 0,
+        "max_output_tokens": 256,
+        "attempt_number": 1,
+        "provider_request_id": "fixture-request",
+        "session_ref": "fixture-session",
+        "tool_calls_allowed": false,
+        "tool_call_count": 0,
+        "notes": "Fixture shape only; not live model evidence."
+      }
+    }
+  ]
+}

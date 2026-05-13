@@ -251,7 +251,7 @@ class Stage1MultiframeEvalTests(unittest.TestCase):
     def test_stage1_eval_has_no_live_model_calls(self):
         combined = "\n".join(
             (EVAL_DIR / filename).read_text(encoding="utf-8")
-            for filename in ["score_stage1_eval.py", "validate_stage1_eval.py"]
+            for filename in ["score_stage1_eval.py", "validate_stage1_eval.py", "validate_stage1_live_capture.py"]
         ).lower()
         forbidden = ["requests", "urllib", "openai", "anthropic", "subprocess", " pi "]
         for token in forbidden:

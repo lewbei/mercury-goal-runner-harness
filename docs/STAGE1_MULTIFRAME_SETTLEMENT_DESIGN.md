@@ -167,6 +167,30 @@ policy_decision.json
 
 This 50-prompt fixture is still deterministic and hand-authored. It is stronger than the 5-prompt starter skeleton, but it is not yet live-model evidence. A later live A/B run must capture prompt provenance, model metadata, outputs, and scoring artifacts before any stronger empirical claim.
 
+## Live A/B provenance capture scaffold
+
+The live capture scaffold validates externally supplied model outputs for both modes. It does not call live models and does not score raw text automatically.
+
+Capture validation checks:
+
+```text
+exactly normal_prompt and multiframe_harness per prompt
+prompt_text matches prompt_set.json
+prompt_hash and output_hash match SHA-256 of stored text
+provider, model, model_version, capture time, session/request metadata exist
+can_certify_done is false
+final-status values and protected artifact references are absent
+```
+
+Default validation requires all 50 prompts. A subset fixture mode exists only for unit tests:
+
+```text
+--allow-subset-for-tests
+capture_scope = subset_fixture_only
+```
+
+Validated live captures are provenance evidence only. Raw model text still needs a separate extraction/scoring protocol before it can be compared against expected frames, assumptions, failure modes, and rejected bad frames.
+
 ## Authority boundary
 
 This benchmark is evaluation-only.
