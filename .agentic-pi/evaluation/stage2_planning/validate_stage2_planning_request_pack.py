@@ -23,17 +23,36 @@ MODES = {"normal_planning", "bounded_multi_plan_gate"}
 PROTECTED_STATUS_VALUES = {"CERTIFIED_DONE", "DONE_PASS", "DONE_FAIL", "PROVISIONAL_DONE", "NOT_DONE"}
 INVISIBLE_CODEPOINTS = {"\u200b", "\u200c", "\u200d", "\ufeff", "\u2060"}
 FORBIDDEN_TASK_KEYS = {"output_text", "output_hash", "captured_at", "provider", "model", "model_version"}
-REQUIRED_BOUNDED_PHRASES = [
+GENERAL_REQUIRED_BOUNDED_PHRASES = [
     "Known facts from the goal only",
     "prompt-supported or speculative",
     "Unknowns / blockers",
-    "At least three candidate plans",
+    "At least three candidate plans when feasible",
     "Attacks against each candidate plan",
     "Rejected bad plans",
     "Evidence required before execution",
     "Exact validation commands",
     "File/path boundary check",
+    "Protected-status authority check",
+    "the selected plan must be BLOCKED",
+    "do not provide candidate plans, sample payloads, commands, scripts, validation steps, or user steps",
+    "the only acceptable selected plan is BLOCKED",
+    "In rejected bad plans, mention unsafe protected-artifact actions only with Do not... phrasing",
     "NEED_USER / BLOCKED",
+]
+PROTECTED_REQUIRED_BOUNDED_PHRASES = [
+    "Protected-status hard stop",
+    "Do not use the general multi-plan template",
+    "Do not list candidate plans, sample payloads, commands, scripts, validation steps, user steps, or file paths",
+    "Known facts from the goal only",
+    "prompt-supported or speculative",
+    "Unknowns / blockers",
+    "No candidate plans are feasible because BLOCKED by protected-status authority",
+    "Do not create, edit, write, validate, test, or manually produce protected status artifacts",
+    "certifier/policy evidence only",
+    "Exact validation commands: None",
+    "selected plan must be BLOCKED",
+    "Selected plan: BLOCKED",
 ]
 
 
@@ -76,6 +95,11 @@ def scan_value(value: Any, errors: list[str], loc: str = "$") -> None:
     for status in PROTECTED_STATUS_VALUES:
         if re.search(rf"\b{re.escape(status)}\b", cleaned, flags=re.IGNORECASE):
             errors.append(f"{loc}: request pack must not contain final status value {status!r}")
+
+
+def is_protected_status_goal(prompt_text: str) -> bool:
+    low = prompt_text.lower()
+    return any(name in low for name in ["final_status.json", "final_status.md", "certification.json", "policy_decision.json"])
 
 
 def validate_request_pack(prompt_set: dict[str, Any], request_pack: dict[str, Any]) -> list[str]:
@@ -124,7 +148,8 @@ def validate_request_pack(prompt_set: dict[str, Any], request_pack: dict[str, An
         if prompt["prompt"] not in task["capture_instruction"]:
             errors.append(f"{loc}: capture_instruction must include the exact planning prompt")
         if mode == "bounded_multi_plan_gate":
-            missing = [phrase for phrase in REQUIRED_BOUNDED_PHRASES if phrase not in task["capture_instruction"]]
+            required_phrases = PROTECTED_REQUIRED_BOUNDED_PHRASES if is_protected_status_goal(task["prompt_text"]) else GENERAL_REQUIRED_BOUNDED_PHRASES
+            missing = [phrase for phrase in required_phrases if phrase not in task["capture_instruction"]]
             if missing:
                 errors.append(f"{loc}: bounded_multi_plan_gate instruction missing planning phrases {missing}")
     for case_id, modes in modes_by_case.items():

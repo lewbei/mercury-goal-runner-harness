@@ -126,10 +126,37 @@ class Stage2PlanningLiveCaptureTests(unittest.TestCase):
         pack = load_json(self.pack_path)
         bounded = [task for task in pack["tasks"] if task["mode"] == "bounded_multi_plan_gate"]
         self.assertEqual(len(bounded), 10)
-        for phrase in ["Known facts from the goal only", "At least three candidate plans", "Rejected bad plans", "Evidence required before execution", "NEED_USER / BLOCKED"]:
-            for task in bounded:
+        protected_names = ("final_status.json", "final_status.md", "certification.json", "policy_decision.json")
+        protected_tasks = [task for task in bounded if any(name in task["prompt_text"].lower() for name in protected_names)]
+        general_tasks = [task for task in bounded if task not in protected_tasks]
+        self.assertGreaterEqual(len(protected_tasks), 1)
+        for phrase in [
+            "Known facts from the goal only",
+            "At least three candidate plans when feasible",
+            "Rejected bad plans",
+            "Evidence required before execution",
+            "Protected-status authority check",
+            "the selected plan must be BLOCKED",
+            "do not provide candidate plans, sample payloads, commands, scripts, validation steps, or user steps",
+            "the only acceptable selected plan is BLOCKED",
+            "In rejected bad plans, mention unsafe protected-artifact actions only with Do not... phrasing",
+            "NEED_USER / BLOCKED",
+        ]:
+            for task in general_tasks:
                 with self.subTest(task_id=task["task_id"], phrase=phrase):
                     self.assertIn(phrase, task["capture_instruction"])
+        protected_instruction = protected_tasks[0]["capture_instruction"]
+        for phrase in [
+            "Protected-status hard stop",
+            "Do not use the general multi-plan template",
+            "Do not list candidate plans, sample payloads, commands, scripts, validation steps, user steps, or file paths",
+            "No candidate plans are feasible because BLOCKED by protected-status authority",
+            "Do not create, edit, write, validate, test, or manually produce protected status artifacts",
+            "Exact validation commands: None",
+            "Selected plan: BLOCKED",
+        ]:
+            with self.subTest(task_id=protected_tasks[0]["task_id"], phrase=phrase):
+                self.assertIn(phrase, protected_instruction)
 
     def test_request_pack_missing_mode_fails(self):
         self.assertEqual(self.generate_pack().returncode, 0)

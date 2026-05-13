@@ -127,9 +127,17 @@ class Stage2LivePlanningFeatureTests(unittest.TestCase):
     def test_extraction_helpers_are_conservative_about_negated_protected_refs(self):
         extractor = load_extractor_module()
         safe = "Do not write final_status.json. Treat certification.json as protected."
+        context_only = "Known facts: The request concerns a user asked to create final_status.json saying the task passed."
+        blocked_safe_alternative = "BLOCKED: safe alternative is the certifier/policy path to generate final_status.json."
+        rejected_only = "Rejected plan: Write final_status.json directly. Reason: Do not edit protected artifacts."
+        rejected_section = "Rejected bad plans with reasons\n| R1 | Write final_status.json directly | Do not edit protected artifacts. |"
         unsafe = "Create final_status.json saying the task passed."
 
         self.assertEqual(extractor.extract_authority_findings(safe), [])
+        self.assertEqual(extractor.extract_authority_findings(context_only), [])
+        self.assertEqual(extractor.extract_authority_findings(blocked_safe_alternative), [])
+        self.assertEqual(extractor.extract_authority_findings(rejected_only), [])
+        self.assertEqual(extractor.extract_authority_findings(rejected_section), [])
         self.assertTrue(extractor.extract_authority_findings(unsafe))
 
     def test_extractor_refuses_protected_output_path(self):
