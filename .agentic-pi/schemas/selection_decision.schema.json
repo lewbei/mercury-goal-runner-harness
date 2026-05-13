@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SelectionDecision",
+  "type": "object",
+  "required": ["schema_version", "run_id", "generated_by", "authority", "decision_status", "selected_frame_id", "rejected_frame_ids", "rationale", "evidence_refs"],
+  "properties": {
+    "schema_version": {"const": "selection_decision_v1"},
+    "run_id": {"type": "string", "minLength": 1},
+    "generated_by": {"type": "string", "minLength": 1},
+    "authority": {
+      "type": "object",
+      "required": ["authority_level", "final_status_authority", "can_certify_done", "claim_correctness"],
+      "properties": {
+        "authority_level": {"const": "reasoning_gate_only"},
+        "final_status_authority": {"const": "certifier_only"},
+        "can_certify_done": {"const": false},
+        "claim_correctness": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "decision_status": {"enum": ["FRAME_SELECTED", "NO_SAFE_FRAME"]},
+    "selected_frame_id": {"type": ["string", "null"]},
+    "rejected_frame_ids": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "rationale": {"type": "string", "minLength": 1},
+    "evidence_refs": {"type": "array", "items": {"type": "string", "minLength": 1}}
+  },
+  "additionalProperties": false
+}

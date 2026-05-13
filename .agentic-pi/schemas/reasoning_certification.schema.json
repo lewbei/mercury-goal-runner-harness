@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ReasoningCertification",
+  "type": "object",
+  "required": ["schema_version", "run_id", "generated_by", "authority", "status", "reason", "checked_artifacts"],
+  "properties": {
+    "schema_version": {"const": "reasoning_certification_v1"},
+    "run_id": {"type": "string", "minLength": 1},
+    "generated_by": {"type": "string", "minLength": 1},
+    "authority": {
+      "type": "object",
+      "required": ["authority_level", "final_status_authority", "can_certify_done", "claim_correctness"],
+      "properties": {
+        "authority_level": {"const": "reasoning_gate_only"},
+        "final_status_authority": {"const": "certifier_only"},
+        "can_certify_done": {"const": false},
+        "claim_correctness": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "status": {"enum": ["CERTIFIED_REASONED", "REJECTED_PREMATURE_CONVERGENCE"]},
+    "reason": {"type": "string", "minLength": 1},
+    "checked_artifacts": {"type": "array", "minItems": 5, "items": {"type": "string", "minLength": 1}}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AttackReport",
+  "type": "object",
+  "required": ["schema_version", "run_id", "generated_by", "authority", "attacks"],
+  "properties": {
+    "schema_version": {"const": "attack_report_v1"},
+    "run_id": {"type": "string", "minLength": 1},
+    "generated_by": {"type": "string", "minLength": 1},
+    "authority": {
+      "type": "object",
+      "required": ["authority_level", "final_status_authority", "can_certify_done", "claim_correctness"],
+      "properties": {
+        "authority_level": {"const": "reasoning_gate_only"},
+        "final_status_authority": {"const": "certifier_only"},
+        "can_certify_done": {"const": false},
+        "claim_correctness": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "attacks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["attack_id", "target_frame_id", "weakness", "severity", "resolution", "mitigation_or_rejection"],
+        "properties": {
+          "attack_id": {"type": "string", "minLength": 1},
+          "target_frame_id": {"type": "string", "minLength": 1},
+          "weakness": {"type": "string", "minLength": 1},
+          "severity": {"enum": ["low", "medium", "high", "blocking"]},
+          "resolution": {"enum": ["unresolved", "mitigated", "accepted_rejection"]},
+          "mitigation_or_rejection": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

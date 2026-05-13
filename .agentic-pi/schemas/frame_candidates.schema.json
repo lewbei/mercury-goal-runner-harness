@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FrameCandidates",
+  "type": "object",
+  "required": ["schema_version", "run_id", "generated_by", "authority", "frames"],
+  "properties": {
+    "schema_version": {"const": "frame_candidates_v1"},
+    "run_id": {"type": "string", "minLength": 1},
+    "generated_by": {"type": "string", "minLength": 1},
+    "authority": {
+      "type": "object",
+      "required": ["authority_level", "final_status_authority", "can_certify_done", "claim_correctness"],
+      "properties": {
+        "authority_level": {"const": "reasoning_gate_only"},
+        "final_status_authority": {"const": "certifier_only"},
+        "can_certify_done": {"const": false},
+        "claim_correctness": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "frames": {
+      "type": "array",
+      "minItems": 5,
+      "items": {
+        "type": "object",
+        "required": ["frame_id", "title", "thesis", "rationale", "assumptions", "expected_evidence"],
+        "properties": {
+          "frame_id": {"type": "string", "minLength": 1},
+          "title": {"type": "string", "minLength": 1},
+          "thesis": {"type": "string", "minLength": 1},
+          "rationale": {"type": "string", "minLength": 1},
+          "assumptions": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+          "expected_evidence": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
