@@ -5,9 +5,7 @@ model: deepseek/deepseek-v4-flash
 thinking: high
 prompt_mode: replace
 inherit_context: false
-skills: false
 tools: read, write
-extensions: false
 ---
 
 # Plan Merger

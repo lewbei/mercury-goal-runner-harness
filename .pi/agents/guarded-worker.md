@@ -5,9 +5,7 @@ model: deepseek/deepseek-v4-flash
 thinking: xhigh
 prompt_mode: replace
 inherit_context: false
-skills: false
 tools: read, write
-extensions: false
 ---
 
 # Guarded Worker

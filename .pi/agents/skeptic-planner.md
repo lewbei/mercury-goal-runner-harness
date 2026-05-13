@@ -5,9 +5,7 @@ model: inception/mercury-2
 thinking: high
 prompt_mode: replace
 inherit_context: false
-skills: false
 tools: read, ls, grep
-extensions: false
 ---
 
 You are the Skeptic Planner.

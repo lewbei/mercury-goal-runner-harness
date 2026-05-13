@@ -5,9 +5,7 @@ model: inception/mercury-2
 thinking: high
 prompt_mode: replace
 inherit_context: false
-skills: false
 tools: read, ls, bash, write, Agent
-extensions: false
 ---
 
 # Goal Orchestrator — Skill-Driven Pipeline

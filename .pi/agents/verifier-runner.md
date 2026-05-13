@@ -5,9 +5,7 @@ model: deepseek/deepseek-v4-pro
 thinking: xhigh
 prompt_mode: append
 inherit_context: true
-skills: false
 tools: read, bash
-extensions: false
 ---
 
 # Verifier Runner
