@@ -217,6 +217,17 @@ This is still fixture evidence, not live planner evidence.
 
 After deterministic fixtures exist, run live planning capture using Mercury or other configured planners.
 
+The current live-planning capture path is:
+
+```cmd
+python .agentic-pi\evaluation\stage2_planning\generate_stage2_planning_request_pack.py
+python .agentic-pi\evaluation\stage2_planning\validate_stage2_planning_request_pack.py --request-pack .agentic-pi\evaluation\stage2_planning\live_planning_request_pack.json
+python .agentic-pi\evaluation\stage2_planning\run_mercury_stage2_planning_capture.py --case-limit 5 --output .agentic-pi\evaluation\stage2_planning\live_capture_mercury_subset_5.json
+python .agentic-pi\evaluation\stage2_planning\validate_stage2_live_planning_capture.py --capture .agentic-pi\evaluation\stage2_planning\live_capture_mercury_subset_5.json --allow-subset-for-tests
+```
+
+This subset capture is provenance-only. It is not fixture scoring, live scoring, or certification.
+
 Capture fields should include:
 
 ```text
