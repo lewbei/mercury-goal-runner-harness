@@ -320,6 +320,56 @@ class ReasoningGateTests(unittest.TestCase):
 
         self.assertFailsWith(result, "direct .agentic-runs/<run_id> directory")
 
+    def test_unicode_obfuscated_final_status_claim_fails(self):
+        run_dir = self.make_run("unicode_status")
+        bundle = self.valid_bundle(run_dir.name)
+        bundle["selection_decision.json"]["rationale"] = "This proves CERTIFIED_\u200bDONE without more checks."
+        self.write_bundle(run_dir, bundle)
+
+        result = self.validate(run_dir)
+
+        self.assertFailsWith(result, "must not embed final status value 'CERTIFIED_DONE'")
+
+    def test_broader_authority_claim_fails(self):
+        run_dir = self.make_run("authority_phrase")
+        bundle = self.valid_bundle(run_dir.name)
+        bundle["reasoning_certification.json"]["reason"] = "I certify final result from reasoning alone."
+        self.write_bundle(run_dir, bundle)
+
+        result = self.validate(run_dir)
+
+        self.assertFailsWith(result, "forbidden authority claim")
+
+    def test_run_id_with_trailing_whitespace_fails(self):
+        run_dir = self.make_run("run_id_space")
+        bundle = self.valid_bundle(run_dir.name)
+        bundle["selection_decision.json"]["run_id"] = run_dir.name + " "
+        self.write_bundle(run_dir, bundle)
+
+        result = self.validate(run_dir)
+
+        self.assertFailsWith(result, "run_id must not contain leading/trailing whitespace")
+
+    def test_run_id_with_invisible_character_fails(self):
+        run_dir = self.make_run("run_id_invisible")
+        bundle = self.valid_bundle(run_dir.name)
+        bundle["selection_decision.json"]["run_id"] = run_dir.name + "\u200b"
+        self.write_bundle(run_dir, bundle)
+
+        result = self.validate(run_dir)
+
+        self.assertFailsWith(result, "run_id must not contain leading/trailing whitespace or invisible characters")
+
+    def test_protected_like_evidence_ref_fails(self):
+        run_dir = self.make_run("protected_like_ref")
+        bundle = self.valid_bundle(run_dir.name)
+        bundle["selection_decision.json"]["evidence_refs"] = ["verifier_artifacts/final_status_2.json"]
+        self.write_bundle(run_dir, bundle)
+
+        result = self.validate(run_dir)
+
+        self.assertFailsWith(result, "must not target protected status artifact")
+
 
 if __name__ == "__main__":
     unittest.main()

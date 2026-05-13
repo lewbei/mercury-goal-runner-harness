@@ -13,6 +13,7 @@ import importlib.util
 import json
 import re
 import sys
+import unicodedata
 from pathlib import Path
 from typing import Any
 
@@ -47,6 +48,14 @@ FORBIDDEN_STATUS_VALUES = {
     "NEEDS_HUMAN_REVIEW",
 }
 
+INVISIBLE_CODEPOINTS = {
+    "\u200b",  # zero width space
+    "\u200c",  # zero width non-joiner
+    "\u200d",  # zero width joiner
+    "\ufeff",  # byte order mark / zero width no-break space
+    "\u2060",  # word joiner
+}
+
 FORBIDDEN_CLAIM_PATTERNS = [
     re.compile(pattern, re.IGNORECASE)
     for pattern in [
@@ -55,6 +64,10 @@ FORBIDDEN_CLAIM_PATTERNS = [
         r"\bmy output is authoritative\b",
         r"\bpolicy decision is final\b",
         r"\bverifier will accept my result without further checks\b",
+        r"\bi certify\b.*\b(final|done|result|status)\b",
+        r"\bcertify\b.*\b(final|done|result|status)\b",
+        r"\bfinal\b.*\b(authority|authoritative|approved|certified)\b",
+        r"\bauthoritative\b.*\b(final|status|result)\b",
     ]
 ]
 
@@ -94,8 +107,20 @@ def validate_run_dir_boundary(run_dir: Path) -> list[str]:
     return []
 
 
+def strip_invisible_characters(value: str) -> str:
+    normalized = unicodedata.normalize("NFKC", value)
+    return "".join(
+        char for char in normalized
+        if char not in INVISIBLE_CODEPOINTS and unicodedata.category(char) != "Cf"
+    )
+
+
 def normalize_text(value: str) -> str:
-    return " ".join(value.lower().split())
+    return " ".join(strip_invisible_characters(value).lower().split())
+
+
+def is_clean_run_id(value: str) -> bool:
+    return value == strip_invisible_characters(value).strip()
 
 
 def recursively_scan_forbidden_values(value: Any, errors: list[str], loc: str = "$", *, key: str = "") -> None:
@@ -112,15 +137,16 @@ def recursively_scan_forbidden_values(value: Any, errors: list[str], loc: str = 
     if not isinstance(value, str):
         return
 
-    if value in FORBIDDEN_STATUS_VALUES:
+    scanned_value = strip_invisible_characters(value)
+    if scanned_value in FORBIDDEN_STATUS_VALUES:
         errors.append(f"{loc}: reasoning gate must not contain final status value {value!r}")
-    if key in {"status", "decision_status"} and value in FORBIDDEN_STATUS_VALUES:
+    if key in {"status", "decision_status"} and scanned_value in FORBIDDEN_STATUS_VALUES:
         errors.append(f"{loc}: status field must not use final authority status {value!r}")
     for status_value in sorted(FORBIDDEN_STATUS_VALUES - {"DONE"}, key=len, reverse=True):
-        if re.search(rf"\b{re.escape(status_value)}\b", value):
+        if re.search(rf"\b{re.escape(status_value)}\b", scanned_value):
             errors.append(f"{loc}: reasoning text must not embed final status value {status_value!r}")
     for pattern in FORBIDDEN_CLAIM_PATTERNS:
-        if pattern.search(value):
+        if pattern.search(scanned_value):
             errors.append(f"{loc}: forbidden authority claim {value!r}")
 
 
@@ -129,7 +155,14 @@ def validate_refs(refs: list[str], errors: list[str], loc: str) -> None:
         ref_path = Path(ref)
         if ref_path.is_absolute() or ".." in ref_path.parts or ":" in ref or "\\" in ref:
             errors.append(f"{loc}: evidence ref must be run-relative and non-escaping, got {ref!r}")
-        if ref_path.name in PROTECTED_STATUS_ARTIFACTS:
+        normalized_name = normalize_text(ref_path.name).replace(" ", "")
+        normalized_stem = normalized_name.rsplit(".", 1)[0]
+        protected_stems = {"final_status", "certification", "policy_decision"}
+        protected_like = any(
+            normalized_stem == stem or normalized_stem.startswith((f"{stem}_", f"{stem}-", f"{stem}."))
+            for stem in protected_stems
+        )
+        if ref_path.name in PROTECTED_STATUS_ARTIFACTS or protected_like:
             errors.append(f"{loc}: evidence ref must not target protected status artifact {ref!r}")
 
 
@@ -147,9 +180,13 @@ def validate_reasoning_gate(data_by_name: dict[str, dict], *, run_dir: Path | No
     if errors:
         return errors
 
-    run_ids = {data["run_id"] for data in data_by_name.values()}
+    raw_run_ids = [data["run_id"] for data in data_by_name.values()]
+    for run_id in raw_run_ids:
+        if not is_clean_run_id(run_id):
+            errors.append(f"run_id must not contain leading/trailing whitespace or invisible characters: {run_id!r}")
+    run_ids = {strip_invisible_characters(run_id).strip() for run_id in raw_run_ids}
     if len(run_ids) != 1:
-        errors.append(f"all reasoning artifacts must share one run_id, got {sorted(run_ids)!r}")
+        errors.append(f"all reasoning artifacts must share one run_id, got {sorted(raw_run_ids)!r}")
 
     frames = data_by_name["frame_candidates"]["frames"]
     if len(frames) < 5:
