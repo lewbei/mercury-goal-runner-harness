@@ -1,0 +1,25 @@
+{
+  "schema_version": "planning_efficiency_goal_v1",
+  "goal_id": "planning_efficiency_v2_runtime_preflight_goal",
+  "rough_goal": "Compile guarded execution runtime inputs through Planning Efficiency v2 preflight before bounded artifact writes.",
+  "artifact_specs": [
+    {
+      "artifact_id": "A.GE2_SUMMARY",
+      "name": "guarded_execution_v2_summary",
+      "requested_path": "artifacts/guarded_execution_v2_summary.txt",
+      "content": "Planning Efficiency v2 prepared this bounded summary artifact before guarded execution."
+    },
+    {
+      "artifact_id": "A.GE2_OBSERVATION",
+      "name": "guarded_execution_v2_observation",
+      "requested_path": "artifacts/guarded_execution_v2_observation.txt",
+      "content": "The Planning Efficiency v2 preflight grounded this action to the expected artifact path."
+    },
+    {
+      "artifact_id": "A.GE2_BOUNDARY",
+      "name": "guarded_execution_v2_boundary",
+      "requested_path": "artifacts/guarded_execution_v2_boundary.txt",
+      "content": "This bounded artifact is ordinary planning evidence text and does not decide policy."
+    }
+  ]
+}
