@@ -13,11 +13,15 @@ It does not execute plans, decide policy, or certify completion.
 from __future__ import annotations
 
 import argparse
-import json
 import sys
 from pathlib import Path
 from typing import Any
 
+RUNTIME_DIR = Path(__file__).resolve().parent
+if str(RUNTIME_DIR) not in sys.path:
+    sys.path.insert(0, str(RUNTIME_DIR))
+
+import canonical_json
 import guarded_execution_v2 as v2
 
 
@@ -37,10 +41,7 @@ def load_required_json(path: Path, label: str) -> dict[str, Any]:
 
 
 def write_json(path: Path, data: Any) -> None:
-    if path.name in v2.PROTECTED_OUTPUT_NAMES:
-        raise ValueError(f"refusing to write protected status artifact: {path}")
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    canonical_json.write_json_canonical(path, data, v2.is_protected_output_name)
 
 
 def hint(code: str, message: str, target: str = "") -> dict[str, str]:

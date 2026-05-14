@@ -336,11 +336,11 @@
     },
     {
       "claim_id": "planning_efficiency_v2_preflight",
-      "claim": "Planning Efficiency v2 preflight compiles and lints guarded execution inputs, records deterministic hashes, and blocks unsafe planning artifacts before runtime execution.",
+      "claim": "Planning Efficiency v2 preflight compiles and lints guarded execution inputs, checks an explicit Stage 3 runtime preflight report, records deterministic hashes, and blocks unsafe planning artifacts before runtime execution.",
       "mode": "quick",
-      "command": ["python", ".agentic-pi/runtime/planning_efficiency_v2_preflight.py", "--goal", ".agentic-pi/runtime/planning_efficiency_v2_goal.json", "--plan-output", ".agentic-runs/proof_matrix_outputs/planning_efficiency_v2_plan.json", "--expected-output", ".agentic-runs/proof_matrix_outputs/planning_efficiency_v2_expected_artifacts.json", "--compile-report-output", ".agentic-runs/proof_matrix_outputs/planning_efficiency_v2_compile_report.json", "--lint-report-output", ".agentic-runs/proof_matrix_outputs/planning_efficiency_v2_lint_report.json", "--output", ".agentic-runs/proof_matrix_outputs/planning_efficiency_v2_preflight_report.json"],
-      "expected_evidence": ["PLANNING_EFFICIENCY_V2_PREFLIGHT_PASS", "PLAN_COMPILE_PASS", "PLAN_LINT_PASS", "deterministic hashes", "token patterns absent", "final status enums absent", "plan execution not attempted", "can_certify_done is false"],
-      "claim_boundary": "Planning Efficiency v2 preflight proof only; it prepares guarded execution inputs before runtime and does not execute goals, decide policy, certify DONE, or prove arbitrary runtime safety."
+      "command": ["python", ".agentic-pi/runtime/planning_efficiency_v2_preflight.py", "--goal", ".agentic-pi/runtime/planning_efficiency_v2_goal.json", "--plan-output", ".agentic-runs/proof_matrix_outputs/planning_efficiency_v2_plan.json", "--expected-output", ".agentic-runs/proof_matrix_outputs/planning_efficiency_v2_expected_artifacts.json", "--compile-report-output", ".agentic-runs/proof_matrix_outputs/planning_efficiency_v2_compile_report.json", "--lint-report-output", ".agentic-runs/proof_matrix_outputs/planning_efficiency_v2_lint_report.json", "--output", ".agentic-runs/proof_matrix_outputs/planning_efficiency_v2_preflight_report.json", "--stage3-preflight-report", ".agentic-runs/proof_matrix_outputs/stage3_runtime_preflight_report_v1.json"],
+      "expected_evidence": ["PLANNING_EFFICIENCY_V2_PREFLIGHT_PASS", "PLAN_COMPILE_PASS", "PLAN_LINT_PASS", "Stage 3 runtime preflight input checked", "deterministic hashes", "token patterns absent", "final status enums absent", "plan execution not attempted", "can_certify_done is false"],
+      "claim_boundary": "Planning Efficiency v2 preflight proof only; it prepares guarded execution inputs after a passing Stage 3 preflight compatibility check and does not execute goals, decide policy, certify DONE, or prove arbitrary runtime safety."
     },
     {
       "claim_id": "planning_efficiency_v2_1_hardening",
@@ -349,6 +349,14 @@
       "command": ["python", ".agentic-pi/runtime/planning_efficiency_v2_1_hardening.py", "--goal", ".agentic-pi/runtime/planning_efficiency_v2_goal.json", "--work-dir", ".agentic-runs/proof_matrix_outputs/planning_efficiency_v2_1_hardening", "--output", ".agentic-runs/proof_matrix_outputs/planning_efficiency_v2_1_hardening_report.json"],
       "expected_evidence": ["PLANNING_EFFICIENCY_V2_1_HARDENING_PASS", "three-run byte stability", "protected status artifacts not created", "final-status enum values absent", "certifier-only authority preserved", "can_certify_done is false"],
       "claim_boundary": "Planning Efficiency v2.1 hardening proof only; it strengthens deterministic preflight evidence and does not execute goals, decide policy, certify DONE, or prove arbitrary runtime safety."
+    },
+    {
+      "claim_id": "planning_efficiency_v2_2_cleanup",
+      "claim": "Planning Efficiency v2.2 cleanup centralizes canonical JSON writing, verifies write-readback hashes, checks explicit Stage 3 preflight compatibility, and binds the handoff to Guarded Execution v2 exactly.",
+      "mode": "quick",
+      "command": ["python", ".agentic-pi/runtime/planning_efficiency_v2_2_cleanup.py", "--goal", ".agentic-pi/runtime/planning_efficiency_v2_goal.json", "--work-dir", ".agentic-runs/proof_matrix_outputs/planning_efficiency_v2_2_cleanup", "--output", ".agentic-runs/proof_matrix_outputs/planning_efficiency_v2_2_cleanup_report.json"],
+      "expected_evidence": ["PLANNING_EFFICIENCY_V2_2_CLEANUP_PASS", "canonical JSON writer readback verified", "three-run byte stability with Stage 3 input verified", "Stage 3 runtime preflight input checked", "exact guarded_execution_v2 binding verified", "certifier-only authority preserved"],
+      "claim_boundary": "Planning Efficiency v2.2 cleanup proof only; it strengthens deterministic planning-preflight evidence and handoff metadata but does not execute goals, decide policy, certify DONE, or prove arbitrary runtime safety."
     },
     {
       "claim_id": "guarded_execution_v2",

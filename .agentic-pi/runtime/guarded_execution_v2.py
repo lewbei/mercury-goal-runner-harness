@@ -20,6 +20,12 @@ import unicodedata
 from pathlib import Path
 from typing import Any
 
+RUNTIME_DIR = Path(__file__).resolve().parent
+if str(RUNTIME_DIR) not in sys.path:
+    sys.path.insert(0, str(RUNTIME_DIR))
+
+import canonical_json
+
 
 ROOT = Path(__file__).resolve().parents[2]
 PREFLIGHT_PATH = ROOT / ".agentic-pi" / "runtime" / "stage3_runtime_preflight.py"
@@ -88,10 +94,7 @@ def load_json(path: Path) -> Any:
 
 
 def write_json(path: Path, data: Any) -> None:
-    if is_protected_output_name(path.name):
-        raise ValueError(f"refusing to write protected status artifact: {path}")
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    canonical_json.write_json_canonical(path, data, is_protected_output_name)
 
 
 def load_required_json(path: Path, label: str) -> dict[str, Any]:
@@ -123,11 +126,11 @@ def sha256_text(value: str) -> str:
 
 
 def stable_json(data: Any) -> str:
-    return json.dumps(data, indent=2, sort_keys=True, ensure_ascii=False)
+    return canonical_json.stable_json(data)
 
 
 def sha256_json(data: Any) -> str:
-    return hashlib.sha256(stable_json(data).encode("utf-8")).hexdigest()
+    return canonical_json.sha256_json(data)
 
 
 def contains_final_status_value(value: Any) -> bool:

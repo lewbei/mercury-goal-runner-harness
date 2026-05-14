@@ -10,12 +10,15 @@ leakage, and records certifier-only authority evidence.
 from __future__ import annotations
 
 import argparse
-import hashlib
-import json
 import sys
 from pathlib import Path
 from typing import Any
 
+RUNTIME_DIR = Path(__file__).resolve().parent
+if str(RUNTIME_DIR) not in sys.path:
+    sys.path.insert(0, str(RUNTIME_DIR))
+
+import canonical_json
 import guarded_execution_v2 as v2
 import planning_efficiency_v2_preflight as preflight
 
@@ -30,25 +33,22 @@ ARTIFACT_KEYS = ["plan", "expected_artifacts", "compile_report", "lint_report", 
 
 
 def stable_json(data: Any) -> str:
-    return json.dumps(data, indent=2, sort_keys=True, ensure_ascii=False)
+    return canonical_json.stable_json(data)
 
 
 def write_json(path: Path, data: Any) -> None:
-    if v2.is_protected_output_name(path.name):
-        raise ValueError(f"refusing to write protected status artifact: {path}")
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(stable_json(data) + "\n", encoding="utf-8")
+    canonical_json.write_json_canonical(path, data, v2.is_protected_output_name)
 
 
 def sha256_bytes(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    return canonical_json.sha256_file(path)
 
 
 def rel_path(path: Path) -> str:
     try:
         return path.resolve().relative_to(ROOT.resolve()).as_posix()
     except ValueError:
-        return str(path)
+        return str(path).replace("\\", "/")
 
 
 def add_check(checks: list[dict[str, Any]], check_id: str, passed: bool, expected: Any, actual: Any) -> None:

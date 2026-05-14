@@ -14,13 +14,16 @@ certify completion.
 from __future__ import annotations
 
 import argparse
-import hashlib
-import json
 import re
 import sys
 from pathlib import Path
 from typing import Any
 
+RUNTIME_DIR = Path(__file__).resolve().parent
+if str(RUNTIME_DIR) not in sys.path:
+    sys.path.insert(0, str(RUNTIME_DIR))
+
+import canonical_json
 import guarded_execution_v2 as v2
 import guarded_plan_compiler as compiler
 import guarded_plan_linter as linter
@@ -50,25 +53,22 @@ def load_required_json(path: Path, label: str) -> dict[str, Any]:
 
 
 def write_json(path: Path, data: Any) -> None:
-    if v2.is_protected_output_name(path.name):
-        raise ValueError(f"refusing to write protected status artifact: {path}")
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(stable_json(data) + "\n", encoding="utf-8")
+    canonical_json.write_json_canonical(path, data, v2.is_protected_output_name)
 
 
 def stable_json(data: Any) -> str:
-    return json.dumps(data, indent=2, sort_keys=True, ensure_ascii=False)
+    return canonical_json.stable_json(data)
 
 
 def sha256_json(data: Any) -> str:
-    return hashlib.sha256(stable_json(data).encode("utf-8")).hexdigest()
+    return canonical_json.sha256_json(data)
 
 
 def rel_path(path: Path) -> str:
     try:
         return path.resolve().relative_to(ROOT.resolve()).as_posix()
     except ValueError:
-        return str(path)
+        return str(path).replace("\\", "/")
 
 
 def add_check(checks: list[dict[str, Any]], check_id: str, passed: bool, expected: Any, actual: Any) -> None:
@@ -150,8 +150,15 @@ def build_preflight(
     lint_report_output: Path,
     preflight_report_output: Path,
     goal_path: Path | None = None,
+    stage3_preflight: dict[str, Any] | None = None,
+    stage3_preflight_path: Path | None = None,
 ) -> tuple[dict[str, Any] | None, dict[str, Any] | None, dict[str, Any], dict[str, Any] | None, dict[str, Any]]:
     output_errors = protected_output_errors([plan_output, expected_output, compile_report_output, lint_report_output, preflight_report_output])
+    stage3_checked = stage3_preflight is not None
+    if stage3_checked:
+        stage3_ok, stage3_errors = v2.preflight_is_usable(stage3_preflight)
+    else:
+        stage3_ok, stage3_errors = True, []
     plan, expected, compile_report = compiler.compile_goal(goal)
     compile_report_errors = compiler.validate_compile_report(compile_report)
     lint_report = linter.lint_plan(plan, expected) if plan is not None and expected is not None else None
@@ -193,6 +200,8 @@ def build_preflight(
     add_check(checks, "output_paths_unprotected", not output_errors, "no generated output path targets protected status artifacts", output_errors)
     add_check(checks, "compiler_passed", compile_ok, "compiler returns PLAN_COMPILE_PASS and validates", compile_report_errors or compile_report.get("status"))
     add_check(checks, "linter_passed", lint_ok, "linter returns PLAN_LINT_PASS and validates", lint_report_errors or (lint_report or {}).get("status"))
+    if stage3_checked:
+        add_check(checks, "stage3_runtime_preflight_usable", stage3_ok, "Stage 3 runtime preflight passes before guarded execution handoff", stage3_errors)
     add_check(checks, "generated_paths_declared", paths_ok, "every generated plan action matches expected_artifacts exactly", path_errors)
     add_check(checks, "deterministic_replay_hashes_match", deterministic_ok, "same goal compiles/lints to identical JSON hashes", {"generated_hashes": generated_hashes, "replay_hashes": replay_hashes})
     add_check(checks, "sensitive_token_patterns_absent", not token_findings, "generated planning artifacts contain no high-risk token patterns", token_findings)
@@ -210,6 +219,12 @@ def build_preflight(
         repair_hints.append({"code": "PROTECTED_STATUS_ARTIFACT_NAME", "message": "Remove protected status artifact filenames from generated planning artifacts before guarded execution.", "target": "generated planning artifacts"})
     if output_errors:
         repair_hints.append({"code": "PROTECTED_OUTPUT_PATH", "message": "Move preflight outputs away from protected status artifact names.", "target": "preflight output paths"})
+    if stage3_checked and not stage3_ok:
+        repair_hints.append({"code": "STAGE3_PREFLIGHT", "message": "Provide a passing Stage 3 runtime preflight report before guarded execution handoff.", "target": "--stage3-preflight-report"})
+
+    source_reports = {}
+    if stage3_preflight_path is not None:
+        source_reports["stage3_runtime_preflight_report"] = rel_path(stage3_preflight_path)
 
     report = {
         "schema_version": "planning_efficiency_v2_preflight_report_v1",
@@ -234,15 +249,18 @@ def build_preflight(
             "criteria_total": len(checks),
             "ready_for_guarded_execution": status == PASS_STATUS,
         },
+        "source_reports": source_reports,
         "execution_gate": {
             "planning_preflight_passed": status == PASS_STATUS,
+            "stage3_runtime_preflight_checked": stage3_checked,
             "may_pass_plan_to_guarded_execution": status == PASS_STATUS,
             "guarded_execution_inputs": {
                 "plan": rel_path(plan_output),
                 "expected_artifacts": rel_path(expected_output),
             },
             "blocked_before_execution": status != PASS_STATUS,
-            "required_next_runtime": "guarded_execution_v2_or_v3",
+            "required_next_runtime": "guarded_execution_v2",
+            "runtime_module": ".agentic-pi/runtime/guarded_execution_v2.py",
         },
         "runtime_execution": {
             "goal_execution_attempted": False,
@@ -286,6 +304,11 @@ def validate_preflight_report(report: dict[str, Any]) -> list[str]:
     if runtime.get("can_certify_done") is not False:
         errors.append("runtime_execution.can_certify_done must be false")
     execution_gate = report.get("execution_gate", {})
+    source_reports = report.get("source_reports", {})
+    if "stage3_runtime_preflight_report" in source_reports and execution_gate.get("stage3_runtime_preflight_checked") is not True:
+        errors.append("stage3_runtime_preflight_checked must be true when source report is recorded")
+    if execution_gate.get("required_next_runtime") not in {"guarded_execution_v2", "guarded_execution_v2_or_v3"}:
+        errors.append("required_next_runtime must name a guarded execution runtime")
     if report.get("status") == PASS_STATUS:
         if execution_gate.get("may_pass_plan_to_guarded_execution") is not True:
             errors.append("passing preflight must allow passing plan to guarded execution")
@@ -304,6 +327,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--compile-report-output", default=str(DEFAULT_COMPILE_REPORT_OUTPUT))
     parser.add_argument("--lint-report-output", default=str(DEFAULT_LINT_REPORT_OUTPUT))
     parser.add_argument("--output", default=str(DEFAULT_PREFLIGHT_REPORT_OUTPUT))
+    parser.add_argument("--stage3-preflight-report")
     args = parser.parse_args(argv)
 
     try:
@@ -313,6 +337,8 @@ def main(argv: list[str] | None = None) -> int:
         lint_report_output = Path(args.lint_report_output)
         preflight_report_output = Path(args.output)
         goal_path = Path(args.goal)
+        stage3_preflight_path = Path(args.stage3_preflight_report) if args.stage3_preflight_report else None
+        stage3_preflight = load_required_json(stage3_preflight_path, "Stage 3 preflight report") if stage3_preflight_path else None
         plan, expected, compile_report, lint_report, report = build_preflight(
             load_required_json(goal_path, "goal"),
             plan_output,
@@ -321,6 +347,8 @@ def main(argv: list[str] | None = None) -> int:
             lint_report_output,
             preflight_report_output,
             goal_path,
+            stage3_preflight,
+            stage3_preflight_path,
         )
         errors = validate_preflight_report(report)
         write_json(compile_report_output, compile_report)

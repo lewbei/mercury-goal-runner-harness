@@ -87,6 +87,7 @@ class V2ProofPackageTests(unittest.TestCase):
             "guarded_execution_v1",
             "planning_efficiency_v2_preflight",
             "planning_efficiency_v2_1_hardening",
+            "planning_efficiency_v2_2_cleanup",
             "guarded_execution_v2",
             "guarded_execution_v3",
             "planning_efficiency_v1",
@@ -139,6 +140,7 @@ class V2ProofPackageTests(unittest.TestCase):
         self.assertIn("guarded_execution_v1", claim_ids)
         self.assertIn("planning_efficiency_v2_preflight", claim_ids)
         self.assertIn("planning_efficiency_v2_1_hardening", claim_ids)
+        self.assertIn("planning_efficiency_v2_2_cleanup", claim_ids)
         self.assertIn("guarded_execution_v2", claim_ids)
         self.assertIn("guarded_execution_v3", claim_ids)
         self.assertIn("planning_efficiency_v1", claim_ids)
@@ -164,6 +166,9 @@ class V2ProofPackageTests(unittest.TestCase):
             OUTPUT_DIR / "planning_efficiency_v2_expected_artifacts.json",
             OUTPUT_DIR / "planning_efficiency_v2_1_hardening_report.json",
             OUTPUT_DIR / "planning_efficiency_v2_1_hardening" / "planning_efficiency_v2_preflight_report.json",
+            OUTPUT_DIR / "planning_efficiency_v2_2_cleanup_report.json",
+            OUTPUT_DIR / "planning_efficiency_v2_2_cleanup" / "stage3_runtime_preflight_report_v1.json",
+            OUTPUT_DIR / "planning_efficiency_v2_2_cleanup" / "planning_efficiency_v2_preflight_report.json",
             OUTPUT_DIR / "guarded_execution_v2_report.json",
             OUTPUT_DIR / "guarded_execution_v2_ledger.json",
             ROOT / ".agentic-runs" / "proof_matrix_guarded_execution_v1" / "artifacts" / "guarded_execution_v1_note.txt",

@@ -14,6 +14,7 @@ PREFLIGHT = ".agentic-pi/runtime/planning_efficiency_v2_preflight.py"
 STAGE3_PREFLIGHT = ".agentic-pi/runtime/stage3_runtime_preflight.py"
 GUARDED_EXECUTION_V2 = ".agentic-pi/runtime/guarded_execution_v2.py"
 HARDENING = ".agentic-pi/runtime/planning_efficiency_v2_1_hardening.py"
+CLEANUP = ".agentic-pi/runtime/planning_efficiency_v2_2_cleanup.py"
 DEFAULT_GOAL = RUNTIME / "planning_efficiency_v2_goal.json"
 
 
@@ -52,15 +53,18 @@ class PlanningEfficiencyV2Tests(unittest.TestCase):
         self.compile_report = self.tmpdir / "planning_efficiency_v2_compile_report.json"
         self.lint_report = self.tmpdir / "planning_efficiency_v2_lint_report.json"
         self.preflight_report = self.tmpdir / "planning_efficiency_v2_preflight_report.json"
+        self.stage3_report = self.tmpdir / "stage3_runtime_preflight_report_v1.json"
         self.hardening_work_dir = self.tmpdir / "planning_efficiency_v2_1_hardening"
         self.hardening_report = self.tmpdir / "planning_efficiency_v2_1_hardening_report.json"
+        self.cleanup_work_dir = self.tmpdir / "planning_efficiency_v2_2_cleanup"
+        self.cleanup_report = self.tmpdir / "planning_efficiency_v2_2_cleanup_report.json"
         write_json(self.goal, load_json(DEFAULT_GOAL))
 
     def tearDown(self):
         shutil.rmtree(self.tmpdir)
         shutil.rmtree(ROOT / ".agentic-runs" / "planning_efficiency_v2_unittest_execution", ignore_errors=True)
 
-    def run_preflight(self):
+    def run_preflight(self, *extra):
         return run_python(
             PREFLIGHT,
             "--goal", str(self.goal),
@@ -69,7 +73,11 @@ class PlanningEfficiencyV2Tests(unittest.TestCase):
             "--compile-report-output", str(self.compile_report),
             "--lint-report-output", str(self.lint_report),
             "--output", str(self.preflight_report),
+            *extra,
         )
+
+    def run_stage3_preflight(self):
+        return run_python(STAGE3_PREFLIGHT, "--output", str(self.stage3_report))
 
     def test_preflight_compiles_lints_hashes_and_does_not_execute(self):
         result = self.run_preflight()
@@ -95,17 +103,16 @@ class PlanningEfficiencyV2Tests(unittest.TestCase):
         self.assertTrue(any(check["check_id"] == "protected_status_artifact_names_absent" and check["status"] == "PASS" for check in report["criteria"]))
 
     def test_generated_plan_can_feed_guarded_execution_v2_after_stage3_preflight(self):
-        result = self.run_preflight()
+        stage3 = self.run_stage3_preflight()
+        self.assertEqual(stage3.returncode, 0, stage3.stdout)
+        result = self.run_preflight("--stage3-preflight-report", str(self.stage3_report))
         self.assertEqual(result.returncode, 0, result.stdout)
-        stage3_report = self.tmpdir / "stage3_runtime_preflight_report_v1.json"
         execution_report = self.tmpdir / "guarded_execution_v2_report.json"
         ledger = self.tmpdir / "guarded_execution_v2_ledger.json"
-        stage3 = run_python(STAGE3_PREFLIGHT, "--output", str(stage3_report))
-        self.assertEqual(stage3.returncode, 0, stage3.stdout)
 
         execution = run_python(
             GUARDED_EXECUTION_V2,
-            "--preflight-report", str(stage3_report),
+            "--preflight-report", str(self.stage3_report),
             "--plan", str(self.plan),
             "--expected-artifacts", str(self.expected),
             "--planning-preflight-report", str(self.preflight_report),
@@ -123,13 +130,12 @@ class PlanningEfficiencyV2Tests(unittest.TestCase):
         self.assertTrue(any(check["check_id"] == "planning_efficiency_v2_preflight_usable" and check["status"] == "PASS" for check in report["criteria"]))
 
     def test_guarded_execution_v2_rejects_mismatched_planning_preflight_binding(self):
-        result = self.run_preflight()
+        stage3 = self.run_stage3_preflight()
+        self.assertEqual(stage3.returncode, 0, stage3.stdout)
+        result = self.run_preflight("--stage3-preflight-report", str(self.stage3_report))
         self.assertEqual(result.returncode, 0, result.stdout)
-        stage3_report = self.tmpdir / "stage3_runtime_preflight_report_v1.json"
         execution_report = self.tmpdir / "guarded_execution_v2_report.json"
         ledger = self.tmpdir / "guarded_execution_v2_ledger.json"
-        stage3 = run_python(STAGE3_PREFLIGHT, "--output", str(stage3_report))
-        self.assertEqual(stage3.returncode, 0, stage3.stdout)
         bad_preflight = load_json(self.preflight_report)
         bad_preflight["execution_gate"]["guarded_execution_inputs"]["plan"] = "artifacts/not_the_generated_plan.json"
         bad_preflight_path = self.tmpdir / "bad_planning_preflight_report.json"
@@ -137,7 +143,7 @@ class PlanningEfficiencyV2Tests(unittest.TestCase):
 
         execution = run_python(
             GUARDED_EXECUTION_V2,
-            "--preflight-report", str(stage3_report),
+            "--preflight-report", str(self.stage3_report),
             "--plan", str(self.plan),
             "--expected-artifacts", str(self.expected),
             "--planning-preflight-report", str(bad_preflight_path),
@@ -155,20 +161,19 @@ class PlanningEfficiencyV2Tests(unittest.TestCase):
         self.assertTrue(any(check["check_id"] == "planning_efficiency_v2_preflight_usable" and check["status"] == "FAIL" for check in report["criteria"]))
 
     def test_guarded_execution_v2_rejects_post_preflight_plan_tampering(self):
-        result = self.run_preflight()
+        stage3 = self.run_stage3_preflight()
+        self.assertEqual(stage3.returncode, 0, stage3.stdout)
+        result = self.run_preflight("--stage3-preflight-report", str(self.stage3_report))
         self.assertEqual(result.returncode, 0, result.stdout)
-        stage3_report = self.tmpdir / "stage3_runtime_preflight_report_v1.json"
         execution_report = self.tmpdir / "guarded_execution_v2_report.json"
         ledger = self.tmpdir / "guarded_execution_v2_ledger.json"
-        stage3 = run_python(STAGE3_PREFLIGHT, "--output", str(stage3_report))
-        self.assertEqual(stage3.returncode, 0, stage3.stdout)
         tampered_plan = load_json(self.plan)
         tampered_plan["actions"][0]["content"] = "Tampered after preflight but still shaped as a safe artifact."
         write_json(self.plan, tampered_plan)
 
         execution = run_python(
             GUARDED_EXECUTION_V2,
-            "--preflight-report", str(stage3_report),
+            "--preflight-report", str(self.stage3_report),
             "--plan", str(self.plan),
             "--expected-artifacts", str(self.expected),
             "--planning-preflight-report", str(self.preflight_report),
@@ -185,6 +190,41 @@ class PlanningEfficiencyV2Tests(unittest.TestCase):
         planning_check = next(check for check in report["criteria"] if check["check_id"] == "planning_efficiency_v2_preflight_usable")
         self.assertEqual(planning_check["status"], "FAIL")
         self.assertTrue(any("plan hash mismatch" in item for item in planning_check["actual"]))
+
+    def test_preflight_accepts_explicit_stage3_preflight_input_without_executing(self):
+        stage3 = self.run_stage3_preflight()
+        self.assertEqual(stage3.returncode, 0, stage3.stdout)
+
+        result = self.run_preflight("--stage3-preflight-report", str(self.stage3_report))
+        report = load_json(self.preflight_report)
+
+        self.assertEqual(result.returncode, 0, result.stdout)
+        self.assertEqual(report["status"], "PLANNING_EFFICIENCY_V2_PREFLIGHT_PASS")
+        self.assertTrue(report["execution_gate"]["stage3_runtime_preflight_checked"])
+        self.assertEqual(report["execution_gate"]["required_next_runtime"], "guarded_execution_v2")
+        self.assertEqual(report["execution_gate"]["runtime_module"], ".agentic-pi/runtime/guarded_execution_v2.py")
+        self.assertTrue(any(check["check_id"] == "stage3_runtime_preflight_usable" and check["status"] == "PASS" for check in report["criteria"]))
+        self.assertIn("stage3_runtime_preflight_report", report["source_reports"])
+        self.assertFalse(report["runtime_execution"]["guarded_execution_invoked"])
+
+    def test_preflight_rejects_failed_explicit_stage3_preflight_input(self):
+        stage3 = self.run_stage3_preflight()
+        self.assertEqual(stage3.returncode, 0, stage3.stdout)
+        failed_stage3 = load_json(self.stage3_report)
+        failed_stage3["status"] = "STAGE3_RUNTIME_PREFLIGHT_FAIL"
+        failed_stage3["runtime_preflight"]["may_consume_planning_evidence"] = False
+        write_json(self.stage3_report, failed_stage3)
+
+        result = self.run_preflight("--stage3-preflight-report", str(self.stage3_report))
+        report = load_json(self.preflight_report)
+
+        self.assertNotEqual(result.returncode, 0, result.stdout)
+        self.assertEqual(report["status"], "PLANNING_EFFICIENCY_V2_PREFLIGHT_FAIL")
+        self.assertTrue(any(check["check_id"] == "stage3_runtime_preflight_usable" and check["status"] == "FAIL" for check in report["criteria"]))
+        self.assertTrue(any(item["code"] == "STAGE3_PREFLIGHT" for item in report["repair_hints"]))
+        self.assertFalse(self.plan.exists())
+        self.assertFalse(self.expected.exists())
+        self.assertFalse(self.lint_report.exists())
 
     def test_preflight_blocks_token_like_content_before_writing_plan_outputs(self):
         goal = load_json(self.goal)
@@ -281,6 +321,18 @@ class PlanningEfficiencyV2Tests(unittest.TestCase):
         self.assertIn("runtime_execution.guarded_execution_invoked must be false", errors)
         self.assertIn("runtime_execution.can_certify_done must be false", errors)
 
+    def test_canonical_json_writer_verifies_readback_bytes(self):
+        module = load_runtime_module("canonical_json")
+        output = self.tmpdir / "canonical_writer_report.json"
+        data = {"b": 2, "a": "stable"}
+
+        metadata = module.write_json_canonical(output, data)
+
+        self.assertTrue(metadata["readback_verified"])
+        self.assertEqual(metadata["writer"], "canonical_json_v1")
+        self.assertEqual(metadata["sha256"], module.sha256_file(output))
+        self.assertEqual(output.read_bytes(), module.canonical_json_bytes(data))
+
     def test_v21_hardening_runs_three_byte_stable_preflights(self):
         result = run_python(
             HARDENING,
@@ -300,6 +352,23 @@ class PlanningEfficiencyV2Tests(unittest.TestCase):
         protected_names = {"final_status.json", "final_status.md", "certification.json", "policy_decision.json"}
         created_protected = [path for path in self.hardening_work_dir.rglob("*") if path.name in protected_names]
         self.assertEqual(created_protected, [])
+
+    def test_v22_cleanup_checks_canonical_writer_and_stage3_input(self):
+        result = run_python(
+            CLEANUP,
+            "--goal", str(self.goal),
+            "--work-dir", str(self.cleanup_work_dir),
+            "--output", str(self.cleanup_report),
+        )
+        report = load_json(self.cleanup_report)
+
+        self.assertEqual(result.returncode, 0, result.stdout)
+        self.assertEqual(report["status"], "PLANNING_EFFICIENCY_V2_2_CLEANUP_PASS")
+        self.assertEqual(report["iteration_count"], 3)
+        self.assertTrue(any(check["check_id"] == "canonical_json_writer_readback_verified" and check["status"] == "PASS" for check in report["criteria"]))
+        self.assertTrue(any(check["check_id"] == "stage3_runtime_preflight_input_checked" and check["status"] == "PASS" for check in report["criteria"]))
+        self.assertTrue(any(check["check_id"] == "exact_guarded_execution_v2_binding" and check["status"] == "PASS" for check in report["criteria"]))
+        self.assertFalse(report["runtime_execution"]["can_certify_done"])
 
     def test_preflight_tools_have_no_live_model_or_command_runner_calls(self):
         text = (ROOT / PREFLIGHT).read_text(encoding="utf-8").lower()
