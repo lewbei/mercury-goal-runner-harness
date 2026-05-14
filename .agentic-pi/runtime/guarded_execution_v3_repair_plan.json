@@ -1,0 +1,35 @@
+{
+  "schema_version": "guarded_execution_v3_repair_plan_v1",
+  "repair_attempts": [
+    {
+      "repair_id": "R.GE3.FIX_DECLARED_PATH",
+      "plan": {
+        "schema_version": "guarded_execution_v2_plan_v1",
+        "plan_id": "guarded_execution_v3_repaired_plan",
+        "actions": [
+          {
+            "action_id": "A.WRITE_GE3_REPAIRED_SUMMARY",
+            "action_type": "write_text_artifact",
+            "artifact_id": "A.GE3_SUMMARY",
+            "artifact_path": "artifacts/guarded_execution_v3_summary.txt",
+            "content": "Guarded Execution v3 wrote this summary artifact only after the repaired plan passed."
+          },
+          {
+            "action_id": "A.WRITE_GE3_REPAIRED_OBSERVATION",
+            "action_type": "write_text_artifact",
+            "artifact_id": "A.GE3_OBSERVATION",
+            "artifact_path": "artifacts/guarded_execution_v3_observation.txt",
+            "content": "The repaired plan corrected the observation path before any plan artifact was written."
+          },
+          {
+            "action_id": "A.WRITE_GE3_REPAIRED_BOUNDARY",
+            "action_type": "write_text_artifact",
+            "artifact_id": "A.GE3_BOUNDARY",
+            "artifact_path": "artifacts/guarded_execution_v3_boundary.txt",
+            "content": "This repaired artifact remains ordinary evidence text under the certifier-only boundary."
+          }
+        ]
+      }
+    }
+  ]
+}

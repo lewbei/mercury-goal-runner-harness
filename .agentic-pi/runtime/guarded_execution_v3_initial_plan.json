@@ -1,0 +1,27 @@
+{
+  "schema_version": "guarded_execution_v2_plan_v1",
+  "plan_id": "guarded_execution_v3_initial_invalid_plan",
+  "actions": [
+    {
+      "action_id": "A.WRITE_GE3_INITIAL_SUMMARY",
+      "action_type": "write_text_artifact",
+      "artifact_id": "A.GE3_SUMMARY",
+      "artifact_path": "artifacts/guarded_execution_v3_summary.txt",
+      "content": "Initial plan summary text is safe, but the full initial plan must still be denied."
+    },
+    {
+      "action_id": "A.WRITE_GE3_INITIAL_OBSERVATION_WRONG_PATH",
+      "action_type": "write_text_artifact",
+      "artifact_id": "A.GE3_OBSERVATION",
+      "artifact_path": "artifacts/guarded_execution_v3_wrong_observation.txt",
+      "content": "Initial plan observation uses a path that is not declared for its artifact id."
+    },
+    {
+      "action_id": "A.WRITE_GE3_INITIAL_BOUNDARY",
+      "action_type": "write_text_artifact",
+      "artifact_id": "A.GE3_BOUNDARY",
+      "artifact_path": "artifacts/guarded_execution_v3_boundary.txt",
+      "content": "Initial plan boundary text is safe, but no partial write is allowed before repair."
+    }
+  ]
+}

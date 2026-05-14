@@ -343,6 +343,14 @@
       "claim_boundary": "Guarded Execution v2 proof only; it does not execute arbitrary goals, decide policy, certify DONE, or prove arbitrary runtime safety."
     },
     {
+      "claim_id": "guarded_execution_v3",
+      "claim": "Guarded Execution v3 rejects an invalid bounded plan, emits a repair request, accepts exactly one repaired plan, and writes only declared non-authority artifacts after revalidation.",
+      "mode": "quick",
+      "command": ["python", ".agentic-pi/runtime/guarded_execution_v3.py", "--preflight-report", ".agentic-runs/proof_matrix_outputs/stage3_runtime_preflight_report_v1.json", "--initial-plan", ".agentic-pi/runtime/guarded_execution_v3_initial_plan.json", "--repair-plan", ".agentic-pi/runtime/guarded_execution_v3_repair_plan.json", "--expected-artifacts", ".agentic-pi/runtime/guarded_execution_v3_expected_artifacts.json", "--run-id", "proof_matrix_guarded_execution_v3", "--output", ".agentic-runs/proof_matrix_outputs/guarded_execution_v3_report.json", "--ledger-output", ".agentic-runs/proof_matrix_outputs/guarded_execution_v3_ledger.json"],
+      "expected_evidence": ["GUARDED_EXECUTION_V3_PASS", "initial plan rejected", "repair request written", "exactly one repair attempt", "repaired plan executed", "can_certify_done is false"],
+      "claim_boundary": "Guarded Execution v3 proof only; it does not execute arbitrary goals, decide policy, certify DONE, or prove arbitrary runtime safety."
+    },
+    {
       "claim_id": "full_unittest",
       "claim": "The complete local unit suite passes.",
       "mode": "full",
