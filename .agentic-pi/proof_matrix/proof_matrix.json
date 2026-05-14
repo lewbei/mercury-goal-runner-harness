@@ -351,6 +351,14 @@
       "claim_boundary": "Guarded Execution v3 proof only; it does not execute arbitrary goals, decide policy, certify DONE, or prove arbitrary runtime safety."
     },
     {
+      "claim_id": "planning_efficiency_v1",
+      "claim": "Planning Efficiency v1 compiles a rough goal into a guarded-execution-compatible bounded plan and lints it before runtime execution.",
+      "mode": "quick",
+      "command": ["python", ".agentic-pi/runtime/guarded_plan_compiler.py", "--goal", ".agentic-pi/runtime/planning_efficiency_v1_goal.json", "--plan-output", ".agentic-runs/proof_matrix_outputs/planning_efficiency_v1_plan.json", "--expected-output", ".agentic-runs/proof_matrix_outputs/planning_efficiency_v1_expected_artifacts.json", "--compile-report-output", ".agentic-runs/proof_matrix_outputs/planning_efficiency_v1_compile_report.json", "--lint-report-output", ".agentic-runs/proof_matrix_outputs/planning_efficiency_v1_lint_report.json"],
+      "expected_evidence": ["PLAN_COMPILE_PASS", "PLAN_LINT_PASS", "repair hints available", "verifier requirements declared", "plan execution not attempted", "can_certify_done is false"],
+      "claim_boundary": "Planning Efficiency v1 proof only; it improves pre-execution planning quality and does not execute goals, decide policy, certify DONE, or prove arbitrary runtime safety."
+    },
+    {
       "claim_id": "full_unittest",
       "claim": "The complete local unit suite passes.",
       "mode": "full",

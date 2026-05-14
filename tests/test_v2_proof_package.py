@@ -87,6 +87,7 @@ class V2ProofPackageTests(unittest.TestCase):
             "guarded_execution_v1",
             "guarded_execution_v2",
             "guarded_execution_v3",
+            "planning_efficiency_v1",
             "full_unittest",
             "benchmark",
         ]:
@@ -136,6 +137,7 @@ class V2ProofPackageTests(unittest.TestCase):
         self.assertIn("guarded_execution_v1", claim_ids)
         self.assertIn("guarded_execution_v2", claim_ids)
         self.assertIn("guarded_execution_v3", claim_ids)
+        self.assertIn("planning_efficiency_v1", claim_ids)
         self.assertNotIn("benchmark", claim_ids)
 
     def test_quick_proof_runner_outputs_only_under_agentic_runs(self):
@@ -163,6 +165,10 @@ class V2ProofPackageTests(unittest.TestCase):
             ROOT / ".agentic-runs" / "proof_matrix_guarded_execution_v3" / "artifacts" / "guarded_execution_v3_summary.txt",
             ROOT / ".agentic-runs" / "proof_matrix_guarded_execution_v3" / "artifacts" / "guarded_execution_v3_observation.txt",
             ROOT / ".agentic-runs" / "proof_matrix_guarded_execution_v3" / "artifacts" / "guarded_execution_v3_boundary.txt",
+            OUTPUT_DIR / "planning_efficiency_v1_compile_report.json",
+            OUTPUT_DIR / "planning_efficiency_v1_lint_report.json",
+            OUTPUT_DIR / "planning_efficiency_v1_plan.json",
+            OUTPUT_DIR / "planning_efficiency_v1_expected_artifacts.json",
         ]:
             self.assertTrue(path.is_file(), path)
             self.assertIn(".agentic-runs", path.as_posix())

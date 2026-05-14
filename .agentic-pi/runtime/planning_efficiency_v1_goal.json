@@ -1,0 +1,22 @@
+{
+  "schema_version": "planning_efficiency_goal_v1",
+  "goal_id": "planning_efficiency_v1_default_goal",
+  "rough_goal": "Compile a bounded guarded execution plan that writes ordinary planning evidence artifacts before runtime.",
+  "artifact_specs": [
+    {
+      "artifact_id": "A.PE1_SUMMARY",
+      "name": "planning_efficiency_v1_summary",
+      "content": "Planning Efficiency v1 summary artifact prepared by the deterministic guarded plan compiler."
+    },
+    {
+      "artifact_id": "A.PE1_STEPS",
+      "name": "planning_efficiency_v1_steps",
+      "content": "Planning Efficiency v1 steps artifact records that actions are grounded before runtime execution."
+    },
+    {
+      "artifact_id": "A.PE1_BOUNDARY",
+      "name": "planning_efficiency_v1_boundary",
+      "content": "Planning Efficiency v1 boundary artifact is ordinary evidence text and not a policy decision."
+    }
+  ]
+}
