@@ -84,6 +84,28 @@ def protected_output_errors(paths: list[Path]) -> list[str]:
     return [f"output path targets protected status artifact: {path}" for path in paths if v2.is_protected_output_name(path.name)]
 
 
+def normalize_repair_hints(*sources: Any) -> list[dict[str, str]]:
+    hints: list[dict[str, str]] = []
+    seen: set[tuple[str, str, str]] = set()
+    for source in sources:
+        if not isinstance(source, list):
+            continue
+        for item in source:
+            if not isinstance(item, dict):
+                continue
+            code = item.get("code")
+            message = item.get("message")
+            target = item.get("target", "")
+            if not isinstance(code, str) or not isinstance(message, str) or not isinstance(target, str):
+                continue
+            key = (code, message, target)
+            if key in seen:
+                continue
+            seen.add(key)
+            hints.append({"code": code, "message": message, "target": target})
+    return hints
+
+
 def collect_string_locations(value: Any, root: str = "$") -> list[tuple[str, str]]:
     if isinstance(value, dict):
         found: list[tuple[str, str]] = []
@@ -210,17 +232,18 @@ def build_preflight(
     add_check(checks, "execution_not_attempted", runtime_flags_ok, "compile/lint preflight does not execute the plan or goal", {"compiler_runtime": compile_report.get("runtime_execution"), "lint_runtime": (lint_report or {}).get("runtime_execution")})
 
     status = PASS_STATUS if all(check["status"] == "PASS" for check in checks) else FAIL_STATUS
-    repair_hints = [] if not lint_report else lint_report.get("repair_hints", [])
+    extra_hints: list[dict[str, str]] = []
     if token_findings:
-        repair_hints.append({"code": "TOKEN_PATTERN", "message": "Remove high-risk token-like text from generated planning artifacts before guarded execution.", "target": "plan.actions[].content"})
+        extra_hints.append({"code": "TOKEN_PATTERN", "message": "Remove high-risk token-like text from generated planning artifacts before guarded execution.", "target": "plan.actions[].content"})
     if final_status_findings:
-        repair_hints.append({"code": "FINAL_STATUS_ENUM_LEAK", "message": "Remove final-status enum values from generated planning artifacts before guarded execution.", "target": "generated planning artifacts"})
+        extra_hints.append({"code": "FINAL_STATUS_ENUM_LEAK", "message": "Remove final-status enum values from generated planning artifacts before guarded execution.", "target": "generated planning artifacts"})
     if protected_name_findings:
-        repair_hints.append({"code": "PROTECTED_STATUS_ARTIFACT_NAME", "message": "Remove protected status artifact filenames from generated planning artifacts before guarded execution.", "target": "generated planning artifacts"})
+        extra_hints.append({"code": "PROTECTED_STATUS_ARTIFACT_NAME", "message": "Remove protected status artifact filenames from generated planning artifacts before guarded execution.", "target": "generated planning artifacts"})
     if output_errors:
-        repair_hints.append({"code": "PROTECTED_OUTPUT_PATH", "message": "Move preflight outputs away from protected status artifact names.", "target": "preflight output paths"})
+        extra_hints.append({"code": "PROTECTED_OUTPUT_PATH", "message": "Move preflight outputs away from protected status artifact names.", "target": "preflight output paths"})
     if stage3_checked and not stage3_ok:
-        repair_hints.append({"code": "STAGE3_PREFLIGHT", "message": "Provide a passing Stage 3 runtime preflight report before guarded execution handoff.", "target": "--stage3-preflight-report"})
+        extra_hints.append({"code": "STAGE3_PREFLIGHT", "message": "Provide a passing Stage 3 runtime preflight report before guarded execution handoff.", "target": "--stage3-preflight-report"})
+    repair_hints = normalize_repair_hints(compile_report.get("repair_hints", []), (lint_report or {}).get("repair_hints", []), extra_hints)
 
     source_reports = {}
     if stage3_preflight_path is not None:
@@ -314,8 +337,20 @@ def validate_preflight_report(report: dict[str, Any]) -> list[str]:
             errors.append("passing preflight must allow passing plan to guarded execution")
         if execution_gate.get("blocked_before_execution") is not False:
             errors.append("passing preflight must not be marked blocked_before_execution")
-    if report.get("status") == FAIL_STATUS and not report.get("repair_hints"):
+    repair_hints = report.get("repair_hints", [])
+    if report.get("status") == FAIL_STATUS and not repair_hints:
         errors.append("failing preflight reports must include repair_hints")
+    if repair_hints is not None:
+        if not isinstance(repair_hints, list):
+            errors.append("repair_hints must be a list")
+        else:
+            for index, item in enumerate(repair_hints):
+                if not isinstance(item, dict):
+                    errors.append(f"repair_hints[{index}] must be an object")
+                    continue
+                for key in ["code", "message", "target"]:
+                    if not isinstance(item.get(key), str):
+                        errors.append(f"repair_hints[{index}].{key} must be a string")
     return errors
 
 

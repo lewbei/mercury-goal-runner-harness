@@ -88,6 +88,7 @@ class V2ProofPackageTests(unittest.TestCase):
             "planning_efficiency_v2_preflight",
             "planning_efficiency_v2_1_hardening",
             "planning_efficiency_v2_2_cleanup",
+            "planning_efficiency_v3_repair_loop",
             "guarded_execution_v2",
             "guarded_execution_v3",
             "planning_efficiency_v1",
@@ -141,6 +142,7 @@ class V2ProofPackageTests(unittest.TestCase):
         self.assertIn("planning_efficiency_v2_preflight", claim_ids)
         self.assertIn("planning_efficiency_v2_1_hardening", claim_ids)
         self.assertIn("planning_efficiency_v2_2_cleanup", claim_ids)
+        self.assertIn("planning_efficiency_v3_repair_loop", claim_ids)
         self.assertIn("guarded_execution_v2", claim_ids)
         self.assertIn("guarded_execution_v3", claim_ids)
         self.assertIn("planning_efficiency_v1", claim_ids)
@@ -169,12 +171,17 @@ class V2ProofPackageTests(unittest.TestCase):
             OUTPUT_DIR / "planning_efficiency_v2_2_cleanup_report.json",
             OUTPUT_DIR / "planning_efficiency_v2_2_cleanup" / "stage3_runtime_preflight_report_v1.json",
             OUTPUT_DIR / "planning_efficiency_v2_2_cleanup" / "planning_efficiency_v2_preflight_report.json",
+            OUTPUT_DIR / "planning_efficiency_v3_repair_report.json",
+            OUTPUT_DIR / "planning_efficiency_v3_repair_loop" / "planning_efficiency_v3_repaired_goal.json",
+            OUTPUT_DIR / "planning_efficiency_v3_repair_loop" / "planning_efficiency_v3_preflight_report.json",
+            OUTPUT_DIR / "planning_efficiency_v3_repair_loop" / "planning_efficiency_v3_plan.json",
+            OUTPUT_DIR / "planning_efficiency_v3_repair_loop" / "planning_efficiency_v3_expected_artifacts.json",
             OUTPUT_DIR / "guarded_execution_v2_report.json",
             OUTPUT_DIR / "guarded_execution_v2_ledger.json",
             ROOT / ".agentic-runs" / "proof_matrix_guarded_execution_v1" / "artifacts" / "guarded_execution_v1_note.txt",
-            ROOT / ".agentic-runs" / "proof_matrix_guarded_execution_v2" / "artifacts" / "guarded_execution_v2_summary.txt",
-            ROOT / ".agentic-runs" / "proof_matrix_guarded_execution_v2" / "artifacts" / "guarded_execution_v2_observation.txt",
-            ROOT / ".agentic-runs" / "proof_matrix_guarded_execution_v2" / "artifacts" / "guarded_execution_v2_boundary.txt",
+            ROOT / ".agentic-runs" / "proof_matrix_guarded_execution_v2" / "artifacts" / "planning_efficiency_v3_summary.txt",
+            ROOT / ".agentic-runs" / "proof_matrix_guarded_execution_v2" / "artifacts" / "planning_efficiency_v3_observation.txt",
+            ROOT / ".agentic-runs" / "proof_matrix_guarded_execution_v2" / "artifacts" / "planning_efficiency_v3_boundary.txt",
             OUTPUT_DIR / "guarded_execution_v3_report.json",
             OUTPUT_DIR / "guarded_execution_v3_ledger.json",
             ROOT / ".agentic-runs" / "proof_matrix_guarded_execution_v3" / "artifacts" / "guarded_execution_v3_repair_request.json",

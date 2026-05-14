@@ -97,25 +97,54 @@ def verifier_requirements() -> list[str]:
     ]
 
 
+def hint(code: str, message: str, target: str = "") -> dict[str, str]:
+    return {"code": code, "message": message, "target": target}
+
+
+def dedupe_repair_hints(items: list[dict[str, str]]) -> list[dict[str, str]]:
+    seen: set[tuple[str, str, str]] = set()
+    deduped: list[dict[str, str]] = []
+    for item in items:
+        key = (str(item.get("code", "")), str(item.get("message", "")), str(item.get("target", "")))
+        if key in seen:
+            continue
+        seen.add(key)
+        deduped.append({"code": key[0], "message": key[1], "target": key[2]})
+    return deduped
+
+
 def compile_goal(goal: dict[str, Any]) -> tuple[dict[str, Any] | None, dict[str, Any] | None, dict[str, Any]]:
     errors: list[str] = []
+    repair_hints: list[dict[str, str]] = []
     if goal.get("schema_version") != "planning_efficiency_goal_v1":
-        errors.append("goal schema_version must be planning_efficiency_goal_v1")
+        message = "goal schema_version must be planning_efficiency_goal_v1"
+        errors.append(message)
+        repair_hints.append(hint("GOAL_SCHEMA", message, "goal.schema_version"))
     rough_goal = str(goal.get("rough_goal", "")).strip()
     if not rough_goal:
-        errors.append("rough_goal must be a non-empty string")
+        message = "rough_goal must be a non-empty string"
+        errors.append(message)
+        repair_hints.append(hint("MISSING_ROUGH_GOAL", message, "goal.rough_goal"))
     if v2.contains_forbidden_content_language(rough_goal):
-        errors.append("rough_goal contains final-status authority language")
+        message = "rough_goal contains final-status authority language"
+        errors.append(message)
+        repair_hints.append(hint("AUTHORITY_LANGUAGE", message, "goal.rough_goal"))
     specs = goal.get("artifact_specs")
     if specs is None:
         specs = default_artifact_specs(goal)
     if not isinstance(specs, list):
-        errors.append("artifact_specs must be a list when provided")
+        message = "artifact_specs must be a list when provided"
+        errors.append(message)
+        repair_hints.append(hint("ARTIFACT_SPECS_SHAPE", message, "goal.artifact_specs"))
         specs = []
     if len(specs) < v2.MIN_ACTIONS:
-        errors.append(f"artifact_specs must provide at least {v2.MIN_ACTIONS} artifacts")
+        message = f"artifact_specs must provide at least {v2.MIN_ACTIONS} artifacts"
+        errors.append(message)
+        repair_hints.append(hint("ACTION_BUDGET", message, "goal.artifact_specs"))
     if len(specs) > v2.MAX_ACTIONS:
-        errors.append(f"artifact_specs must provide at most {v2.MAX_ACTIONS} artifacts")
+        message = f"artifact_specs must provide at most {v2.MAX_ACTIONS} artifacts"
+        errors.append(message)
+        repair_hints.append(hint("ACTION_BUDGET", message, "goal.artifact_specs"))
 
     actions: list[dict[str, Any]] = []
     artifacts: list[dict[str, Any]] = []
@@ -123,12 +152,16 @@ def compile_goal(goal: dict[str, Any]) -> tuple[dict[str, Any] | None, dict[str,
     seen_paths: set[str] = set()
     for index, raw_spec in enumerate(specs):
         if not isinstance(raw_spec, dict):
-            errors.append(f"artifact_specs[{index}] must be an object")
+            message = f"artifact_specs[{index}] must be an object"
+            errors.append(message)
+            repair_hints.append(hint("ARTIFACT_SPECS_SHAPE", message, f"goal.artifact_specs[{index}]"))
             continue
         name = str(raw_spec.get("name") or raw_spec.get("artifact_id") or f"artifact_{index + 1}")
         artifact_id = str(raw_spec.get("artifact_id") or f"A.{slugify(name, f'artifact_{index + 1}').upper()}")
         if artifact_id in seen_ids:
-            errors.append(f"duplicate artifact_id: {artifact_id}")
+            message = f"duplicate artifact_id: {artifact_id}"
+            errors.append(message)
+            repair_hints.append(hint("DUPLICATE_ARTIFACT_ID", message, f"goal.artifact_specs[{index}].artifact_id"))
         seen_ids.add(artifact_id)
         requested_path = raw_spec.get("requested_path")
         if requested_path is None:
@@ -136,21 +169,32 @@ def compile_goal(goal: dict[str, Any]) -> tuple[dict[str, Any] | None, dict[str,
         elif isinstance(requested_path, str) and requested_path.strip():
             artifact_path = requested_path
         else:
-            errors.append(f"artifact {artifact_id} requested_path must be a non-empty string when supplied")
+            message = f"artifact {artifact_id} requested_path must be a non-empty string when supplied"
+            errors.append(message)
+            repair_hints.append(hint("EXPECTED_ARTIFACTS_CONTRACT", message, f"goal.artifact_specs[{index}].requested_path"))
             artifact_path = f"artifacts/{slugify(name, f'artifact_{index + 1}')}.txt"
         artifact_path, path_errors = safe_artifact_path(artifact_path, f"artifact {artifact_id}")
         errors.extend(path_errors)
+        for path_error in path_errors:
+            code = "PROTECTED_PATH" if "protected status artifact" in path_error else "EXPECTED_ARTIFACTS_CONTRACT"
+            repair_hints.append(hint(code, path_error, f"goal.artifact_specs[{index}].requested_path"))
         if artifact_path in seen_paths:
-            errors.append(f"duplicate artifact path: {artifact_path}")
+            message = f"duplicate artifact path: {artifact_path}"
+            errors.append(message)
+            repair_hints.append(hint("DUPLICATE_ARTIFACT_PATH", message, f"goal.artifact_specs[{index}].requested_path"))
         seen_paths.add(artifact_path)
         content = str(raw_spec.get("content", "")).strip()
         if not content:
             content = f"Compiled artifact for {name} in the bounded planning task."
         if v2.contains_forbidden_content_language(content):
-            errors.append(f"artifact {artifact_id} content contains final-status authority language")
+            message = f"artifact {artifact_id} content contains final-status authority language"
+            errors.append(message)
+            repair_hints.append(hint("AUTHORITY_LANGUAGE", message, f"goal.artifact_specs[{index}].content"))
         content_bytes = len(content.encode("utf-8"))
         if content_bytes > 2000:
-            errors.append(f"artifact {artifact_id} content exceeds 2000 bytes")
+            message = f"artifact {artifact_id} content exceeds 2000 bytes"
+            errors.append(message)
+            repair_hints.append(hint("CONTENT_TOO_LARGE", message, f"goal.artifact_specs[{index}].content"))
         artifacts.append({
             "artifact_id": artifact_id,
             "expected_path": artifact_path,
@@ -184,7 +228,9 @@ def compile_goal(goal: dict[str, Any]) -> tuple[dict[str, Any] | None, dict[str,
     }
     lint_report = linter.lint_plan(plan, expected) if not errors else None
     if lint_report and lint_report.get("status") != "PLAN_LINT_PASS":
+        repair_hints.extend(lint_report.get("repair_hints", []))
         errors.extend(item["message"] for item in lint_report.get("repair_hints", []))
+    repair_hints = dedupe_repair_hints(repair_hints)
     status = "PLAN_COMPILE_PASS" if not errors else "PLAN_COMPILE_FAIL"
     compile_report = {
         "schema_version": "guarded_plan_compile_report_v1",
@@ -202,10 +248,12 @@ def compile_goal(goal: dict[str, Any]) -> tuple[dict[str, Any] | None, dict[str,
             {"check_id": "compiled_plan_lints", "status": "PASS" if lint_report and lint_report.get("status") == "PLAN_LINT_PASS" else "FAIL"},
         ],
         "compile_errors": errors,
+        "repair_hints": repair_hints,
         "planning_efficiency": {
             "compiled_action_count": len(actions),
             "declared_artifact_count": len(artifacts),
             "lint_status": lint_report.get("status") if lint_report else "NOT_RUN",
+            "repair_hint_count": len(repair_hints),
             "ready_for_guarded_execution": status == "PLAN_COMPILE_PASS",
         },
         "runtime_execution": {
@@ -237,6 +285,20 @@ def validate_compile_report(report: dict[str, Any]) -> list[str]:
         errors.append("runtime_execution.can_certify_done must be false")
     if report.get("status") == "PLAN_COMPILE_FAIL" and not report.get("compile_errors"):
         errors.append("failing compile reports must include compile_errors")
+    repair_hints = report.get("repair_hints", [])
+    if report.get("status") == "PLAN_COMPILE_FAIL" and not repair_hints:
+        errors.append("failing compile reports must include repair_hints")
+    if repair_hints is not None:
+        if not isinstance(repair_hints, list):
+            errors.append("repair_hints must be a list")
+        else:
+            for index, item in enumerate(repair_hints):
+                if not isinstance(item, dict):
+                    errors.append(f"repair_hints[{index}] must be an object")
+                    continue
+                for key in ["code", "message", "target"]:
+                    if not isinstance(item.get(key), str):
+                        errors.append(f"repair_hints[{index}].{key} must be a string")
     return errors
 
 

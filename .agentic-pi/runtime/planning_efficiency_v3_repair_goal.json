@@ -1,0 +1,25 @@
+{
+  "schema_version": "planning_efficiency_goal_v1",
+  "goal_id": "planning_efficiency_v3_repair_goal",
+  "rough_goal": "Compile guarded execution inputs with one repairable planning-preflight issue before bounded artifact writes.",
+  "artifact_specs": [
+    {
+      "artifact_id": "A.V3_SUMMARY",
+      "name": "v3_repair_summary",
+      "requested_path": "artifacts/planning_efficiency_v3_summary.txt",
+      "content": "Planning Efficiency v3 should repair this api_key marker before guarded execution handoff."
+    },
+    {
+      "artifact_id": "A.V3_OBSERVATION",
+      "name": "v3_repair_observation",
+      "requested_path": "artifacts/planning_efficiency_v3_observation.txt",
+      "content": "The bounded repair loop applies only exact deterministic repair hints from v2 preflight."
+    },
+    {
+      "artifact_id": "A.V3_BOUNDARY",
+      "name": "v3_repair_boundary",
+      "requested_path": "artifacts/planning_efficiency_v3_boundary.txt",
+      "content": "This artifact records planning evidence only; policy and certifier authority remain separate."
+    }
+  ]
+}
