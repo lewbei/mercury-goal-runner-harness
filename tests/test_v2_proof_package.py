@@ -83,6 +83,7 @@ class V2ProofPackageTests(unittest.TestCase):
             "stage2_finalisation_gate",
             "stage3_runtime_readiness_gate",
             "stage3_runtime_preflight_gate",
+            "guarded_runtime_smoke",
             "full_unittest",
             "benchmark",
         ]:
@@ -128,6 +129,7 @@ class V2ProofPackageTests(unittest.TestCase):
         self.assertIn("stage2_finalisation_gate", claim_ids)
         self.assertIn("stage3_runtime_readiness_gate", claim_ids)
         self.assertIn("stage3_runtime_preflight_gate", claim_ids)
+        self.assertIn("guarded_runtime_smoke", claim_ids)
         self.assertNotIn("benchmark", claim_ids)
 
     def test_quick_proof_runner_outputs_only_under_agentic_runs(self):
@@ -141,6 +143,7 @@ class V2ProofPackageTests(unittest.TestCase):
             OUTPUT_DIR / "stage2_finalisation_gate_report_v1.json",
             OUTPUT_DIR / "stage3_runtime_readiness_report_v1.json",
             OUTPUT_DIR / "stage3_runtime_preflight_report_v1.json",
+            OUTPUT_DIR / "guarded_runtime_smoke_report_v1.json",
         ]:
             self.assertTrue(path.is_file(), path)
             self.assertIn(".agentic-runs", path.as_posix())

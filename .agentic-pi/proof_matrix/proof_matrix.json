@@ -319,6 +319,14 @@
       "claim_boundary": "Runtime preflight smoke only; it does not execute goals, decide policy, certify DONE, or prove arbitrary runtime safety."
     },
     {
+      "claim_id": "guarded_runtime_smoke",
+      "claim": "A non-executing runtime smoke path refuses to consume planning evidence unless Stage 3 preflight has passed.",
+      "mode": "quick",
+      "command": ["python", ".agentic-pi/runtime/guarded_runtime_smoke.py", "--preflight-report", ".agentic-runs/proof_matrix_outputs/stage3_runtime_preflight_report_v1.json", "--output", ".agentic-runs/proof_matrix_outputs/guarded_runtime_smoke_report_v1.json"],
+      "expected_evidence": ["GUARDED_RUNTIME_SMOKE_PASS", "preflight checked", "goal_execution_attempted is false", "protected_status_write_attempted is false", "can_certify_done is false"],
+      "claim_boundary": "Guarded runtime smoke only; it does not execute goals, decide policy, certify DONE, or prove arbitrary runtime safety."
+    },
+    {
       "claim_id": "full_unittest",
       "claim": "The complete local unit suite passes.",
       "mode": "full",
