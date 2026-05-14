@@ -42,6 +42,7 @@ TOKEN_PATTERNS = [
     ("SK_PREFIX_TOKEN_PATTERN", re.compile(r"\bsk-[A-Za-z0-9_-]{12,}\b")),
     ("PRIVATE_KEY_BLOCK_PATTERN", re.compile(r"-----BEGIN [A-Z ]*PRIVATE KEY-----")),
 ]
+PROTECTED_STATUS_ARTIFACT_NAMES = {"final_status.json", "final_status.md", "certification.json", "policy_decision.json"}
 
 
 def load_required_json(path: Path, label: str) -> dict[str, Any]:
@@ -49,7 +50,7 @@ def load_required_json(path: Path, label: str) -> dict[str, Any]:
 
 
 def write_json(path: Path, data: Any) -> None:
-    if path.name in v2.PROTECTED_OUTPUT_NAMES:
+    if v2.is_protected_output_name(path.name):
         raise ValueError(f"refusing to write protected status artifact: {path}")
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(stable_json(data) + "\n", encoding="utf-8")
@@ -80,14 +81,16 @@ def add_check(checks: list[dict[str, Any]], check_id: str, passed: bool, expecte
 
 
 def protected_output_errors(paths: list[Path]) -> list[str]:
-    return [f"output path targets protected status artifact: {path}" for path in paths if path.name in v2.PROTECTED_OUTPUT_NAMES]
+    return [f"output path targets protected status artifact: {path}" for path in paths if v2.is_protected_output_name(path.name)]
 
 
 def collect_string_locations(value: Any, root: str = "$") -> list[tuple[str, str]]:
     if isinstance(value, dict):
         found: list[tuple[str, str]] = []
         for key, child in value.items():
-            found.extend(collect_string_locations(child, f"{root}.{key}"))
+            key_text = str(key)
+            found.append((f"{root}.<key:{key_text}>", key_text))
+            found.extend(collect_string_locations(child, f"{root}.{key_text}"))
         return found
     if isinstance(value, list):
         found = []
@@ -106,6 +109,26 @@ def token_leak_locations(objects: dict[str, Any]) -> list[dict[str, str]]:
             for code, pattern in TOKEN_PATTERNS:
                 if pattern.search(text):
                     findings.append({"code": code, "location": location})
+    return findings
+
+
+def final_status_enum_locations(objects: dict[str, Any]) -> list[dict[str, str]]:
+    findings: list[dict[str, str]] = []
+    for object_name, obj in objects.items():
+        for location, text in collect_string_locations(obj, object_name):
+            for status in sorted(v2.FINAL_STATUS_VALUES):
+                if re.search(rf"\b{re.escape(status)}\b", text, flags=re.IGNORECASE):
+                    findings.append({"status_value": status, "location": location})
+    return findings
+
+
+def protected_status_artifact_name_locations(objects: dict[str, Any]) -> list[dict[str, str]]:
+    findings: list[dict[str, str]] = []
+    for object_name, obj in objects.items():
+        for location, text in collect_string_locations(obj, object_name):
+            for name in sorted(PROTECTED_STATUS_ARTIFACT_NAMES):
+                if re.search(rf"(?<![\w.-]){re.escape(name)}(?![\w.-])", text, flags=re.IGNORECASE):
+                    findings.append({"artifact_name": name, "location": location})
     return findings
 
 
@@ -152,7 +175,10 @@ def build_preflight(
     replay_hashes = {name: sha256_json(obj) for name, obj in replay_objects.items() if obj is not None}
     deterministic_ok = generated_hashes == replay_hashes and bool(generated_hashes)
 
-    token_findings = token_leak_locations({name: obj for name, obj in generated_objects.items() if obj is not None})
+    generated_present_objects = {name: obj for name, obj in generated_objects.items() if obj is not None}
+    token_findings = token_leak_locations(generated_present_objects)
+    final_status_findings = final_status_enum_locations(generated_present_objects)
+    protected_name_findings = protected_status_artifact_name_locations(generated_present_objects)
     paths_ok, path_errors = generated_paths_are_declared(plan, expected)
     compile_ok = compile_report.get("status") == "PLAN_COMPILE_PASS" and not compile_report_errors
     lint_ok = bool(lint_report) and lint_report.get("status") == "PLAN_LINT_PASS" and not lint_report_errors
@@ -170,12 +196,18 @@ def build_preflight(
     add_check(checks, "generated_paths_declared", paths_ok, "every generated plan action matches expected_artifacts exactly", path_errors)
     add_check(checks, "deterministic_replay_hashes_match", deterministic_ok, "same goal compiles/lints to identical JSON hashes", {"generated_hashes": generated_hashes, "replay_hashes": replay_hashes})
     add_check(checks, "sensitive_token_patterns_absent", not token_findings, "generated planning artifacts contain no high-risk token patterns", token_findings)
+    add_check(checks, "final_status_enum_values_absent", not final_status_findings, "generated planning artifacts contain no final-status enum values", final_status_findings)
+    add_check(checks, "protected_status_artifact_names_absent", not protected_name_findings, "generated planning artifacts contain no protected status artifact names", protected_name_findings)
     add_check(checks, "execution_not_attempted", runtime_flags_ok, "compile/lint preflight does not execute the plan or goal", {"compiler_runtime": compile_report.get("runtime_execution"), "lint_runtime": (lint_report or {}).get("runtime_execution")})
 
     status = PASS_STATUS if all(check["status"] == "PASS" for check in checks) else FAIL_STATUS
     repair_hints = [] if not lint_report else lint_report.get("repair_hints", [])
     if token_findings:
         repair_hints.append({"code": "TOKEN_PATTERN", "message": "Remove high-risk token-like text from generated planning artifacts before guarded execution.", "target": "plan.actions[].content"})
+    if final_status_findings:
+        repair_hints.append({"code": "FINAL_STATUS_ENUM_LEAK", "message": "Remove final-status enum values from generated planning artifacts before guarded execution.", "target": "generated planning artifacts"})
+    if protected_name_findings:
+        repair_hints.append({"code": "PROTECTED_STATUS_ARTIFACT_NAME", "message": "Remove protected status artifact filenames from generated planning artifacts before guarded execution.", "target": "generated planning artifacts"})
     if output_errors:
         repair_hints.append({"code": "PROTECTED_OUTPUT_PATH", "message": "Move preflight outputs away from protected status artifact names.", "target": "preflight output paths"})
 

@@ -16,6 +16,7 @@ import importlib.util
 import json
 import re
 import sys
+import unicodedata
 from pathlib import Path
 from typing import Any
 
@@ -27,6 +28,8 @@ DEFAULT_PLAN = ROOT / ".agentic-pi" / "runtime" / "guarded_execution_v2_plan.jso
 DEFAULT_EXPECTED_ARTIFACTS = ROOT / ".agentic-pi" / "runtime" / "guarded_execution_v2_expected_artifacts.json"
 DEFAULT_RUN_ID = "guarded_execution_v2_smoke"
 DEFAULT_LEDGER_NAME = "guarded_execution_v2_ledger.json"
+PLANNING_PREFLIGHT_PASS_STATUS = "PLANNING_EFFICIENCY_V2_PREFLIGHT_PASS"
+PLANNING_PREFLIGHT_SCHEMA_VERSION = "planning_efficiency_v2_preflight_report_v1"
 PROTECTED_OUTPUT_NAMES = {
     "final_status.json",
     "final_status.md",
@@ -85,7 +88,7 @@ def load_json(path: Path) -> Any:
 
 
 def write_json(path: Path, data: Any) -> None:
-    if path.name in PROTECTED_OUTPUT_NAMES:
+    if is_protected_output_name(path.name):
         raise ValueError(f"refusing to write protected status artifact: {path}")
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -110,13 +113,21 @@ def load_preflight_module():
 
 def rel_path(path: Path) -> str:
     try:
-        return str(path.resolve().relative_to(ROOT.resolve()))
+        return path.resolve().relative_to(ROOT.resolve()).as_posix()
     except ValueError:
-        return str(path)
+        return str(path).replace("\\", "/")
 
 
 def sha256_text(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
+
+
+def stable_json(data: Any) -> str:
+    return json.dumps(data, indent=2, sort_keys=True, ensure_ascii=False)
+
+
+def sha256_json(data: Any) -> str:
+    return hashlib.sha256(stable_json(data).encode("utf-8")).hexdigest()
 
 
 def contains_final_status_value(value: Any) -> bool:
@@ -156,8 +167,16 @@ def normalize_run_relative(raw_path: str) -> str:
     return raw_path.replace("\\", "/")
 
 
+def normalized_output_name(raw_name: str) -> str:
+    return unicodedata.normalize("NFKC", str(raw_name)).casefold()
+
+
+def is_protected_output_name(raw_name: str) -> bool:
+    return normalized_output_name(Path(str(raw_name)).name) in PROTECTED_OUTPUT_NAMES
+
+
 def basename_is_protected(raw_path: str) -> bool:
-    return Path(normalize_run_relative(raw_path)).name in PROTECTED_OUTPUT_NAMES
+    return is_protected_output_name(Path(normalize_run_relative(raw_path)).name)
 
 
 def resolve_artifact_path(run_dir: Path, artifact_path: str) -> Path:
@@ -227,6 +246,67 @@ def preflight_is_usable(preflight: dict[str, Any]) -> tuple[bool, list[str]]:
         errors.append("preflight must require policy/certifier for status")
     if contains_final_status_value(preflight):
         errors.append("preflight report contains final status enum value")
+    return errors == [], errors
+
+
+def resolve_reported_path(raw_path: str) -> Path:
+    candidate = Path(str(raw_path))
+    if candidate.is_absolute():
+        return candidate.resolve()
+    return (ROOT / candidate).resolve()
+
+
+def planning_preflight_is_usable(
+    planning_preflight: dict[str, Any],
+    plan: dict[str, Any],
+    expected_artifacts: dict[str, Any],
+    plan_path: Path,
+    expected_artifacts_path: Path,
+) -> tuple[bool, list[str]]:
+    errors: list[str] = []
+    if planning_preflight.get("schema_version") != PLANNING_PREFLIGHT_SCHEMA_VERSION:
+        errors.append("planning preflight schema_version mismatch")
+    if planning_preflight.get("status") != PLANNING_PREFLIGHT_PASS_STATUS:
+        errors.append(f"planning preflight status is not {PLANNING_PREFLIGHT_PASS_STATUS}")
+    if planning_preflight.get("authority") != REQUIRED_AUTHORITY:
+        errors.append("planning preflight authority boundary mismatch")
+    if contains_final_status_value(planning_preflight):
+        errors.append("planning preflight report contains final status enum value")
+    runtime = planning_preflight.get("runtime_execution", {})
+    if runtime.get("goal_execution_attempted") is not False:
+        errors.append("planning preflight must not execute goals")
+    if runtime.get("plan_execution_attempted") is not False:
+        errors.append("planning preflight must not execute plans")
+    if runtime.get("guarded_execution_invoked") is not False:
+        errors.append("planning preflight must not invoke guarded execution")
+    if runtime.get("can_certify_done") is not False:
+        errors.append("planning preflight must not certify DONE")
+    execution_gate = planning_preflight.get("execution_gate", {})
+    if execution_gate.get("may_pass_plan_to_guarded_execution") is not True:
+        errors.append("planning preflight does not allow guarded execution handoff")
+    guarded_inputs = execution_gate.get("guarded_execution_inputs", {})
+    reported_plan = guarded_inputs.get("plan")
+    reported_expected = guarded_inputs.get("expected_artifacts")
+    if not isinstance(reported_plan, str) or not reported_plan.strip():
+        errors.append("planning preflight missing guarded_execution_inputs.plan")
+    elif resolve_reported_path(reported_plan) != plan_path.resolve():
+        errors.append(f"planning preflight plan path mismatch: expected {plan_path}, got {reported_plan}")
+    if not isinstance(reported_expected, str) or not reported_expected.strip():
+        errors.append("planning preflight missing guarded_execution_inputs.expected_artifacts")
+    elif resolve_reported_path(reported_expected) != expected_artifacts_path.resolve():
+        errors.append(f"planning preflight expected_artifacts path mismatch: expected {expected_artifacts_path}, got {reported_expected}")
+    generated_hashes = planning_preflight.get("generated_hashes", {})
+    if not isinstance(generated_hashes, dict):
+        errors.append("planning preflight generated_hashes must be an object")
+    else:
+        plan_hash = generated_hashes.get("plan")
+        expected_hash = generated_hashes.get("expected_artifacts")
+        actual_plan_hash = sha256_json(plan)
+        actual_expected_hash = sha256_json(expected_artifacts)
+        if plan_hash != actual_plan_hash:
+            errors.append(f"planning preflight plan hash mismatch: expected {plan_hash}, got {actual_plan_hash}")
+        if expected_hash != actual_expected_hash:
+            errors.append(f"planning preflight expected_artifacts hash mismatch: expected {expected_hash}, got {actual_expected_hash}")
     return errors == [], errors
 
 
@@ -437,6 +517,8 @@ def build_execution_report(
     expected_artifacts_path: Path,
     run_id: str,
     runtime_intent: str,
+    planning_preflight: dict[str, Any] | None = None,
+    planning_preflight_path: Path | None = None,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     run_dir = run_dir_for_id(run_id)
     preflight_ok, preflight_errors = preflight_is_usable(preflight)
@@ -447,6 +529,17 @@ def build_execution_report(
     intent_ok = intent_is_safe(runtime_intent)
     checks: list[dict[str, Any]] = []
     permissions = preflight_permissions(preflight)
+    planning_preflight_checked = planning_preflight is not None
+    if planning_preflight_checked:
+        planning_preflight_ok, planning_preflight_errors = planning_preflight_is_usable(
+            planning_preflight,
+            plan,
+            expected_artifacts,
+            plan_path,
+            expected_artifacts_path,
+        )
+    else:
+        planning_preflight_ok, planning_preflight_errors = True, []
 
     add_check(checks, "preflight_usable", preflight_ok, "Stage 3 preflight passes and preserves permissions", preflight_errors)
     add_check(
@@ -459,6 +552,14 @@ def build_execution_report(
             "may_execute_goals": permissions.get("may_execute_goals"),
         },
     )
+    if planning_preflight_checked:
+        add_check(
+            checks,
+            "planning_efficiency_v2_preflight_usable",
+            planning_preflight_ok,
+            "Planning Efficiency v2 preflight passed and its generated paths match guarded execution inputs",
+            planning_preflight_errors,
+        )
     add_check(
         checks,
         "expected_artifacts_contract_valid",
@@ -517,6 +618,7 @@ def build_execution_report(
         "run_id": run_id,
         "status": status,
         "preflight_checked": True,
+        "planning_preflight_checked": planning_preflight_checked,
         "min_actions": MIN_ACTIONS,
         "max_actions": MAX_ACTIONS,
         "action_count_planned": len(actions),
@@ -536,20 +638,24 @@ def build_execution_report(
         "requires_policy_certifier_for_status": True,
         "can_certify_done": False,
     }
+    source_reports = {
+        "stage3_runtime_preflight_report": rel_path(preflight_path),
+        "bounded_plan": rel_path(plan_path),
+        "expected_artifacts": rel_path(expected_artifacts_path),
+    }
+    if planning_preflight_path is not None:
+        source_reports["planning_efficiency_v2_preflight_report"] = rel_path(planning_preflight_path)
     report = {
         "schema_version": "guarded_execution_v2_report_v1",
         "status": status,
         "authority": REQUIRED_AUTHORITY,
         "runtime_intent": runtime_intent,
-        "source_reports": {
-            "stage3_runtime_preflight_report": rel_path(preflight_path),
-            "bounded_plan": rel_path(plan_path),
-            "expected_artifacts": rel_path(expected_artifacts_path),
-        },
+        "source_reports": source_reports,
         "criteria": checks,
         "runtime_execution": {
             "run_id": run_id,
             "preflight_checked": True,
+            "planning_preflight_checked": planning_preflight_checked,
             "min_actions": MIN_ACTIONS,
             "max_actions": MAX_ACTIONS,
             "action_count_planned": len(actions),
@@ -602,6 +708,12 @@ def validate_execution_report(report: dict[str, Any], ledger: dict[str, Any]) ->
             errors.append(f"{obj_name}.status_authority must be certifier_only")
         if obj.get("requires_policy_certifier_for_status") is not True:
             errors.append(f"{obj_name}.requires_policy_certifier_for_status must be true")
+    source_reports = report.get("source_reports", {})
+    planning_source_present = isinstance(source_reports, dict) and "planning_efficiency_v2_preflight_report" in source_reports
+    if planning_source_present and runtime_execution.get("planning_preflight_checked") is not True:
+        errors.append("runtime_execution.planning_preflight_checked must be true when a planning preflight source is recorded")
+    if runtime_execution.get("planning_preflight_checked") != ledger.get("planning_preflight_checked"):
+        errors.append("report and ledger planning_preflight_checked values must match")
     criteria = report.get("criteria")
     if not isinstance(criteria, list) or not criteria:
         errors.append("criteria must be a non-empty list")
@@ -636,7 +748,7 @@ def validate_execution_report(report: dict[str, Any], ledger: dict[str, Any]) ->
 
 def guarded_output_path(raw_path: str | None, default_path: Path) -> Path:
     path = Path(raw_path) if raw_path else default_path
-    if path.name in PROTECTED_OUTPUT_NAMES:
+    if is_protected_output_name(path.name):
         raise ValueError(f"refusing to write protected status artifact: {path}")
     return path
 
@@ -648,6 +760,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--expected-artifacts", default=str(DEFAULT_EXPECTED_ARTIFACTS))
     parser.add_argument("--run-id", default=DEFAULT_RUN_ID)
     parser.add_argument("--runtime-intent", default="bounded_plan_artifact_writes")
+    parser.add_argument("--planning-preflight-report")
     parser.add_argument("--output")
     parser.add_argument("--ledger-output")
     args = parser.parse_args(argv)
@@ -656,6 +769,8 @@ def main(argv: list[str] | None = None) -> int:
         run_dir = run_dir_for_id(args.run_id)
         report_path = guarded_output_path(args.output, run_dir / "guarded_execution_v2_report.json")
         ledger_path = guarded_output_path(args.ledger_output, run_dir / "artifacts" / DEFAULT_LEDGER_NAME)
+        planning_preflight_path = Path(args.planning_preflight_report) if args.planning_preflight_report else None
+        planning_preflight = load_required_json(planning_preflight_path, "planning preflight report") if planning_preflight_path else None
         report, ledger = build_execution_report(
             load_required_json(Path(args.preflight_report), "preflight report"),
             Path(args.preflight_report),
@@ -665,6 +780,8 @@ def main(argv: list[str] | None = None) -> int:
             Path(args.expected_artifacts),
             args.run_id,
             args.runtime_intent,
+            planning_preflight,
+            planning_preflight_path,
         )
         errors = validate_execution_report(report, ledger)
         write_json(ledger_path, ledger)

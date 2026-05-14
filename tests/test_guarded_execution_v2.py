@@ -304,6 +304,10 @@ class GuardedExecutionV2Tests(unittest.TestCase):
         self.assertNotEqual(protected_report.returncode, 0, protected_report.stdout)
         self.assertIn("refusing to write protected status artifact", protected_report.stdout)
 
+        mixed_case_report = self.run_execution("--output", str(self.tmpdir / "Final_Status.Json"))
+        self.assertNotEqual(mixed_case_report.returncode, 0, mixed_case_report.stdout)
+        self.assertIn("refusing to write protected status artifact", mixed_case_report.stdout)
+
         protected_ledger = self.run_execution("--ledger-output", str(self.tmpdir / "certification.json"))
         self.assertNotEqual(protected_ledger.returncode, 0, protected_ledger.stdout)
         self.assertIn("refusing to write protected status artifact", protected_ledger.stdout)
