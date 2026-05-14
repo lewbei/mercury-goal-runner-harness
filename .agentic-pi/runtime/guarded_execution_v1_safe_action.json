@@ -1,0 +1,7 @@
+{
+  "schema_version": "guarded_execution_action_v1",
+  "action_id": "A.WRITE_SAFE_GUARDED_EXECUTION_NOTE",
+  "action_type": "write_text_artifact",
+  "artifact_path": "artifacts/guarded_execution_v1_note.txt",
+  "content": "Guarded Execution v1 wrote one non-authority artifact after Stage 3 preflight. Policy and certifier remain responsible for status."
+}

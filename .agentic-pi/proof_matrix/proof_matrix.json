@@ -327,6 +327,14 @@
       "claim_boundary": "Guarded runtime smoke only; it does not execute goals, decide policy, certify DONE, or prove arbitrary runtime safety."
     },
     {
+      "claim_id": "guarded_execution_v1",
+      "claim": "Guarded Execution v1 permits exactly one safe non-authority artifact write after Stage 3 preflight and rejects unsafe execution shapes.",
+      "mode": "quick",
+      "command": ["python", ".agentic-pi/runtime/guarded_execution_v1.py", "--preflight-report", ".agentic-runs/proof_matrix_outputs/stage3_runtime_preflight_report_v1.json", "--action-spec", ".agentic-pi/runtime/guarded_execution_v1_safe_action.json", "--run-id", "proof_matrix_guarded_execution_v1", "--output", ".agentic-runs/proof_matrix_outputs/guarded_execution_v1_report.json"],
+      "expected_evidence": ["GUARDED_EXECUTION_V1_PASS", "one safe artifact written", "goal_execution_attempted is false", "protected_status_write_attempted is false", "can_certify_done is false"],
+      "claim_boundary": "Guarded Execution v1 proof only; it does not execute arbitrary goals, decide policy, certify DONE, or prove arbitrary runtime safety."
+    },
+    {
       "claim_id": "full_unittest",
       "claim": "The complete local unit suite passes.",
       "mode": "full",
