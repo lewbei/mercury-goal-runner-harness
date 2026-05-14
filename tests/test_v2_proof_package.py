@@ -85,6 +85,7 @@ class V2ProofPackageTests(unittest.TestCase):
             "stage3_runtime_preflight_gate",
             "guarded_runtime_smoke",
             "guarded_execution_v1",
+            "guarded_execution_v2",
             "full_unittest",
             "benchmark",
         ]:
@@ -132,6 +133,7 @@ class V2ProofPackageTests(unittest.TestCase):
         self.assertIn("stage3_runtime_preflight_gate", claim_ids)
         self.assertIn("guarded_runtime_smoke", claim_ids)
         self.assertIn("guarded_execution_v1", claim_ids)
+        self.assertIn("guarded_execution_v2", claim_ids)
         self.assertNotIn("benchmark", claim_ids)
 
     def test_quick_proof_runner_outputs_only_under_agentic_runs(self):
@@ -147,7 +149,12 @@ class V2ProofPackageTests(unittest.TestCase):
             OUTPUT_DIR / "stage3_runtime_preflight_report_v1.json",
             OUTPUT_DIR / "guarded_runtime_smoke_report_v1.json",
             OUTPUT_DIR / "guarded_execution_v1_report.json",
+            OUTPUT_DIR / "guarded_execution_v2_report.json",
+            OUTPUT_DIR / "guarded_execution_v2_ledger.json",
             ROOT / ".agentic-runs" / "proof_matrix_guarded_execution_v1" / "artifacts" / "guarded_execution_v1_note.txt",
+            ROOT / ".agentic-runs" / "proof_matrix_guarded_execution_v2" / "artifacts" / "guarded_execution_v2_summary.txt",
+            ROOT / ".agentic-runs" / "proof_matrix_guarded_execution_v2" / "artifacts" / "guarded_execution_v2_observation.txt",
+            ROOT / ".agentic-runs" / "proof_matrix_guarded_execution_v2" / "artifacts" / "guarded_execution_v2_boundary.txt",
         ]:
             self.assertTrue(path.is_file(), path)
             self.assertIn(".agentic-runs", path.as_posix())

@@ -1,0 +1,27 @@
+{
+  "schema_version": "guarded_execution_v2_plan_v1",
+  "plan_id": "guarded_execution_v2_default_plan",
+  "actions": [
+    {
+      "action_id": "A.WRITE_GE2_SUMMARY",
+      "action_type": "write_text_artifact",
+      "artifact_id": "A.GE2_SUMMARY",
+      "artifact_path": "artifacts/guarded_execution_v2_summary.txt",
+      "content": "Guarded Execution v2 wrote this bounded summary artifact after a passing preflight check."
+    },
+    {
+      "action_id": "A.WRITE_GE2_OBSERVATION",
+      "action_type": "write_text_artifact",
+      "artifact_id": "A.GE2_OBSERVATION",
+      "artifact_path": "artifacts/guarded_execution_v2_observation.txt",
+      "content": "The runtime matched this action to the declared expected artifact path before writing."
+    },
+    {
+      "action_id": "A.WRITE_GE2_BOUNDARY",
+      "action_type": "write_text_artifact",
+      "artifact_id": "A.GE2_BOUNDARY",
+      "artifact_path": "artifacts/guarded_execution_v2_boundary.txt",
+      "content": "This artifact is ordinary evidence text only and does not control policy or completion."
+    }
+  ]
+}

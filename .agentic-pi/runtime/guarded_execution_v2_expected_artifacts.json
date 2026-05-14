@@ -1,0 +1,29 @@
+{
+  "schema_version": "guarded_execution_v2_expected_artifacts_v1",
+  "artifacts": [
+    {
+      "artifact_id": "A.GE2_SUMMARY",
+      "expected_path": "artifacts/guarded_execution_v2_summary.txt",
+      "required": true,
+      "allowed_actions": ["write_text_artifact"],
+      "min_size_bytes": 20,
+      "max_size_bytes": 1000
+    },
+    {
+      "artifact_id": "A.GE2_OBSERVATION",
+      "expected_path": "artifacts/guarded_execution_v2_observation.txt",
+      "required": true,
+      "allowed_actions": ["write_text_artifact"],
+      "min_size_bytes": 20,
+      "max_size_bytes": 1000
+    },
+    {
+      "artifact_id": "A.GE2_BOUNDARY",
+      "expected_path": "artifacts/guarded_execution_v2_boundary.txt",
+      "required": true,
+      "allowed_actions": ["write_text_artifact"],
+      "min_size_bytes": 20,
+      "max_size_bytes": 1000
+    }
+  ]
+}
