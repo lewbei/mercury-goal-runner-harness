@@ -13,6 +13,9 @@
   "same_worker_as_solution": true,
   "executes_code": true,
   "assertion_count": 2,
+  "covered_criteria": [
+    "artifacts/output.txt exists."
+  ],
   "mock_ratio_percent": 0,
   "smell_flags": [],
   "authority": "advisory",

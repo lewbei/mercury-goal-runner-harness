@@ -212,8 +212,8 @@ def _run_pre_transition_gates(run_id: str, target_phase: str) -> None:
     """
     run_dir = _get_run_dir(run_id)
 
-    if target_phase == "PLANNING":
-        # Gate: plan_coverage_matrix.json must exist and be complete
+    if target_phase == "WORKTREE_READY":
+        # Gate: planning_coverage.json must exist and be complete before leaving planning.
         _gate_plan_completeness(run_dir)
     elif target_phase == "IMPLEMENTING":
         # Gate: vertical slice must be selected
@@ -224,15 +224,16 @@ def _run_pre_transition_gates(run_id: str, target_phase: str) -> None:
 
 
 def _gate_plan_completeness(run_dir: Path) -> None:
-    """Run Plan Completeness Gate. Blocks if plan is incomplete."""
+    """Run Plan Completeness Gate. Blocks if planning coverage is incomplete."""
     planning_dir = Path(__file__).resolve().parents[1] / "planning"
     gate_path = planning_dir / "plan_completeness_gate.py"
     if not gate_path.is_file():
         return
-    matrix_path = run_dir / "plan_coverage_matrix.json"
-    if not matrix_path.is_file():
+    coverage_path = run_dir / "planning_coverage.json"
+    legacy_matrix_path = run_dir / "plan_coverage_matrix.json"
+    if not coverage_path.is_file() and not legacy_matrix_path.is_file():
         raise RuntimeError(
-            "PLANNING blocked: plan_coverage_matrix.json missing in run_dir"
+            "WORKTREE_READY blocked: planning_coverage.json missing in run_dir"
         )
     import subprocess
     result = subprocess.run(
@@ -247,7 +248,7 @@ def _gate_plan_completeness(run_dir: Path) -> None:
         if not report.get("plan_complete", False):
             gaps = report.get("gaps", [])
             raise RuntimeError(
-                f"PLANNING blocked: plan incomplete. Gaps: {'; '.join(gaps[:5])}"
+                f"WORKTREE_READY blocked: plan incomplete. Gaps: {'; '.join(gaps[:5])}"
             )
 
     # Schema drift check: validate plan_graph.json format
@@ -261,7 +262,7 @@ def _gate_plan_completeness(run_dir: Path) -> None:
             if isinstance(n, dict):
                 if "node_id" not in n and "id" not in n:
                     raise RuntimeError(
-                        f"PLANNING blocked: plan_graph node missing node_id/id: {n}"
+                        f"WORKTREE_READY blocked: plan_graph node missing node_id/id: {n}"
                     )
         # Edges must have source + target (or from + to)
         for e in edges:
@@ -270,7 +271,7 @@ def _gate_plan_completeness(run_dir: Path) -> None:
                 has_v2 = "from" in e and "to" in e
                 if not has_v1 and not has_v2:
                     raise RuntimeError(
-                        f"PLANNING blocked: plan_graph edge missing source/target: {e}"
+                        f"WORKTREE_READY blocked: plan_graph edge missing source/target: {e}"
                     )
 
 

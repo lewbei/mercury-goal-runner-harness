@@ -1,0 +1,468 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AdaptiveResearchInputs",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "run_id",
+    "generated_by",
+    "generated_at",
+    "authority",
+    "determinism_boundary",
+    "collection_config",
+    "implementation_boundary",
+    "status_artifact_write_policy",
+    "source_artifacts",
+    "research_questions",
+    "findings",
+    "planning_inputs",
+    "integration_contract"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "adaptive_research_inputs_v1"
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "generated_by": {
+      "type": "string",
+      "minLength": 1
+    },
+    "generated_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authority": {
+      "type": "object",
+      "required": [
+        "authority_level",
+        "final_status_authority",
+        "can_certify_done",
+        "can_write_status_artifacts",
+        "claim_correctness",
+        "claim_exhaustive_research"
+      ],
+      "properties": {
+        "authority_level": {
+          "const": "planning_input_only"
+        },
+        "final_status_authority": {
+          "const": "certifier_only"
+        },
+        "can_certify_done": {
+          "const": false
+        },
+        "can_write_status_artifacts": {
+          "const": false
+        },
+        "claim_correctness": {
+          "const": false
+        },
+        "claim_exhaustive_research": {
+          "const": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "determinism_boundary": {
+      "type": "object",
+      "required": [
+        "adaptive_generation_may_be_nondeterministic",
+        "deterministic_validation_required",
+        "validators_must_not_fetch_network",
+        "certifier_ignores_as_authority",
+        "replay_uses_recorded_sources_only"
+      ],
+      "properties": {
+        "adaptive_generation_may_be_nondeterministic": {
+          "const": true
+        },
+        "deterministic_validation_required": {
+          "const": true
+        },
+        "validators_must_not_fetch_network": {
+          "const": true
+        },
+        "certifier_ignores_as_authority": {
+          "const": true
+        },
+        "replay_uses_recorded_sources_only": {
+          "const": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "collection_config": {
+      "type": "object",
+      "required": [
+        "mode",
+        "external_network_access_performed",
+        "llm_sampling_performed",
+        "max_research_questions",
+        "max_findings",
+        "max_planning_inputs",
+        "non_exhaustive_research_claim",
+        "future_live_research_requirements"
+      ],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "minLength": 1
+        },
+        "external_network_access_performed": {
+          "type": "boolean"
+        },
+        "llm_sampling_performed": {
+          "type": "boolean"
+        },
+        "max_research_questions": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_findings": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_planning_inputs": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "non_exhaustive_research_claim": {
+          "const": "bounded_not_exhaustive"
+        },
+        "future_live_research_requirements": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "implementation_boundary": {
+      "type": "object",
+      "required": [
+        "source_code_origin",
+        "external_sources_are_design_inputs_only",
+        "external_code_copied",
+        "external_dependencies_added"
+      ],
+      "properties": {
+        "source_code_origin": {
+          "const": "harness_native_no_vendor_copy"
+        },
+        "external_sources_are_design_inputs_only": {
+          "const": true
+        },
+        "external_code_copied": {
+          "const": false
+        },
+        "external_dependencies_added": {
+          "const": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "status_artifact_write_policy": {
+      "type": "object",
+      "required": [
+        "write_scope",
+        "forbidden_paths",
+        "attempted_status_write"
+      ],
+      "properties": {
+        "write_scope": {
+          "const": "run_local_planning_artifact_only"
+        },
+        "forbidden_paths": {
+          "type": "array",
+          "minItems": 4,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "attempted_status_write": {
+          "const": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "source_artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "required",
+          "exists"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "exists": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "research_questions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "question_id",
+          "question",
+          "rationale",
+          "status"
+        ],
+        "properties": {
+          "question_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "question": {
+            "type": "string",
+            "minLength": 1
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "findings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "finding_id",
+          "source_type",
+          "source_title",
+          "source_url",
+          "claim",
+          "planning_implication",
+          "limitations",
+          "provenance",
+          "evidence_refs",
+          "authority_impact",
+          "can_certify_done",
+          "external_source_design_only",
+          "code_copied"
+        ],
+        "properties": {
+          "finding_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_type": {
+            "type": "string",
+            "enum": [
+              "paper",
+              "repo_readme",
+              "engineering_doc",
+              "web_search_summary",
+              "human_note",
+              "model_suggestion",
+              "run_local_note"
+            ]
+          },
+          "source_title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_url": {
+            "type": "string",
+            "minLength": 1
+          },
+          "claim": {
+            "type": "string",
+            "minLength": 1
+          },
+          "planning_implication": {
+            "type": "string",
+            "minLength": 1
+          },
+          "limitations": {
+            "type": "string",
+            "minLength": 1
+          },
+          "provenance": {
+            "type": "object",
+            "required": [
+              "retrieval_method",
+              "retrieved_by",
+              "retrieved_at",
+              "content_hash",
+              "network_access",
+              "llm_sampling"
+            ],
+            "properties": {
+              "retrieval_method": {
+                "type": "string",
+                "minLength": 1
+              },
+              "retrieved_by": {
+                "type": "string",
+                "minLength": 1
+              },
+              "retrieved_at": {
+                "type": "string",
+                "minLength": 1
+              },
+              "content_hash": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              },
+              "network_access": {
+                "type": "boolean"
+              },
+              "llm_sampling": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "authority_impact": {
+            "const": "none"
+          },
+          "can_certify_done": {
+            "const": false
+          },
+          "external_source_design_only": {
+            "const": true
+          },
+          "code_copied": {
+            "const": false
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "planning_inputs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "input_id",
+          "finding_refs",
+          "applies_to",
+          "recommendation",
+          "required_verifier_followup",
+          "integration_status",
+          "authority_level",
+          "can_certify_done"
+        ],
+        "properties": {
+          "input_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "finding_refs": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "applies_to": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "recommendation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "required_verifier_followup": {
+            "type": "string",
+            "minLength": 1
+          },
+          "integration_status": {
+            "type": "string",
+            "minLength": 1
+          },
+          "authority_level": {
+            "const": "planning_only"
+          },
+          "can_certify_done": {
+            "const": false
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "integration_contract": {
+      "type": "object",
+      "required": [
+        "consumed_by",
+        "must_not_be_consumed_by",
+        "required_before_certification",
+        "authority_boundary"
+      ],
+      "properties": {
+        "consumed_by": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "must_not_be_consumed_by": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required_before_certification": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "authority_boundary": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

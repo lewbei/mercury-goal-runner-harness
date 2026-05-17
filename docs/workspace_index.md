@@ -112,7 +112,7 @@ Who is allowed to certify DONE?
 
 ## Known Cleanup Debt
 
-- Direct certifier compatibility may still emit `DONE_PASS` / `DONE_FAIL` for historical runs without `verifier_contract.json`; the current strict `full_verify.py` path requires existing proof artifacts and fails closed when they are missing.
+- Direct certifier compatibility may still emit `DONE_PASS` / `DONE_FAIL` for historical runs without `verifier_contract.json`; the current strict `full_verify.py` path requires existing planning search/coverage artifacts, proof artifacts, and verifier evidence, and fails closed when they are missing.
 - Provenance-mode runs can emit `NOT_DONE`, `PROVISIONAL_DONE`, or `CERTIFIED_DONE`.
 - The current provenance diagnostic set is intentionally four deterministic cases, not a broad benchmark.
 - The trajectory diagnostic set is intentionally six deterministic session fixtures, not a proof of full autonomous Pi runtime.

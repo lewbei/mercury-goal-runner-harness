@@ -1042,8 +1042,11 @@ def apply_memory_authority_gate(
     return current_status
 
 
-def check_validator_certification(run_dir: Path, failed: list, passed: list) -> None:
+def check_validator_certification(run_dir: Path, failed: list, passed: list, provenance_mode: bool) -> None:
     """Read validator_certification.json and block if missing or not certified."""
+    if not provenance_mode:
+        passed.append("validator_certification.json skipped for legacy non-provenance run")
+        return
     vc_path = run_dir / "validator_certification.json"
     if not vc_path.is_file():
         failed.append("validator_certification.json missing \u2014 verifier not certified")
@@ -1258,7 +1261,7 @@ def main():
             artifact_tests_present=artifact_tests_present,
         )
 
-    check_validator_certification(run_dir, failed, passed)
+    check_validator_certification(run_dir, failed, passed, provenance_mode)
 
     if provenance_mode:
         if verifier_contract:

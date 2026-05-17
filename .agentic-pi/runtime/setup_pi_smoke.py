@@ -2,6 +2,7 @@ import argparse
 import hashlib
 import json
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -10,6 +11,7 @@ CERTIFIER_OUTPUTS = [
     "final_status.md",
     "certification.json",
     "policy_decision.json",
+    "validator_certification.json",
     "verifier_smell_reports",
     "verifier_strength_reports",
 ]
@@ -93,6 +95,42 @@ def remove_certifier_outputs(target_dir: Path):
     return removed
 
 
+def prepare_validator_certification(root: Path, target_dir: Path) -> dict:
+    verifier_dir = target_dir / "verifier_artifacts"
+    verifier_artifacts = sorted(verifier_dir.glob("*.json")) if verifier_dir.is_dir() else []
+    if not verifier_artifacts:
+        return {
+            "status": "SKIP",
+            "reason": "no verifier_artifacts/*.json present",
+            "certified": False,
+        }
+
+    result = subprocess.run(
+        [sys.executable, ".agentic-pi/validators/validator_factory.py", str(target_dir)],
+        cwd=root,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+    )
+    certification_path = target_dir / "validator_certification.json"
+    certified = False
+    reasons = []
+    if certification_path.is_file():
+        data = json.loads(certification_path.read_text(encoding="utf-8-sig"))
+        certified = data.get("certified") is True
+        reasons = data.get("reasons", [])
+    return {
+        "status": "PASS" if result.returncode == 0 and certification_path.is_file() else "FAIL",
+        "exit_code": result.returncode,
+        "certified": certified,
+        "reasons": reasons,
+        "path": str(certification_path),
+        "stdout_tail": "\n".join((result.stdout or "").splitlines()[-8:]),
+    }
+
+
 def setup_pi_smoke(source_dir: Path, target_run_id: str, clean: bool = False):
     root = repo_root()
     run_root = root / ".agentic-runs"
@@ -115,6 +153,7 @@ def setup_pi_smoke(source_dir: Path, target_run_id: str, clean: bool = False):
     source_run_id = source_goal["run_id"]
     rewrite_run_ids(target_dir, source_run_id, target_run_id)
     removed = remove_certifier_outputs(target_dir)
+    validator_report = prepare_validator_certification(root, target_dir)
 
     after_hashes = snapshot_source(source_dir)
     source_unchanged = before_hashes == after_hashes
@@ -130,6 +169,7 @@ def setup_pi_smoke(source_dir: Path, target_run_id: str, clean: bool = False):
         "removed_certifier_outputs": removed,
         "source_file_count": len(before_hashes),
         "source_unchanged": source_unchanged,
+        "validator_certification": validator_report,
         "next_certifier_command": f"python .agentic-pi/validators/certify_run.py .agentic-runs/{target_run_id}",
     }
     return report

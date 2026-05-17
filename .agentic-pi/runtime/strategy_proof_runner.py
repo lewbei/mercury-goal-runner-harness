@@ -89,6 +89,7 @@ def run_strategy_proof(run_id: str) -> dict:
         ([".agentic-pi/runtime/guarded_worker.py", "--run-id", run_id], "guarded worker executed selected strategy"),
         ([".agentic-pi/runtime/artifact_linker.py", run_id], "artifact_registry.json built"),
         ([".agentic-pi/runtime/task_graph_builder.py", run_id], "task_graph.json built"),
+        ([".agentic-pi/validators/validator_factory.py", str(run_dir)], "validator_certification.json built"),
         ([".agentic-pi/validators/certify_run.py", str(run_dir)], "certifier decided final status"),
     ]:
         run_tool(args)

@@ -1,0 +1,68 @@
+{
+  "schema_version": "artifact_placement_policy_v1",
+  "description": "Policy rules for artifact placement. The harness enforces these during artifact location validation.",
+  "rules": [
+    {
+      "id": "expected_path_required",
+      "description": "Every expected artifact must be written to its declared expected_path. An artifact found at a different path is a misplacement.",
+      "severity": "BLOCKED",
+      "enforced": true
+    },
+    {
+      "id": "no_fallback_artifacts",
+      "description": "If an expected artifact declares a path, a sibling artifact with a similar basename at the run root does not satisfy the contract. E.g., expected artifacts/report.json cannot be satisfied by report.json.",
+      "severity": "WARNING",
+      "enforced": true
+    },
+    {
+      "id": "no_orphan_authority_artifacts",
+      "description": "Agents may not write final_status.json, certification.json, policy_decision.json, replay_report.json, or evidence_freeze.json regardless of path.",
+      "severity": "FAILED_AUTHORITY_VIOLATION",
+      "enforced": true,
+      "protected_names": [
+        "final_status.json",
+        "certification.json",
+        "policy_decision.json",
+        "replay_report.json",
+        "evidence_freeze.json",
+        "run_state.json",
+        "phase_queue.json",
+        "dispatch_log.jsonl"
+      ]
+    },
+    {
+      "id": "required_artifacts_must_be_present",
+      "description": "If an artifact is marked required=true in expected_artifacts.json and is missing from the filesystem, the run is NOT_DONE.",
+      "severity": "NOT_DONE",
+      "enforced": true
+    },
+    {
+      "id": "forbidden_writers_enforced",
+      "description": "If a forbidden_writers list is specified for an artifact, and a writer matching that role attempts to create it, the attempt must be blocked.",
+      "severity": "FAILED_AUTHORITY_VIOLATION",
+      "enforced": true
+    },
+    {
+      "id": "extra_unexpected_artifacts",
+      "description": "Artifacts found on disk that are not in expected_artifacts.json are logged as warnings but do not block the run.",
+      "severity": "WARNING",
+      "enforced": false
+    }
+  ],
+  "default_path_conventions": {
+    "question_contract": "artifacts/question_contract.json",
+    "research_pack": "artifacts/research_pack.md",
+    "design_options": "artifacts/design_options.json",
+    "structure_outline": "artifacts/structure_outline.json",
+    "plan_graph": "artifacts/plan_graph.json",
+    "workspace_manifest": "artifacts/workspace_manifest.json",
+    "verifier_artifact": "artifacts/verifier_artifacts/",
+    "certification": "certification.json",
+    "policy_decision": "policy_decision.json",
+    "final_status": "final_status.json",
+    "final_status_md": "final_status.md",
+    "evidence_freeze": "evidence_freeze.json",
+    "evidence_index": "evidence_index.json"
+  },
+  "updated_at": "2026-05-08T00:00:00Z"
+}

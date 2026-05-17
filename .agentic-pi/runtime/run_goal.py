@@ -113,11 +113,14 @@ def _run_tool(rk, run_id, tool_name, cmd_args, cwd=None, skill_context_path=None
         raise
 
 
-def _run_full_verification(run_dir: Path, run_id: str) -> str:
+def _run_full_verification(run_dir: Path, run_id: str, *, skip_memory_consolidation: bool = False) -> str:
     """Run all deterministic framework layers: artifact routing, provenance,
     policy engine, evidence indexing, replay, then certifier."""
+    command = [sys.executable, ".agentic-pi/runtime/full_verify.py", str(run_dir)]
+    if skip_memory_consolidation:
+        command.append("--skip-memory-consolidation")
     result = subprocess.run(
-        [sys.executable, ".agentic-pi/runtime/full_verify.py", str(run_dir)],
+        command,
         cwd=BASE_DIR, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
     )
     print(result.stdout or "")
@@ -133,6 +136,25 @@ def _run_full_verification(run_dir: Path, run_id: str) -> str:
         cert_data = json.loads(cert_path.read_text(encoding="utf-8"))
         return cert_data.get("status", "DONE_FAIL")
     return "DONE_FAIL"
+
+
+def _run_direct_certifier(run_dir: Path) -> tuple[int, str]:
+    result = subprocess.run(
+        [sys.executable, ".agentic-pi/validators/certify_run.py", str(run_dir)],
+        cwd=BASE_DIR,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+    )
+    output = result.stdout or ""
+    print(output[:500] if len(output) > 500 else output)
+    cert_path = run_dir / "certification.json"
+    if cert_path.is_file():
+        cert = json.loads(cert_path.read_text(encoding="utf-8-sig"))
+        return result.returncode, cert.get("status", "DONE_FAIL")
+    return result.returncode, "DONE_FAIL"
 
 
 def _normalize_for_certifier(run_dir: Path, run_id: str):
@@ -284,44 +306,19 @@ def main():
     if planning_skills:
         print(f"  QRSPI skills active: {', '.join(planning_skills)}")
 
-    # 1. Generate plans (router)
-    print("Running plan_router...")
+    # 1. Build strict run-folder planning artifacts. The legacy plan_router path
+    # requires pre-existing plans/*_plan.json and intentionally does not create
+    # substitute plans. roadmap_planner.py is the current strict prepared-run
+    # planner: it writes adaptive_research_inputs.json,
+    # planning_search_tree.json, planning_coverage.json, expected_artifacts.json,
+    # selected_plan.json, merged_plan.json, and
+    # plan_graph.json without executing workers or certifying DONE.
+    print("Running roadmap_planner...")
     try:
-        _run_tool(rk, args.run_id, "plan_router",
-                  ["python", ".agentic-pi/runtime/plan_router.py", "--run-id", args.run_id],
-                  skill_context_path=planning_ctx)
+        _run_tool(rk, args.run_id, "roadmap_planner",
+                  ["python", ".agentic-pi/runtime/roadmap_planner.py", "--run-id", args.run_id])
     except RuntimeError as e:
-        print(f"  plan_router failed: {e}")
-        return 1
-
-    # 2. Select best plan
-    print("Running plan_selector...")
-    try:
-        _run_tool(rk, args.run_id, "plan_selector",
-                  ["python", ".agentic-pi/runtime/plan_selector.py", "--run-id", args.run_id],
-                  skill_context_path=planning_ctx)
-    except RuntimeError as e:
-        print(f"  plan_selector failed: {e}")
-        return 1
-
-    # 3. Merge selected plan
-    print("Running plan_merger...")
-    try:
-        _run_tool(rk, args.run_id, "plan_merger",
-                  ["python", ".agentic-pi/runtime/plan_merger.py", "--run-id", args.run_id],
-                  skill_context_path=planning_ctx)
-    except RuntimeError as e:
-        print(f"  plan_merger failed: {e}")
-        return 1
-
-    # 4. Build PlanGraph
-    print("Running plan_graph_builder...")
-    try:
-        _run_tool(rk, args.run_id, "plan_graph_builder",
-                  ["python", ".agentic-pi/runtime/plan_graph_builder.py", args.run_id],
-                  skill_context_path=planning_ctx)
-    except RuntimeError as e:
-        print(f"  plan_graph_builder failed: {e}")
+        print(f"  roadmap_planner failed: {e}")
         return 1
 
     # ── Phase: IMPLEMENTING ───────────────────────────────────────────────
@@ -341,13 +338,8 @@ def main():
         print(f"  guarded_worker failed: {e}")
         return 1
 
-    # ── Phase: Post-implementation (EVIDENCE_INDEXING) ────────────────────
+    # ── Phase: Post-implementation setup ─────────────────────────────────
     _maybe_transition(rk, args.run_id, "VALIDATOR_BUILDING")
-    _maybe_transition(rk, args.run_id, "VALIDATING")
-    validating_skills, validating_ctx = _inject_skill_context(run_dir, "VALIDATING")
-    if validating_skills:
-        print(f"  QRSPI skills active: {', '.join(validating_skills)}")
-    _maybe_transition(rk, args.run_id, "EVIDENCE_INDEXING")
 
     # 6. Build post-worker views
     print("Running artifact_linker...")
@@ -366,16 +358,46 @@ def main():
         print(f"  task_graph_builder failed: {e}")
         return 1
 
-    # ── Phase: POLICY / REPLAY / CERTIFYING ─────────────────────────────
-    _maybe_transition(rk, args.run_id, "POLICY_DECIDING")
-    _maybe_transition(rk, args.run_id, "REPLAYING")
+    provenance_mode = (run_dir / "verifier_contract.json").is_file()
+    if provenance_mode:
+        print("Running validator_factory...")
+        try:
+            _run_tool(rk, args.run_id, "validator_factory",
+                      ["python", ".agentic-pi/validators/validator_factory.py", str(run_dir)])
+        except RuntimeError as e:
+            print(f"  validator_factory failed: {e}")
+            print("Running certifier to write fail-closed status artifacts...")
+            _, status = _run_direct_certifier(run_dir)
+            return 0 if status in {"DONE_PASS", "CERTIFIED_DONE", "PROVISIONAL_DONE"} else 1
+    else:
+        print("Skipping validator_factory for legacy non-provenance run.")
 
+    print("Running audit_run...")
+    try:
+        _run_tool(rk, args.run_id, "audit_run",
+                  ["python", ".agentic-pi/runtime/audit_run.py", str(run_dir)])
+    except RuntimeError as e:
+        print(f"  audit_run failed: {e}")
+        return 1
+
+    _maybe_transition(rk, args.run_id, "VALIDATING")
+    validating_skills, validating_ctx = _inject_skill_context(run_dir, "VALIDATING")
+    if validating_skills:
+        print(f"  QRSPI skills active: {', '.join(validating_skills)}")
+    _maybe_transition(rk, args.run_id, "EVIDENCE_INDEXING")
+
+    # ── Phase: POLICY / REPLAY / CERTIFYING ─────────────────────────────
     # Strict mode does not synthesize expected_artifacts.json before certifying.
     ea_path = run_dir / "expected_artifacts.json"
     outputs = contract.get("final_outputs", [])
     if outputs and not ea_path.exists():
         print("  expected_artifacts.json missing; strict mode will not synthesize artifact contracts")
         return 1
+
+    if not provenance_mode:
+        print("Running legacy certifier compatibility path...")
+        _, status = _run_direct_certifier(run_dir)
+        return 0 if status == "DONE_PASS" else 1
 
     # ── 7. Full verification pipeline ───────────────────────────
     _maybe_transition(rk, args.run_id, "POLICY_DECIDING")
@@ -385,7 +407,11 @@ def main():
     if cert_skills:
         print(f"  QRSPI skills active: {', '.join(cert_skills)}")
     print("Running full verification (artifact routing + provenance + policy + replay + certifier)...")
-    verification_status = _run_full_verification(run_dir, args.run_id)
+    verification_status = _run_full_verification(
+        run_dir,
+        args.run_id,
+        skip_memory_consolidation=args.skip_memory_update,
+    )
 
     # ── Phase: REPORTING / MEMORY ─────────────────────────────────────────
     _maybe_transition(rk, args.run_id, "REPORTING")

@@ -120,6 +120,10 @@ def verifier_artifact(run_id: str) -> dict:
         "same_worker_as_solution": False,
         "executes_code": True,
         "assertion_count": 2,
+        "covered_criteria": [
+            "README.md exists.",
+            "README.md contains the word 'harness'.",
+        ],
         "mock_ratio_percent": 0,
         "smell_flags": [],
         "authority": "certifying",
@@ -170,7 +174,7 @@ def main(argv=None) -> int:
     parser.add_argument("--goal", required=True)
     parser.add_argument(
         "--mode",
-        choices=["p2", "missing_verifier", "planning_p2"],
+        choices=["legacy", "p2", "missing_verifier", "planning_p2"],
         default="p2",
         help="strict raw-goal proof fixture mode",
     )

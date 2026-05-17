@@ -66,6 +66,43 @@ class SupervisedRunTests(unittest.TestCase):
         }
         (run_dir / "goal_contract.json").write_text(
             json.dumps(goal, indent=2), encoding="utf-8")
+        required_phases = [
+            "Question",
+            "Research",
+            "Design",
+            "Structure",
+            "PlanGraph",
+            "Implement",
+            "Verify",
+            "Policy",
+            "Replay",
+            "Certify",
+            "Report",
+            "Memory",
+        ]
+        coverage = {
+            "dimensions": [
+                {
+                    "name": phase,
+                    "covered": True,
+                    "task": f"{phase} task",
+                    "artifact": f"artifacts/{phase.lower()}_artifact.json",
+                    "validator": "deterministic_validator",
+                    "verifier": "independent_verifier",
+                    "authority": "P2",
+                    "status": "COVERED",
+                }
+                for phase in required_phases
+            ],
+            "success_criteria": [
+                {
+                    "criterion": "Create a test file",
+                    "validator": "deterministic_validator",
+                }
+            ],
+        }
+        (run_dir / "plan_coverage_matrix.json").write_text(
+            json.dumps(coverage, indent=2), encoding="utf-8")
 
         return run_dir
 

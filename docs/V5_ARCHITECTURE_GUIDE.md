@@ -43,7 +43,7 @@ on top of v3.7 MemPalace + ACE Memory Governance.
 **PROJECT_STATUS.md** is the source of truth for version. The `workspace_index.md`
 cross-references it. Keep these in sync — the plan should not lag behind.
 
-Current local cleanup note: default runtime scripts are being strictified to fail closed. `full_verify.py` requires existing proof artifacts, `plan_router.py` requires existing planner-owned `plans/*_plan.json`, `plan_merger.py` writes `merged_plan.json` from `selected_plan.json`, and workers must not create fallback artifacts.
+Current local cleanup note: default runtime scripts are being strictified to fail closed. `full_verify.py` requires existing planning search/coverage artifacts, proof artifacts, and verifier evidence, and validates adaptive research inputs when present; `adaptive_research_inputs.py` records non-deterministic/autoresearch findings as optional planning-only provenance; `plan_router.py` requires existing planner-owned `plans/*_plan.json`; `plan_merger.py` writes `merged_plan.json` from `selected_plan.json`; and workers must not create fallback artifacts.
 
 ---
 

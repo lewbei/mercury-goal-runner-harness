@@ -1,8 +1,10 @@
 #!/usr/bin/env python
-"""Plan Completeness Gate
+"""Plan Completeness Gate.
 
-Validates a macro‑plan coverage matrix against the required checks and writes a
-`plan_completeness_report.json` file.
+Validates the current run-local planning coverage artifact and writes a
+`plan_completeness_report.json` file. The current strict artifact is
+`planning_coverage.json`; the older `plan_coverage_matrix.json` format remains
+accepted only as a legacy fallback.
 """
 
 import json
@@ -106,6 +108,66 @@ def compute_score(dimensions: List[Dict]) -> float:
     covered = sum(1 for d in dimensions if d.get("covered"))
     return covered / total
 
+
+def validate_planning_coverage(data: Dict) -> List[str]:
+    """Validate the current planning_coverage.json gate semantics.
+
+    This is intentionally a planning gate, not certification. The stronger
+    schema/semantic validator still lives in
+    `.agentic-pi/validators/validate_planning_coverage.py`; this gate only
+    checks that the run cannot leave planning with missing, failing, or
+    authority-claiming coverage.
+    """
+    gaps: List[str] = []
+    if data.get("schema_version") != "planning_coverage_v1":
+        gaps.append("planning_coverage.json schema_version must be planning_coverage_v1")
+
+    authority = data.get("authority", {})
+    if authority.get("can_certify_done") is not False:
+        gaps.append("planning coverage must not certify DONE")
+    if authority.get("claim_exhaustive_planning") is not False:
+        gaps.append("planning coverage must not claim exhaustive planning")
+    if authority.get("claim_correctness") is not False:
+        gaps.append("planning coverage must not claim correctness")
+    if authority.get("final_status_authority") != "certifier_only":
+        gaps.append("planning coverage final status authority must be certifier_only")
+
+    proof_boundary = data.get("proof_boundary", {})
+    if proof_boundary.get("proves_all_possible_plans") is not False:
+        gaps.append("planning coverage must not prove all possible plans")
+    if proof_boundary.get("proves_artifact_correctness") is not False:
+        gaps.append("planning coverage must not prove artifact correctness")
+    for required_gate in ["requires_worker_execution", "requires_verifier_artifacts", "requires_policy_engine", "requires_certifier"]:
+        if proof_boundary.get(required_gate) is not True:
+            gaps.append(f"planning coverage proof boundary must require {required_gate}")
+
+    search_budget = data.get("search_budget", {})
+    if search_budget.get("search_completeness_claim") != "bounded_not_exhaustive":
+        gaps.append("planning coverage must claim bounded_not_exhaustive search")
+
+    alternatives = data.get("alternatives_considered", [])
+    if not alternatives:
+        gaps.append("planning coverage must record alternatives_considered")
+    elif not any(item.get("status") == "selected" for item in alternatives if isinstance(item, dict)):
+        gaps.append("planning coverage must record one selected alternative")
+
+    checks = data.get("coverage_checks", [])
+    if not checks:
+        gaps.append("planning coverage must record coverage_checks")
+    failing = [item.get("check_id", "<unknown>") for item in checks if isinstance(item, dict) and item.get("status") == "FAIL"]
+    if failing:
+        gaps.append(f"planning coverage checks failed: {', '.join(failing[:5])}")
+
+    verification = data.get("verification_strategy", {})
+    if not verification.get("verifier_requirements"):
+        gaps.append("planning coverage must record verifier requirements")
+    boundary = verification.get("policy_boundary", "")
+    if "policy_engine.py" not in boundary and "certify_run.py" not in boundary:
+        gaps.append("planning coverage must hand off to policy_engine.py or certify_run.py")
+
+    return gaps
+
+
 # ---------------------------------------------------------------------------
 # Main routine
 # ---------------------------------------------------------------------------
@@ -118,10 +180,30 @@ def main(argv: list = None) -> None:
         base_dir = os.path.abspath(argv[1])
     else:
         base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".agentic-runs", "plangate"))
-    coverage_path = os.path.join(base_dir, "plan_coverage_matrix.json")
+    coverage_path = os.path.join(base_dir, "planning_coverage.json")
+    legacy_coverage_path = os.path.join(base_dir, "plan_coverage_matrix.json")
     report_path = os.path.join(base_dir, "plan_completeness_report.json")
 
-    # Load the coverage matrix
+    if os.path.exists(coverage_path):
+        data = load_json(coverage_path)
+        gaps = validate_planning_coverage(data)
+        plan_complete = not gaps
+        report = {
+            "plan_complete": plan_complete,
+            "score": 1.0 if plan_complete else 0.0,
+            "gaps": gaps,
+            "covered_dimensions": len(data.get("coverage_checks", [])),
+            "source_artifact": "planning_coverage.json",
+        }
+        with open(report_path, "w", encoding="utf-8") as f:
+            json.dump(report, f, indent=2)
+        print(f"Plan completeness report written to {report_path}")
+        return
+
+    # Legacy fallback for pre-strict fixtures.
+    coverage_path = legacy_coverage_path
+
+    # Load the legacy coverage matrix
     data = load_json(coverage_path)
     dimensions = data.get("dimensions", [])
     success_criteria = data.get("success_criteria", [])
@@ -148,7 +230,8 @@ def main(argv: list = None) -> None:
         "plan_complete": plan_complete,
         "score": round(score, 2),
         "gaps": gaps,
-        "covered_dimensions": len(dimensions)
+        "covered_dimensions": len(dimensions),
+        "source_artifact": "plan_coverage_matrix.json"
     }
     with open(report_path, "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2)

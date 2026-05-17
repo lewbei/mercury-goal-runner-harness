@@ -20,7 +20,21 @@ from typing import Optional
 
 
 _RUNTIME_DIR = Path(__file__).resolve().parent
-_SKILLS_DIR = _RUNTIME_DIR.parent / "skills"
+_ROOT_DIR = _RUNTIME_DIR.parents[1]
+
+
+def _default_skills_dir() -> Path:
+    for candidate in (
+        _ROOT_DIR / ".pi" / "skills",
+        _ROOT_DIR / "skills",
+        _RUNTIME_DIR.parent / "skills",
+    ):
+        if candidate.is_dir():
+            return candidate
+    return _RUNTIME_DIR.parent / "skills"
+
+
+_SKILLS_DIR = _default_skills_dir()
 _PHASE_REGISTRY_PATH = _RUNTIME_DIR.parent / "run_kernel" / "phase_registry.json"
 
 
@@ -55,6 +69,7 @@ PHASE_SKILL_MAP: dict[str, list[str]] = {
     "BLOCKED_BY_EVIDENCE_GAP":         [],
     "BLOCKED_BY_REPLAY_MISMATCH":      [],
     "BLOCKED_BY_AUTHORITY_VIOLATION":  [],
+    "BLOCKED_BY_CHECK_FAILURE":         [],
     "REPAIRING_PLAN":                   ["harness-repair"],
     "REPAIRING_ARTIFACT_ROUTING":       ["harness-repair"],
     "REPAIRING_VALIDATOR":              ["harness-repair"],

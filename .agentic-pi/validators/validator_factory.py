@@ -178,6 +178,28 @@ def write_certification(run_dir: Path, certified: bool, reasons: list) -> None:
 # Entry point
 # ----------------------------------------------------------------------
 
+
+def load_verifier_artifact_for_run(run_dir: Path) -> dict:
+    """Load the verifier artifact to certify without fabricating one.
+
+    Prefer the historical verifier.json path. If it is absent, accept exactly
+    one existing verifier_artifacts/*.json file. Multiple artifacts require an
+    explicit verifier.json to avoid silently certifying the wrong verifier.
+    """
+    verifier_dir = run_dir / "verifier_artifacts"
+    verifier_path = verifier_dir / "verifier.json"
+    if verifier_path.is_file():
+        return load_json(verifier_path)
+
+    artifact_paths = sorted(verifier_dir.glob("*.json")) if verifier_dir.is_dir() else []
+    if not artifact_paths:
+        raise FileNotFoundError(f"No verifier artifacts found in {verifier_dir}")
+    if len(artifact_paths) != 1:
+        names = ", ".join(path.name for path in artifact_paths)
+        raise ValueError(f"Multiple verifier artifacts found; create verifier.json to choose one: {names}")
+    return load_json(artifact_paths[0])
+
+
 #@ Requires(lambda a: isinstance(a, list), "argv must be a list of strings")
 #@ Ensures(lambda _: True, "no return value")
 def main(argv: list) -> None:
@@ -204,9 +226,9 @@ def main(argv: list) -> None:
     goal_contract = load_json(goal_path)
     done_criteria = extract_done_criteria(goal_contract)
 
-    # Load verifier artifact (assumed to be at run_dir/verifier_artifacts/verifier.json)
-    verifier_path = run_dir / "verifier_artifacts" / "verifier.json"
-    verifier_artifact = load_json(verifier_path)
+    # Load an existing verifier artifact. This certifies verifier quality only;
+    # it does not create verifier evidence or final status artifacts.
+    verifier_artifact = load_verifier_artifact_for_run(run_dir)
 
     # 1. Strength score > 0.5
     strength_score = compute_strength_score(verifier_artifact)

@@ -233,7 +233,7 @@ The new v0.3 PlanGraph proof is:
 planned tasks produce named artifacts, downstream tasks require exact artifact IDs, and certification validates those artifact links.
 ```
 
-The first verifier-provenance runtime gate is implemented. Direct certifier compatibility can still preserve historical `DONE_PASS` / `DONE_FAIL` behavior for runs without `verifier_contract.json`, but the current strict `full_verify.py` path requires existing proof artifacts and fails closed instead of synthesizing missing plans or verifier contracts.
+The first verifier-provenance runtime gate is implemented. Direct certifier compatibility can still preserve historical `DONE_PASS` / `DONE_FAIL` behavior for runs without `verifier_contract.json`, but the current strict `full_verify.py` path requires existing planning search/coverage artifacts, proof artifacts, and verifier evidence, validates adaptive research inputs when present, then fails closed instead of synthesizing missing plans or verifier contracts.
 
 The v0.3.3 diagnostic slice verifies this behavior using deterministic fixtures only. It is not a broad benchmark.
 

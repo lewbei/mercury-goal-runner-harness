@@ -721,6 +721,46 @@ class TestIntegrationScenarios(unittest.TestCase):
         """Multiple work packets in one phase."""
         run_id = "test_multi_packet"
         self.rk.create_run(run_id)
+        run_dir = self.rk.get_run_dir(run_id)
+        (run_dir / "planning_coverage.json").write_text(json.dumps({
+            "schema_version": "planning_coverage_v1",
+            "authority": {
+                "final_status_authority": "certifier_only",
+                "can_certify_done": False,
+                "claim_exhaustive_planning": False,
+                "claim_correctness": False,
+            },
+            "proof_boundary": {
+                "proves_all_possible_plans": False,
+                "proves_artifact_correctness": False,
+                "requires_worker_execution": True,
+                "requires_verifier_artifacts": True,
+                "requires_policy_engine": True,
+                "requires_certifier": True,
+            },
+            "search_budget": {"search_completeness_claim": "bounded_not_exhaustive"},
+            "alternatives_considered": [{"option_id": "S.TEST", "status": "selected"}],
+            "coverage_checks": [{"check_id": "C.TEST", "status": "PASS"}],
+            "verification_strategy": {
+                "verifier_requirements": ["test verifier evidence"],
+                "policy_boundary": "policy_engine.py and certify_run.py own final status.",
+            },
+        }), encoding="utf-8")
+        (run_dir / "macro_plan.json").write_text(json.dumps({"plan_id": "test"}), encoding="utf-8")
+        (run_dir / "vertical_slice_candidates.json").write_text(json.dumps({
+            "candidates": [{
+                "slice_id": "VS.TEST",
+                "fixture": "fixtures/test.json",
+                "expected_verdict": "PASS",
+                "end_to_end_layers": ["plan", "execute", "verify"],
+                "end_to_end_coverage": 3,
+                "fake_done_risk": 1,
+                "authority_boundary_value": 10,
+                "validator_availability": 10,
+                "low_implementation_cost": 10,
+                "replay_certification_impact": 10,
+            }]
+        }), encoding="utf-8")
         # Must go through chain to reach IMPLEMENTING
         for phase in ["INTAKE", "QUESTIONING", "RESEARCHING", "DESIGNING",
                       "STRUCTURING", "PLANNING", "WORKTREE_READY"]:

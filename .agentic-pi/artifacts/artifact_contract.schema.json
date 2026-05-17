@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "artifact_contract_v1",
+  "description": "A per-packet artifact contract binding a work packet to its expected output artifact. The contract is created by the artifact routing layer before dispatch and checked after result receipt.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "contract_id",
+    "work_packet_id",
+    "artifact_id",
+    "expected_path",
+    "allowed_writers",
+    "forbidden_writers",
+    "min_satisfaction"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["artifact_contract_v1"]
+    },
+    "contract_id": { "type": "string" },
+    "work_packet_id": { "type": "string" },
+    "artifact_id": { "type": "string" },
+    "expected_path": { "type": "string" },
+    "description": { "type": "string" },
+    "allowed_writers": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "forbidden_writers": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "min_satisfaction": {
+      "type": "object",
+      "properties": {
+        "file_exists": { "type": "boolean" },
+        "min_size_bytes": { "type": "integer", "minimum": 0 },
+        "must_be_valid_json": { "type": "boolean" },
+        "must_be_valid_yaml": { "type": "boolean" },
+        "must_not_be_empty": { "type": "boolean" },
+        "custom_check_command": { "type": "string" }
+      }
+    },
+    "success_criteria": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "created_at": { "type": "string" },
+    "updated_at": { "type": "string" }
+  },
+  "additionalProperties": false
+}

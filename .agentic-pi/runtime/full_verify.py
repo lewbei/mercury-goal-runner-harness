@@ -4,10 +4,12 @@
 Usage:
   python .agentic-pi/runtime/full_verify.py .agentic-runs/<run_id>
 
-This strict path never synthesizes missing proof artifacts. Plan artifacts, expected_artifacts.json, verifier_contract.json, and
-verifier_artifacts/ must already exist before this runner starts. Missing
-prerequisites produce NOT_DONE instead of fabricated contracts or generated
-compatibility plans.
+This strict path never synthesizes missing proof artifacts. Planning search,
+planning coverage, plan artifacts, expected_artifacts.json,
+verifier_contract.json, and verifier_artifacts/ must already exist before this
+runner starts. If adaptive_research_inputs.json exists, it is validated as an
+optional planning-only input. Missing prerequisites produce NOT_DONE instead of
+fabricated contracts or generated compatibility plans.
 """
 
 import json
@@ -42,7 +44,7 @@ def run_tool(tool_path: str, args: list[str], label: str) -> bool:
         return False
 
 
-def verify(run_dir: Path) -> str:
+def verify(run_dir: Path, *, skip_memory_consolidation: bool = False) -> str:
     run_id = run_dir.name
     print(f"\n{'='*60}")
     print(f"FULL VERIFICATION: {run_id}")
@@ -54,6 +56,17 @@ def verify(run_dir: Path) -> str:
         return "NOT_DONE"
 
     deterministic_layers_ok = True
+
+    # Layer 0A: Planning search/coverage gates. These are not certifiers, but
+    # full verification requires valid planning evidence before policy/certifier
+    # status can be considered.
+    print("\n[Layer 0A] Planning search and coverage gates")
+    if (run_dir / "adaptive_research_inputs.json").is_file():
+        deterministic_layers_ok &= run_tool(f"{VALIDATORS}/validate_adaptive_research_inputs.py", [str(run_dir)], "validate_adaptive_research_inputs")
+    else:
+        print("  [validate_adaptive_research_inputs] SKIP (optional planning input absent)")
+    deterministic_layers_ok &= run_tool(f"{VALIDATORS}/validate_planning_search_tree.py", [str(run_dir)], "validate_planning_search_tree")
+    deterministic_layers_ok &= run_tool(f"{VALIDATORS}/validate_planning_coverage.py", [str(run_dir)], "validate_planning_coverage")
 
     # Layer 1: Artifact routing
     print("\n[Layer 1] Artifact routing")
@@ -94,7 +107,9 @@ def verify(run_dir: Path) -> str:
 
     # Layer 7: Memory (advisory only; never certifies)
     print("\n[Layer 7] Memory consolidation")
-    if not _run_memory_consolidation(run_dir, run_id):
+    if skip_memory_consolidation:
+        print("  skipped by caller; certifier-owned status is unchanged")
+    elif not _run_memory_consolidation(run_dir, run_id):
         print("  memory consolidation incomplete; certifier-owned status is unchanged")
 
     # Read final status
@@ -114,6 +129,8 @@ def _require_preexisting_proof_artifacts(run_dir: Path) -> bool:
     """
     required_files = [
         "goal_contract.json",
+        "planning_search_tree.json",
+        "planning_coverage.json",
         "plan_graph.json",
         "merged_plan.json",
         "selected_plan.json",
@@ -261,10 +278,17 @@ def _run_memory_consolidation(run_dir: Path, run_id: str) -> bool:
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python full_verify.py .agentic-runs/<run_id>")
-        sys.exit(2)
-    run_dir = Path(sys.argv[1])
-    status = verify(run_dir)
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Strict verification pipeline for prepared run folders")
+    parser.add_argument("run_dir", help=".agentic-runs/<run_id> folder")
+    parser.add_argument(
+        "--skip-memory-consolidation",
+        action="store_true",
+        help="Skip advisory memory consolidation; certifier-owned status is unchanged",
+    )
+    args = parser.parse_args()
+    run_dir = Path(args.run_dir)
+    status = verify(run_dir, skip_memory_consolidation=args.skip_memory_consolidation)
     print(f"\nFINAL: {status}")
     sys.exit(0 if status in ("DONE_PASS", "CERTIFIED_DONE", "PROVISIONAL_DONE") else 1)

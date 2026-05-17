@@ -218,6 +218,13 @@
       "is_repair": false
     },
     {
+      "phase": "BLOCKED_BY_CHECK_FAILURE",
+      "display_name": "Blocked: Check Failure",
+      "description": "A deterministic check failed before the run could continue.",
+      "is_blocked": true,
+      "is_repair": false
+    },
+    {
       "phase": "REPAIRING_PLAN",
       "display_name": "Repairing: Plan",
       "description": "Repairing plan or criteria issues.",

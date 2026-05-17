@@ -44,12 +44,25 @@ def run_dir_for(run_id: str) -> Path:
     return RUN_ROOT / require_run_id(run_id)
 
 
+def write_stdout_lossy(text: str) -> None:
+    """Write gateway output without letting console encoding hide tool results."""
+    if not text:
+        return
+    try:
+        sys.stdout.write(text)
+    except UnicodeEncodeError:
+        encoding = sys.stdout.encoding or "utf-8"
+        safe_text = text.encode(encoding, errors="replace").decode(encoding, errors="replace")
+        sys.stdout.write(safe_text)
+    sys.stdout.flush()
+
+
 def run_cmd(args: list[str], run_id: str | None = None) -> int:
     """Run a subprocess command, routed through gateway dispatch when possible."""
     if run_id:
         gw = _load_gateway()
         exit_code, stdout = gw.dispatch(args, run_id)
-        print(stdout, end="")
+        write_stdout_lossy(stdout)
         return exit_code
     # Fallback: direct execution (for commands without a run_id)
     result = subprocess.run(
@@ -59,7 +72,7 @@ def run_cmd(args: list[str], run_id: str | None = None) -> int:
         stderr=subprocess.STDOUT,
         text=True,
     )
-    print(result.stdout, end="")
+    write_stdout_lossy(result.stdout)
     return result.returncode
 
 
@@ -209,7 +222,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_compile.add_argument("--goal", required=True)
     p_compile.add_argument(
         "--mode",
-        choices=["p2", "missing_verifier", "planning_p2"],
+        choices=["legacy", "p2", "missing_verifier", "planning_p2"],
         default="p2",
         help="strict raw-goal proof fixture mode",
     )

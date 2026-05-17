@@ -64,6 +64,8 @@ Before the strict verification phase, the run must already contain planner/verif
 
 ```text
 goal_contract.json
+planning_search_tree.json
+planning_coverage.json
 expected_artifacts.json
 plans/*_plan.json
 selected_plan.json
@@ -71,6 +73,12 @@ merged_plan.json
 plan_graph.json
 verifier_contract.json
 verifier_artifacts/*.json
+```
+
+Optional adaptive/autoresearch planning input, when present, must be run-local and validator-clean:
+
+```text
+adaptive_research_inputs.json
 ```
 
 ## Current bounded planning-quality proof path
@@ -109,7 +117,7 @@ The following files contain smoke, compatibility, or proof-slice behavior and sh
 The default runtime files below are intended to fail closed rather than create generated substitute proof artifacts:
 
 ```text
-.agentic-pi/runtime/full_verify.py       recommended strict path; requires existing proof artifacts; no synthesized plans/contracts
+.agentic-pi/runtime/full_verify.py       recommended strict path; requires existing planning search/coverage, proof artifacts, and verifier evidence; validates adaptive research inputs when present; no synthesized plans/contracts
 .agentic-pi/runtime/orchestrate_pipeline.py lower-level deterministic phase runner; fails on any phase failure
 .agentic-pi/runtime/plan_router.py       checks for existing plans/*_plan.json only
 .agentic-pi/runtime/plan_selector.py     selects among valid existing planner plans only

@@ -112,7 +112,8 @@ Memory:
 │   ├── validate_prompt_eval_case.py   Prompt compiler seed eval fixtures
 │   └── validate_prompt_provenance.py  Prompt provenance authority boundary
 ├── runtime/
-│   ├── full_verify.py                 Recommended strict proof-artifact verifier; no synthesized proof files
+│   ├── full_verify.py                 Strict verifier requiring planning search/coverage + proof artifacts; validates adaptive research if present
+│   ├── adaptive_research_inputs.py    Records optional adaptive/autoresearch findings as planning-only provenance
 │   ├── prompt_provenance.py           Records raw prompt -> execution_prompt provenance
 │   ├── run_prompt_compiler_eval.py    Scores prompt-compiler seed eval cases
 │   ├── orchestrate_pipeline.py        Lower-level deterministic phase runner; fails on phase failure

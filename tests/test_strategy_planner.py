@@ -87,6 +87,98 @@ class StrategyPlannerTests(unittest.TestCase):
         (run_dir / "trace.jsonl").write_text("", encoding="utf-8")
         return run_dir
 
+    def write_planning_coverage_fixture(self, run_dir: Path, final_output: str = "artifacts/output.txt"):
+        candidate = {
+            "strategy_id": "S.WRITE_SIMPLE",
+            "task_type": "writing",
+            "required_capabilities": ["file_write_run_folder", "plan_graph", "policy_engine"],
+            "expected_artifacts": [final_output],
+            "verifier_requirements": ["independent content check required"],
+            "risk_notes": ["polished but wrong"],
+            "can_reach_certifying_evidence": True,
+            "uses_artifact_tests": False,
+            "needs_executable_behavior": False,
+            "attempts_status_write": False,
+            "attempts_verifier_forgery": False,
+            "status_authority": "none",
+            "risk_level": "LOW",
+        }
+        write_json(
+            run_dir / "strategy_candidates.json",
+            {"run_id": run_dir.name, "task_type": "writing", "candidates": [candidate]},
+        )
+        write_json(
+            run_dir / "strategy_applicability.json",
+            {"run_id": run_dir.name, "task_type": "writing", "applicable_strategies": [candidate], "blocked_strategies": []},
+        )
+        write_json(
+            run_dir / "strategy_scores.json",
+            {
+                "run_id": run_dir.name,
+                "task_type": "writing",
+                "experience_memory_used": False,
+                "scores": [
+                    {
+                        "strategy_id": "S.WRITE_SIMPLE",
+                        "score": 7,
+                        "score_level": "preferred",
+                        "positive_factors": ["can_reach_certifying_evidence"],
+                        "penalties": [],
+                    }
+                ],
+            },
+        )
+        write_json(
+            run_dir / "strategy_decision.json",
+            {
+                "run_id": run_dir.name,
+                "decision_status": "SELECTED",
+                "selected_strategy": "S.WRITE_SIMPLE",
+                "reason": "Selected strategy has the best deterministic score and passed applicability checks.",
+                "rejected_strategies": [],
+                "selector_checks": ["strategy selector did not write certification status artifacts"],
+                "status_artifacts_absent_before_selection": True,
+                "advisory_memory_used": False,
+                "advisory_memory_learning_ids": [],
+                "advisory_memory_authority": "advisory_only",
+                "advisory_memory_can_certify_done": False,
+            },
+        )
+        write_json(
+            run_dir / "selected_strategy.json",
+            {
+                "run_id": run_dir.name,
+                "strategy_id": "S.WRITE_SIMPLE",
+                "task_type": "writing",
+                "required_capabilities": ["file_write_run_folder", "plan_graph", "policy_engine"],
+                "expected_artifacts": [final_output],
+                "verifier_requirements": ["independent content check required"],
+                "risk_notes": ["polished but wrong"],
+                "can_reach_certifying_evidence": True,
+            },
+        )
+        write_json(run_dir / "rejected_strategies.json", {"run_id": run_dir.name, "rejected_strategies": []})
+        write_json(
+            run_dir / "expected_artifacts.json",
+            {
+                "schema_version": "expected_artifacts_v1",
+                "run_id": run_dir.name,
+                "phase": "PLANNING",
+                "artifacts": [
+                    {
+                        "artifact_id": "A.FINAL_OUTPUT",
+                        "expected_path": final_output,
+                        "description": "Final planned output",
+                        "required": True,
+                        "allowed_writers": ["Engineer"],
+                        "forbidden_writers": ["Reporter", "Critic", "Certifier"],
+                        "success_criteria": [f"{final_output} exists"],
+                        "min_size_bytes": 1,
+                    }
+                ],
+            },
+        )
+
     def test_task_type_router_classifies_core_task_types(self):
         cases = [
             ("writing", "Write a README.md document for the harness", "README.md"),
@@ -297,6 +389,304 @@ class StrategyPlannerTests(unittest.TestCase):
         self.assertEqual(merged_plan["steps"][0]["produces"][0]["artifact_id"], "A.FINAL_OUTPUT")
         for status_name in ["final_status.md", "certification.json", "policy_decision.json"]:
             self.assertFalse((run_dir / status_name).exists(), status_name)
+
+    def test_adaptive_research_inputs_are_planning_only(self):
+        run_dir = self.make_run("adaptive_research", "Write a README.md document")
+        self.write_planning_coverage_fixture(run_dir)
+        result = run_python(".agentic-pi/runtime/adaptive_research_inputs.py", str(run_dir))
+        self.assertEqual(result.returncode, 0, result.stdout)
+
+        artifact = load_json(run_dir / "adaptive_research_inputs.json")
+        self.assertFalse(artifact["authority"]["can_certify_done"])
+        self.assertFalse(artifact["authority"]["can_write_status_artifacts"])
+        self.assertFalse(artifact["authority"]["claim_correctness"])
+        self.assertTrue(artifact["determinism_boundary"]["adaptive_generation_may_be_nondeterministic"])
+        self.assertTrue(artifact["determinism_boundary"]["deterministic_validation_required"])
+        self.assertTrue(artifact["determinism_boundary"]["validators_must_not_fetch_network"])
+        self.assertTrue(artifact["determinism_boundary"]["certifier_ignores_as_authority"])
+        self.assertTrue(all(not item["can_certify_done"] for item in artifact["findings"]))
+        self.assertTrue(all(item["authority_impact"] == "none" for item in artifact["findings"]))
+        self.assertTrue(all(not item["code_copied"] for item in artifact["findings"]))
+        self.assertIn("final_status.json", artifact["status_artifact_write_policy"]["forbidden_paths"])
+        self.assertFalse(artifact["status_artifact_write_policy"]["attempted_status_write"])
+
+        schema = run_python(
+            ".agentic-pi/validators/validate_schema.py",
+            ".agentic-pi/schemas/adaptive_research_inputs.schema.json",
+            str(run_dir / "adaptive_research_inputs.json"),
+        )
+        self.assertEqual(schema.returncode, 0, schema.stdout)
+        validator = run_python(".agentic-pi/validators/validate_adaptive_research_inputs.py", str(run_dir))
+        self.assertEqual(validator.returncode, 0, validator.stdout)
+
+    def test_adaptive_research_inputs_reject_authority_claim(self):
+        run_dir = self.make_run("adaptive_research_authority", "Write a README.md document")
+        self.write_planning_coverage_fixture(run_dir)
+        result = run_python(".agentic-pi/runtime/adaptive_research_inputs.py", str(run_dir))
+        self.assertEqual(result.returncode, 0, result.stdout)
+
+        artifact = load_json(run_dir / "adaptive_research_inputs.json")
+        artifact["authority"]["can_certify_done"] = True
+        artifact["authority"]["can_write_status_artifacts"] = True
+        artifact["authority"]["claim_correctness"] = True
+        artifact["findings"][0]["authority_impact"] = "certifies"
+        artifact["findings"][0]["can_certify_done"] = True
+        artifact["findings"][0]["code_copied"] = True
+        artifact["status_artifact_write_policy"]["attempted_status_write"] = True
+        write_json(run_dir / "adaptive_research_inputs.json", artifact)
+
+        validator = run_python(".agentic-pi/validators/validate_adaptive_research_inputs.py", str(run_dir))
+        self.assertNotEqual(validator.returncode, 0, validator.stdout)
+        self.assertIn("can_certify_done", validator.stdout)
+        self.assertIn("claim_correctness", validator.stdout)
+        self.assertIn("attempted_status_write", validator.stdout)
+
+    def test_planning_artifacts_consume_adaptive_research_as_planning_only(self):
+        run_dir = self.make_run("adaptive_research_planning", "Write a README.md document")
+        self.write_planning_coverage_fixture(run_dir)
+        result = run_python(".agentic-pi/runtime/adaptive_research_inputs.py", str(run_dir))
+        self.assertEqual(result.returncode, 0, result.stdout)
+        result = run_python(".agentic-pi/runtime/planning_search_tree.py", str(run_dir))
+        self.assertEqual(result.returncode, 0, result.stdout)
+        result = run_python(".agentic-pi/runtime/planning_coverage.py", str(run_dir))
+        self.assertEqual(result.returncode, 0, result.stdout)
+
+        tree = load_json(run_dir / "planning_search_tree.json")
+        self.assertIn("adaptive_autoresearch_provenance", {item["method_id"] for item in tree["method_influences"]})
+        self.assertIn("live_adaptive_autoresearch_sampling", {item["method_id"] for item in tree["deferred_expansion_methods"]})
+        self.assertTrue(any(node["node_id"] == "N.STRATEGY.ADAPTIVE_RESEARCH_INPUTS" for node in tree["nodes"]))
+        self.assertFalse(tree["authority"]["can_certify_done"])
+
+        coverage = load_json(run_dir / "planning_coverage.json")
+        self.assertIn("adaptive_autoresearch_input_recording", coverage["search_budget"]["search_methods_considered"])
+        self.assertTrue(any(item["option_id"] == "A.ADAPTIVE_RESEARCH_INPUTS" for item in coverage["alternatives_considered"]))
+        self.assertFalse(coverage["authority"]["can_certify_done"])
+
+        self.assertEqual(run_python(".agentic-pi/validators/validate_planning_search_tree.py", str(run_dir)).returncode, 0)
+        self.assertEqual(run_python(".agentic-pi/validators/validate_planning_coverage.py", str(run_dir)).returncode, 0)
+
+    def test_planning_search_tree_records_deep_bounded_path(self):
+        run_dir = self.make_run("planning_tree", "Write a README.md document")
+        self.write_planning_coverage_fixture(run_dir)
+        result = run_python(".agentic-pi/runtime/planning_search_tree.py", str(run_dir))
+        self.assertEqual(result.returncode, 0, result.stdout)
+
+        tree = load_json(run_dir / "planning_search_tree.json")
+        self.assertFalse(tree["authority"]["can_certify_done"])
+        self.assertFalse(tree["authority"]["claim_exhaustive_search"])
+        self.assertFalse(tree["authority"]["claim_correctness"])
+        self.assertFalse(tree["proof_boundary"]["proves_all_possible_plans"])
+        self.assertFalse(tree["proof_boundary"]["proves_artifact_correctness"])
+        self.assertTrue(tree["proof_boundary"]["requires_verifier_artifacts"])
+        self.assertEqual(tree["implementation_boundary"]["source_code_origin"], "harness_native_no_vendor_copy")
+        self.assertFalse(tree["implementation_boundary"]["planner_can_certify_done"])
+        self.assertEqual(tree["search_config"]["completeness_claim"], "bounded_not_exhaustive")
+        self.assertEqual(tree["search_config"]["correctness_claim"], "not_proven_by_planning")
+        self.assertGreaterEqual(tree["coverage_metrics"]["max_depth_reached"], 4)
+        self.assertGreaterEqual(tree["coverage_metrics"]["selected_path_length"], 4)
+        self.assertGreaterEqual(tree["coverage_metrics"]["pruned_or_deferred_count"], 1)
+        self.assertGreaterEqual(tree["coverage_metrics"]["iterations_recorded"], 3)
+        self.assertGreaterEqual(tree["coverage_metrics"]["deferred_expansion_method_count"], 3)
+        self.assertEqual(tree["coverage_metrics"]["candidate_evaluation_count"], tree["coverage_metrics"]["candidate_strategy_count"])
+        self.assertEqual(tree["search_config"]["max_rollouts"], 0)
+        self.assertFalse(tree["search_config"]["mcts_optimality_claim"])
+        self.assertFalse(tree["operation_graph"]["can_certify_done"])
+        self.assertIn("lats_mcts", {item["method_id"] for item in tree["method_influences"]})
+        self.assertIn(
+            "mcts_rollout_backpropagation",
+            {item["method_id"] for item in tree["deferred_expansion_methods"]},
+        )
+        self.assertIn("score_strategy_frontier", {item["phase"] for item in tree["search_iterations"]})
+        self.assertTrue(all(node["score_components"]["total"] == node["score"] for node in tree["nodes"]))
+        self.assertTrue(any(node["planned_evidence_refs"] for node in tree["nodes"]))
+        self.assertEqual(tree["candidate_evaluations"][0]["strategy_id"], "S.WRITE_SIMPLE")
+
+        schema = run_python(
+            ".agentic-pi/validators/validate_schema.py",
+            ".agentic-pi/schemas/planning_search_tree.schema.json",
+            str(run_dir / "planning_search_tree.json"),
+        )
+        self.assertEqual(schema.returncode, 0, schema.stdout)
+        validator = run_python(".agentic-pi/validators/validate_planning_search_tree.py", str(run_dir))
+        self.assertEqual(validator.returncode, 0, validator.stdout)
+
+    def test_planning_search_tree_rejects_exhaustive_or_authority_claim(self):
+        run_dir = self.make_run("planning_tree_authority", "Write a README.md document")
+        self.write_planning_coverage_fixture(run_dir)
+        result = run_python(".agentic-pi/runtime/planning_search_tree.py", str(run_dir))
+        self.assertEqual(result.returncode, 0, result.stdout)
+
+        tree = load_json(run_dir / "planning_search_tree.json")
+        tree["authority"]["can_certify_done"] = True
+        tree["authority"]["claim_exhaustive_search"] = True
+        tree["authority"]["claim_correctness"] = True
+        tree["proof_boundary"]["proves_all_possible_plans"] = True
+        tree["proof_boundary"]["proves_artifact_correctness"] = True
+        write_json(run_dir / "planning_search_tree.json", tree)
+
+        validator = run_python(".agentic-pi/validators/validate_planning_search_tree.py", str(run_dir))
+        self.assertNotEqual(validator.returncode, 0, validator.stdout)
+        self.assertIn("can_certify_done", validator.stdout)
+        self.assertIn("claim_correctness", validator.stdout)
+        self.assertIn("proves_artifact_correctness", validator.stdout)
+
+    def test_planning_search_tree_rejects_budget_overrun(self):
+        run_dir = self.make_run("planning_tree_budget", "Write a README.md document")
+        self.write_planning_coverage_fixture(run_dir)
+        result = run_python(".agentic-pi/runtime/planning_search_tree.py", str(run_dir))
+        self.assertEqual(result.returncode, 0, result.stdout)
+
+        tree = load_json(run_dir / "planning_search_tree.json")
+        tree["search_config"]["max_nodes"] = tree["coverage_metrics"]["nodes_expanded"] - 1
+        write_json(run_dir / "planning_search_tree.json", tree)
+
+        validator = run_python(".agentic-pi/validators/validate_planning_search_tree.py", str(run_dir))
+        self.assertNotEqual(validator.returncode, 0, validator.stdout)
+        self.assertIn("max_nodes", validator.stdout)
+
+    def test_planning_search_tree_records_need_user_stop_branch(self):
+        run_dir = self.make_run("planning_tree_need_user", "blue sky purpose with no operational keyword")
+        for tool in [
+            ".agentic-pi/runtime/task_type_router.py",
+            ".agentic-pi/runtime/capability_inventory.py",
+            ".agentic-pi/runtime/strategy_generator.py",
+            ".agentic-pi/runtime/strategy_applicability_gate.py",
+            ".agentic-pi/runtime/strategy_scorer.py",
+        ]:
+            result = run_python(tool, str(run_dir))
+            self.assertEqual(result.returncode, 0, result.stdout)
+        selector = run_python(".agentic-pi/runtime/strategy_selector.py", str(run_dir))
+        self.assertNotEqual(selector.returncode, 0, selector.stdout)
+
+        result = run_python(".agentic-pi/runtime/planning_search_tree.py", str(run_dir))
+        self.assertEqual(result.returncode, 0, result.stdout)
+        tree = load_json(run_dir / "planning_search_tree.json")
+        selected_nodes = [node for node in tree["nodes"] if node["status"] == "need_user"]
+        self.assertTrue(selected_nodes)
+        self.assertIn("N.STOP.NEED_USER_STRATEGY", tree["selected_path"])
+        validator = run_python(".agentic-pi/validators/validate_planning_search_tree.py", str(run_dir))
+        self.assertEqual(validator.returncode, 0, validator.stdout)
+
+    def test_planning_coverage_records_bounded_alternatives(self):
+        run_dir = self.make_run("planning_coverage", "Write a README.md document")
+        self.write_planning_coverage_fixture(run_dir)
+        result = run_python(".agentic-pi/runtime/planning_coverage.py", str(run_dir))
+        self.assertEqual(result.returncode, 0, result.stdout)
+
+        coverage = load_json(run_dir / "planning_coverage.json")
+        self.assertFalse(coverage["authority"]["can_certify_done"])
+        self.assertFalse(coverage["authority"]["claim_exhaustive_planning"])
+        self.assertFalse(coverage["authority"]["claim_correctness"])
+        self.assertFalse(coverage["proof_boundary"]["proves_all_possible_plans"])
+        self.assertFalse(coverage["proof_boundary"]["proves_artifact_correctness"])
+        self.assertTrue(coverage["proof_boundary"]["requires_certifier"])
+        self.assertEqual(coverage["search_budget"]["search_completeness_claim"], "bounded_not_exhaustive")
+        self.assertGreaterEqual(len(coverage["alternatives_considered"]), 2)
+        self.assertIn("lats_style_deferred_rollout_record", coverage["search_budget"]["search_methods_considered"])
+        self.assertTrue(any("Language Agent Tree Search" in item["source_title"] for item in coverage["research_basis"]))
+
+        schema = run_python(
+            ".agentic-pi/validators/validate_schema.py",
+            ".agentic-pi/schemas/planning_coverage.schema.json",
+            str(run_dir / "planning_coverage.json"),
+        )
+        self.assertEqual(schema.returncode, 0, schema.stdout)
+        validator = run_python(".agentic-pi/validators/validate_planning_coverage.py", str(run_dir))
+        self.assertEqual(validator.returncode, 0, validator.stdout)
+
+    def test_planning_coverage_rejects_authority_claim(self):
+        run_dir = self.make_run("planning_authority", "Write a README.md document")
+        self.write_planning_coverage_fixture(run_dir)
+        result = run_python(".agentic-pi/runtime/planning_coverage.py", str(run_dir))
+        self.assertEqual(result.returncode, 0, result.stdout)
+
+        coverage = load_json(run_dir / "planning_coverage.json")
+        coverage["authority"]["can_certify_done"] = True
+        coverage["authority"]["claim_correctness"] = True
+        coverage["proof_boundary"]["proves_artifact_correctness"] = True
+        write_json(run_dir / "planning_coverage.json", coverage)
+
+        validator = run_python(".agentic-pi/validators/validate_planning_coverage.py", str(run_dir))
+        self.assertNotEqual(validator.returncode, 0, validator.stdout)
+        self.assertIn("can_certify_done", validator.stdout)
+        self.assertIn("claim_correctness", validator.stdout)
+        self.assertIn("proves_artifact_correctness", validator.stdout)
+
+    def test_planning_coverage_rejects_missing_non_selected_branch(self):
+        run_dir = self.make_run("planning_branch", "Write a README.md document")
+        self.write_planning_coverage_fixture(run_dir)
+        result = run_python(".agentic-pi/runtime/planning_coverage.py", str(run_dir))
+        self.assertEqual(result.returncode, 0, result.stdout)
+
+        coverage = load_json(run_dir / "planning_coverage.json")
+        coverage["alternatives_considered"] = [
+            item for item in coverage["alternatives_considered"] if item["status"] == "selected"
+        ]
+        coverage["search_budget"]["rejected_or_deferred_count"] = 0
+        write_json(run_dir / "planning_coverage.json", coverage)
+
+        validator = run_python(".agentic-pi/validators/validate_planning_coverage.py", str(run_dir))
+        self.assertNotEqual(validator.returncode, 0, validator.stdout)
+        self.assertIn("alternatives_considered", validator.stdout)
+
+    def test_planning_artifacts_alone_do_not_prove_correctness(self):
+        run_dir = self.make_run("planning_not_correctness", "Write a README.md document", "README.md")
+        roadmap = run_python(".agentic-pi/runtime/roadmap_planner.py", "--run-id", run_dir.name, "--stop-after", "plan_graph")
+        self.assertEqual(roadmap.returncode, 0, roadmap.stdout)
+        self.assertTrue((run_dir / "adaptive_research_inputs.json").is_file())
+        self.assertTrue((run_dir / "planning_search_tree.json").is_file())
+        self.assertTrue((run_dir / "planning_coverage.json").is_file())
+
+        full_verify = run_python(".agentic-pi/runtime/full_verify.py", str(run_dir))
+        self.assertNotEqual(full_verify.returncode, 0, full_verify.stdout)
+        self.assertIn("missing required proof artifact: verifier_contract.json", full_verify.stdout)
+        self.assertIn("missing required proof artifact: verifier_artifacts/*.json", full_verify.stdout)
+        self.assertIn("FINAL: NOT_DONE", full_verify.stdout)
+        for status_name in ["final_status.md", "certification.json", "policy_decision.json"]:
+            self.assertFalse((run_dir / status_name).exists(), status_name)
+
+    def test_goal_run_uses_strict_roadmap_planning_artifacts(self):
+        run_id = f"pi_smoke_goal_run_{self._testMethodName}"
+        self.run_ids.append(run_id)
+        run_dir = RUN_ROOT / run_id
+        if run_dir.exists():
+            shutil.rmtree(run_dir)
+
+        compile_result = run_python(
+            ".agentic-pi/runtime/pi_cli.py",
+            "goal-compile",
+            run_id,
+            "--goal",
+            "Create README.md explaining the harness",
+            "--mode",
+            "p2",
+        )
+        self.assertEqual(compile_result.returncode, 0, compile_result.stdout)
+        run_result = run_python(
+            ".agentic-pi/runtime/pi_cli.py",
+            "goal-run",
+            run_id,
+            "--skip-memory-update",
+        )
+        self.assertEqual(run_result.returncode, 0, run_result.stdout)
+
+        for artifact_name in [
+            "adaptive_research_inputs.json",
+            "planning_search_tree.json",
+            "planning_coverage.json",
+            "expected_artifacts.json",
+            "macro_plan.json",
+            "vertical_slice_candidates.json",
+            "vertical_slice_selection.json",
+            "selected_plan.json",
+            "merged_plan.json",
+            "plan_graph.json",
+            "validator_certification.json",
+        ]:
+            self.assertTrue((run_dir / artifact_name).is_file(), artifact_name)
+        self.assertEqual(load_json(run_dir / "certification.json")["status"], "CERTIFIED_DONE")
+        self.assertEqual(load_json(run_dir / "policy_decision.json")["status"], "CERTIFIED_DONE")
+        self.assertFalse(load_json(run_dir / "planning_search_tree.json")["authority"]["can_certify_done"])
 
     def test_strategy_proof_reaches_certified_done_for_p2_fixture(self):
         run_id = f"pi_smoke_strategy_{self._testMethodName}"

@@ -14,7 +14,7 @@ helpers can prepare, execute, trace, replay, or audit, but they cannot certify D
 The default runtime path is fail-closed:
 
 ```text
-full_verify.py       requires existing proof artifacts; it does not create missing plans or verifier contracts
+full_verify.py       requires existing planning_search_tree.json, planning_coverage.json, proof artifacts, and verifier evidence; it validates adaptive_research_inputs.json when present and does not create missing plans or verifier contracts
 plan_router.py       requires existing plans/*_plan.json; it does not synthesize SIMPLE/MEDIUM/HARD plans
 plan_selector.py     validates and selects among existing planner-owned plans
 plan_merger.py       writes merged_plan.json from selected_plan.json only
@@ -46,15 +46,36 @@ it cannot certify DONE or replace verifier evidence.
 Planning and strategy:
 
 ```text
+adaptive_research_inputs.py
 plan_router.py
 plan_selector.py
 planning_proof_runner.py
+planning_coverage.py
+planning_search_tree.py
+roadmap_planner.py
 strategy_*.py
 milestone_*.py
 local_step_planner.py
 step_compiler.py
 plan_merger.py
 ```
+
+`adaptive_research_inputs.py` writes run-local
+`adaptive_research_inputs.json`, the Option A boundary for adaptive or
+non-deterministic autoresearch: saved findings may shape planning questions,
+risk notes, and verifier follow-up, but deterministic validators consume only
+recorded provenance and research cannot certify DONE. `planning_search_tree.py`
+writes run-local `planning_search_tree.json`, a bounded depth-limited tree trace
+over task type, strategy, execution, verifier, risk, adaptive research inputs,
+and deferred branches. It now records search iterations, score components,
+GitHub-method influences (ToT/GoT/LATS), and explicitly deferred expansion
+methods such as LLM voting, graph aggregation, adaptive live research, and MCTS
+rollouts. `planning_coverage.py` writes run-local `planning_coverage.json`,
+recording selected/rejected/deferred planning branches, assumptions, risks,
+verifier handoff, ask-user triggers, and false-DONE traps. These artifacts
+include boundaries saying they do not prove all possible plans and do not prove
+artifact correctness. They are planning evidence only; none claims exhaustive
+planning, correctness, or final-status authority.
 
 Execution and artifacts:
 
