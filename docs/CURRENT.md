@@ -104,11 +104,17 @@ docs/PROJECT_STATUS.md      historical status ledger and roadmap context
 docs/workspace_index.md     file map and cleanup debt
 ```
 
+## Implemented hardening notes
+
+```text
+artifact test command execution is allowlisted for run-relative Python scripts only
+unsafe shell operators, Python -c/-m style eval, path escapes, protected status artifact references, and unknown executables fail closed
+```
+
 ## Still valid gaps
 
 ```text
 docs/package cleanup beyond this pointer still needs follow-up
-artifact test command allowlisting still needed
 certifier is still a large monolith
 Stage 2 semantic/live evaluation still needs expansion
 task routing can still improve

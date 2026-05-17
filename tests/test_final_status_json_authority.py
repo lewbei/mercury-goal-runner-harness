@@ -23,6 +23,9 @@ def write_json(path: Path, obj):
 
 
 def load_module(name: str, path: Path):
+    module_dir = str(path.parent)
+    if module_dir not in sys.path:
+        sys.path.insert(0, module_dir)
     spec = importlib.util.spec_from_file_location(name, path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -188,6 +191,92 @@ class FinalStatusJsonAuthorityTests(unittest.TestCase):
         self.assertEqual(final_status["status_source"], "policy_decision.json")
         self.assertEqual(final_status["policy_decision_path"], "policy_decision.json")
         self.assertEqual(final_status["certification_path"], "certification.json")
+
+    def test_artifact_command_allowlist_accepts_run_relative_python_script(self):
+        run_dir = self.copy_case(
+            EVAL_ROOT / "p2_strong",
+            "test_artifact_command_allowlist_accepts",
+        )
+        certifier = load_module(
+            "certify_run_for_artifact_command_allowlist_positive",
+            ROOT / ".agentic-pi" / "validators" / "certify_run.py",
+        )
+        case = load_json(run_dir / "case.json")
+        passed = []
+        failed = []
+
+        ok = certifier.run_artifact_command_test(run_dir, case["artifact_tests"][0], passed, failed)
+
+        self.assertTrue(ok, failed)
+        self.assertIn("artifact_test OUTPUT_BEHAVIOR passed", passed)
+        self.assertEqual(failed, [])
+
+    def test_artifact_command_allowlist_rejects_shell_and_python_eval(self):
+        run_dir = self.copy_case(
+            EVAL_ROOT / "p2_strong",
+            "test_artifact_command_allowlist_rejects_shell",
+        )
+        certifier = load_module(
+            "certify_run_for_artifact_command_allowlist_negative",
+            ROOT / ".agentic-pi" / "validators" / "certify_run.py",
+        )
+        unsafe_tests = [
+            {
+                "test_id": "SHELL_CHAIN",
+                "type": "command",
+                "cmd": "python artifacts/check_output.py && python artifacts/check_output.py",
+            },
+            {
+                "test_id": "PYTHON_EVAL",
+                "type": "command",
+                "cmd": "python -c print(1)",
+            },
+            {
+                "test_id": "PATH_ESCAPE",
+                "type": "command",
+                "cmd": "python ../outside.py",
+            },
+            {
+                "test_id": "PROTECTED_ARG",
+                "type": "command",
+                "cmd": "python artifacts/check_output.py final_status.json",
+            },
+        ]
+
+        for unsafe_test in unsafe_tests:
+            with self.subTest(test_id=unsafe_test["test_id"]):
+                passed = []
+                failed = []
+                ok = certifier.run_artifact_command_test(run_dir, unsafe_test, passed, failed)
+                self.assertFalse(ok)
+                self.assertEqual(passed, [])
+                self.assertTrue(failed)
+                self.assertIn("command rejected by allowlist", failed[0])
+
+    def test_artifact_command_allowlist_failure_blocks_certification(self):
+        run_dir = self.copy_case(
+            EVAL_ROOT / "p2_strong",
+            "test_artifact_command_allowlist_blocks_cert",
+        )
+        goal = load_json(run_dir / "goal_contract.json")
+        goal["artifact_tests"] = [
+            {
+                "test_id": "SHELL_CHAIN",
+                "type": "command",
+                "cmd": "python artifacts/check_output.py && python artifacts/check_output.py",
+                "expect_exit_code": 0,
+            }
+        ]
+        write_json(run_dir / "goal_contract.json", goal)
+
+        result = self.certify(run_dir)
+
+        self.assertNotEqual(result.returncode, 0, result.stdout)
+        self.assertIn("command rejected by allowlist", result.stdout)
+        final_status = load_json(run_dir / "final_status.json")
+        self.assertIn(final_status["status"], {"NOT_DONE", "DONE_FAIL"})
+        self.assertEqual(final_status["final_status_authority"], "certifier_only")
+        self.assertFalse(final_status["can_certify_done"])
 
     def test_legacy_done_pass_done_fail_still_supported(self):
         pass_dir = self.copy_case(

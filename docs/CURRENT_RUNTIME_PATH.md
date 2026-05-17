@@ -38,6 +38,8 @@ Final status is owned by:
 
 `final_status.json` is the machine-readable authority artifact. `final_status.md` is a derived human-readable view. In the normal provenance path, `final_status.json` cites `policy_decision.json`; when a later certifier gate blocks the run, it cites `certification.json` and records a blocking status.
 
+Artifact test commands declared in `goal_contract.json` are not a general shell surface. The certifier allowlists only run-relative Python script commands and rejects shell operators, Python eval/module shortcuts, absolute/path-escaping scripts, protected status artifact references, and unknown executables before execution.
+
 ## Repo-local helper path
 
 The repo-local command helper is:

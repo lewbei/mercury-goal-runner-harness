@@ -36,6 +36,10 @@ PROTECTED_PREFIXES = {
 PROVENANCE_ORDER = {"P0": 0, "P1": 1, "P2": 2, "P3": 3}
 PROVENANCE_STATUSES = {"NOT_DONE", "PROVISIONAL_DONE", "CERTIFIED_DONE"}
 
+ALLOWED_ARTIFACT_COMMAND_EXECUTABLES = {"python", "python3"}
+FORBIDDEN_ARTIFACT_COMMAND_CHARS = set("\n\r;&|<>`$")
+FORBIDDEN_ARTIFACT_COMMAND_TOKENS = {"&&", "||", ";", "|", ">", ">>", "<", "2>", "&"}
+
 STEP_REQUIRED = {
     "run_id": str,
     "step_id": int,
@@ -300,6 +304,65 @@ def split_artifact_command(cmd: str):
     return shlex.split(cmd, posix=(os.name != "nt"))
 
 
+def validate_artifact_command_allowlist(run_dir: Path, cmd: str, cmd_parts: list[str]) -> tuple[bool, list[str], list[str]]:
+    """Validate and normalize an artifact-test command before execution.
+
+    Artifact tests are certifier-owned checks, but their command strings come
+    from goal_contract.json. Keep the command surface deliberately narrow:
+    run-local Python scripts only, no shell operators, no Python -c/-m, no path
+    escapes, no protected status-artifact references. The returned command uses
+    this interpreter instead of trusting PATH.
+    """
+    reasons: list[str] = []
+    if any(ch in cmd for ch in FORBIDDEN_ARTIFACT_COMMAND_CHARS):
+        reasons.append("contains shell metacharacter or newline")
+    if any(part in FORBIDDEN_ARTIFACT_COMMAND_TOKENS for part in cmd_parts):
+        reasons.append("contains shell operator token")
+    if len(cmd_parts) < 2:
+        reasons.append("expected 'python <run-relative-script.py> [args...]'")
+        return False, [], reasons
+
+    executable = cmd_parts[0]
+    if Path(executable).name != executable:
+        reasons.append("python executable must be a bare allowlisted name")
+    if executable.lower() not in ALLOWED_ARTIFACT_COMMAND_EXECUTABLES:
+        reasons.append(f"executable {executable!r} is not allowlisted")
+
+    script_arg = cmd_parts[1]
+    if script_arg.startswith("-"):
+        reasons.append("python options such as -c or -m are not allowed")
+    if Path(script_arg).suffix != ".py":
+        reasons.append("artifact command script must be a .py file")
+    try:
+        script_path = resolve_run_path(run_dir, script_arg)
+        script_rel = run_relative(run_dir, script_path)
+        if not script_path.is_file():
+            reasons.append(f"script does not exist: {script_arg}")
+        if Path(script_rel).name in PROTECTED_NAMES or any(script_rel.startswith(prefix) for prefix in PROTECTED_PREFIXES):
+            reasons.append(f"script path is protected: {script_arg}")
+    except ValueError as exc:
+        reasons.append(str(exc))
+
+    for raw_arg in cmd_parts[2:]:
+        if not isinstance(raw_arg, str) or not raw_arg:
+            reasons.append("empty command argument is not allowed")
+            continue
+        if any(ch in raw_arg for ch in FORBIDDEN_ARTIFACT_COMMAND_CHARS):
+            reasons.append(f"argument contains shell metacharacter: {raw_arg!r}")
+        if raw_arg in FORBIDDEN_ARTIFACT_COMMAND_TOKENS:
+            reasons.append(f"argument is shell operator token: {raw_arg!r}")
+        if Path(raw_arg).is_absolute():
+            reasons.append(f"absolute argument path is not allowed: {raw_arg}")
+        if ".." in Path(raw_arg).parts:
+            reasons.append(f"argument path escape is not allowed: {raw_arg}")
+        if Path(raw_arg).name in PROTECTED_NAMES:
+            reasons.append(f"argument references protected status artifact: {raw_arg}")
+
+    if reasons:
+        return False, [], reasons
+    return True, [sys.executable, *cmd_parts[1:]], []
+
+
 def run_artifact_command_test(run_dir: Path, test: dict, passed: list, failed: list):
     test_id = test.get("test_id", "<missing-test-id>")
     cmd = test.get("cmd")
@@ -323,9 +386,17 @@ def run_artifact_command_test(run_dir: Path, test: dict, passed: list, failed: l
         failed.append(f"artifact_test {test_id} missing command")
         return False
 
+    allowed, allowed_parts, allowlist_errors = validate_artifact_command_allowlist(run_dir, cmd, cmd_parts)
+    if not allowed:
+        failed.append(
+            f"artifact_test {test_id} command rejected by allowlist: "
+            + "; ".join(allowlist_errors)
+        )
+        return False
+
     try:
         result = subprocess.run(
-            cmd_parts,
+            allowed_parts,
             cwd=run_dir,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
