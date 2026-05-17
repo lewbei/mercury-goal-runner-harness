@@ -90,6 +90,7 @@ class V2ProofPackageTests(unittest.TestCase):
             "planning_efficiency_v2_2_cleanup",
             "planning_efficiency_v3_repair_loop",
             "planning_coordination_v1",
+            "planning_coordination_v1_1_quality",
             "guarded_execution_v2",
             "guarded_execution_v3",
             "planning_efficiency_v1",
@@ -145,6 +146,7 @@ class V2ProofPackageTests(unittest.TestCase):
         self.assertIn("planning_efficiency_v2_2_cleanup", claim_ids)
         self.assertIn("planning_efficiency_v3_repair_loop", claim_ids)
         self.assertIn("planning_coordination_v1", claim_ids)
+        self.assertIn("planning_coordination_v1_1_quality", claim_ids)
         self.assertIn("guarded_execution_v2", claim_ids)
         self.assertIn("guarded_execution_v3", claim_ids)
         self.assertIn("planning_efficiency_v1", claim_ids)
@@ -189,6 +191,15 @@ class V2ProofPackageTests(unittest.TestCase):
             OUTPUT_DIR / "planning_coordination_v1" / "candidates" / "planning_efficiency_v3_repair_loop" / "planning_efficiency_v3_preflight_report.json",
             OUTPUT_DIR / "planning_coordination_v1" / "candidates" / "planning_efficiency_v3_repair_loop" / "planning_efficiency_v3_plan.json",
             OUTPUT_DIR / "planning_coordination_v1" / "candidates" / "planning_efficiency_v3_repair_loop" / "planning_efficiency_v3_expected_artifacts.json",
+            OUTPUT_DIR / "planning_coordination_v1_1_quality_report.json",
+            OUTPUT_DIR / "planning_coordination_v1_1" / "coordination_v1_report.json",
+            OUTPUT_DIR / "planning_coordination_v1_1" / "plan_quality_report.json",
+            OUTPUT_DIR / "planning_coordination_v1_1" / "blocker_budget_report.json",
+            OUTPUT_DIR / "planning_coordination_v1_1" / "coordination_v1" / "candidate_plans.json",
+            OUTPUT_DIR / "planning_coordination_v1_1" / "coordination_v1" / "planning_completeness_report.json",
+            OUTPUT_DIR / "planning_coordination_v1_1" / "coordination_v1" / "candidates" / "planning_efficiency_v3_repair_loop" / "planning_efficiency_v3_preflight_report.json",
+            OUTPUT_DIR / "planning_coordination_v1_1" / "coordination_v1" / "candidates" / "planning_efficiency_v3_repair_loop" / "planning_efficiency_v3_plan.json",
+            OUTPUT_DIR / "planning_coordination_v1_1" / "coordination_v1" / "candidates" / "planning_efficiency_v3_repair_loop" / "planning_efficiency_v3_expected_artifacts.json",
             OUTPUT_DIR / "guarded_execution_v2_report.json",
             OUTPUT_DIR / "guarded_execution_v2_ledger.json",
             ROOT / ".agentic-runs" / "proof_matrix_guarded_execution_v1" / "artifacts" / "guarded_execution_v1_note.txt",
