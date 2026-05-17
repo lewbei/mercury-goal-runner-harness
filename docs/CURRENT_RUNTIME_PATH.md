@@ -73,6 +73,28 @@ verifier_contract.json
 verifier_artifacts/*.json
 ```
 
+## Current bounded planning-quality proof path
+
+The strongest current planning path is bounded and evidence-gated:
+
+```text
+stage3_runtime_preflight.py
+  -> planning_coordination_v1.py
+  -> planning_coordination_v1_1_quality.py
+  -> guarded_execution_v2.py
+  -> policy_engine.py / certify_run.py
+```
+
+Planning Coordination v1.1 adds evidence-weighted quality scoring, blocker/unknown budget checks, selected-handoff revalidation, and handoff binding to Guarded Execution v2. It is allowed to approve or block a handoff; it must not execute the guarded plan and must not certify DONE.
+
+Boundary: this is the current bounded proof path for the guarded v2 slice. It does not mean every historical runner, smoke harness, or compatibility path is globally forced through v1.1.
+
+The current-state summary lives at:
+
+```text
+docs/CURRENT.md
+```
+
 ## Compatibility / proof-slice paths
 
 The following files contain smoke, compatibility, or proof-slice behavior and should not be treated as the strict authority path without reading their boundaries:

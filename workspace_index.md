@@ -4,7 +4,7 @@ Canonical content lives at [`docs/workspace_index.md`](docs/workspace_index.md).
 
 This root file is a compatibility pointer for humans and agents that look for `workspace_index.md` at repository root.
 
-Current local note: use `docs/workspace_index.md`, `docs/CURRENT_RUNTIME_PATH.md`, and `docs/PLAN_ROUTER.md` for the current strict runtime map. Historical docs remain evidence records, not the default contract.
+Current local note: use `docs/CURRENT.md`, `docs/workspace_index.md`, `docs/CURRENT_RUNTIME_PATH.md`, and `docs/PLAN_ROUTER.md` for the current strict runtime map. Historical docs remain evidence records, not the default contract.
 
 Compatibility index terms retained for deterministic structure checks:
 

@@ -26,13 +26,14 @@ Who is allowed to certify DONE?
 ## Source-Of-Truth Files
 
 - `README.md` - repository overview and current commands.
+- `docs/CURRENT.md` - canonical current-state pointer, latest certified planning milestones, package boundary, and current validation commands.
 - `PROJECT_STATUS.md` - root compatibility pointer to `docs/PROJECT_STATUS.md`.
 - `FRAMEWORK.md` - root compatibility pointer to `docs/FRAMEWORK.md`.
 - `workspace_index.md` - root compatibility pointer to `docs/workspace_index.md`.
-- `docs/PROJECT_STATUS.md` - implementation status and limitations.
+- `docs/PROJECT_STATUS.md` - historical status ledger, roadmap context, and limitations.
 - `docs/FRAMEWORK.md` - conceptual architecture and actual current file map.
 - `docs/V5_ARCHITECTURE_GUIDE.md` - corrected V5 architecture plan with per-layer build status (✅ exists / 🔧 needs work).
-- `docs/CURRENT_RUNTIME_PATH.md` - current strict runtime boundary and compatibility-pointer map.
+- `docs/CURRENT_RUNTIME_PATH.md` - current strict runtime boundary, bounded planning-quality proof path, and compatibility-pointer map.
 - `docs/PLAN_ROUTER.md` - current plan-router boundary; no generated substitute planning.
 - `.agentic-pi/README.md` - local harness folder ownership map.
 - `.agentic-pi/runtime/README.md` - runtime module ownership map.

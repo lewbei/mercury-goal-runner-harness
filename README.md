@@ -13,8 +13,10 @@ Pi only reports what the certifier wrote.
 
 ## Install
 
+This repository is the harness repo. If installing this harness with Pi, use:
+
 ```bash
-pi install git:github.com/lewbei/mercury-goal-runner
+pi install git:github.com/lewbei/mercury-goal-runner-harness
 ```
 
 Or locally:
@@ -22,9 +24,11 @@ Or locally:
 pi install .
 ```
 
+If you meant a separate package named `mercury-goal-runner`, treat that as a different install target. This repo does not currently claim polished Python package metadata such as `pyproject.toml` or `setup.py`.
+
 ## Quick Start
 
-This is a prepared-run harness. The runtime is strict: it does not create missing planner or verifier proof artifacts for you.
+This is a prepared-run harness. The runtime is strict: it does not create missing planner or verifier proof artifacts for you. For the current bounded planning-quality proof path, start with `docs/CURRENT.md` and `docs/CURRENT_RUNTIME_PATH.md`.
 
 ```bash
 # 1. Init a run
@@ -149,6 +153,7 @@ Memory can advise worker/repair, but cannot certify DONE.
 ## Docs
 
 - `AGENTS.md` — Agent instructions and rules
+- `docs/CURRENT.md` — canonical current-state pointer, latest certified planning milestones, and package boundary
 - `docs/CURRENT_RUNTIME_PATH.md` — current strict runtime boundary and compatibility map
 - `docs/PLAN_ROUTER.md` — current plan-router boundary; no generated substitute planning
 - `docs/FRAMEWORK.md` — conceptual architecture and file map

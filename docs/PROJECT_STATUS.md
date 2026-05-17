@@ -1,6 +1,18 @@
 # Project Status
 
-## Version boundary (read first)
+## Canonical current pointer
+
+For current reviewer-facing status, latest certified planning milestones, package/install boundary, and current validation commands, read:
+
+```text
+docs/CURRENT.md
+```
+
+This file is a historical status ledger and roadmap context. Older sections may describe local proof slices, compatibility behavior, or version-era assumptions. Do not treat a versioned section here as the current runtime contract unless `docs/CURRENT.md` or `docs/CURRENT_RUNTIME_PATH.md` points to it.
+
+This file does not certify DONE.
+
+## Version boundary (historical ledger)
 
 ```text
 Committed state:     v3.4 RPG Test Aggregation
