@@ -1,0 +1,25 @@
+{
+  "schema_version": "planning_efficiency_goal_v1",
+  "goal_id": "planning_coordination_v1_goal",
+  "rough_goal": "Coordinate direct and repaired bounded planning candidates before guarded execution handoff.",
+  "artifact_specs": [
+    {
+      "artifact_id": "A.COORDINATION_SUMMARY",
+      "name": "coordination_summary",
+      "requested_path": "artifacts/planning_coordination_v1_summary.txt",
+      "content": "Planning Coordination v1 should reject the direct api_key marker and select the repaired candidate."
+    },
+    {
+      "artifact_id": "A.COORDINATION_SELECTION",
+      "name": "coordination_selection",
+      "requested_path": "artifacts/planning_coordination_v1_selection.txt",
+      "content": "The coordinator records candidate scores, rejected routes, and the selected preflight-passing handoff."
+    },
+    {
+      "artifact_id": "A.COORDINATION_BOUNDARY",
+      "name": "coordination_boundary",
+      "requested_path": "artifacts/planning_coordination_v1_boundary.txt",
+      "content": "This artifact records planning coordination evidence only; policy and certifier authority remain separate."
+    }
+  ]
+}
