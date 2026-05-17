@@ -1,3 +1,7 @@
+---
+description: Project-local Pi skill tree for the Mercury Goal Runner Harness.
+---
+
 # Project Pi Skills
 
 This directory is the project-local Pi skill tree used by this repository.

@@ -199,10 +199,9 @@ def main(argv=None) -> int:
 
     output_path = Path(args.output) if args.output else OUTPUT_ROOT / f"{args.scenario}_result.json"
     write_json(output_path, result)
-    print(json.dumps(result, indent=2, ensure_ascii=False))
+    print(json.dumps(result, indent=2, ensure_ascii=True))
     return 0 if result["result_status"] == "PASS" else 1
 
 
 if __name__ == "__main__":
     sys.exit(main())
-

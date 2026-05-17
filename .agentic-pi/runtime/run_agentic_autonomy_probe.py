@@ -193,7 +193,7 @@ def main(argv=None) -> int:
         return 1
 
     write_json(output_path, result)
-    print(json.dumps(result, indent=2, ensure_ascii=False))
+    print(json.dumps(result, indent=2, ensure_ascii=True))
     return 0 if result["result_status"] == "PASS" else 1
 
 
