@@ -240,10 +240,10 @@
     },
     {
       "claim_id": "raw_goal_chain",
-      "claim": "The raw goal chain compiles, runs, certifies, and returns non-zero exit for NOT_DONE status.",
+      "claim": "The raw goal chain compiles, runs, certifies, returns non-zero exit for NOT_DONE status, and marks legacy non-provenance mode as deprecated compatibility-only.",
       "mode": "quick",
       "command": ["python", "tests/test_raw_goal_chain.py", "-v"],
-      "expected_evidence": ["tests pass", "NOT_DONE status exits non-zero", "DONE_PASS exits zero", "CERTIFIED_DONE exits zero"],
+      "expected_evidence": ["tests pass", "legacy mode emits deprecation warning", "NOT_DONE status exits non-zero", "DONE_PASS exits zero for deprecated compatibility coverage", "CERTIFIED_DONE exits zero"],
       "claim_boundary": "Deterministic raw-goal compilation and certification fixtures only; not general natural-language goal compilation."
     },
     {

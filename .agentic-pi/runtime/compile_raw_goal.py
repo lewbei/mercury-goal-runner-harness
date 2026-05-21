@@ -17,6 +17,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 RUN_ROOT = ROOT / ".agentic-runs"
 RUN_ID_RE = re.compile(r"^[A-Za-z0-9_.-]+$")
+LEGACY_DEPRECATION_WARNING = (
+    "WARNING: --mode legacy is deprecated compatibility-only. "
+    "Use --mode p2 or --mode planning_p2 for strict verifier-provenance runs."
+)
 
 
 def require_run_id(run_id: str) -> str:
@@ -176,7 +180,7 @@ def main(argv=None) -> int:
         "--mode",
         choices=["legacy", "p2", "missing_verifier", "planning_p2"],
         default="p2",
-        help="strict raw-goal proof fixture mode",
+        help="strict raw-goal proof fixture mode; legacy is deprecated compatibility-only",
     )
     args = parser.parse_args(argv)
 
@@ -198,6 +202,8 @@ def main(argv=None) -> int:
         print("goal-run will not work without run_state.json. Use 'pi_cli.py goal-init' first.", file=sys.stderr)
         sys.exit(1)
 
+    if args.mode == "legacy":
+        print(LEGACY_DEPRECATION_WARNING)
     run_dir = compile_raw_goal(args.run_id, args.goal, args.mode)
     print(f"Compiled raw goal into {run_dir}")
     print(f"mode={args.mode}")

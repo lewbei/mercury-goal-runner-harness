@@ -46,6 +46,8 @@ class RawGoalChainTests(unittest.TestCase):
             mode,
         )
         self.assertEqual(compile_result.returncode, 0, compile_result.stdout)
+        if mode == "legacy":
+            self.assertIn("deprecated compatibility-only", compile_result.stdout)
         self.assertEqual(load_json(run_dir / "goal_contract.json")["run_id"], run_id)
 
         run_result = run_python(
@@ -70,6 +72,7 @@ class RawGoalChainTests(unittest.TestCase):
         status = run_python(".agentic-pi/runtime/pi_cli.py", "goal-status", run_dir.name, "--fail-on-missing")
         self.assertEqual(status.returncode, 0, status.stdout)
         self.assertIn("SKIPPED_LEGACY", status.stdout)
+        self.assertIn("deprecated compatibility mode", status.stdout)
 
     def test_raw_p2_provenance_reaches_certified_done(self):
         run_dir = self.run_case("p2", "p2", "CERTIFIED_DONE")

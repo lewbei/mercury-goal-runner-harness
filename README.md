@@ -30,6 +30,8 @@ If you meant a separate package named `mercury-goal-runner`, treat that as a dif
 
 This is a prepared-run harness. The runtime is strict: it does not create missing planner or verifier proof artifacts for you. For the current bounded planning-quality proof path, start with `docs/CURRENT.md` and `docs/CURRENT_RUNTIME_PATH.md`.
 
+Legacy raw-goal mode (`pi_cli.py goal-compile --mode legacy`) is deprecated compatibility coverage only. Use strict verifier-provenance runs (`--mode p2` / `--mode planning_p2`, or prepared runs with `verifier_contract.json` and `verifier_artifacts/*.json`) for current architecture work.
+
 ```bash
 # 1. Init a run
 python .agentic-pi/runtime/init_run.py --run-id my_goal

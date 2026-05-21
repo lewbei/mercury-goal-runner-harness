@@ -731,14 +731,14 @@ Important compatibility rule:
 policy_decision.json exists only in provenance mode.
 ```
 
-Legacy runs without `verifier_contract.json` use:
+Deprecated compatibility legacy runs without `verifier_contract.json` use:
 
 ```text
 DONE_PASS
 DONE_FAIL
 ```
 
-Provenance-mode runs use:
+Current recommended provenance-mode runs use:
 
 ```text
 NOT_DONE

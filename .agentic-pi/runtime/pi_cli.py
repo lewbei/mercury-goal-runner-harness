@@ -173,7 +173,7 @@ def goal_status(args) -> int:
         print()
     if not provenance_mode and not policy_path.is_file():
         print(f"## {policy_path.relative_to(ROOT).as_posix()}")
-        print("SKIPPED_LEGACY")
+        print("SKIPPED_LEGACY (deprecated compatibility mode; use strict verifier-provenance runs for current architecture)")
         print()
     return 1 if missing and args.fail_on_missing else 0
 
@@ -224,7 +224,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--mode",
         choices=["legacy", "p2", "missing_verifier", "planning_p2"],
         default="p2",
-        help="strict raw-goal proof fixture mode",
+        help="strict raw-goal proof fixture mode; legacy is deprecated compatibility-only",
     )
     p_compile.set_defaults(func=goal_compile)
 

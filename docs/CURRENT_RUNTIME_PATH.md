@@ -50,6 +50,8 @@ python .agentic-pi/runtime/pi_cli.py --help
 
 This helper is not the external Pi agent. It dispatches deterministic harness commands and must not certify DONE by itself.
 
+`pi_cli.py goal-compile --mode legacy` is deprecated compatibility-only. Do not use it as the recommended walkthrough or authority path; use strict verifier-provenance inputs instead.
+
 ## Prepared-run path
 
 A prepared run uses:
@@ -107,13 +109,14 @@ docs/CURRENT.md
 
 ## Compatibility / proof-slice paths
 
-The following files contain smoke, compatibility, or proof-slice behavior and should not be treated as the strict authority path without reading their boundaries:
+The following files contain smoke, compatibility, deprecated legacy, or proof-slice behavior and should not be treated as the strict authority path without reading their boundaries:
 
 ```text
 .agentic-pi/runtime/run_pi_chain_smoke.py
 .agentic-pi/runtime/run_agentic_autonomy_probe.py
 .agentic-pi/runtime/run_real_pi_behavior_evaluation.py
 .agentic-pi/runtime/run_real_pi_behavior_matrix.py
+.agentic-pi/runtime/compile_raw_goal.py --mode legacy
 ```
 
 The default runtime files below are intended to fail closed rather than create generated substitute proof artifacts:

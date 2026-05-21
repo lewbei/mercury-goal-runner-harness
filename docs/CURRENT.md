@@ -35,6 +35,8 @@ Stage 3 runtime preflight
 
 This path is evidence-gated and execution-blocking for the guarded v2 slice. It does not prove that every historical runner, smoke harness, or legacy compatibility path is globally forced through v1.1.
 
+Legacy raw-goal/non-provenance mode remains available only as deprecated compatibility coverage. It is not the recommended walkthrough path for current architecture work.
+
 ## Latest certified planning milestones
 
 | Milestone | Commit | Certified run | Status |
@@ -111,6 +113,7 @@ artifact test command execution is allowlisted for run-relative Python scripts o
 unsafe shell operators, Python -c/-m style eval, path escapes, protected status artifact references, and unknown executables fail closed
 Planning Coordination v1.1 requires explicit selected-candidate skeptic/attack review evidence before exposing guarded-execution handoff inputs
 unresolved high-severity or authority risks block guarded-execution handoff while preserving planning-only/non-certification boundaries
+legacy raw-goal/non-provenance mode is deprecated compatibility-only; strict verifier-provenance is the recommended current path
 ```
 
 ## Still valid gaps
