@@ -35,7 +35,7 @@ Stage 3 runtime preflight
 
 This path is evidence-gated and execution-blocking for the guarded v2 slice. It does not prove that every historical runner, smoke harness, or legacy compatibility path is globally forced through v1.1.
 
-Legacy raw-goal/non-provenance mode remains available only as deprecated compatibility coverage. It is not the recommended walkthrough path for current architecture work.
+Legacy raw-goal/non-provenance mode remains available only as deprecated compatibility coverage. It is not the recommended walkthrough path for current architecture work. For mock raw-goal walkthroughs, use strict verifier-provenance mode: `pi_cli.py goal-compile <run_id> --goal "Create README.md explaining the harness" --mode p2` followed by `goal-run` and `goal-status`.
 
 ## Latest certified planning milestones
 

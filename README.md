@@ -32,6 +32,14 @@ This is a prepared-run harness. The runtime is strict: it does not create missin
 
 Legacy raw-goal mode (`pi_cli.py goal-compile --mode legacy`) is deprecated compatibility coverage only. Use strict verifier-provenance runs (`--mode p2` / `--mode planning_p2`, or prepared runs with `verifier_contract.json` and `verifier_artifacts/*.json`) for current architecture work.
 
+Strict raw-goal fixture smoke:
+
+```bash
+python .agentic-pi/runtime/pi_cli.py goal-compile strict_mock_goal --goal "Create README.md explaining the harness" --mode p2
+python .agentic-pi/runtime/pi_cli.py goal-run strict_mock_goal --skip-memory-update
+python .agentic-pi/runtime/pi_cli.py goal-status strict_mock_goal --fail-on-missing
+```
+
 ```bash
 # 1. Init a run
 python .agentic-pi/runtime/init_run.py --run-id my_goal

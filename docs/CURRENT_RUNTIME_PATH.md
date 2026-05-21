@@ -52,6 +52,16 @@ This helper is not the external Pi agent. It dispatches deterministic harness co
 
 `pi_cli.py goal-compile --mode legacy` is deprecated compatibility-only. Do not use it as the recommended walkthrough or authority path; use strict verifier-provenance inputs instead.
 
+Strict raw-goal fixture smoke uses verifier provenance by default (`--mode p2` is the default, and `--mode planning_p2` is the stricter planning proof fixture):
+
+```cmd
+python .agentic-pi/runtime/pi_cli.py goal-compile strict_mock_goal --goal "Create README.md explaining the harness" --mode p2
+python .agentic-pi/runtime/pi_cli.py goal-run strict_mock_goal --skip-memory-update
+python .agentic-pi/runtime/pi_cli.py goal-status strict_mock_goal --fail-on-missing
+```
+
+Expected authority artifacts for that path include `verifier_contract.json`, `verifier_artifacts/V.RAW_GOAL_P2.json`, `policy_decision.json`, `certification.json`, and `final_status.json` with `CERTIFIED_DONE` only after policy/certifier checks pass.
+
 ## Prepared-run path
 
 A prepared run uses:
