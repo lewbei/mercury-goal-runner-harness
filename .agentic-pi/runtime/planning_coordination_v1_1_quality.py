@@ -33,6 +33,10 @@ PASS_STATUS = "PLANNING_COORDINATION_V1_1_QUALITY_APPROVED"
 NOT_READY_STATUS = "PLANNING_COORDINATION_V1_1_NOT_READY"
 PLAN_QUALITY_APPROVED = "PLAN_QUALITY_APPROVED"
 PLAN_QUALITY_BLOCKED = "PLAN_QUALITY_BLOCKED"
+SKEPTIC_REVIEW_APPROVED = "SKEPTIC_REVIEW_APPROVED"
+SKEPTIC_REVIEW_BLOCKED = "SKEPTIC_REVIEW_BLOCKED"
+ATTACK_RESOLUTION_APPROVED = "ATTACK_RESOLUTION_APPROVED"
+ATTACK_RESOLUTION_BLOCKED = "ATTACK_RESOLUTION_BLOCKED"
 BLOCKER_BUDGET_WITHIN = "WITHIN_BUDGET"
 BLOCKER_BUDGET_EXCEEDED = "BLOCK_EXECUTION"
 DEFAULT_MIN_QUALITY_SCORE = 0.85
@@ -45,14 +49,15 @@ CRITICAL_RISK_IDS = {
     "R.AUTHORITY_LEAK",
 }
 QUALITY_WEIGHTS = {
-    "evidence_requirement_coverage": 0.14,
-    "dependency_coverage": 0.14,
-    "forbidden_path_safety": 0.12,
-    "verifier_readiness": 0.14,
-    "assumption_visibility": 0.12,
+    "evidence_requirement_coverage": 0.12,
+    "dependency_coverage": 0.12,
+    "forbidden_path_safety": 0.10,
+    "verifier_readiness": 0.12,
+    "assumption_visibility": 0.10,
     "unknown_handling": 0.10,
-    "validation_specificity": 0.08,
-    "rejection_accountability": 0.04,
+    "validation_specificity": 0.07,
+    "rejection_accountability": 0.03,
+    "skeptic_attack_review": 0.12,
     "authority_safety": 0.12,
 }
 
@@ -87,6 +92,8 @@ def quality_artifact_paths(work_dir: Path) -> dict[str, Path]:
     return {
         "coordination_work_dir": work_dir / "coordination_v1",
         "coordination_report": work_dir / "coordination_v1_report.json",
+        "planning_skeptic_review_report": work_dir / "planning_skeptic_review_report.json",
+        "planning_attack_resolution_report": work_dir / "planning_attack_resolution_report.json",
         "plan_quality_report": work_dir / "plan_quality_report.json",
         "blocker_budget_report": work_dir / "blocker_budget_report.json",
     }
@@ -164,7 +171,9 @@ def load_package(coordination_report_path: Path) -> dict[str, Any]:
         raw_path = artifacts.get(key)
         if not isinstance(raw_path, str) or not raw_path.strip():
             raise ValueError(f"coordination report missing planning_artifacts.{key}")
-        package[key] = load_required_json(resolve_reported_path(raw_path), key)
+        resolved_path = resolve_reported_path(raw_path)
+        package[key] = load_required_json(resolved_path, key)
+        package[f"{key}_path"] = resolved_path
     inputs = selected_inputs(coordination_report)
     for key in ["plan", "expected_artifacts", "planning_preflight_report", "preflight_report"]:
         raw_path = inputs.get(key)
@@ -374,6 +383,185 @@ def evaluate_rejection_accountability(package: dict[str, Any]) -> tuple[float, l
     return 1.0 if not blockers else 0.0, blockers, warnings, {"rejected_candidate_count": len(rejected)}
 
 
+def severity_for_risk(risk: dict[str, Any], selected_candidate_id: str) -> str:
+    """Classify a v1 risk as LOW/MEDIUM/HIGH/CRITICAL for skeptic review."""
+    risk_id = str(risk.get("risk_id", ""))
+    attack_text = str(risk.get("attack", "")).lower()
+    if risk_id in CRITICAL_RISK_IDS or "authority" in risk_id.lower() or "certif" in attack_text or "final run status" in attack_text:
+        return "CRITICAL"
+    if risk_id == f"R.CANDIDATE_{selected_candidate_id}":
+        return "HIGH"
+    if risk_id.startswith("R.CANDIDATE_"):
+        return "MEDIUM"
+    return "LOW"
+
+
+def risk_blocks_skeptic_review(risk: dict[str, Any], selected_candidate_id: str) -> bool:
+    if risk.get("status") == "PASS":
+        return False
+    severity = severity_for_risk(risk, selected_candidate_id)
+    return severity in {"HIGH", "CRITICAL"}
+
+
+def runtime_nonexecution_contract() -> dict[str, Any]:
+    return {
+        "goal_execution_attempted": False,
+        "plan_execution_attempted": False,
+        "guarded_execution_invoked": False,
+        "status_authority": "certifier_only",
+        "requires_policy_certifier_for_status": True,
+        "can_certify_done": False,
+    }
+
+
+def build_skeptic_review_reports(package: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
+    coordination_report = package["coordination_report"]
+    risk_report = package["planning_risk_attack_report"]
+    selected_candidate_id = str(coordination_report.get("selected_candidate_id") or risk_report.get("selected_candidate_id") or "")
+    risks = risk_report.get("risks", []) if isinstance(risk_report, dict) else []
+    reviewed_risks: list[dict[str, Any]] = []
+    unresolved_high_or_authority: list[dict[str, Any]] = []
+    unresolved_nonblocking: list[dict[str, Any]] = []
+    resolved_attacks: list[dict[str, Any]] = []
+
+    for risk in risks if isinstance(risks, list) else []:
+        if not isinstance(risk, dict):
+            continue
+        risk_id = str(risk.get("risk_id", "<unknown>"))
+        severity = severity_for_risk(risk, selected_candidate_id)
+        applies_to_selected = risk_id in CRITICAL_RISK_IDS or risk_id == f"R.CANDIDATE_{selected_candidate_id}"
+        finding = {
+            "risk_id": risk_id,
+            "attack": risk.get("attack", ""),
+            "mitigation": risk.get("mitigation", ""),
+            "status": risk.get("status", "UNKNOWN"),
+            "severity": severity,
+            "applies_to_selected_candidate": applies_to_selected,
+            "authority_boundary_risk": severity == "CRITICAL",
+            "blocking": risk_blocks_skeptic_review(risk, selected_candidate_id),
+            "resolution": "resolved" if risk.get("status") == "PASS" else "unresolved",
+        }
+        reviewed_risks.append(finding)
+        if finding["blocking"]:
+            unresolved_high_or_authority.append(finding)
+        elif finding["resolution"] == "unresolved":
+            unresolved_nonblocking.append(finding)
+        else:
+            resolved_attacks.append({
+                "risk_id": risk_id,
+                "severity": severity,
+                "mitigation": risk.get("mitigation", ""),
+            })
+
+    selected_risk_reviewed = any(item.get("risk_id") == f"R.CANDIDATE_{selected_candidate_id}" for item in reviewed_risks)
+    authority_risk_reviewed = any(item.get("severity") == "CRITICAL" for item in reviewed_risks)
+    blocking_failures: list[str] = []
+    if not selected_candidate_id:
+        blocking_failures.append("selected candidate id is missing from skeptic review input")
+    if not reviewed_risks:
+        blocking_failures.append("skeptic review has no attack cases")
+    if not selected_risk_reviewed:
+        blocking_failures.append("skeptic review must include the selected candidate risk")
+    if not authority_risk_reviewed:
+        blocking_failures.append("skeptic review must include authority-boundary attack coverage")
+    if unresolved_high_or_authority:
+        blocking_failures.append("unresolved high-severity or authority risks remain")
+
+    approved = not blocking_failures
+    review = {
+        "schema_version": "planning_coordination_v1_1_skeptic_review_report_v1",
+        "status": SKEPTIC_REVIEW_APPROVED if approved else SKEPTIC_REVIEW_BLOCKED,
+        "authority": v2.REQUIRED_AUTHORITY,
+        "review_mode": "planning_only",
+        "reviewer_role": "deterministic_skeptic_gate",
+        "selected_candidate_id": selected_candidate_id,
+        "selected_generator": coordination_report.get("selected_generator", ""),
+        "source_risk_attack_report": rel_path(package["planning_risk_attack_report_path"]),
+        "review_scope": [
+            "selected candidate attack surface",
+            "authority-boundary risks",
+            "guarded-execution handoff risks",
+            "non-selected candidate rejection accountability",
+        ],
+        "attack_cases": reviewed_risks,
+        "risk_findings": reviewed_risks,
+        "unresolved_high_or_authority_risks": unresolved_high_or_authority,
+        "unresolved_nonblocking_risks": unresolved_nonblocking,
+        "blocking_failures": blocking_failures,
+        "runtime_execution": runtime_nonexecution_contract(),
+        "claim_boundary": "Skeptic review is a deterministic planning-only attack review. It does not execute plans, decide policy, certify, or prove exhaustive risk coverage.",
+    }
+    resolution = {
+        "schema_version": "planning_coordination_v1_1_attack_resolution_report_v1",
+        "status": ATTACK_RESOLUTION_APPROVED if approved else ATTACK_RESOLUTION_BLOCKED,
+        "authority": v2.REQUIRED_AUTHORITY,
+        "selected_candidate_id": selected_candidate_id,
+        "source_skeptic_review_status": review["status"],
+        "resolved_attacks": resolved_attacks,
+        "unresolved_high_or_authority_risks": unresolved_high_or_authority,
+        "unresolved_nonblocking_risks": unresolved_nonblocking,
+        "resolution_policy": "unresolved HIGH or CRITICAL/authority risks block guarded execution handoff; non-selected candidate failures remain visible as warnings",
+        "execution_gate": {
+            "skeptic_review_approved": approved,
+            "may_pass_plan_to_guarded_execution": approved,
+            "blocked_before_execution": not approved,
+        },
+        "runtime_execution": runtime_nonexecution_contract(),
+        "claim_boundary": "Attack resolution is a bounded pre-execution planning gate. It cannot certify DONE or replace verifier/policy/certifier authority.",
+    }
+    return review, resolution
+
+
+def validate_skeptic_review_reports(review: dict[str, Any], resolution: dict[str, Any], selected_candidate_id: str) -> list[str]:
+    errors: list[str] = []
+    if review.get("schema_version") != "planning_coordination_v1_1_skeptic_review_report_v1":
+        errors.append("skeptic review schema_version mismatch")
+    if resolution.get("schema_version") != "planning_coordination_v1_1_attack_resolution_report_v1":
+        errors.append("attack resolution schema_version mismatch")
+    if review.get("authority") != v2.REQUIRED_AUTHORITY or resolution.get("authority") != v2.REQUIRED_AUTHORITY:
+        errors.append("skeptic artifacts must preserve evaluation_only/certifier_only authority")
+    if review.get("review_mode") != "planning_only":
+        errors.append("skeptic review must be planning_only")
+    if review.get("selected_candidate_id") != selected_candidate_id or resolution.get("selected_candidate_id") != selected_candidate_id:
+        errors.append("skeptic artifacts must match selected candidate id")
+    if not isinstance(review.get("attack_cases"), list) or not review.get("attack_cases"):
+        errors.append("skeptic review must contain attack cases")
+    if not any(isinstance(item, dict) and item.get("risk_id") == f"R.CANDIDATE_{selected_candidate_id}" for item in review.get("attack_cases", [])):
+        errors.append("skeptic review must include selected candidate attack case")
+    if not any(isinstance(item, dict) and item.get("authority_boundary_risk") is True for item in review.get("risk_findings", [])):
+        errors.append("skeptic review must include authority-boundary risk coverage")
+    if review.get("unresolved_high_or_authority_risks") or resolution.get("unresolved_high_or_authority_risks"):
+        errors.append("unresolved high-severity or authority risks must block")
+    if review.get("status") != SKEPTIC_REVIEW_APPROVED:
+        errors.append("skeptic review is not approved")
+    if resolution.get("status") != ATTACK_RESOLUTION_APPROVED:
+        errors.append("attack resolution is not approved")
+    for label, artifact in {"skeptic review": review, "attack resolution": resolution}.items():
+        errors.extend(report_runtime_is_nonexecuting(artifact, label))
+        if v2.contains_final_status_value(artifact):
+            errors.append(f"{label} must not contain final status enum values")
+    return errors
+
+
+def evaluate_skeptic_attack_review(package: dict[str, Any]) -> tuple[float, list[str], list[str], dict[str, Any]]:
+    review = package.get("planning_skeptic_review_report")
+    resolution = package.get("planning_attack_resolution_report")
+    selected_candidate_id = str(package["coordination_report"].get("selected_candidate_id", ""))
+    blockers: list[str] = []
+    warnings: list[str] = []
+    if not isinstance(review, dict) or not isinstance(resolution, dict):
+        return 0.0, ["skeptic review artifacts are missing"], warnings, {}
+    blockers.extend(validate_skeptic_review_reports(review, resolution, selected_candidate_id))
+    if resolution.get("unresolved_nonblocking_risks"):
+        warnings.append(f"nonblocking unresolved risks remain visible: {[item.get('risk_id') for item in resolution.get('unresolved_nonblocking_risks', []) if isinstance(item, dict)]}")
+    return 1.0 if not blockers else 0.0, blockers, warnings, {
+        "selected_candidate_id": selected_candidate_id,
+        "attack_case_count": len(review.get("attack_cases", [])) if isinstance(review.get("attack_cases"), list) else 0,
+        "resolved_attack_count": len(resolution.get("resolved_attacks", [])) if isinstance(resolution.get("resolved_attacks"), list) else 0,
+        "unresolved_high_or_authority_count": len(resolution.get("unresolved_high_or_authority_risks", [])) if isinstance(resolution.get("unresolved_high_or_authority_risks"), list) else 0,
+    }
+
+
 def evaluate_authority_safety(package: dict[str, Any]) -> tuple[float, list[str], list[str], dict[str, Any]]:
     blockers: list[str] = []
     warnings: list[str] = []
@@ -386,6 +574,8 @@ def evaluate_authority_safety(package: dict[str, Any]) -> tuple[float, list[str]
         "planning_completeness_report": package["planning_completeness_report"],
         "coordinator_selection_ledger": package["coordinator_selection_ledger"],
         "planning_preflight_report": package.get("planning_preflight_report") or {},
+        "planning_skeptic_review_report": package.get("planning_skeptic_review_report") or {},
+        "planning_attack_resolution_report": package.get("planning_attack_resolution_report") or {},
     }
     for name, report in named_reports.items():
         if isinstance(report, dict) and "authority" in report and not source_authority_ok(report):
@@ -402,8 +592,9 @@ def compute_plan_quality_report(
     min_quality_score: float,
     max_blocking_unknowns: int,
     max_nonblocking_unknowns: int,
+    package: dict[str, Any] | None = None,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
-    package = load_package(coordination_report_path)
+    package = package if package is not None else load_package(coordination_report_path)
     dimensions: list[dict[str, Any]] = []
     for name, evaluator, critical in [
         ("evidence_requirement_coverage", evaluate_evidence_requirement_coverage, True),
@@ -414,6 +605,7 @@ def compute_plan_quality_report(
         ("unknown_handling", evaluate_unknown_handling, True),
         ("validation_specificity", evaluate_validation_specificity, True),
         ("rejection_accountability", evaluate_rejection_accountability, False),
+        ("skeptic_attack_review", evaluate_skeptic_attack_review, True),
         ("authority_safety", evaluate_authority_safety, True),
     ]:
         score, blockers, warnings, evidence = evaluator(package)
@@ -466,6 +658,8 @@ def compute_plan_quality_report(
         "quality_dimensions": dimensions,
         "unknown_budget": blocker_budget,
         "quality_scores": {item["dimension"]: item["score"] for item in dimensions},
+        "skeptic_review_status": package.get("planning_skeptic_review_report", {}).get("status") if isinstance(package.get("planning_skeptic_review_report"), dict) else None,
+        "attack_resolution_status": package.get("planning_attack_resolution_report", {}).get("status") if isinstance(package.get("planning_attack_resolution_report"), dict) else None,
         "blocking_failures": blocking_failures,
         "nonblocking_warnings": nonblocking_warnings,
         "execution_gate": {
@@ -519,14 +713,26 @@ def build_quality_gate_report(
         coordination_report = load_required_json(reuse_coordination_report, "Planning Coordination v1 report")
         coordination_errors = coordination.validate_coordination_report(coordination_report)
 
+    package = load_package(paths["coordination_report"])
+    skeptic_review_report, attack_resolution_report = build_skeptic_review_reports(package)
+    skeptic_metadata = write_json(paths["planning_skeptic_review_report"], skeptic_review_report)
+    attack_metadata = write_json(paths["planning_attack_resolution_report"], attack_resolution_report)
+    package["planning_skeptic_review_report"] = skeptic_review_report
+    package["planning_attack_resolution_report"] = attack_resolution_report
+    package["planning_skeptic_review_report_path"] = paths["planning_skeptic_review_report"]
+    package["planning_attack_resolution_report_path"] = paths["planning_attack_resolution_report"]
+
     plan_quality_report, blocker_budget = compute_plan_quality_report(
         paths["coordination_report"],
         paths["plan_quality_report"],
         min_quality_score,
         max_blocking_unknowns,
         max_nonblocking_unknowns,
+        package,
     )
     write_metadata = {
+        "planning_skeptic_review_report": skeptic_metadata,
+        "planning_attack_resolution_report": attack_metadata,
         "plan_quality_report": write_json(paths["plan_quality_report"], plan_quality_report),
         "blocker_budget_report": write_json(paths["blocker_budget_report"], blocker_budget),
     }
@@ -535,6 +741,7 @@ def build_quality_gate_report(
     add_check(criteria, "coordination_v1_report_valid", not coordination_errors and coordination_report.get("status") == coordination.PASS_STATUS, "Planning Coordination v1 report validates and is approved", coordination_errors or coordination_report.get("status"))
     add_check(criteria, "evidence_weighted_quality_score_met", plan_quality_report.get("quality_score", 0) >= min_quality_score, f"quality_score >= {min_quality_score}", plan_quality_report.get("quality_score"))
     add_check(criteria, "blocker_budget_within_limits", blocker_budget.get("status") == BLOCKER_BUDGET_WITHIN, "blocking/nonblocking unknowns remain within budget", blocker_budget)
+    add_check(criteria, "planning_only_skeptic_review_passed", skeptic_review_report.get("status") == SKEPTIC_REVIEW_APPROVED and attack_resolution_report.get("status") == ATTACK_RESOLUTION_APPROVED, "selected candidate has explicit skeptic review and no unresolved high/authority risks", {"skeptic_review_status": skeptic_review_report.get("status"), "attack_resolution_status": attack_resolution_report.get("status")})
     add_check(criteria, "plan_quality_approved", plan_quality_report.get("status") == PLAN_QUALITY_APPROVED, PLAN_QUALITY_APPROVED, plan_quality_report.get("status"))
     add_check(criteria, "guarded_execution_not_invoked", True, "v1.1 quality gate does not invoke guarded execution", False)
     add_check(criteria, "certifier_only_authority_preserved", True, "v1.1 quality gate is evaluation-only and cannot certify", v2.REQUIRED_AUTHORITY)
@@ -543,6 +750,8 @@ def build_quality_gate_report(
     execution_gate = {
         "planning_quality_status": plan_quality_report.get("status"),
         "blocker_budget_status": blocker_budget.get("status"),
+        "skeptic_review_status": skeptic_review_report.get("status"),
+        "attack_resolution_status": attack_resolution_report.get("status"),
         "may_pass_plan_to_guarded_execution": approved,
         "required_next_runtime": "guarded_execution_v2" if approved else "none_until_plan_quality_approved",
         "runtime_module": ".agentic-pi/runtime/guarded_execution_v2.py" if approved else "",
@@ -563,16 +772,22 @@ def build_quality_gate_report(
         "selected_generator": coordination_report.get("selected_generator", "") if approved else "",
         "quality_score": plan_quality_report.get("quality_score"),
         "minimum_quality_score": min_quality_score,
+        "skeptic_review_status": skeptic_review_report.get("status"),
+        "attack_resolution_status": attack_resolution_report.get("status"),
         "unknown_budget": blocker_budget,
         "criteria": criteria,
         "quality_artifacts": {
             "coordination_report": rel_path(paths["coordination_report"]),
+            "planning_skeptic_review_report": rel_path(paths["planning_skeptic_review_report"]),
+            "planning_attack_resolution_report": rel_path(paths["planning_attack_resolution_report"]),
             "plan_quality_report": rel_path(paths["plan_quality_report"]),
             "blocker_budget_report": rel_path(paths["blocker_budget_report"]),
         },
         "quality_artifact_hashes": {key: meta["sha256"] for key, meta in write_metadata.items()},
         "source_reports": {
             "coordination_v1_report": rel_path(paths["coordination_report"]),
+            "planning_skeptic_review_report": rel_path(paths["planning_skeptic_review_report"]),
+            "planning_attack_resolution_report": rel_path(paths["planning_attack_resolution_report"]),
             "plan_quality_report": rel_path(paths["plan_quality_report"]),
             "blocker_budget_report": rel_path(paths["blocker_budget_report"]),
         },
@@ -604,6 +819,28 @@ def validate_quality_gate_report(report: dict[str, Any]) -> list[str]:
         errors.append("criteria must be a non-empty list")
     elif report.get("status") == PASS_STATUS and any(check.get("status") != "PASS" for check in criteria):
         errors.append("approved v1.1 reports must have all criteria PASS")
+    artifacts = report.get("quality_artifacts", {})
+    artifact_hashes = report.get("quality_artifact_hashes", {})
+    source_reports = report.get("source_reports", {})
+    for key in ["coordination_report", "planning_skeptic_review_report", "planning_attack_resolution_report", "plan_quality_report", "blocker_budget_report"]:
+        raw_path = artifacts.get(key) if isinstance(artifacts, dict) else None
+        if not isinstance(raw_path, str) or not raw_path.strip():
+            errors.append(f"quality_artifacts.{key} is required")
+        elif not resolve_reported_path(raw_path).is_file():
+            errors.append(f"quality artifact does not exist: {raw_path}")
+    for key in ["planning_skeptic_review_report", "planning_attack_resolution_report", "plan_quality_report", "blocker_budget_report"]:
+        if not isinstance(artifact_hashes, dict) or not isinstance(artifact_hashes.get(key), str) or not artifact_hashes.get(key):
+            errors.append(f"quality_artifact_hashes.{key} is required")
+        if not isinstance(source_reports, dict) or not isinstance(source_reports.get(key), str) or not source_reports.get(key):
+            errors.append(f"source_reports.{key} is required")
+    if report.get("status") == PASS_STATUS:
+        check_ids = {check.get("check_id") for check in criteria} if isinstance(criteria, list) else set()
+        if "planning_only_skeptic_review_passed" not in check_ids:
+            errors.append("approved v1.1 reports must include planning_only_skeptic_review_passed criterion")
+        if report.get("skeptic_review_status") != SKEPTIC_REVIEW_APPROVED:
+            errors.append("approved v1.1 report must have approved skeptic review")
+        if report.get("attack_resolution_status") != ATTACK_RESOLUTION_APPROVED:
+            errors.append("approved v1.1 report must have approved attack resolution")
     runtime = report.get("runtime_execution", {})
     if runtime.get("goal_execution_attempted") is not False:
         errors.append("runtime_execution.goal_execution_attempted must be false")
@@ -683,6 +920,8 @@ def main(argv: list[str] | None = None) -> int:
     print("blocker budget within limits")
     print(f"selected candidate {report['selected_candidate_id']}")
     print("plan_quality_report written")
+    print("planning skeptic review approved")
+    print("attack resolution report approved")
     print("guarded execution not invoked by v1.1")
     print("handoff bound to guarded_execution_v2")
     print("certifier-only authority preserved")

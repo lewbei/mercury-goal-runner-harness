@@ -109,6 +109,8 @@ docs/workspace_index.md     file map and cleanup debt
 ```text
 artifact test command execution is allowlisted for run-relative Python scripts only
 unsafe shell operators, Python -c/-m style eval, path escapes, protected status artifact references, and unknown executables fail closed
+Planning Coordination v1.1 requires explicit selected-candidate skeptic/attack review evidence before exposing guarded-execution handoff inputs
+unresolved high-severity or authority risks block guarded-execution handoff while preserving planning-only/non-certification boundaries
 ```
 
 ## Still valid gaps
@@ -118,7 +120,7 @@ docs/package cleanup beyond this pointer still needs follow-up
 certifier is still a large monolith
 Stage 2 semantic/live evaluation still needs expansion
 task routing can still improve
-skeptic planner is not yet mandatory across all paths
+skeptic/attack review is mandatory on the current Planning Coordination v1.1 handoff path, but not yet mandatory across every historical compatibility path
 no MCTS / symbolic bridge / partial-observability planner yet
 ```
 

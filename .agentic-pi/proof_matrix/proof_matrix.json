@@ -376,11 +376,11 @@
     },
     {
       "claim_id": "planning_coordination_v1_1_quality",
-      "claim": "Planning Coordination v1.1 adds evidence-weighted plan-quality scoring and blocker-budget gating on top of Planning Coordination v1, exposing guarded_execution_v2 inputs only when quality score and unknown budgets pass.",
+      "claim": "Planning Coordination v1.1 adds evidence-weighted plan-quality scoring, mandatory selected-candidate skeptic/attack review, and blocker-budget gating on top of Planning Coordination v1, exposing guarded_execution_v2 inputs only when quality score, skeptic review, attack resolution, and unknown budgets pass.",
       "mode": "quick",
       "command": ["python", ".agentic-pi/runtime/planning_coordination_v1_1_quality.py", "--goal", ".agentic-pi/runtime/planning_coordination_v1_goal.json", "--stage3-preflight-report", ".agentic-runs/proof_matrix_outputs/stage3_runtime_preflight_report_v1.json", "--work-dir", ".agentic-runs/proof_matrix_outputs/planning_coordination_v1_1", "--output", ".agentic-runs/proof_matrix_outputs/planning_coordination_v1_1_quality_report.json"],
-      "expected_evidence": ["PLANNING_COORDINATION_V1_1_QUALITY_APPROVED", "evidence-weighted plan quality approved", "blocker budget within limits", "selected candidate planning_efficiency_v3_repair_loop", "plan_quality_report written", "guarded execution not invoked by v1.1", "handoff bound to guarded_execution_v2", "certifier-only authority preserved"],
-      "claim_boundary": "Planning Coordination v1.1 quality proof only; it scores and gates the selected planning handoff before guarded execution but does not execute guarded plans, decide policy, certify DONE, or prove arbitrary planning safety."
+      "expected_evidence": ["PLANNING_COORDINATION_V1_1_QUALITY_APPROVED", "evidence-weighted plan quality approved", "blocker budget within limits", "selected candidate planning_efficiency_v3_repair_loop", "plan_quality_report written", "planning skeptic review approved", "attack resolution report approved", "guarded execution not invoked by v1.1", "handoff bound to guarded_execution_v2", "certifier-only authority preserved"],
+      "claim_boundary": "Planning Coordination v1.1 quality proof only; it scores, skeptic-reviews, and gates the selected planning handoff before guarded execution but does not execute guarded plans, decide policy, certify DONE, or prove arbitrary planning safety."
     },
     {
       "claim_id": "guarded_execution_v2",

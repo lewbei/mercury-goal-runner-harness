@@ -95,7 +95,7 @@ stage3_runtime_preflight.py
   -> policy_engine.py / certify_run.py
 ```
 
-Planning Coordination v1.1 adds evidence-weighted quality scoring, blocker/unknown budget checks, selected-handoff revalidation, and handoff binding to Guarded Execution v2. It is allowed to approve or block a handoff; it must not execute the guarded plan and must not certify DONE.
+Planning Coordination v1.1 adds evidence-weighted quality scoring, mandatory selected-candidate skeptic/attack review, blocker/unknown budget checks, selected-handoff revalidation, and handoff binding to Guarded Execution v2. It is allowed to approve or block a handoff; unresolved high-severity or authority risks must block the handoff. It must not execute the guarded plan and must not certify DONE.
 
 Boundary: this is the current bounded proof path for the guarded v2 slice. It does not mean every historical runner, smoke harness, or compatibility path is globally forced through v1.1.
 
