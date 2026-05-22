@@ -114,13 +114,14 @@ unsafe shell operators, Python -c/-m style eval, path escapes, protected status 
 Planning Coordination v1.1 requires explicit selected-candidate skeptic/attack review evidence before exposing guarded-execution handoff inputs
 unresolved high-severity or authority risks block guarded-execution handoff while preserving planning-only/non-certification boundaries
 legacy raw-goal/non-provenance mode is deprecated compatibility-only; strict verifier-provenance is the recommended current path
+certifier modularization pre-audit v1 maps certify_run.py authority seams and golden tests without refactoring behavior
 ```
 
 ## Still valid gaps
 
 ```text
 docs/package cleanup beyond this pointer still needs follow-up
-certifier is still a large monolith
+certifier is still a large monolith; modularization pre-audit exists, but the behavior-preserving split is not implemented yet
 Stage 2 semantic/live evaluation still needs expansion
 task routing can still improve
 skeptic/attack review is mandatory on the current Planning Coordination v1.1 handoff path, but not yet mandatory across every historical compatibility path

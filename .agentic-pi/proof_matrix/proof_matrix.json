@@ -247,6 +247,14 @@
       "claim_boundary": "Deterministic raw-goal compilation and certification fixtures only; not general natural-language goal compilation."
     },
     {
+      "claim_id": "certifier_modularization_pre_audit",
+      "claim": "Certifier Modularization Pre-Audit v1 maps certify_run.py authority responsibilities, future module seams, and golden behavior tests as a pre-refactor audit only, without adding a new status writer or changing certifier behavior.",
+      "mode": "quick",
+      "command": ["python", "tests/test_certifier_modularization_pre_audit.py", "-v"],
+      "expected_evidence": ["pre-refactor audit only", "authority invariant preserved", "current certifier functions mapped", "future seams are non-authority-expanding", "golden behavior cases listed"],
+      "claim_boundary": "Documentation/test-lock evidence only; this does not modularize certify_run.py, execute goals, decide policy, certify DONE, or prove behavior preservation for a future refactor."
+    },
+    {
       "claim_id": "execution_layer",
       "claim": "The controlled execution layer validates command allowlist, write scope, and protected files per role.",
       "mode": "quick",
