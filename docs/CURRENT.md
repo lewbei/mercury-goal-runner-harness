@@ -115,14 +115,15 @@ Planning Coordination v1.1 requires explicit selected-candidate skeptic/attack r
 unresolved high-severity or authority risks block guarded-execution handoff while preserving planning-only/non-certification boundaries
 legacy raw-goal/non-provenance mode is deprecated compatibility-only; strict verifier-provenance is the recommended current path
 certifier modularization pre-audit v1 maps certify_run.py authority seams and golden tests without refactoring behavior
-certifier golden behavior lock v1 freezes bounded current certifier behavior before any module extraction
+certifier golden behavior lock v1 freezes bounded current certifier behavior before module extraction
+certifier IO/path helper extraction v1 moved only pure helper code; policy/gates/result writing remain in certify_run.py
 ```
 
 ## Still valid gaps
 
 ```text
 docs/package cleanup beyond this pointer still needs follow-up
-certifier is still a large monolith; pre-audit and golden behavior lock exist, but the behavior-preserving split is not implemented yet
+certifier is still mostly monolithic; IO/path helpers are extracted, but policy/gates/result writing remain in certify_run.py
 Stage 2 semantic/live evaluation still needs expansion
 task routing can still improve
 skeptic/attack review is mandatory on the current Planning Coordination v1.1 handoff path, but not yet mandatory across every historical compatibility path

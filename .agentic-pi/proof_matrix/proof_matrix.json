@@ -263,6 +263,14 @@
       "claim_boundary": "Bounded deterministic certifier behavior regression tests only; this does not modularize certify_run.py, execute arbitrary goals, prove future refactor equivalence, or grant DONE authority outside the existing policy/certifier path."
     },
     {
+      "claim_id": "certifier_io_paths_extraction",
+      "claim": "Certifier IO/Path Helper Extraction v1 moves pure IO and run-path helper extraction into certifier_io.py and certifier_paths.py while preserving the existing certifier runner behavior and authority boundary.",
+      "mode": "quick",
+      "command": ["python", "tests/test_certifier_io_paths_extraction.py", "-v"],
+      "expected_evidence": ["certify_run imports helper functions from extracted modules", "moved helpers are not redefined inside certify_run.py", "IO helper behavior is preserved", "path helper behavior is preserved", "representative certifier run still reaches NOT_DONE through existing artifacts"],
+      "claim_boundary": "Bounded helper extraction regression tests only; this does not move policy invocation, post-policy gates, result artifact writing, markdown rendering, or legacy compatibility logic."
+    },
+    {
       "claim_id": "execution_layer",
       "claim": "The controlled execution layer validates command allowlist, write scope, and protected files per role.",
       "mode": "quick",

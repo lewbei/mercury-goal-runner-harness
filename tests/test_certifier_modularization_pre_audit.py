@@ -6,6 +6,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DOC = ROOT / "docs" / "CERTIFIER_MODULARIZATION_PRE_AUDIT_V1.md"
 CERTIFIER = ROOT / ".agentic-pi" / "validators" / "certify_run.py"
+CERTIFIER_IO = ROOT / ".agentic-pi" / "validators" / "certifier_io.py"
+CERTIFIER_PATHS = ROOT / ".agentic-pi" / "validators" / "certifier_paths.py"
 PROOF_MATRIX = ROOT / ".agentic-pi" / "proof_matrix" / "proof_matrix.json"
 
 
@@ -13,11 +15,13 @@ class CertifierModularizationPreAuditTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.doc = DOC.read_text(encoding="utf-8")
-        cls.certifier_functions = {
-            node.name
-            for node in ast.parse(CERTIFIER.read_text(encoding="utf-8")).body
-            if isinstance(node, ast.FunctionDef)
-        }
+        cls.mapped_functions = set()
+        for path in (CERTIFIER, CERTIFIER_IO, CERTIFIER_PATHS):
+            cls.mapped_functions.update(
+                node.name
+                for node in ast.parse(path.read_text(encoding="utf-8")).body
+                if isinstance(node, ast.FunctionDef)
+            )
 
     def test_pre_audit_preserves_authority_boundary(self):
         required = [
@@ -59,7 +63,7 @@ class CertifierModularizationPreAuditTests(unittest.TestCase):
         ]
         for name in required_functions:
             with self.subTest(function=name):
-                self.assertIn(name, self.certifier_functions)
+                self.assertIn(name, self.mapped_functions)
                 self.assertIn(f"`{name}`", self.doc)
 
     def test_future_module_seams_are_explicitly_non_authority_expanding(self):

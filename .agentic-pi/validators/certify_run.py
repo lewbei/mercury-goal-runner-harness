@@ -1,10 +1,8 @@
-import hashlib
 import json
 import os
 import shlex
 import subprocess
 import sys
-import importlib.util
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -12,26 +10,20 @@ RUNTIME_DIR = Path(__file__).resolve().parents[1] / "runtime"
 if str(RUNTIME_DIR) not in sys.path:
     sys.path.insert(0, str(RUNTIME_DIR))
 
-from validate_schema import validate as validate_schema_instance
+from certifier_io import load_json, load_local_module, sha256_file, validate_with_schema, write_json
+from certifier_paths import (
+    PROTECTED_NAMES,
+    PROTECTED_PREFIXES,
+    find_output,
+    non_empty_string_list,
+    resolve_run_path,
+    run_relative,
+)
 from verifier_provenance import create_verifier_artifact
 from smell_scanner import safe_report_filename, scan_verifier_artifact
 from strength_scorer import safe_strength_report_filename, score_verifier_artifact
 from policy_engine import decide_run_policy, write_policy_decision
 
-
-PROTECTED_NAMES = {
-    "certification.json",
-    "final_status.json",
-    "final_status.md",
-    "policy_decision.json",
-    "trace.jsonl",
-}
-
-PROTECTED_PREFIXES = {
-    "verifier_artifacts/",
-    "verifier_smell_reports/",
-    "verifier_strength_reports/",
-}
 
 PROVENANCE_ORDER = {"P0": 0, "P1": 1, "P2": 2, "P3": 3}
 PROVENANCE_STATUSES = {"NOT_DONE", "PROVISIONAL_DONE", "CERTIFIED_DONE"}
@@ -53,23 +45,6 @@ STEP_REQUIRED = {
 }
 
 STEP_STATUSES = {"PASSED", "FAILED_REPAIRABLE", "BLOCKED", "NEED_USER"}
-
-
-def load_json(path: Path):
-    with path.open("r", encoding="utf-8-sig") as f:
-        return json.load(f)
-
-
-def sha256_file(path: Path) -> str:
-    h = hashlib.sha256()
-    with path.open("rb") as f:
-        for chunk in iter(lambda: f.read(8192), b""):
-            h.update(chunk)
-    return h.hexdigest()
-
-
-def write_json(path: Path, obj):
-    path.write_text(json.dumps(obj, indent=2, ensure_ascii=False), encoding="utf-8")
 
 
 def status_after_failures(status: str, provenance_mode: bool, failed: list) -> str:
@@ -103,63 +78,6 @@ def build_final_status_data(
         "checks_total": total,
         "generated_at": datetime.now(timezone.utc).isoformat(),
     }
-
-
-def load_local_module(name: str, path: Path):
-    spec = importlib.util.spec_from_file_location(name, path)
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[name] = module
-    spec.loader.exec_module(module)
-    return module
-
-
-def schema_path(name: str) -> Path:
-    return Path(__file__).resolve().parents[1] / "schemas" / name
-
-
-def validate_with_schema(instance, schema_name: str, label: str, failed: list):
-    try:
-        schema = load_json(schema_path(schema_name))
-    except Exception as exc:
-        failed.append(f"{label} schema load failed: {exc}")
-        return
-    for error in validate_schema_instance(instance, schema):
-        failed.append(f"{label} schema validation failed: {error}")
-
-
-def resolve_run_path(run_dir: Path, raw_path: str) -> Path:
-    candidate = Path(raw_path)
-    if candidate.is_absolute():
-        raise ValueError(f"absolute path is not allowed: {raw_path}")
-
-    run_root = run_dir.resolve()
-    resolved = (run_root / candidate).resolve()
-    if resolved != run_root and run_root not in resolved.parents:
-        raise ValueError(f"path escapes run folder: {raw_path}")
-    return resolved
-
-
-def run_relative(run_dir: Path, path: Path) -> str:
-    return path.resolve().relative_to(run_dir.resolve()).as_posix()
-
-
-def output_candidates(run_dir: Path, output: str):
-    yield resolve_run_path(run_dir, output)
-
-
-def find_output(run_dir: Path, output: str):
-    for candidate in output_candidates(run_dir, output):
-        if candidate.exists():
-            return candidate
-    return None
-
-
-def non_empty_string_list(value):
-    return (
-        isinstance(value, list)
-        and bool(value)
-        and all(isinstance(item, str) and item.strip() for item in value)
-    )
 
 
 def validate_step_shape(step, log_name, run_id, failed):
