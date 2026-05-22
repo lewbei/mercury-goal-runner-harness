@@ -271,6 +271,14 @@
       "claim_boundary": "Bounded helper extraction regression tests only; this does not move policy invocation, post-policy gates, result artifact writing, markdown rendering, or legacy compatibility logic."
     },
     {
+      "claim_id": "certifier_artifact_command_extraction",
+      "claim": "Certifier Artifact Command Extraction v1 moves artifact command-test helper extraction into certifier_artifact_commands.py while preserving the narrow allowlist surface and keeping verifier artifact logging/result writing in certify_run.py.",
+      "mode": "quick",
+      "command": ["python", "tests/test_certifier_artifact_command_extraction.py", "-v"],
+      "expected_evidence": ["certify_run imports command helpers from extracted module", "verifier artifact logging remains in certify_run.py", "safe run-relative Python command passes", "unsafe command surfaces are rejected", "unsafe artifact command blocks certifier run"],
+      "claim_boundary": "Bounded artifact command-test helper extraction only; this does not move verifier artifact logging, policy invocation, post-policy gates, result artifact writing, markdown rendering, or legacy compatibility logic."
+    },
+    {
       "claim_id": "execution_layer",
       "claim": "The controlled execution layer validates command allowlist, write scope, and protected files per role.",
       "mode": "quick",
