@@ -169,6 +169,7 @@ Memory can advise worker/repair, but cannot certify DONE.
 - `docs/PLAN_ROUTER.md` — current plan-router boundary; no generated substitute planning
 - `docs/FRAMEWORK.md` — conceptual architecture and file map
 - `docs/CERTIFIER_MODULARIZATION_PRE_AUDIT_V1.md` — pre-refactor certifier authority/module-seam audit
+- `docs/CERTIFIER_GOLDEN_BEHAVIOR_LOCK_V1.md` — pre-refactor certifier golden behavior regression lock
 - `docs/PROJECT_STATUS.md` — version history, local status, and proof-slice limits
 - `docs/workspace_index.md` — source-of-truth file map and cleanup debt
 - `docs/` — versioned historical records plus current architecture docs; old V0/V1 docs are not the default runtime contract

@@ -36,6 +36,7 @@ Each case is a copy-ready run folder. The test copies each fixture into:
 Then it runs:
 
 ```cmd
+python .agentic-pi\validators\validator_factory.py .agentic-runs\test_<case_name>
 python .agentic-pi\validators\certify_run.py .agentic-runs\test_<case_name>
 ```
 

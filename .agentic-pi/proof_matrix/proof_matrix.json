@@ -255,6 +255,14 @@
       "claim_boundary": "Documentation/test-lock evidence only; this does not modularize certify_run.py, execute goals, decide policy, certify DONE, or prove behavior preservation for a future refactor."
     },
     {
+      "claim_id": "certifier_golden_behavior_lock",
+      "claim": "Certifier Golden Behavior Lock v1 preserves bounded deterministic certifier behavior for provenance status mapping, weak/strong verifier evidence, post-policy replay downgrades, artifact command allowlisting, protected path blocking, legacy compatibility status mapping, and markdown non-authority before any certifier modularization.",
+      "mode": "quick",
+      "command": ["python", "tests/test_certifier_golden_behavior_lock.py", "-v"],
+      "expected_evidence": ["provenance status matrix matches golden expectations", "late replay gate downgrades policy CERTIFIED_DONE to final NOT_DONE", "artifact command allowlist rejects unsafe surfaces", "protected worker-touched paths block certification", "legacy compatibility statuses remain unchanged", "markdown cannot upgrade JSON authority"],
+      "claim_boundary": "Bounded deterministic certifier behavior regression tests only; this does not modularize certify_run.py, execute arbitrary goals, prove future refactor equivalence, or grant DONE authority outside the existing policy/certifier path."
+    },
+    {
       "claim_id": "execution_layer",
       "claim": "The controlled execution layer validates command allowlist, write scope, and protected files per role.",
       "mode": "quick",

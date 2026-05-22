@@ -79,7 +79,16 @@ class ProvenanceGateDiagnosticTests(unittest.TestCase):
         self.created_run_dirs.append(run_dir)
         return run_dir
 
+    def ensure_validator_certified(self, run_dir: Path):
+        verifier_dir = run_dir / "verifier_artifacts"
+        if not (verifier_dir.is_dir() and any(verifier_dir.glob("*.json"))):
+            return
+        validator_result = run_python(".agentic-pi/validators/validator_factory.py", str(run_dir))
+        self.assertEqual(validator_result.returncode, 0, validator_result.stdout)
+        self.assertTrue((run_dir / "validator_certification.json").is_file(), validator_result.stdout)
+
     def certify(self, run_dir: Path):
+        self.ensure_validator_certified(run_dir)
         return run_python(".agentic-pi/validators/certify_run.py", str(run_dir))
 
     def test_diagnostic_case_inventory_is_exact(self):
