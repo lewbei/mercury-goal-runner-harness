@@ -1,0 +1,82 @@
+{
+  "schema_version": "merged_plan_v1",
+  "source": "selected_plan.json",
+  "steps": [
+    {
+      "task_id": "T.M.WRITING_OUTLINE",
+      "milestone_id": "M.WRITING_OUTLINE",
+      "local_step_id": "LS001",
+      "action": "create_file",
+      "path": "artifacts/milestones/m_writing_outline.md",
+      "content": "# outline\n\nMilestone ID: M.WRITING_OUTLINE\n\nSelected strategy: S.WRITE_SIMPLE\n\nPurpose: Create the structure before drafting.\n\nThis milestone is planning evidence only. It cannot certify DONE.\n",
+      "requires": [],
+      "produces": [
+        {
+          "artifact_id": "A.M.WRITING_OUTLINE",
+          "path": "artifacts/milestones/m_writing_outline.md"
+        }
+      ]
+    },
+    {
+      "task_id": "T.M.WRITING_DRAFT",
+      "milestone_id": "M.WRITING_DRAFT",
+      "local_step_id": "LS002",
+      "action": "create_file",
+      "path": "artifacts/milestones/m_writing_draft.md",
+      "content": "# draft\n\nMilestone ID: M.WRITING_DRAFT\n\nSelected strategy: S.WRITE_SIMPLE\n\nPurpose: Draft the requested artifact.\n\nThis milestone is planning evidence only. It cannot certify DONE.\n",
+      "requires": [
+        "A.M.WRITING_OUTLINE"
+      ],
+      "produces": [
+        {
+          "artifact_id": "A.M.WRITING_DRAFT",
+          "path": "artifacts/milestones/m_writing_draft.md"
+        }
+      ]
+    },
+    {
+      "task_id": "T.M.WRITING_VERIFY_CONSTRAINTS",
+      "milestone_id": "M.WRITING_VERIFY_CONSTRAINTS",
+      "local_step_id": "LS003",
+      "action": "create_file",
+      "path": "artifacts/milestones/m_writing_verify_constraints.md",
+      "content": "# verify constraints\n\nMilestone ID: M.WRITING_VERIFY_CONSTRAINTS\n\nSelected strategy: S.WRITE_SIMPLE\n\nPurpose: Check required wording, scope, and output path.\n\nThis milestone is planning evidence only. It cannot certify DONE.\n",
+      "requires": [
+        "A.M.WRITING_DRAFT"
+      ],
+      "produces": [
+        {
+          "artifact_id": "A.M.WRITING_VERIFY_CONSTRAINTS",
+          "path": "artifacts/milestones/m_writing_verify_constraints.md"
+        }
+      ]
+    },
+    {
+      "task_id": "T.M.WRITING_FINALIZE",
+      "milestone_id": "M.WRITING_FINALIZE",
+      "local_step_id": "LS004",
+      "action": "create_file",
+      "path": "README.md",
+      "content": "# Harness Milestone Output\n\nThis artifact explains the harness and preserves verifier provenance.\n",
+      "requires": [
+        "A.M.WRITING_VERIFY_CONSTRAINTS"
+      ],
+      "produces": [
+        {
+          "artifact_id": "A.FINAL_OUTPUT",
+          "path": "README.md"
+        }
+      ]
+    }
+  ],
+  "selected_plan_metadata": {
+    "schema_version": "planner_plan_v1",
+    "planner": "roadmap_planner.py",
+    "run_id": "golden_strict_p2_minimal",
+    "source": "local_step_plan.json",
+    "selected_strategy": "S.WRITE_SIMPLE",
+    "strategy_task_type": "writing",
+    "final_status_authority": "certifier_only",
+    "can_certify_done": false
+  }
+}

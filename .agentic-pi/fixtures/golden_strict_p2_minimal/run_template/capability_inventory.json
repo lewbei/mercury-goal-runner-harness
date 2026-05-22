@@ -1,0 +1,126 @@
+{
+  "run_id": "golden_strict_p2_minimal",
+  "capabilities": [
+    {
+      "capability_id": "file_write_run_folder",
+      "description": "Guarded Worker can write approved files inside the run folder.",
+      "allowed_for_task_types": [
+        "*"
+      ],
+      "writes_run_folder": true,
+      "writes_status_artifacts": false,
+      "certifier_owned": false,
+      "requires_verifier_contract": false,
+      "risk_level": "LOW"
+    },
+    {
+      "capability_id": "python_command",
+      "description": "Run local Python commands through deterministic harness tools.",
+      "allowed_for_task_types": [
+        "coding",
+        "debugging",
+        "benchmark",
+        "experiment"
+      ],
+      "writes_run_folder": false,
+      "writes_status_artifacts": false,
+      "certifier_owned": false,
+      "requires_verifier_contract": false,
+      "risk_level": "MEDIUM"
+    },
+    {
+      "capability_id": "artifact_test",
+      "description": "Execute goal_contract artifact tests for behavior evidence.",
+      "allowed_for_task_types": [
+        "coding",
+        "debugging",
+        "benchmark",
+        "experiment"
+      ],
+      "writes_run_folder": false,
+      "writes_status_artifacts": false,
+      "certifier_owned": false,
+      "requires_verifier_contract": false,
+      "risk_level": "LOW"
+    },
+    {
+      "capability_id": "plan_graph",
+      "description": "Build artifact-linked plan_graph, artifact_registry, and task_graph files.",
+      "allowed_for_task_types": [
+        "*"
+      ],
+      "writes_run_folder": true,
+      "writes_status_artifacts": false,
+      "certifier_owned": false,
+      "requires_verifier_contract": false,
+      "risk_level": "LOW"
+    },
+    {
+      "capability_id": "policy_engine",
+      "description": "Policy engine decides provenance-mode status through certifier-owned path.",
+      "allowed_for_task_types": [
+        "*"
+      ],
+      "writes_run_folder": true,
+      "writes_status_artifacts": true,
+      "certifier_owned": true,
+      "requires_verifier_contract": true,
+      "risk_level": "LOW"
+    },
+    {
+      "capability_id": "audit",
+      "description": "Audit run-folder evidence and block certification when invalid.",
+      "allowed_for_task_types": [
+        "*"
+      ],
+      "writes_run_folder": true,
+      "writes_status_artifacts": false,
+      "certifier_owned": false,
+      "requires_verifier_contract": false,
+      "risk_level": "LOW"
+    },
+    {
+      "capability_id": "replay",
+      "description": "Replay run-folder evidence read-only.",
+      "allowed_for_task_types": [
+        "*"
+      ],
+      "writes_run_folder": true,
+      "writes_status_artifacts": false,
+      "certifier_owned": false,
+      "requires_verifier_contract": false,
+      "risk_level": "LOW"
+    },
+    {
+      "capability_id": "rollback_dry_run",
+      "description": "Dry-run rollback for run-folder-owned artifacts.",
+      "allowed_for_task_types": [
+        "coding",
+        "debugging",
+        "benchmark",
+        "experiment"
+      ],
+      "writes_run_folder": true,
+      "writes_status_artifacts": false,
+      "certifier_owned": false,
+      "requires_verifier_contract": false,
+      "risk_level": "MEDIUM"
+    },
+    {
+      "capability_id": "pi_status_report",
+      "description": "Pi may report status artifacts but cannot certify DONE.",
+      "allowed_for_task_types": [
+        "*"
+      ],
+      "writes_run_folder": false,
+      "writes_status_artifacts": false,
+      "certifier_owned": false,
+      "requires_verifier_contract": false,
+      "risk_level": "LOW"
+    }
+  ],
+  "notes": [
+    "Static deterministic local capability inventory.",
+    "Strategy artifacts cannot use certifier-owned capabilities to self-certify."
+  ]
+}

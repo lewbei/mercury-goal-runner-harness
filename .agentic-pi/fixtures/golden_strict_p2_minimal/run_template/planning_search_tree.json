@@ -1,0 +1,701 @@
+{
+  "schema_version": "planning_search_tree_v1",
+  "run_id": "golden_strict_p2_minimal",
+  "generated_by": "planning-search-tree-v1",
+  "generated_at": "2026-05-20T11:26:22.338107+00:00",
+  "authority": {
+    "authority_level": "planning_search_only",
+    "final_status_authority": "certifier_only",
+    "can_certify_done": false,
+    "claim_exhaustive_search": false,
+    "claim_correctness": false
+  },
+  "proof_boundary": {
+    "proof_scope": "bounded_planning_trace_only",
+    "proves_all_possible_plans": false,
+    "proves_artifact_correctness": false,
+    "requires_worker_execution": true,
+    "requires_verifier_artifacts": true,
+    "requires_policy_engine": true,
+    "requires_certifier": true
+  },
+  "implementation_boundary": {
+    "source_code_origin": "harness_native_no_vendor_copy",
+    "external_references_are_design_inputs_only": true,
+    "planner_can_certify_done": false
+  },
+  "method_influences": [
+    {
+      "method_id": "tree_of_thoughts_bfs",
+      "source": "princeton-nlp/tree-of-thought-llm",
+      "inspected_files": [
+        "src/tot/methods/bfs.py",
+        "run.py"
+      ],
+      "adapted_lesson": "Make generation, evaluation, and selection phases explicit, with a bounded frontier instead of one opaque plan.",
+      "not_adapted": "No external code, LLM sampling loop, or self-reported vote authority is copied into the harness."
+    },
+    {
+      "method_id": "graph_of_thoughts_operations",
+      "source": "spcl/graph-of-thoughts",
+      "inspected_files": [
+        "graph_of_thoughts/operations/operations.py",
+        "graph_of_thoughts/controller/controller.py"
+      ],
+      "adapted_lesson": "Represent planning as inspectable operations over nodes and edges, while keeping controller authority separate from certification.",
+      "not_adapted": "No graph executor, optimizer, or aggregation code is vendored; graph-style expansion remains a bounded trace."
+    },
+    {
+      "method_id": "lats_mcts",
+      "source": "lapisrocks/LanguageAgentTreeSearch",
+      "inspected_files": [
+        "programming/mcts.py",
+        "hotpot/lats.py",
+        "webshop/lats.py"
+      ],
+      "adapted_lesson": "Record selection, expansion, evaluation, deferred rollout/backpropagation, failed-branch lessons, and terminal risk boundaries.",
+      "not_adapted": "No stochastic UCT rollout, environment interaction, reward claim, or success certification is executed by this planner."
+    },
+    {
+      "method_id": "adaptive_autoresearch_provenance",
+      "source": "saved run-local adaptive_research_inputs.json plus reproducibility/eval guidance",
+      "inspected_files": [
+        ".agentic-pi/runtime/adaptive_research_inputs.py",
+        ".agentic-pi/validators/validate_adaptive_research_inputs.py"
+      ],
+      "adapted_lesson": "Allow nondeterministic research to widen planning questions only after it is saved as provenance and validated deterministically.",
+      "not_adapted": "No external code, live network fetch, mutable research claim, or final-status authority is copied into this planning tree."
+    }
+  ],
+  "search_config": {
+    "algorithm": "bounded_best_first_tree_search",
+    "max_depth": 5,
+    "max_iterations": 4,
+    "max_nodes": 64,
+    "max_candidate_branches": 12,
+    "max_selected_branches": 1,
+    "max_rollouts": 0,
+    "max_improvement_iterations": 0,
+    "beam_width": 3,
+    "mcts_optimality_claim": false,
+    "branching_policy": "Expand task type, strategy candidates, selected execution, verifier handoff, and risk branch; defer higher-cost graph/MCTS expansion.",
+    "generation_policy": "Generate run-local nodes only from existing goal, task type, strategy, expected artifact, adaptive research provenance, and verifier-handoff artifacts.",
+    "evaluation_policy": "Evaluate deterministic proxy scores, applicability gates, saved adaptive research provenance, verifier-path presence, and risk notes; do not treat reward or research as certification.",
+    "selection_policy": "Select the highest safe deterministic strategy frontier or route to NEED_USER_STRATEGY; keep rejected/deferred branches inspectable.",
+    "scoring_policy": "Expose score_components on every node so strategy score, applicability, verifier path, risk, and bounded-budget effects are auditable.",
+    "reflection_policy": "Failed/blocked/deferred branches are recorded as score reasons and pruned_or_deferred entries, not hidden or rewritten.",
+    "backpropagation_policy": "MCTS-style rollout and backpropagation are deferred until rewards are verifier-backed and policy-gated.",
+    "stop_condition": "Stop after selected verifier/risk branch or NEED_USER_STRATEGY; do not execute worker or certify final status.",
+    "completeness_claim": "bounded_not_exhaustive",
+    "correctness_claim": "not_proven_by_planning"
+  },
+  "root_node_id": "N.ROOT",
+  "nodes": [
+    {
+      "node_id": "N.ROOT",
+      "parent_id": null,
+      "depth": 0,
+      "node_type": "root",
+      "status": "expanded",
+      "summary": "Bounded planning search root for the run goal.",
+      "score": 0,
+      "score_components": {
+        "base_strategy_score": 0.0,
+        "applicability_adjustment": 0.0,
+        "verifier_path_bonus": 0.0,
+        "risk_penalty": 0.0,
+        "selection_adjustment": 0.0,
+        "bounded_budget_adjustment": 0.0,
+        "total": 0.0
+      },
+      "score_reasons": [
+        "root of deterministic bounded tree search",
+        "status artifacts absent during search-tree build"
+      ],
+      "evidence_refs": [
+        "goal_contract.json"
+      ],
+      "planned_evidence_refs": [],
+      "children": [
+        "N.TASK_TYPE"
+      ]
+    },
+    {
+      "node_id": "N.TASK_TYPE",
+      "parent_id": "N.ROOT",
+      "depth": 1,
+      "node_type": "task_type",
+      "status": "expanded",
+      "summary": "Task type considered: writing",
+      "score": 1,
+      "score_components": {
+        "base_strategy_score": 0.0,
+        "applicability_adjustment": 0.0,
+        "verifier_path_bonus": 0.0,
+        "risk_penalty": 0.0,
+        "selection_adjustment": 0.0,
+        "bounded_budget_adjustment": 1.0,
+        "total": 1.0
+      },
+      "score_reasons": [
+        "task type came from task_type_decision.json or strategy candidates"
+      ],
+      "evidence_refs": [
+        "task_type_decision.json",
+        "strategy_candidates.json"
+      ],
+      "planned_evidence_refs": [],
+      "children": [
+        "N.STRATEGY.ADAPTIVE_RESEARCH_INPUTS",
+        "N.STRATEGY.S.WRITE_SIMPLE",
+        "N.DEFER.EXPANDED_SEARCH"
+      ]
+    },
+    {
+      "node_id": "N.STRATEGY.ADAPTIVE_RESEARCH_INPUTS",
+      "parent_id": "N.TASK_TYPE",
+      "depth": 2,
+      "node_type": "strategy",
+      "status": "deferred",
+      "summary": "Adaptive/autoresearch inputs are recorded as planning-only evidence, not execution or certification authority.",
+      "score": 0,
+      "score_components": {
+        "base_strategy_score": 0.0,
+        "applicability_adjustment": 0.0,
+        "verifier_path_bonus": 0.0,
+        "risk_penalty": 0.0,
+        "selection_adjustment": 0.0,
+        "bounded_budget_adjustment": 0.0,
+        "total": 0.0
+      },
+      "score_reasons": [
+        "adaptive_research_inputs.json recorded 5 findings and 3 planning inputs",
+        "nondeterministic research can shape questions and verifier follow-up only after deterministic validation",
+        "adaptive research cannot certify DONE"
+      ],
+      "evidence_refs": [
+        "adaptive_research_inputs.json"
+      ],
+      "planned_evidence_refs": [],
+      "children": []
+    },
+    {
+      "node_id": "N.STRATEGY.S.WRITE_SIMPLE",
+      "parent_id": "N.TASK_TYPE",
+      "depth": 2,
+      "node_type": "strategy",
+      "status": "selected",
+      "summary": "Strategy branch: S.WRITE_SIMPLE",
+      "score": 7.0,
+      "score_components": {
+        "base_strategy_score": 7.0,
+        "applicability_adjustment": 0.0,
+        "verifier_path_bonus": 0.0,
+        "risk_penalty": 0.0,
+        "selection_adjustment": 0.0,
+        "bounded_budget_adjustment": 0.0,
+        "total": 7.0
+      },
+      "score_reasons": [
+        "can_reach_certifying_evidence",
+        "produces_expected_artifacts",
+        "low_risk",
+        "small_capability_surface",
+        "Selected strategy has the best deterministic score and passed applicability checks."
+      ],
+      "evidence_refs": [
+        "strategy_candidates.json",
+        "strategy_scores.json",
+        "strategy_applicability.json"
+      ],
+      "planned_evidence_refs": [],
+      "children": [
+        "N.EXECUTE.S.WRITE_SIMPLE"
+      ]
+    },
+    {
+      "node_id": "N.EXECUTE.S.WRITE_SIMPLE",
+      "parent_id": "N.STRATEGY.S.WRITE_SIMPLE",
+      "depth": 3,
+      "node_type": "execution_branch",
+      "status": "selected",
+      "summary": "Selected execution branch prepares run-local artifacts only.",
+      "score": 9.0,
+      "score_components": {
+        "base_strategy_score": 7.0,
+        "applicability_adjustment": 0.0,
+        "verifier_path_bonus": 2.0,
+        "risk_penalty": 0.0,
+        "selection_adjustment": 0.0,
+        "bounded_budget_adjustment": 0.0,
+        "total": 9.0
+      },
+      "score_reasons": [
+        "worker execution is still separate from planning",
+        "write scope must be enforced by expected_artifacts.json"
+      ],
+      "evidence_refs": [
+        "selected_strategy.json"
+      ],
+      "planned_evidence_refs": [
+        "expected_artifacts.json",
+        "merged_plan.json"
+      ],
+      "children": [
+        "N.VERIFY.S.WRITE_SIMPLE"
+      ]
+    },
+    {
+      "node_id": "N.VERIFY.S.WRITE_SIMPLE",
+      "parent_id": "N.EXECUTE.S.WRITE_SIMPLE",
+      "depth": 4,
+      "node_type": "verifier_branch",
+      "status": "selected",
+      "summary": "Verifier branch records checks that must exist before certifier handoff.",
+      "score": 11.0,
+      "score_components": {
+        "base_strategy_score": 7.0,
+        "applicability_adjustment": 0.0,
+        "verifier_path_bonus": 4.0,
+        "risk_penalty": 0.0,
+        "selection_adjustment": 0.0,
+        "bounded_budget_adjustment": 0.0,
+        "total": 11.0
+      },
+      "score_reasons": [
+        "P2/P3 verifier evidence required when provenance mode is active",
+        "independent review required for high-stakes factual claims"
+      ],
+      "evidence_refs": [
+        "selected_strategy.json",
+        "verifier_contract.json"
+      ],
+      "planned_evidence_refs": [
+        "verifier_artifacts/*.json"
+      ],
+      "children": [
+        "N.RISK.S.WRITE_SIMPLE"
+      ]
+    },
+    {
+      "node_id": "N.RISK.S.WRITE_SIMPLE",
+      "parent_id": "N.VERIFY.S.WRITE_SIMPLE",
+      "depth": 5,
+      "node_type": "risk_branch",
+      "status": "terminal",
+      "summary": "Risk branch keeps known failure modes visible after selection.",
+      "score": 9.0,
+      "score_components": {
+        "base_strategy_score": 7.0,
+        "applicability_adjustment": 0.0,
+        "verifier_path_bonus": 2.0,
+        "risk_penalty": 0.0,
+        "selection_adjustment": 0.0,
+        "bounded_budget_adjustment": 0.0,
+        "total": 9.0
+      },
+      "score_reasons": [
+        "simple writing strategy is not semantic proof",
+        "polished but wrong",
+        "unsupported claims",
+        "false-DONE risk remains until certifier policy runs"
+      ],
+      "evidence_refs": [
+        "strategy_candidates.json"
+      ],
+      "planned_evidence_refs": [
+        "planning_coverage.json"
+      ],
+      "children": []
+    },
+    {
+      "node_id": "N.DEFER.EXPANDED_SEARCH",
+      "parent_id": "N.TASK_TYPE",
+      "depth": 2,
+      "node_type": "strategy",
+      "status": "deferred",
+      "summary": "Higher-cost tree/graph/MCTS expansion is recorded but not executed by this deterministic bounded search.",
+      "score": 0,
+      "score_components": {
+        "base_strategy_score": 0.0,
+        "applicability_adjustment": 0.0,
+        "verifier_path_bonus": 0.0,
+        "risk_penalty": 0.0,
+        "selection_adjustment": 0.0,
+        "bounded_budget_adjustment": 0.0,
+        "total": 0.0
+      },
+      "score_reasons": [
+        "bounded search records this branch instead of pretending exhaustive planning"
+      ],
+      "evidence_refs": [],
+      "planned_evidence_refs": [
+        "planning_search_tree.json"
+      ],
+      "children": []
+    }
+  ],
+  "edges": [
+    {
+      "source": "N.ROOT",
+      "target": "N.TASK_TYPE",
+      "relation": "expands_to"
+    },
+    {
+      "source": "N.TASK_TYPE",
+      "target": "N.STRATEGY.ADAPTIVE_RESEARCH_INPUTS",
+      "relation": "defers"
+    },
+    {
+      "source": "N.TASK_TYPE",
+      "target": "N.STRATEGY.S.WRITE_SIMPLE",
+      "relation": "selects"
+    },
+    {
+      "source": "N.STRATEGY.S.WRITE_SIMPLE",
+      "target": "N.EXECUTE.S.WRITE_SIMPLE",
+      "relation": "selects"
+    },
+    {
+      "source": "N.EXECUTE.S.WRITE_SIMPLE",
+      "target": "N.VERIFY.S.WRITE_SIMPLE",
+      "relation": "selects"
+    },
+    {
+      "source": "N.VERIFY.S.WRITE_SIMPLE",
+      "target": "N.RISK.S.WRITE_SIMPLE",
+      "relation": "selects"
+    },
+    {
+      "source": "N.TASK_TYPE",
+      "target": "N.DEFER.EXPANDED_SEARCH",
+      "relation": "defers"
+    }
+  ],
+  "selected_path": [
+    "N.ROOT",
+    "N.TASK_TYPE",
+    "N.STRATEGY.S.WRITE_SIMPLE",
+    "N.EXECUTE.S.WRITE_SIMPLE",
+    "N.VERIFY.S.WRITE_SIMPLE",
+    "N.RISK.S.WRITE_SIMPLE"
+  ],
+  "pruned_or_deferred": [
+    {
+      "node_id": "N.STRATEGY.ADAPTIVE_RESEARCH_INPUTS",
+      "status": "deferred",
+      "reason": "adaptive_research_inputs.json recorded 5 findings and 3 planning inputs; nondeterministic research can shape questions and verifier follow-up only after deterministic validation; adaptive research cannot certify DONE"
+    },
+    {
+      "node_id": "N.DEFER.EXPANDED_SEARCH",
+      "status": "deferred",
+      "reason": "bounded search records this branch instead of pretending exhaustive planning"
+    }
+  ],
+  "search_iterations": [
+    {
+      "iteration_id": "I.001_ROOT_TO_TASK_TYPE",
+      "phase": "expand_task_type",
+      "input_node_ids": [
+        "N.ROOT"
+      ],
+      "generated_node_ids": [
+        "N.TASK_TYPE"
+      ],
+      "evaluated_node_ids": [
+        "N.TASK_TYPE"
+      ],
+      "selected_node_ids": [
+        "N.TASK_TYPE"
+      ],
+      "pruned_or_deferred_node_ids": [],
+      "frontier_after": [
+        "N.STRATEGY.ADAPTIVE_RESEARCH_INPUTS",
+        "N.STRATEGY.S.WRITE_SIMPLE",
+        "N.DEFER.EXPANDED_SEARCH"
+      ],
+      "notes": [
+        "Task-type expansion is deterministic and run-local.",
+        "This is generation/evaluation bookkeeping, not certification."
+      ]
+    },
+    {
+      "iteration_id": "I.002_SCORE_STRATEGY_FRONTIER",
+      "phase": "score_strategy_frontier",
+      "input_node_ids": [
+        "N.TASK_TYPE"
+      ],
+      "generated_node_ids": [
+        "N.STRATEGY.ADAPTIVE_RESEARCH_INPUTS",
+        "N.STRATEGY.S.WRITE_SIMPLE",
+        "N.DEFER.EXPANDED_SEARCH"
+      ],
+      "evaluated_node_ids": [
+        "N.STRATEGY.ADAPTIVE_RESEARCH_INPUTS",
+        "N.STRATEGY.S.WRITE_SIMPLE",
+        "N.DEFER.EXPANDED_SEARCH"
+      ],
+      "selected_node_ids": [
+        "N.STRATEGY.S.WRITE_SIMPLE"
+      ],
+      "pruned_or_deferred_node_ids": [
+        "N.STRATEGY.ADAPTIVE_RESEARCH_INPUTS",
+        "N.DEFER.EXPANDED_SEARCH"
+      ],
+      "frontier_after": [
+        "N.STRATEGY.S.WRITE_SIMPLE"
+      ],
+      "notes": [
+        "Beam width is capped at 3; deterministic scores and applicability gates select the frontier.",
+        "Rejected, blocked, need-user, and deferred branches remain visible instead of being erased."
+      ]
+    },
+    {
+      "iteration_id": "I.003_DEEPEN_SELECTED_BRANCH",
+      "phase": "deepen_selected_branch",
+      "input_node_ids": [
+        "N.STRATEGY.S.WRITE_SIMPLE"
+      ],
+      "generated_node_ids": [
+        "N.EXECUTE.S.WRITE_SIMPLE",
+        "N.VERIFY.S.WRITE_SIMPLE",
+        "N.RISK.S.WRITE_SIMPLE"
+      ],
+      "evaluated_node_ids": [
+        "N.EXECUTE.S.WRITE_SIMPLE",
+        "N.VERIFY.S.WRITE_SIMPLE",
+        "N.RISK.S.WRITE_SIMPLE"
+      ],
+      "selected_node_ids": [
+        "N.EXECUTE.S.WRITE_SIMPLE",
+        "N.VERIFY.S.WRITE_SIMPLE",
+        "N.RISK.S.WRITE_SIMPLE"
+      ],
+      "pruned_or_deferred_node_ids": [],
+      "frontier_after": [],
+      "notes": [
+        "Selected execution, verifier, and risk branches are expanded to keep handoff obligations inspectable.",
+        "Worker execution and certifier policy remain outside the planning tree."
+      ]
+    },
+    {
+      "iteration_id": "I.004_RECORD_DEFERRED_EXPANSION",
+      "phase": "record_deferred_expansion",
+      "input_node_ids": [
+        "N.ROOT",
+        "N.TASK_TYPE",
+        "N.STRATEGY.S.WRITE_SIMPLE",
+        "N.EXECUTE.S.WRITE_SIMPLE",
+        "N.VERIFY.S.WRITE_SIMPLE",
+        "N.RISK.S.WRITE_SIMPLE"
+      ],
+      "generated_node_ids": [],
+      "evaluated_node_ids": [
+        "N.STRATEGY.ADAPTIVE_RESEARCH_INPUTS",
+        "N.DEFER.EXPANDED_SEARCH"
+      ],
+      "selected_node_ids": [],
+      "pruned_or_deferred_node_ids": [
+        "N.STRATEGY.ADAPTIVE_RESEARCH_INPUTS",
+        "N.DEFER.EXPANDED_SEARCH"
+      ],
+      "frontier_after": [],
+      "notes": [
+        "ToT-style LLM voting, GoT-style aggregation, and LATS/MCTS rollouts are recorded as deferred methods.",
+        "Deferred methods cannot become final-status authority without independent verifier and certifier gates."
+      ]
+    }
+  ],
+  "candidate_evaluations": [
+    {
+      "strategy_id": "S.WRITE_SIMPLE",
+      "node_id": "N.STRATEGY.S.WRITE_SIMPLE",
+      "applicability_status": "applicable",
+      "score": 7.0,
+      "score_level": "preferred",
+      "positive_factors": [
+        "can_reach_certifying_evidence",
+        "produces_expected_artifacts",
+        "low_risk",
+        "small_capability_surface"
+      ],
+      "penalties": [],
+      "selection_rank": 1,
+      "selection_result": "selected",
+      "decision_reason": "can_reach_certifying_evidence; produces_expected_artifacts; low_risk; small_capability_surface; Selected strategy has the best deterministic score and passed applicability checks."
+    }
+  ],
+  "operation_graph": {
+    "graph_kind": "planning_operation_dag",
+    "controller": "deterministic_strategy_selector",
+    "controller_authority": "planning_only",
+    "can_certify_done": false,
+    "operations": [
+      {
+        "operation_id": "OP.GENERATE_TASK_TYPE",
+        "operation_type": "generate",
+        "authority_level": "planning_only",
+        "input_node_ids": [
+          "N.ROOT"
+        ],
+        "output_node_ids": [
+          "N.TASK_TYPE"
+        ],
+        "description": "Generate task-type node from run-local goal artifacts."
+      },
+      {
+        "operation_id": "OP.GENERATE_STRATEGY_FRONTIER",
+        "operation_type": "generate",
+        "authority_level": "planning_only",
+        "input_node_ids": [
+          "N.TASK_TYPE"
+        ],
+        "output_node_ids": [
+          "N.STRATEGY.ADAPTIVE_RESEARCH_INPUTS",
+          "N.STRATEGY.S.WRITE_SIMPLE",
+          "N.DEFER.EXPANDED_SEARCH"
+        ],
+        "description": "Generate strategy frontier including selected, rejected, blocked, need-user, and deferred branches."
+      },
+      {
+        "operation_id": "OP.SCORE_AND_VALIDATE_FRONTIER",
+        "operation_type": "score",
+        "authority_level": "planning_only",
+        "input_node_ids": [
+          "N.STRATEGY.ADAPTIVE_RESEARCH_INPUTS",
+          "N.STRATEGY.S.WRITE_SIMPLE",
+          "N.DEFER.EXPANDED_SEARCH"
+        ],
+        "output_node_ids": [
+          "N.STRATEGY.ADAPTIVE_RESEARCH_INPUTS",
+          "N.STRATEGY.S.WRITE_SIMPLE",
+          "N.DEFER.EXPANDED_SEARCH"
+        ],
+        "description": "Score deterministic candidates and validate applicability without certifying final status."
+      },
+      {
+        "operation_id": "OP.SELECT_OR_DEFER",
+        "operation_type": "select",
+        "authority_level": "planning_only",
+        "input_node_ids": [
+          "N.STRATEGY.ADAPTIVE_RESEARCH_INPUTS",
+          "N.STRATEGY.S.WRITE_SIMPLE",
+          "N.DEFER.EXPANDED_SEARCH"
+        ],
+        "output_node_ids": [
+          "N.ROOT",
+          "N.TASK_TYPE",
+          "N.STRATEGY.S.WRITE_SIMPLE",
+          "N.EXECUTE.S.WRITE_SIMPLE",
+          "N.VERIFY.S.WRITE_SIMPLE",
+          "N.RISK.S.WRITE_SIMPLE",
+          "N.STRATEGY.ADAPTIVE_RESEARCH_INPUTS",
+          "N.DEFER.EXPANDED_SEARCH"
+        ],
+        "description": "Select the safe bounded path or defer/stop branches while keeping pruned branches visible."
+      },
+      {
+        "operation_id": "OP.HANDOFF_VERIFIER_RISK",
+        "operation_type": "handoff",
+        "authority_level": "planning_only",
+        "input_node_ids": [
+          "N.ROOT",
+          "N.TASK_TYPE",
+          "N.STRATEGY.S.WRITE_SIMPLE",
+          "N.EXECUTE.S.WRITE_SIMPLE",
+          "N.VERIFY.S.WRITE_SIMPLE",
+          "N.RISK.S.WRITE_SIMPLE"
+        ],
+        "output_node_ids": [
+          "N.ROOT",
+          "N.TASK_TYPE",
+          "N.STRATEGY.S.WRITE_SIMPLE",
+          "N.EXECUTE.S.WRITE_SIMPLE",
+          "N.VERIFY.S.WRITE_SIMPLE",
+          "N.RISK.S.WRITE_SIMPLE"
+        ],
+        "description": "Expose verifier and risk handoff obligations; worker, policy, and certifier remain separate."
+      }
+    ],
+    "operation_edges": [
+      {
+        "source": "OP.GENERATE_TASK_TYPE",
+        "target": "OP.GENERATE_STRATEGY_FRONTIER",
+        "relation": "feeds"
+      },
+      {
+        "source": "OP.GENERATE_STRATEGY_FRONTIER",
+        "target": "OP.SCORE_AND_VALIDATE_FRONTIER",
+        "relation": "feeds"
+      },
+      {
+        "source": "OP.SCORE_AND_VALIDATE_FRONTIER",
+        "target": "OP.SELECT_OR_DEFER",
+        "relation": "feeds"
+      },
+      {
+        "source": "OP.SELECT_OR_DEFER",
+        "target": "OP.HANDOFF_VERIFIER_RISK",
+        "relation": "feeds"
+      }
+    ]
+  },
+  "deferred_expansion_methods": [
+    {
+      "method_id": "llm_candidate_sampling_and_vote",
+      "source_method": "Tree-of-Thoughts sample/propose plus value/vote selection",
+      "reason_deferred": "This strict harness path uses deterministic strategy candidates; live LLM branch generation would need separate prompt provenance and verifier fixtures.",
+      "required_before_enablement": [
+        "run-local prompt provenance for every sampled branch",
+        "deterministic replay fixture for sampled candidates",
+        "validator proving sampled branches cannot write authority artifacts"
+      ],
+      "authority_boundary": "planning-only; cannot certify DONE"
+    },
+    {
+      "method_id": "graph_aggregate_improve_loop",
+      "source_method": "Graph-of-Thoughts generate/score/validate/improve/aggregate operations",
+      "reason_deferred": "The current artifact records graph-shaped edges but does not run multi-operation improvement loops or aggregate plans as proof.",
+      "required_before_enablement": [
+        "operation schema with explicit inputs and outputs",
+        "cycle/dependency validator",
+        "independent verifier handoff for aggregated branches"
+      ],
+      "authority_boundary": "planning-only; cannot certify DONE"
+    },
+    {
+      "method_id": "mcts_rollout_backpropagation",
+      "source_method": "LATS/MCTS select, expand, evaluate, rollout, and backpropagate",
+      "reason_deferred": "Rollouts require executable environments and reward models; this planner only records deterministic proxy scores and risk notes.",
+      "required_before_enablement": [
+        "bounded rollout budget in run config",
+        "reward provenance tied to verifier artifacts",
+        "policy gate preventing reward from becoming final status"
+      ],
+      "authority_boundary": "planning-only; cannot certify DONE"
+    },
+    {
+      "method_id": "live_adaptive_autoresearch_sampling",
+      "source_method": "Non-deterministic LLM/web research used to propose planning inputs",
+      "reason_deferred": "Live research can be useful, but deterministic validators may only consume saved run-local provenance artifacts.",
+      "required_before_enablement": [
+        "adaptive_research_inputs.json with source URLs, queries/prompts, hashes, and model/request metadata",
+        "validator proving research inputs cannot write authority artifacts or certify DONE",
+        "verifier follow-up for any research-backed plan change"
+      ],
+      "authority_boundary": "planning-only; cannot certify DONE"
+    }
+  ],
+  "coverage_metrics": {
+    "nodes_expanded": 8,
+    "edges_expanded": 7,
+    "max_depth_reached": 5,
+    "selected_path_length": 6,
+    "candidate_strategy_count": 1,
+    "candidate_evaluation_count": 1,
+    "selected_strategy_branch_count": 1,
+    "pruned_or_deferred_count": 2,
+    "iterations_recorded": 4,
+    "deferred_expansion_method_count": 4
+  }
+}

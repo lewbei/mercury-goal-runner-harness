@@ -1,0 +1,168 @@
+{
+  "schema_version": "phase_queue_v1",
+  "run_id": "golden_strict_p2_minimal",
+  "phases": [
+    {
+      "phase": "INTAKE",
+      "status": "COMPLETED",
+      "order": 0,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": "2026-05-20T11:26:18.534908+00:00",
+      "completed_at": "2026-05-20T11:26:18.602453+00:00"
+    },
+    {
+      "phase": "QUESTIONING",
+      "status": "COMPLETED",
+      "order": 1,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": "2026-05-20T11:26:18.602453+00:00",
+      "completed_at": "2026-05-20T11:26:18.647852+00:00"
+    },
+    {
+      "phase": "RESEARCHING",
+      "status": "COMPLETED",
+      "order": 2,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": "2026-05-20T11:26:18.647852+00:00",
+      "completed_at": "2026-05-20T11:26:18.704280+00:00"
+    },
+    {
+      "phase": "DESIGNING",
+      "status": "COMPLETED",
+      "order": 3,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": "2026-05-20T11:26:18.704280+00:00",
+      "completed_at": "2026-05-20T11:26:18.771458+00:00"
+    },
+    {
+      "phase": "STRUCTURING",
+      "status": "COMPLETED",
+      "order": 4,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": "2026-05-20T11:26:18.771458+00:00",
+      "completed_at": "2026-05-20T11:26:18.827398+00:00"
+    },
+    {
+      "phase": "PLANNING",
+      "status": "COMPLETED",
+      "order": 5,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": "2026-05-20T11:26:18.827398+00:00",
+      "completed_at": "2026-05-20T11:26:24.634947+00:00"
+    },
+    {
+      "phase": "WORKTREE_READY",
+      "status": "COMPLETED",
+      "order": 6,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": "2026-05-20T11:26:24.634947+00:00",
+      "completed_at": "2026-05-20T11:26:24.859043+00:00"
+    },
+    {
+      "phase": "IMPLEMENTING",
+      "status": "COMPLETED",
+      "order": 7,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": "2026-05-20T11:26:24.859043+00:00",
+      "completed_at": "2026-05-20T11:26:26.163925+00:00"
+    },
+    {
+      "phase": "VALIDATOR_BUILDING",
+      "status": "COMPLETED",
+      "order": 8,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": "2026-05-20T11:26:26.163925+00:00",
+      "completed_at": "2026-05-20T11:26:27.357829+00:00"
+    },
+    {
+      "phase": "VALIDATING",
+      "status": "COMPLETED",
+      "order": 9,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": "2026-05-20T11:26:27.357829+00:00",
+      "completed_at": "2026-05-20T11:26:27.409334+00:00"
+    },
+    {
+      "phase": "EVIDENCE_INDEXING",
+      "status": "COMPLETED",
+      "order": 10,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": "2026-05-20T11:26:27.409334+00:00",
+      "completed_at": "2026-05-20T11:26:27.441877+00:00"
+    },
+    {
+      "phase": "POLICY_DECIDING",
+      "status": "COMPLETED",
+      "order": 11,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": "2026-05-20T11:26:27.441877+00:00",
+      "completed_at": "2026-05-20T11:26:27.472004+00:00"
+    },
+    {
+      "phase": "REPLAYING",
+      "status": "COMPLETED",
+      "order": 12,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": "2026-05-20T11:26:27.472004+00:00",
+      "completed_at": "2026-05-20T11:26:27.502003+00:00"
+    },
+    {
+      "phase": "CERTIFYING",
+      "status": "COMPLETED",
+      "order": 13,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": "2026-05-20T11:26:27.502003+00:00",
+      "completed_at": "2026-05-20T11:26:35.042571+00:00"
+    },
+    {
+      "phase": "REPORTING",
+      "status": "COMPLETED",
+      "order": 14,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": "2026-05-20T11:26:35.042571+00:00",
+      "completed_at": "2026-05-20T11:26:35.071235+00:00"
+    },
+    {
+      "phase": "MEMORY_CONSOLIDATING",
+      "status": "COMPLETED",
+      "order": 15,
+      "work_packet_ids": [],
+      "dependencies": [],
+      "result_summary": null,
+      "started_at": "2026-05-20T11:26:35.071235+00:00",
+      "completed_at": "2026-05-20T11:26:36.150810+00:00"
+    }
+  ],
+  "created_at": "2026-05-20T11:26:08.358927+00:00",
+  "updated_at": "2026-05-20T11:26:36.150810+00:00"
+}

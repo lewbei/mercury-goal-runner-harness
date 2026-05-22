@@ -166,6 +166,8 @@ class SmellScannerTests(unittest.TestCase):
         shutil.copytree(DIAGNOSTIC_DIR / case_name, run_dir)
         self.created_run_dirs.append(run_dir)
 
+        validator_result = run_python(".agentic-pi/validators/validator_factory.py", str(run_dir))
+        self.assertEqual(validator_result.returncode, 0, validator_result.stdout)
         result = run_python(".agentic-pi/validators/certify_run.py", str(run_dir))
 
         self.assertEqual(result.returncode, 0, result.stdout)

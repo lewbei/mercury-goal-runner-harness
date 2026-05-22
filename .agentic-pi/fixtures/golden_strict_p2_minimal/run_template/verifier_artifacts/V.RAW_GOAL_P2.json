@@ -1,0 +1,24 @@
+{
+  "artifact_id": "V.RAW_GOAL_P2",
+  "run_id": "golden_strict_p2_minimal",
+  "target_artifact": "README.md",
+  "kind": "command_test",
+  "source": "independent_verifier_agent",
+  "created_at": "2026-05-20T11:26:13.484791+00:00",
+  "created_at_phase": "pre_solution",
+  "author_agent": "deterministic-raw-goal-compiler",
+  "author_model": "deterministic-local-fixture",
+  "provenance_level": "P2",
+  "depends_on_solution": false,
+  "same_worker_as_solution": false,
+  "executes_code": true,
+  "assertion_count": 2,
+  "covered_criteria": [
+    "README.md exists.",
+    "README.md contains the word 'harness'."
+  ],
+  "mock_ratio_percent": 0,
+  "smell_flags": [],
+  "authority": "certifying",
+  "solution_exists_at_creation": false
+}

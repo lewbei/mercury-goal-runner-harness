@@ -2,6 +2,8 @@
 
 QRSPI-phased goal execution harness for Pi coding agent. Planner designs, worker codes, verifier proves, certifier decides. Every step produces evidence. Final status comes only from deterministic checks.
 
+Verifier-Provenance Goal Runner Harness is the current authority model: verifiers produce evidence, policy decides, and the certifier writes final status.
+
 ## Core Question
 
 ```text
@@ -31,6 +33,14 @@ If you meant a separate package named `mercury-goal-runner`, treat that as a dif
 This is a prepared-run harness. The runtime is strict: it does not create missing planner or verifier proof artifacts for you. For the current bounded planning-quality proof path, start with `docs/CURRENT.md` and `docs/CURRENT_RUNTIME_PATH.md`.
 
 Legacy raw-goal mode (`pi_cli.py goal-compile --mode legacy`) is deprecated compatibility coverage only. Use strict verifier-provenance runs (`--mode p2` / `--mode planning_p2`, or prepared runs with `verifier_contract.json` and `verifier_artifacts/*.json`) for current architecture work.
+
+Canonical strict reviewer fixture:
+
+```bash
+python .agentic-pi/fixtures/golden_strict_p2_minimal/materialize.py
+python .agentic-pi/runtime/full_verify.py .agentic-runs/golden_strict_p2_minimal --skip-memory-consolidation
+python -m unittest discover tests -v
+```
 
 Strict raw-goal fixture smoke:
 
@@ -172,6 +182,28 @@ Memory can advise worker/repair, but cannot certify DONE.
 - `docs/CERTIFIER_GOLDEN_BEHAVIOR_LOCK_V1.md` — pre-refactor certifier golden behavior regression lock
 - `docs/CERTIFIER_IO_PATHS_EXTRACTION_V1.md` — first behavior-preserving certifier helper extraction
 - `docs/CERTIFIER_ARTIFACT_COMMAND_EXTRACTION_V1.md` — behavior-preserving artifact command helper extraction
+- `docs/V1_2_PLANNING_PROOF_HARDENING.md` — deterministic planning proof hardening boundary
+- `docs/V1_3_STRATEGY_PLANNER.md` — deterministic strategy planner boundary
+- `docs/V1_4_MILESTONE_PLANNING.md` — deterministic milestone planning boundary
+- `docs/V1_5_DRIFT_AWARE_REPLANNING.md` — drift-aware replanning boundary
+- `docs/V1_6_TRAJECTORY_LEVEL_EVALUATION.md` — trajectory-level evaluation boundary
+- `docs/V1_7_EXPERIENCE_MEMORY.md` — advisory experience memory boundary
+- `docs/V1_8_DOMAIN_PACKS.md` — deterministic domain pack boundary
+- `docs/V1_9_STRATEGY_SEARCH.md` — workflow-search boundary
+- `docs/V2_0_INTEGRATED_HARNESS_PROOF_PACKAGE.md` — integrated proof package boundary
+- `docs/V2_0_EXAMPLES.md` — V2 example commands
+- `docs/V2_1_CONTROLLED_PI_CHAIN_RUNTIME_PROOF.md` — controlled Pi chain proof boundary
+- `docs/V2_2_DIRECT_PI_MERCURY_BEHAVIOR_AUDIT.md` — direct Pi/Mercury audit boundary
+- `docs/V2_3_REAL_PI_INTERACTIVE_SMOKE.md` — real Pi interactive smoke boundary
+- `docs/V2_4_REAL_PI_RUN_MONITOR.md` — real Pi run monitor boundary
+- `docs/V3_0_REAL_PI_BEHAVIOR_EVALUATION.md` — real Pi behavior evaluation boundary
+- `docs/V3_1_REAL_PI_PROMPT_COVERAGE.md` — prompt coverage boundary
+- `docs/V3_2_RUNTIME_ENFORCEMENT_PROOF.md` — runtime enforcement proof boundary
+- `docs/RPG_HARNESS_TEST_FORM.md` — RPG harness test record form
+- `docs/V3_4_RPG_TEST_AGGREGATION.md` — RPG test aggregation boundary
+- `docs/V3_5_0_AUTHORITY_ARTIFACT_PREREQUISITE.md` — authority artifact prerequisite
+- `docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md` — strategy/replanning/memory roadmap
 - `docs/PROJECT_STATUS.md` — version history, local status, and proof-slice limits
+- `docs/V3_5_TO_V4_0_AUTHORITY_EVIDENCE_MEMORY_PLAN.md` — authority, evidence, and memory roadmap
 - `docs/workspace_index.md` — source-of-truth file map and cleanup debt
 - `docs/` — versioned historical records plus current architecture docs; old V0/V1 docs are not the default runtime contract

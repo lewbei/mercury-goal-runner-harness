@@ -181,7 +181,7 @@ class PlanGraphTests(unittest.TestCase):
         result = self.validate_graph()
 
         self.assertNotEqual(result.returncode, 0, result.stdout)
-        self.assertIn("unexpected field unexpected", result.stdout)
+        self.assertIn("unexpected field 'unexpected'", result.stdout)
 
 
 if __name__ == "__main__":

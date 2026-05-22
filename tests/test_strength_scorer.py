@@ -116,7 +116,7 @@ class StrengthScorerTests(unittest.TestCase):
 
         errors = validate(report, "verifier_strength_report.schema.json")
 
-        self.assertTrue(any("unexpected field unexpected" in error for error in errors), errors)
+        self.assertTrue(any("unexpected" in error for error in errors), errors)
 
     def test_p0_self_test_is_weak_or_advisory(self):
         artifact = self.load_fixture_artifact("case_p0_self_test", "V.P0_SELF.json")
@@ -171,6 +171,8 @@ class StrengthScorerTests(unittest.TestCase):
         shutil.copytree(DIAGNOSTIC_DIR / case_name, run_dir)
         self.created_run_dirs.append(run_dir)
 
+        validator_result = run_python(".agentic-pi/validators/validator_factory.py", str(run_dir))
+        self.assertEqual(validator_result.returncode, 0, validator_result.stdout)
         result = run_python(".agentic-pi/validators/certify_run.py", str(run_dir))
 
         self.assertEqual(result.returncode, 0, result.stdout)

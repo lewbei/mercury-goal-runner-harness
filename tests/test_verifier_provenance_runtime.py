@@ -103,8 +103,18 @@ class VerifierProvenanceRuntimeTests(unittest.TestCase):
             },
         )
 
-    def certify(self):
+    def certify(self, certify_validator=True):
+        verifier_dir = self.run_dir / "verifier_artifacts"
+        if certify_validator and verifier_dir.is_dir() and any(verifier_dir.glob("*.json")):
+            validator_result = run_python(".agentic-pi/validators/validator_factory.py", str(self.run_dir))
+            self.assertEqual(validator_result.returncode, 0, validator_result.stdout)
         return run_python(".agentic-pi/validators/certify_run.py", str(self.run_dir))
+
+    def add_covered_criteria(self, artifact_id, criteria=None):
+        artifact_path = self.run_dir / "verifier_artifacts" / f"{artifact_id}.json"
+        artifact = json.loads(artifact_path.read_text(encoding="utf-8"))
+        artifact["covered_criteria"] = criteria or ["out.txt exists."]
+        write_json(artifact_path, artifact)
 
     def load_certification(self):
         return json.loads((self.run_dir / "certification.json").read_text(encoding="utf-8"))
@@ -146,6 +156,7 @@ class VerifierProvenanceRuntimeTests(unittest.TestCase):
             ])
         result = run_python(*args)
         self.assertEqual(result.returncode, 0, result.stdout)
+        self.add_covered_criteria(artifact_id)
 
     def test_logger_records_solution_existence_before_and_after_target(self):
         before = run_python(
@@ -271,16 +282,21 @@ class VerifierProvenanceRuntimeTests(unittest.TestCase):
         self.add_verifier_contract()
         self.write_successful_output_and_log()
 
-        result = self.certify()
+        first_result = self.certify(certify_validator=False)
 
-        self.assertEqual(result.returncode, 0, result.stdout)
-        certification = self.load_certification()
-        self.assertEqual(certification["status"], "PROVISIONAL_DONE")
+        self.assertNotEqual(first_result.returncode, 0, first_result.stdout)
         logged = self.run_dir / "verifier_artifacts" / "V.ARTIFACT_TEST.VISIBLE_TEST.json"
         self.assertTrue(logged.is_file())
         artifact = json.loads(logged.read_text(encoding="utf-8"))
         self.assertEqual(artifact["provenance_level"], "P1")
         self.assertEqual(artifact["source"], "existing_repo_test")
+
+        self.add_covered_criteria("V.ARTIFACT_TEST.VISIBLE_TEST")
+        result = self.certify()
+
+        self.assertEqual(result.returncode, 0, result.stdout)
+        certification = self.load_certification()
+        self.assertEqual(certification["status"], "PROVISIONAL_DONE")
 
     def test_worker_touched_verifier_artifact_is_rejected(self):
         write_json(self.run_dir / "goal_contract.json", base_contract(self.run_id))
@@ -288,7 +304,7 @@ class VerifierProvenanceRuntimeTests(unittest.TestCase):
         self.write_successful_output_and_log(touched_path="verifier_artifacts/V.BAD.json")
         self.add_verifier_artifact("V.P2", "independent_verifier_agent")
 
-        result = self.certify()
+        result = self.certify(certify_validator=False)
 
         self.assertNotEqual(result.returncode, 0, result.stdout)
         self.assertEqual(self.load_certification()["status"], "NOT_DONE")

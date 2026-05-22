@@ -1,0 +1,39 @@
+{
+  "run_id": "golden_strict_p2_minimal",
+  "generated_by": "milestone-tracker-v1.4",
+  "selected_strategy": "S.WRITE_SIMPLE",
+  "task_type": "writing",
+  "allowed_statuses": [
+    "planned",
+    "active",
+    "complete",
+    "blocked"
+  ],
+  "final_status_authority": "certifier_only",
+  "milestone_statuses": [
+    {
+      "order": 1,
+      "milestone_id": "M.WRITING_OUTLINE",
+      "status": "planned",
+      "status_reason": "Milestone is planned; execution and certification have not changed this status."
+    },
+    {
+      "order": 2,
+      "milestone_id": "M.WRITING_DRAFT",
+      "status": "planned",
+      "status_reason": "Milestone is planned; execution and certification have not changed this status."
+    },
+    {
+      "order": 3,
+      "milestone_id": "M.WRITING_VERIFY_CONSTRAINTS",
+      "status": "planned",
+      "status_reason": "Milestone is planned; execution and certification have not changed this status."
+    },
+    {
+      "order": 4,
+      "milestone_id": "M.WRITING_FINALIZE",
+      "status": "planned",
+      "status_reason": "Milestone is planned; execution and certification have not changed this status."
+    }
+  ]
+}

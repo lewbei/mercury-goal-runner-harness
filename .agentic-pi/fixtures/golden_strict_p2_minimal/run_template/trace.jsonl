@@ -1,0 +1,6 @@
+{"timestamp": "2026-05-20T11:26:13.489719+00:00", "event": "raw_goal_compiled", "data": {"run_id": "golden_strict_p2_minimal", "mode": "p2", "raw_goal": "Create README.md explaining the harness"}}
+{"time": "2026-05-20T11:26:25.443290+00:00", "agent": "guarded_worker", "event": "step_executed", "status": "OK", "data": {"step_id": 1, "status": "PASSED"}, "data_hash": "b1fb210298e196578e500bc1e134168d1ccc9f79242b4850819696da92abd285"}
+{"time": "2026-05-20T11:26:25.608063+00:00", "agent": "guarded_worker", "event": "step_executed", "status": "OK", "data": {"step_id": 2, "status": "PASSED"}, "data_hash": "6bb20388e8efb85d5478c0ed4bd31d1e92a4988bfbec491e746503fbf49a2114"}
+{"time": "2026-05-20T11:26:25.790612+00:00", "agent": "guarded_worker", "event": "step_executed", "status": "OK", "data": {"step_id": 3, "status": "PASSED"}, "data_hash": "7b2ab28034fab8ca63af8edcc18d2ee5fde1ab69e6b4623c0bfa77b4017c823f"}
+{"time": "2026-05-20T11:26:25.966030+00:00", "agent": "guarded_worker", "event": "step_executed", "status": "OK", "data": {"step_id": 4, "status": "PASSED"}, "data_hash": "9ea2032e399322653d11ae3cba7f8287f31c2820aea0da2570116d2cd3a31723"}
+{"time": "2026-05-20T11:26:26.126467+00:00", "agent": "guarded_worker", "event": "run_completed", "status": "OK", "data": {}, "data_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"}

@@ -891,6 +891,10 @@ def check_validator_certification(run_dir: Path, failed: list, passed: list, pro
     if not provenance_mode:
         passed.append("validator_certification.json skipped for legacy non-provenance run")
         return
+    verifier_dir = run_dir / "verifier_artifacts"
+    if not verifier_dir.is_dir() or not any(verifier_dir.glob("*.json")):
+        passed.append("validator_certification.json skipped because verifier_artifacts are missing")
+        return
     vc_path = run_dir / "validator_certification.json"
     if not vc_path.is_file():
         failed.append("validator_certification.json missing \u2014 verifier not certified")

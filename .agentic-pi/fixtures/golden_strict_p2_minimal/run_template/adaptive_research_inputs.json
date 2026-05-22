@@ -1,0 +1,298 @@
+{
+  "schema_version": "adaptive_research_inputs_v1",
+  "run_id": "golden_strict_p2_minimal",
+  "generated_by": "adaptive-research-inputs-v1",
+  "generated_at": "2026-05-20T11:26:21.169097+00:00",
+  "authority": {
+    "authority_level": "planning_input_only",
+    "final_status_authority": "certifier_only",
+    "can_certify_done": false,
+    "can_write_status_artifacts": false,
+    "claim_correctness": false,
+    "claim_exhaustive_research": false
+  },
+  "determinism_boundary": {
+    "adaptive_generation_may_be_nondeterministic": true,
+    "deterministic_validation_required": true,
+    "validators_must_not_fetch_network": true,
+    "certifier_ignores_as_authority": true,
+    "replay_uses_recorded_sources_only": true
+  },
+  "collection_config": {
+    "mode": "deterministic_seed_record",
+    "external_network_access_performed": false,
+    "llm_sampling_performed": false,
+    "max_research_questions": 5,
+    "max_findings": 8,
+    "max_planning_inputs": 8,
+    "non_exhaustive_research_claim": "bounded_not_exhaustive",
+    "future_live_research_requirements": [
+      "save exact query or prompt text",
+      "save provider/model/version, seed, temperature, and system fingerprint when available",
+      "save source URLs and content hashes",
+      "save retrieval timestamp and tool name",
+      "treat findings as planning inputs only"
+    ]
+  },
+  "implementation_boundary": {
+    "source_code_origin": "harness_native_no_vendor_copy",
+    "external_sources_are_design_inputs_only": true,
+    "external_code_copied": false,
+    "external_dependencies_added": false
+  },
+  "status_artifact_write_policy": {
+    "write_scope": "run_local_planning_artifact_only",
+    "forbidden_paths": [
+      "final_status.json",
+      "final_status.md",
+      "certification.json",
+      "policy_decision.json"
+    ],
+    "attempted_status_write": false
+  },
+  "source_artifacts": [
+    {
+      "path": "goal_contract.json",
+      "required": true,
+      "exists": true
+    },
+    {
+      "path": "task_type_decision.json",
+      "required": false,
+      "exists": true
+    },
+    {
+      "path": "strategy_candidates.json",
+      "required": true,
+      "exists": true
+    },
+    {
+      "path": "strategy_applicability.json",
+      "required": false,
+      "exists": true
+    },
+    {
+      "path": "retrieved_experience.json",
+      "required": false,
+      "exists": true
+    }
+  ],
+  "research_questions": [
+    {
+      "question_id": "RQ.PLANNING_METHODS",
+      "question": "Which bounded planning/search method lessons apply to this writing goal without changing certifier authority?",
+      "rationale": "Adaptive research can widen planning alternatives before deterministic strategy selection is audited.",
+      "status": "recorded_seed"
+    },
+    {
+      "question_id": "RQ.VERIFIER_FOLLOWUP",
+      "question": "What verifier evidence would catch a plausible false-DONE for: Create README.md explaining the harness.",
+      "rationale": "Research findings are useful only if they create concrete verifier follow-up obligations.",
+      "status": "recorded_seed"
+    },
+    {
+      "question_id": "RQ.REPRODUCIBILITY",
+      "question": "What provenance must be recorded when adaptive LLM or web research is non-deterministic?",
+      "rationale": "Deterministic validators need saved inputs, hashes, source URLs, and model/request metadata instead of live claims.",
+      "status": "recorded_seed"
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "F.TOT.BOUNDED_FRONTIER",
+      "source_type": "paper",
+      "source_title": "Tree of Thoughts: Deliberate Problem Solving with Large Language Models",
+      "source_url": "https://proceedings.neurips.cc/paper/2023/hash/271db9922b8d1f4dd7aaef84ed5ac703-Abstract.html",
+      "claim": "Branching over generated thoughts can improve hard planning, but the search is heuristic and budget-bound.",
+      "planning_implication": "Record generation/evaluation/selection branches and rejected alternatives; never call the frontier exhaustive.",
+      "limitations": "LLM self-evaluation and voting are not independent verifier evidence.",
+      "provenance": {
+        "retrieval_method": "deterministic_seed_record",
+        "retrieved_by": "adaptive_research_inputs.py",
+        "retrieved_at": "recorded_at_runtime",
+        "content_hash": "sha256:04aaee56db069a5ab48236cbafe33f7c78a64f19b87b911d517005096d8df2ef",
+        "network_access": false,
+        "llm_sampling": false
+      },
+      "evidence_refs": [
+        "goal_contract.json",
+        "strategy_candidates.json"
+      ],
+      "authority_impact": "none",
+      "can_certify_done": false,
+      "external_source_design_only": true,
+      "code_copied": false
+    },
+    {
+      "finding_id": "F.GOT.OPERATION_GRAPH",
+      "source_type": "paper",
+      "source_title": "Graph of Thoughts: Solving Elaborate Problems with Large Language Models",
+      "source_url": "https://arxiv.org/abs/2308.09687",
+      "claim": "Graph-structured operations can combine, score, improve, and aggregate reasoning paths.",
+      "planning_implication": "Keep operation dependencies inspectable as planning graph evidence while forbidding graph aggregation from certifying DONE.",
+      "limitations": "Operation scores are planning heuristics unless backed by deterministic verifier artifacts.",
+      "provenance": {
+        "retrieval_method": "deterministic_seed_record",
+        "retrieved_by": "adaptive_research_inputs.py",
+        "retrieved_at": "recorded_at_runtime",
+        "content_hash": "sha256:8805928c113256ec36930fcf9e36e4d294a82b8994322266f7d47a73706be73e",
+        "network_access": false,
+        "llm_sampling": false
+      },
+      "evidence_refs": [
+        "planning_search_tree.json"
+      ],
+      "authority_impact": "none",
+      "can_certify_done": false,
+      "external_source_design_only": true,
+      "code_copied": false
+    },
+    {
+      "finding_id": "F.LATS.EXTERNAL_FEEDBACK",
+      "source_type": "paper",
+      "source_title": "Language Agent Tree Search Unifies Reasoning, Acting, and Planning in Language Models",
+      "source_url": "https://proceedings.mlr.press/v235/zhou24r.html",
+      "claim": "MCTS-style selection, expansion, evaluation, reflection, and external feedback can improve adaptive agent planning.",
+      "planning_implication": "Use external feedback as planning input and risk signal; require independent verifier evidence before policy/certifier handoff.",
+      "limitations": "Rollout rewards, reflections, and environment feedback are not final status authority.",
+      "provenance": {
+        "retrieval_method": "deterministic_seed_record",
+        "retrieved_by": "adaptive_research_inputs.py",
+        "retrieved_at": "recorded_at_runtime",
+        "content_hash": "sha256:37acdafa9a8fa469717b0650c2e0b09fc17ed8cf2926e362a1b74b0b6430f35d",
+        "network_access": false,
+        "llm_sampling": false
+      },
+      "evidence_refs": [
+        "strategy_candidates.json",
+        "verifier_contract.json"
+      ],
+      "authority_impact": "none",
+      "can_certify_done": false,
+      "external_source_design_only": true,
+      "code_copied": false
+    },
+    {
+      "finding_id": "F.REPRO.SEED_FINGERPRINT",
+      "source_type": "engineering_doc",
+      "source_title": "OpenAI advanced usage: reproducible outputs",
+      "source_url": "https://developers.openai.com/api/docs/guides/advanced-usage#reproducible-outputs",
+      "claim": "LLM calls are non-deterministic by default; seed and system_fingerprint are best-effort reproducibility metadata, not guarantees.",
+      "planning_implication": "When adaptive LLM research is used, save prompts, parameters, seed, model id, system fingerprint, output hash, and source URLs.",
+      "limitations": "Matching seeds and fingerprints reduce variation but do not prove output quality or correctness.",
+      "provenance": {
+        "retrieval_method": "deterministic_seed_record",
+        "retrieved_by": "adaptive_research_inputs.py",
+        "retrieved_at": "recorded_at_runtime",
+        "content_hash": "sha256:153574748caec41d858325683cd7c69e9b9863108c2cfef48e07534743d0fe97",
+        "network_access": false,
+        "llm_sampling": false
+      },
+      "evidence_refs": [
+        "adaptive_research_inputs.json"
+      ],
+      "authority_impact": "none",
+      "can_certify_done": false,
+      "external_source_design_only": true,
+      "code_copied": false
+    },
+    {
+      "finding_id": "F.EVAL.REPRODUCIBLE_HARNESS",
+      "source_type": "paper",
+      "source_title": "Lessons from the Trenches on Reproducible Evaluation of Language Models",
+      "source_url": "https://arxiv.org/html/2405.14782v1",
+      "claim": "Evaluation results are sensitive to prompts, implementation details, sample choices, and model changes.",
+      "planning_implication": "Prefer deterministic schema/constraint/trace validators first; record adaptive artifacts for audit and replay rather than live fetching.",
+      "limitations": "A saved research finding can guide validation design but does not replace actual validators.",
+      "provenance": {
+        "retrieval_method": "deterministic_seed_record",
+        "retrieved_by": "adaptive_research_inputs.py",
+        "retrieved_at": "recorded_at_runtime",
+        "content_hash": "sha256:03a42a10309b6152db2c6145c001e488d25e12943a8a60842e849efcb5f8bc08",
+        "network_access": false,
+        "llm_sampling": false
+      },
+      "evidence_refs": [
+        "adaptive_research_inputs.json",
+        "planning_coverage.json"
+      ],
+      "authority_impact": "none",
+      "can_certify_done": false,
+      "external_source_design_only": true,
+      "code_copied": false
+    }
+  ],
+  "planning_inputs": [
+    {
+      "input_id": "AI.SEARCH_FRONTIER_BREADTH",
+      "finding_refs": [
+        "F.TOT.BOUNDED_FRONTIER",
+        "F.GOT.OPERATION_GRAPH",
+        "F.LATS.EXTERNAL_FEEDBACK"
+      ],
+      "applies_to": [
+        "planning_search_tree",
+        "planning_coverage"
+      ],
+      "recommendation": "Expose selected, rejected, blocked, and deferred branches from any adaptive search; keep budgets explicit.",
+      "required_verifier_followup": "Verifier artifacts must independently check the selected branch output; branch scores do not prove correctness.",
+      "integration_status": "recorded_for_planning",
+      "authority_level": "planning_only",
+      "can_certify_done": false
+    },
+    {
+      "input_id": "AI.PROVENANCE_FOR_NONDETERMINISM",
+      "finding_refs": [
+        "F.REPRO.SEED_FINGERPRINT",
+        "F.EVAL.REPRODUCIBLE_HARNESS"
+      ],
+      "applies_to": [
+        "verifier_strategy",
+        "replay"
+      ],
+      "recommendation": "Record exact prompts, queries, model/provider metadata, source URLs, timestamps, and content hashes for any live autoresearch.",
+      "required_verifier_followup": "Deterministic validators must validate the saved artifact only and must not depend on fresh network fetches.",
+      "integration_status": "recorded_for_planning",
+      "authority_level": "planning_only",
+      "can_certify_done": false
+    },
+    {
+      "input_id": "AI.CANDIDATE_RISK_REVIEW",
+      "finding_refs": [
+        "F.TOT.BOUNDED_FRONTIER",
+        "F.GOT.OPERATION_GRAPH",
+        "F.LATS.EXTERNAL_FEEDBACK",
+        "F.REPRO.SEED_FINGERPRINT",
+        "F.EVAL.REPRODUCIBLE_HARNESS"
+      ],
+      "applies_to": [
+        "risk_register",
+        "verification_strategy"
+      ],
+      "recommendation": "Use adaptive research to add risk notes and verifier follow-up for candidate strategies: S.WRITE_SIMPLE",
+      "required_verifier_followup": "Policy/certifier must still require verifier_contract.json and verifier_artifacts/*.json before any final status.",
+      "integration_status": "recorded_for_planning",
+      "authority_level": "planning_only",
+      "can_certify_done": false
+    }
+  ],
+  "integration_contract": {
+    "consumed_by": [
+      "planning_search_tree.py",
+      "planning_coverage.py",
+      "full_verify.py"
+    ],
+    "must_not_be_consumed_by": [
+      "policy_engine.py as final-status authority",
+      "certify_run.py as final-status authority"
+    ],
+    "required_before_certification": [
+      "validate_adaptive_research_inputs.py passes",
+      "validate_planning_search_tree.py passes",
+      "validate_planning_coverage.py passes",
+      "verifier_contract.json exists",
+      "verifier_artifacts/*.json exist"
+    ],
+    "authority_boundary": "Adaptive research can change planning questions, risks, and verifier follow-up; it cannot certify DONE."
+  }
+}

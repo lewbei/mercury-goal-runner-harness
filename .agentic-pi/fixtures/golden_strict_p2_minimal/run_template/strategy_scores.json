@@ -1,0 +1,19 @@
+{
+  "run_id": "golden_strict_p2_minimal",
+  "task_type": "writing",
+  "experience_memory_used": false,
+  "scores": [
+    {
+      "strategy_id": "S.WRITE_SIMPLE",
+      "score": 7,
+      "score_level": "preferred",
+      "positive_factors": [
+        "can_reach_certifying_evidence",
+        "produces_expected_artifacts",
+        "low_risk",
+        "small_capability_surface"
+      ],
+      "penalties": []
+    }
+  ]
+}

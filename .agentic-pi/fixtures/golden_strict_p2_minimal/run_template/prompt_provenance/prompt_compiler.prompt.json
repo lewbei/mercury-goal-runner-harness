@@ -1,0 +1,52 @@
+{
+  "schema_version": "prompt_provenance_v1",
+  "artifact_id": "PROMPT.PROVENANCE.PROMPT_COMPILER",
+  "run_id": "golden_strict_p2_minimal",
+  "created_at": "2026-05-20T11:26:13.457999+00:00",
+  "source": {
+    "tool": "prompt_provenance.py",
+    "agent": "compile_raw_goal.py",
+    "model": "deterministic-local-fixture",
+    "source_phase": "raw_goal_compilation"
+  },
+  "authority": {
+    "authority_level": "provenance_only",
+    "can_certify_done": false,
+    "not_evidence_for_done": true,
+    "notes": "Records prompt transformation only; policy_engine.py/certify_run.py own final status."
+  },
+  "goal_contract": {
+    "path": "goal_contract.json",
+    "sha256": "cc577e0a5087c27ebaa1be50dbc420391aec1775f3dd8fef1cb04ee0a01c26be"
+  },
+  "prompt_compiler_files": {
+    "agent_prompt": {
+      "path": ".pi/agents/prompt-compiler.md",
+      "exists": true,
+      "sha256": "5702c7508eb55b77438b668f3900ebfc454e61c70b6d39eceea9ac07994ced2b"
+    },
+    "runtime_prompt": {
+      "path": ".agentic-pi/prompts/prompt_compiler.md",
+      "exists": true,
+      "sha256": "95760e0dc1a75e71459a2e8a2ddecef391ed041b8739d350074502a6dc6e17bf"
+    }
+  },
+  "raw_prompt": {
+    "text": "Create README.md explaining the harness",
+    "sha256": "336d5473802936787e6712e792b8d090a326f8198ed7dc5d5f3f7cc6573f1737",
+    "length_chars": 39,
+    "present": true
+  },
+  "execution_prompt": {
+    "text": "Create README.md for the harness. Do not touch protected files.",
+    "sha256": "9d82b8226c92b8995c5859a615a8bc17219a188a22ebdbb707fd5682b43ae615",
+    "length_chars": 63,
+    "present": true
+  },
+  "checks": {
+    "goal_contract_json_valid": true,
+    "raw_prompt_present": true,
+    "execution_prompt_present": true,
+    "authority_files_written": false
+  }
+}

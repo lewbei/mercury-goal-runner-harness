@@ -123,7 +123,7 @@ class TestVerticalSlice003_ArtifactMisplacement(unittest.TestCase):
     # ── Test 2: Wrong artifact path blocks certification ──────────────────
 
     def test_wrong_path_blocks_certification(self):
-        """Artifact at wrong path -> certification must fail with NOT_DONE."""
+        """Artifact at wrong path -> legacy certification must fail with DONE_FAIL."""
         self._create_minimal_run()
 
         # Write expected_artifacts.json — expects artifacts/report.json
@@ -146,22 +146,22 @@ class TestVerticalSlice003_ArtifactMisplacement(unittest.TestCase):
 
         # Read certification output
         cert = load_json(self.run_dir / "certification.json")
-        self.assertEqual(cert["status"], "NOT_DONE",
-                        "Wrong artifact path must yield NOT_DONE")
+        self.assertEqual(cert["status"], "DONE_FAIL",
+                        "Wrong artifact path must yield DONE_FAIL in legacy mode")
 
         # The misplacement should appear in failed checks
         misplaced = any("MISPLACED" in c for c in cert["failed_checks"])
         self.assertTrue(misplaced,
                        "Misplacement should appear in failed_checks")
 
-        # The status should be NOT_DONE (not DONE_FAIL for legacy)
+        # The status should be DONE_FAIL for legacy non-provenance mode.
         final_status = load_json(self.run_dir / "final_status.json")
-        self.assertEqual(final_status["status"], "NOT_DONE")
+        self.assertEqual(final_status["status"], "DONE_FAIL")
 
     # ── Test 3: Missing required artifact blocks certification ────────────
 
     def test_missing_required_blocks_certification(self):
-        """Required artifact missing entirely -> NOT_DONE."""
+        """Required artifact missing entirely -> DONE_FAIL in legacy mode."""
         self._create_minimal_run()
 
         ea = {
@@ -177,8 +177,8 @@ class TestVerticalSlice003_ArtifactMisplacement(unittest.TestCase):
         result = run_certify(self.run_dir)
 
         cert = load_json(self.run_dir / "certification.json")
-        self.assertEqual(cert["status"], "NOT_DONE",
-                        "Missing required artifact must yield NOT_DONE")
+        self.assertEqual(cert["status"], "DONE_FAIL",
+                        "Missing required artifact must yield DONE_FAIL in legacy mode")
         missing = any("MISSING" in c for c in cert["failed_checks"])
         self.assertTrue(missing,
                        "Missing artifact should appear in failed_checks")

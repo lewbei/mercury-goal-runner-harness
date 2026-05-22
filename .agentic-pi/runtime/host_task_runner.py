@@ -14,6 +14,7 @@ CERTIFIER_OUTPUTS = [
     "policy_decision.json",
     "verifier_smell_reports",
     "verifier_strength_reports",
+    "validator_certification.json",
 ]
 
 
@@ -121,6 +122,26 @@ def prepare_disposable_run(source_dir: Path, target_dir: Path, target_run_id: st
 
 
 def run_certifier(run_dir: Path):
+    verifier_dir = run_dir / "verifier_artifacts"
+    command_label = "python .agentic-pi/validators/certify_run.py " + run_dir.as_posix()
+    if verifier_dir.is_dir() and any(verifier_dir.glob("*.json")):
+        validator_cmd = [sys.executable, ".agentic-pi/validators/validator_factory.py", str(run_dir)]
+        validator_result = subprocess.run(
+            validator_cmd,
+            cwd=repo_root(),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+        )
+        command_label = (
+            "python .agentic-pi/validators/validator_factory.py "
+            + run_dir.as_posix()
+            + " && "
+            + command_label
+        )
+        if validator_result.returncode != 0:
+            return validator_result.returncode, command_label
+
     cmd = [sys.executable, ".agentic-pi/validators/certify_run.py", str(run_dir)]
     result = subprocess.run(
         cmd,
@@ -129,7 +150,7 @@ def run_certifier(run_dir: Path):
         stderr=subprocess.STDOUT,
         text=True,
     )
-    return result.returncode, "python .agentic-pi/validators/certify_run.py " + run_dir.as_posix()
+    return result.returncode, command_label
 
 
 def read_status_values(run_dir: Path):

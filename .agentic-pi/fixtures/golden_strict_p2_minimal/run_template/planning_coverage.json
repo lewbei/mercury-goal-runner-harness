@@ -1,0 +1,419 @@
+{
+  "schema_version": "planning_coverage_v1",
+  "run_id": "golden_strict_p2_minimal",
+  "generated_by": "planning-coverage-v1",
+  "generated_at": "2026-05-20T11:26:24.193198+00:00",
+  "authority": {
+    "authority_level": "planning_coverage_only",
+    "final_status_authority": "certifier_only",
+    "can_certify_done": false,
+    "claim_exhaustive_planning": false,
+    "claim_correctness": false
+  },
+  "proof_boundary": {
+    "proof_scope": "planning_coverage_only",
+    "proves_all_possible_plans": false,
+    "proves_artifact_correctness": false,
+    "requires_worker_execution": true,
+    "requires_verifier_artifacts": true,
+    "requires_policy_engine": true,
+    "requires_certifier": true
+  },
+  "research_basis": [
+    {
+      "source_title": "Large Language Models for Planning: A Comprehensive and Systematic Survey",
+      "source_url": "https://arxiv.org/html/2505.19683v1",
+      "applied_lesson": "Planning should record decomposition, search/exploration choices, constraints, and verifier handoff rather than claiming exhaustive reasoning."
+    },
+    {
+      "source_title": "Demystifying Chains, Trees, and Graphs of Thoughts",
+      "source_url": "https://arxiv.org/html/2401.14295v6",
+      "applied_lesson": "Branching/tree/graph reasoning improves coverage by making alternatives explicit and scorable, but still remains bounded search."
+    },
+    {
+      "source_title": "PlanGenLLMs: A Modern Survey of LLM Planning Capabilities",
+      "source_url": "https://aclanthology.org/2025.acl-long.958.pdf",
+      "applied_lesson": "Planning quality should be checked with constraint adherence, plan rationality, verifier-guided selection, and failure-aware evaluation."
+    },
+    {
+      "source_title": "Tree-of-Thoughts reference implementation",
+      "source_url": "https://github.com/princeton-nlp/tree-of-thought-llm",
+      "applied_lesson": "Expose generate/evaluate/select frontier bookkeeping, but keep LLM voting outside the certifier boundary."
+    },
+    {
+      "source_title": "Graph-of-Thoughts reference implementation",
+      "source_url": "https://github.com/spcl/graph-of-thoughts",
+      "applied_lesson": "Represent planning operations and dependencies as inspectable graph evidence rather than opaque confidence."
+    },
+    {
+      "source_title": "Language Agent Tree Search reference implementation",
+      "source_url": "https://github.com/lapisrocks/LanguageAgentTreeSearch",
+      "applied_lesson": "Selection, expansion, evaluation, rollout, backpropagation, and failed-trajectory reflection are useful audit concepts, but rollout rewards cannot certify DONE."
+    }
+  ],
+  "source_artifacts": [
+    {
+      "path": "goal_contract.json",
+      "required": true,
+      "exists": true
+    },
+    {
+      "path": "task_type_decision.json",
+      "required": false,
+      "exists": true
+    },
+    {
+      "path": "domain_pack_selection.json",
+      "required": false,
+      "exists": true
+    },
+    {
+      "path": "capability_inventory.json",
+      "required": false,
+      "exists": true
+    },
+    {
+      "path": "strategy_candidates.json",
+      "required": true,
+      "exists": true
+    },
+    {
+      "path": "strategy_applicability.json",
+      "required": true,
+      "exists": true
+    },
+    {
+      "path": "retrieved_experience.json",
+      "required": false,
+      "exists": true
+    },
+    {
+      "path": "adaptive_research_inputs.json",
+      "required": false,
+      "exists": true
+    },
+    {
+      "path": "strategy_scores.json",
+      "required": true,
+      "exists": true
+    },
+    {
+      "path": "strategy_decision.json",
+      "required": true,
+      "exists": true
+    },
+    {
+      "path": "planning_search_tree.json",
+      "required": false,
+      "exists": true
+    },
+    {
+      "path": "selected_strategy.json",
+      "required": false,
+      "exists": true
+    },
+    {
+      "path": "rejected_strategies.json",
+      "required": false,
+      "exists": true
+    },
+    {
+      "path": "milestone_plan.json",
+      "required": false,
+      "exists": true
+    },
+    {
+      "path": "local_step_plan.json",
+      "required": false,
+      "exists": true
+    },
+    {
+      "path": "expected_artifacts.json",
+      "required": false,
+      "exists": true
+    },
+    {
+      "path": "merged_plan.json",
+      "required": false,
+      "exists": true
+    },
+    {
+      "path": "plan_graph.json",
+      "required": false,
+      "exists": true
+    }
+  ],
+  "search_budget": {
+    "strategy_candidates_count": 1,
+    "rejected_or_deferred_count": 3,
+    "planning_methods_considered": [
+      "deterministic_strategy_selection",
+      "milestone_decomposition",
+      "local_step_decomposition",
+      "artifact_linked_plan_graph",
+      "verifier_guided_handoff",
+      "failed_branch_reflection_notes",
+      "bounded_planning_tree_search",
+      "adaptive_research_risk_review"
+    ],
+    "search_methods_considered": [
+      "candidate_generation",
+      "applicability_gate",
+      "deterministic_scoring",
+      "rejected_or_deferred_branch_recording",
+      "tot_style_frontier_bookkeeping",
+      "got_style_operation_trace",
+      "lats_style_deferred_rollout_record",
+      "depth_limited_tree_expansion",
+      "adaptive_autoresearch_input_recording"
+    ],
+    "search_completeness_claim": "bounded_not_exhaustive",
+    "stop_condition": "status artifacts absent during coverage build; execution must stop at verifier/certifier gates before any final-status claim."
+  },
+  "goal_coverage": {
+    "final_outputs": [
+      "README.md"
+    ],
+    "constraints": [
+      "Keep it minimal.",
+      "Write only inside the run folder.",
+      "Use deterministic prepared-run execution.",
+      "Do not modify protected files.",
+      "Do not certify DONE in the compiler."
+    ],
+    "done_criteria": [
+      "README.md exists.",
+      "README.md contains the word 'harness'."
+    ],
+    "failure_criteria": [
+      "README.md missing.",
+      "README.md does not mention 'harness'."
+    ],
+    "ambiguities": []
+  },
+  "alternatives_considered": [
+    {
+      "option_id": "S.WRITE_SIMPLE",
+      "source": "strategy_decision.json",
+      "status": "selected",
+      "reason": "Selected strategy has the best deterministic score and passed applicability checks.",
+      "evidence_refs": [
+        "strategy_scores.json",
+        "strategy_decision.json",
+        "selected_strategy.json"
+      ],
+      "verifier_path": "P2/P3 verifier evidence required when provenance mode is active; independent review required for high-stakes factual claims"
+    },
+    {
+      "option_id": "A.ADAPTIVE_RESEARCH_INPUTS",
+      "source": "adaptive_research_inputs.json",
+      "status": "deferred",
+      "reason": "Adaptive/autoresearch findings can refine planning questions and verifier follow-up, but remain planning-only and non-certifying.",
+      "evidence_refs": [
+        "adaptive_research_inputs.json"
+      ],
+      "verifier_path": "Validate adaptive_research_inputs.json, then require independent verifier artifacts before policy/certifier status."
+    },
+    {
+      "option_id": "A.EXPANDED_TREE_OR_GRAPH_SEARCH",
+      "source": "research_basis",
+      "status": "deferred",
+      "reason": "Tree/graph/MCTS-style expansion can explore more branches, but this run used bounded deterministic strategy selection.",
+      "evidence_refs": [
+        "planning_coverage.json",
+        "strategy_candidates.json"
+      ],
+      "verifier_path": "Use only as extra planning evidence; selected branch still needs verifier artifacts and certifier policy."
+    },
+    {
+      "option_id": "A.ASK_USER_OR_DEFER",
+      "source": "goal_contract.json",
+      "status": "deferred",
+      "reason": "If constraints, verifier path, or output ownership become ambiguous, stop and ask instead of inventing coverage.",
+      "evidence_refs": [
+        "goal_contract.json"
+      ],
+      "verifier_path": "User clarification is not verifier evidence; certification still belongs to policy/certifier artifacts."
+    }
+  ],
+  "assumptions": [
+    {
+      "assumption": "Use deterministic prepared-run execution.",
+      "source": "goal_contract.inferred_constraints",
+      "validation_or_escape": "Verifier or user review must catch a bad inference before certification."
+    },
+    {
+      "assumption": "Selected strategy S.WRITE_SIMPLE is the best bounded deterministic strategy, not the only possible plan.",
+      "source": "selected_strategy.json",
+      "validation_or_escape": "Rejected/deferred alternatives remain visible in planning_coverage.json."
+    }
+  ],
+  "risk_register": [
+    {
+      "risk_id": "R001",
+      "risk": "simple writing strategy is not semantic proof",
+      "mitigation": "Keep this as planning evidence only; require verifier artifacts and certifier policy before final status.",
+      "source": "goal/strategy/planning_coverage"
+    },
+    {
+      "risk_id": "R002",
+      "risk": "polished but wrong",
+      "mitigation": "Keep this as planning evidence only; require verifier artifacts and certifier policy before final status.",
+      "source": "goal/strategy/planning_coverage"
+    },
+    {
+      "risk_id": "R003",
+      "risk": "unsupported claims",
+      "mitigation": "Keep this as planning evidence only; require verifier artifacts and certifier policy before final status.",
+      "source": "goal/strategy/planning_coverage"
+    },
+    {
+      "risk_id": "R004",
+      "risk": "README.md missing.",
+      "mitigation": "Keep this as planning evidence only; require verifier artifacts and certifier policy before final status.",
+      "source": "goal/strategy/planning_coverage"
+    },
+    {
+      "risk_id": "R005",
+      "risk": "README.md does not mention 'harness'.",
+      "mitigation": "Keep this as planning evidence only; require verifier artifacts and certifier policy before final status.",
+      "source": "goal/strategy/planning_coverage"
+    },
+    {
+      "risk_id": "R006",
+      "risk": "Adaptive research finding F.TOT.BOUNDED_FRONTIER is advisory only: LLM self-evaluation and voting are not independent verifier evidence.",
+      "mitigation": "Keep this as planning evidence only; require verifier artifacts and certifier policy before final status.",
+      "source": "goal/strategy/planning_coverage"
+    },
+    {
+      "risk_id": "R007",
+      "risk": "Adaptive research finding F.GOT.OPERATION_GRAPH is advisory only: Operation scores are planning heuristics unless backed by deterministic verifier artifacts.",
+      "mitigation": "Keep this as planning evidence only; require verifier artifacts and certifier policy before final status.",
+      "source": "goal/strategy/planning_coverage"
+    },
+    {
+      "risk_id": "R008",
+      "risk": "Adaptive research finding F.LATS.EXTERNAL_FEEDBACK is advisory only: Rollout rewards, reflections, and environment feedback are not final status authority.",
+      "mitigation": "Keep this as planning evidence only; require verifier artifacts and certifier policy before final status.",
+      "source": "goal/strategy/planning_coverage"
+    },
+    {
+      "risk_id": "R009",
+      "risk": "Adaptive research finding F.REPRO.SEED_FINGERPRINT is advisory only: Matching seeds and fingerprints reduce variation but do not prove output quality or correctness.",
+      "mitigation": "Keep this as planning evidence only; require verifier artifacts and certifier policy before final status.",
+      "source": "goal/strategy/planning_coverage"
+    },
+    {
+      "risk_id": "R010",
+      "risk": "Adaptive research finding F.EVAL.REPRODUCIBLE_HARNESS is advisory only: A saved research finding can guide validation design but does not replace actual validators.",
+      "mitigation": "Keep this as planning evidence only; require verifier artifacts and certifier policy before final status.",
+      "source": "goal/strategy/planning_coverage"
+    },
+    {
+      "risk_id": "R011",
+      "risk": "Planner may miss a better branch because planning search is bounded.",
+      "mitigation": "Keep this as planning evidence only; require verifier artifacts and certifier policy before final status.",
+      "source": "goal/strategy/planning_coverage"
+    },
+    {
+      "risk_id": "R012",
+      "risk": "Artifact existence can look successful while behavior or evidence is wrong.",
+      "mitigation": "Keep this as planning evidence only; require verifier artifacts and certifier policy before final status.",
+      "source": "goal/strategy/planning_coverage"
+    }
+  ],
+  "verification_strategy": {
+    "verifier_requirements": [
+      "P2/P3 verifier evidence required when provenance mode is active",
+      "independent review required for high-stakes factual claims",
+      "Verifier artifacts and certifier policy are required before final status.",
+      "Verifier artifacts must independently check the selected branch output; branch scores do not prove correctness.",
+      "Deterministic validators must validate the saved artifact only and must not depend on fresh network fetches.",
+      "Policy/certifier must still require verifier_contract.json and verifier_artifacts/*.json before any final status."
+    ],
+    "expected_artifacts": [
+      "artifacts/milestones/m_writing_outline.md",
+      "artifacts/milestones/m_writing_draft.md",
+      "artifacts/milestones/m_writing_verify_constraints.md",
+      "README.md"
+    ],
+    "policy_boundary": "Planning coverage can guide verification, but policy_engine.py/certify_run.py own final status.",
+    "certifier_handoff": "After worker execution, provide verifier_contract.json and verifier_artifacts/*.json, then run full_verify.py or certify_run.py."
+  },
+  "false_done_traps": [
+    {
+      "trap": "Planner created a plausible plan but worker/verifier/certifier did not complete.",
+      "mitigation": "roadmap/planning artifacts cannot set final status; run verifier and certifier-owned policy."
+    },
+    {
+      "trap": "Required file exists but does not satisfy the user's done criteria.",
+      "mitigation": "Verifier artifacts must check behavior or content against done_criteria, not only existence."
+    },
+    {
+      "trap": "Selected branch passed scoring while an unexpanded branch could be safer.",
+      "mitigation": "Record deferred search and ask-user triggers; do not claim exhaustive planning."
+    },
+    {
+      "trap": "Do not modify protected files.",
+      "mitigation": "Forbidden actions stay visible to worker, verifier, policy, and certifier gates."
+    },
+    {
+      "trap": "Do not certify DONE in the compiler.",
+      "mitigation": "Forbidden actions stay visible to worker, verifier, policy, and certifier gates."
+    }
+  ],
+  "ask_user_triggers": [
+    {
+      "condition": "Any new ambiguity, missing verifier path, or output-path conflict appears during execution.",
+      "source": "planning_coverage_default",
+      "required_when": "Stop before inventing artifacts, verifier evidence, or final status."
+    }
+  ],
+  "coverage_checks": [
+    {
+      "check_id": "C.AUTHORITY_BOUNDARY",
+      "status": "PASS",
+      "evidence": "Planning coverage is explicitly planning-only and certifier-owned final status is preserved."
+    },
+    {
+      "check_id": "C.CORRECTNESS_BOUNDARY",
+      "status": "PASS",
+      "evidence": "Planning coverage explicitly cannot prove artifact correctness; verifier artifacts and certifier policy remain required."
+    },
+    {
+      "check_id": "C.ALTERNATIVES_RECORDED",
+      "status": "PASS",
+      "evidence": "Recorded 4 selected/rejected/deferred/blocked alternatives."
+    },
+    {
+      "check_id": "C.REJECTED_OR_DEFERRED_RECORDED",
+      "status": "PASS",
+      "evidence": "At least one non-selected branch or stop condition is visible."
+    },
+    {
+      "check_id": "C.CONSTRAINTS_CAPTURED",
+      "status": "PASS",
+      "evidence": "Goal constraints, done criteria, and failure criteria are copied into coverage."
+    },
+    {
+      "check_id": "C.RISKS_CAPTURED",
+      "status": "PASS",
+      "evidence": "Recorded 12 planning risks."
+    },
+    {
+      "check_id": "C.VERIFIER_HANDOFF_RECORDED",
+      "status": "PASS",
+      "evidence": "Verifier requirements and expected artifacts are present."
+    },
+    {
+      "check_id": "C.FALSE_DONE_TRAPS_RECORDED",
+      "status": "PASS",
+      "evidence": "False-DONE traps are explicitly listed."
+    },
+    {
+      "check_id": "C.ASK_USER_TRIGGERS_RECORDED",
+      "status": "PASS",
+      "evidence": "Ask-user or stop conditions are explicitly listed."
+    }
+  ]
+}

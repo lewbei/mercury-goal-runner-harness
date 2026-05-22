@@ -4,6 +4,7 @@
 This is a trusted core component. It never writes state.
 """
 
+import copy
 import json
 import sys
 from pathlib import Path
@@ -43,7 +44,12 @@ def validate_criteria_set(criteria_set: dict) -> list[str]:
     errors: list[str] = []
 
     # Schema validation
-    schema = _load_json(_SET_SCHEMA_PATH)
+    schema = copy.deepcopy(_load_json(_SET_SCHEMA_PATH))
+    # The shared lightweight schema validator intentionally supports only
+    # local $ref values. This validator performs per-criterion validation below,
+    # so the set-level schema should validate container shape without following
+    # the external success_criteria.schema.json reference.
+    schema.get("properties", {}).get("criteria", {}).get("items", {}).pop("$ref", None)
     validator = _load_schema_validator()
     errors.extend(validator(criteria_set, schema))
     if errors:

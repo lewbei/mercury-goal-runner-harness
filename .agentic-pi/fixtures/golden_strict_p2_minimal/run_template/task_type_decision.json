@@ -1,0 +1,13 @@
+{
+  "run_id": "golden_strict_p2_minimal",
+  "task_type": "writing",
+  "confidence": "deterministic",
+  "matched_signals": [
+    "writing:readme",
+    "writing:.md"
+  ],
+  "notes": [
+    "Task type is selected by deterministic keyword and output-path rules.",
+    "This is not model confidence."
+  ]
+}

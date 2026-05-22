@@ -114,7 +114,7 @@ class HarnessRuntimeTests(unittest.TestCase):
         self.assertTrue((self.run_dir / "artifacts" / probe_name).is_file())
         self.assertFalse(root_probe.exists(), "worker wrote outside the run folder")
 
-    def test_plan_router_does_not_create_artifacts(self):
+    def test_plan_router_fails_closed_without_existing_planner_artifacts(self):
         write_json(
             self.run_dir / "goal_contract.json",
             base_contract(
@@ -127,8 +127,9 @@ class HarnessRuntimeTests(unittest.TestCase):
 
         result = run_python(".agentic-pi/runtime/plan_router.py", "--run-id", self.run_id)
 
-        self.assertEqual(result.returncode, 0, result.stdout)
-        self.assertTrue((self.run_dir / "plans" / "planner-minimal_plan.json").is_file())
+        self.assertNotEqual(result.returncode, 0, result.stdout)
+        self.assertIn("STRICT_PLAN_ROUTER_REQUIRES_EXISTING_PLAN", result.stdout)
+        self.assertFalse((self.run_dir / "plans" / "planner-minimal_plan.json").is_file())
         self.assertFalse((self.run_dir / "README.md").exists())
         self.assertFalse((self.run_dir / "artifacts" / "README.md").exists())
 

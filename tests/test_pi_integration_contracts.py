@@ -13,7 +13,13 @@ NEW_AGENT_FILES = [
     "verifier-reviewer.md",
 ]
 
-FORBIDDEN_TOOLS = {"write", "edit", "apply_patch"}
+FORBIDDEN_TOOLS = {"edit", "apply_patch"}
+
+EXPECTED_AGENT_TOOLS = {
+    "goal-orchestrator.md": {"read", "ls", "bash", "write", "Agent"},
+    "verifier-generator.md": {"read", "write"},
+    "verifier-reviewer.md": {"read", "ls"},
+}
 
 
 def read(path: Path) -> str:
@@ -55,7 +61,7 @@ class PiIntegrationContractTests(unittest.TestCase):
 
                 self.assertTrue(tools, filename)
                 self.assertFalse(tools & FORBIDDEN_TOOLS, tools)
-                self.assertLessEqual(tools, {"read", "ls", "bash"})
+                self.assertEqual(tools, EXPECTED_AGENT_TOOLS[filename])
 
     def test_new_pi_agents_cannot_certify_done(self):
         for filename in NEW_AGENT_FILES:
@@ -72,6 +78,7 @@ class PiIntegrationContractTests(unittest.TestCase):
 
         self.assertIn("No Pi agent may certify DONE.", chain)
         self.assertIn("certify_run.py + policy_engine.py decide final status", chain)
+        self.assertIn("python .agentic-pi/runtime/full_verify.py", chain)
         self.assertIn("python .agentic-pi/validators/certify_run.py", chain)
         self.assertIn("The chain must not produce its own final status.", chain)
         self.assertIn("policy_decision.json", chain)

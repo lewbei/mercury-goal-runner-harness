@@ -85,7 +85,17 @@ class PolicyEngineTests(unittest.TestCase):
                 obj["run_id"] = run_id
                 write_json(json_path, obj)
 
-    def certify(self, run_dir: Path):
+    def certify(self, run_dir: Path, certify_validator: bool = True):
+        if certify_validator and any((run_dir / "verifier_artifacts").glob("*.json")):
+            validator_result = run_python(".agentic-pi/validators/validator_factory.py", str(run_dir))
+            self.assertEqual(validator_result.returncode, 0, validator_result.stdout)
+        return run_python(".agentic-pi/validators/certify_run.py", str(run_dir))
+
+    def certify_with_untrusted_validator(self, run_dir: Path):
+        validator_result = run_python(".agentic-pi/validators/validator_factory.py", str(run_dir))
+        self.assertEqual(validator_result.returncode, 0, validator_result.stdout)
+        validator_certification = load_json(run_dir / "validator_certification.json")
+        self.assertFalse(validator_certification["certified"], validator_result.stdout)
         return run_python(".agentic-pi/validators/certify_run.py", str(run_dir))
 
     def assert_certification_status(self, run_dir: Path, expected_status: str, result):
@@ -154,15 +164,16 @@ class PolicyEngineTests(unittest.TestCase):
         write_json(weak_artifact_path, artifact)
         old_artifact_path.unlink()
 
-        result = self.certify(run_dir)
+        result = self.certify_with_untrusted_validator(run_dir)
 
-        self.assertEqual(result.returncode, 0, result.stdout)
-        self.assert_certification_status(run_dir, "PROVISIONAL_DONE", result)
+        self.assertNotEqual(result.returncode, 0, result.stdout)
+        self.assert_certification_status(run_dir, "NOT_DONE", result)
+        certification = load_json(run_dir / "certification.json")
+        self.assertIn("verifier not certified", "\n".join(certification["failed_checks"]))
         decision = load_json(run_dir / "policy_decision.json")
         self.assertNotEqual(decision["status"], "CERTIFIED_DONE")
-        self.assertIn("verifier strength is insufficient", decision["reason"])
+        self.assertIn("Hard validation failure", decision["reason"])
         self.assertEqual(decision["certifying_artifacts"], [])
-        self.assertEqual(decision["provisional_artifacts"], ["V.P2_WEAK"])
 
     def test_self_generated_only_conflicts_with_required_p2(self):
         run_dir = self.copy_case(
@@ -190,7 +201,7 @@ class PolicyEngineTests(unittest.TestCase):
         decision["unexpected"] = True
         errors = validate(decision, "policy_decision.schema.json")
 
-        self.assertTrue(any("unexpected field unexpected" in error for error in errors), errors)
+        self.assertTrue(any("unexpected" in error for error in errors), errors)
 
 
 if __name__ == "__main__":

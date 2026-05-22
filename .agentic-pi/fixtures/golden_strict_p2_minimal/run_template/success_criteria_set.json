@@ -1,0 +1,23 @@
+{
+  "schema_version": "success_criteria_set_v1",
+  "run_id": "golden_strict_p2_minimal",
+  "source_goal_id": "",
+  "criteria": [
+    {
+      "criterion_id": "SC.001",
+      "description": "Goal 'generic' produces expected output",
+      "measurable_indicator": {
+        "type": "oracle_output"
+      },
+      "required": true,
+      "priority": "HIGH",
+      "oracle_types": [
+        "STRUCTURAL_ORACLE",
+        "BEHAVIORAL_ORACLE"
+      ],
+      "minimum_oracle_strength": "P1_VISIBLE"
+    }
+  ],
+  "compilation_timestamp": "2026-05-20T11:26:18.576553+00:00",
+  "compilation_strategy": "derived"
+}

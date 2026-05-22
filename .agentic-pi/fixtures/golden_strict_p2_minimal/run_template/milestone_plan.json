@@ -1,0 +1,49 @@
+{
+  "run_id": "golden_strict_p2_minimal",
+  "generated_by": "milestone-builder-v1.4",
+  "selected_strategy": "S.WRITE_SIMPLE",
+  "task_type": "writing",
+  "final_status_authority": "certifier_only",
+  "milestones": [
+    {
+      "order": 1,
+      "milestone_id": "M.WRITING_OUTLINE",
+      "title": "outline",
+      "purpose": "Create the structure before drafting.",
+      "expected_artifacts": [
+        "artifacts/milestones/m_writing_outline.md"
+      ],
+      "verifier_relevance": "Advisory planning evidence only; cannot certify DONE."
+    },
+    {
+      "order": 2,
+      "milestone_id": "M.WRITING_DRAFT",
+      "title": "draft",
+      "purpose": "Draft the requested artifact.",
+      "expected_artifacts": [
+        "artifacts/milestones/m_writing_draft.md"
+      ],
+      "verifier_relevance": "Advisory planning evidence only; cannot certify DONE."
+    },
+    {
+      "order": 3,
+      "milestone_id": "M.WRITING_VERIFY_CONSTRAINTS",
+      "title": "verify constraints",
+      "purpose": "Check required wording, scope, and output path.",
+      "expected_artifacts": [
+        "artifacts/milestones/m_writing_verify_constraints.md"
+      ],
+      "verifier_relevance": "Advisory planning evidence only; cannot certify DONE."
+    },
+    {
+      "order": 4,
+      "milestone_id": "M.WRITING_FINALIZE",
+      "title": "finalize",
+      "purpose": "Write the final output artifact.",
+      "expected_artifacts": [
+        "README.md"
+      ],
+      "verifier_relevance": "Final output must still be judged by verifier provenance and certifier policy."
+    }
+  ]
+}

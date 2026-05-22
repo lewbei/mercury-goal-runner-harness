@@ -1,0 +1,39 @@
+{
+  "schema_version": "vertical_slice_candidates_v1",
+  "run_id": "golden_strict_p2_minimal",
+  "generated_by": "roadmap_planner.py",
+  "generated_at": "2026-05-20T11:26:23.024772+00:00",
+  "authority": {
+    "authority_level": "planning_only",
+    "final_status_authority": "certifier_only",
+    "can_certify_done": false
+  },
+  "candidates": [
+    {
+      "slice_id": "VS.ROADMAP.PRIMARY",
+      "fixture": "expected_artifacts.json",
+      "expected_verdict": "planner_ready_not_certified",
+      "end_to_end_layers": [
+        "planning_coverage",
+        "artifact_contract",
+        "guarded_execution",
+        "verifier_evidence",
+        "certifier_policy"
+      ],
+      "end_to_end_coverage": 5,
+      "fake_done_risk": 1,
+      "authority_boundary_value": 10,
+      "validator_availability": 8,
+      "low_implementation_cost": 8,
+      "replay_certification_impact": 8,
+      "source_plan": "local_step_plan.json",
+      "planned_artifacts": [
+        "artifacts/milestones/m_writing_outline.md",
+        "artifacts/milestones/m_writing_draft.md",
+        "artifacts/milestones/m_writing_verify_constraints.md",
+        "README.md"
+      ],
+      "can_certify_done": false
+    }
+  ]
+}

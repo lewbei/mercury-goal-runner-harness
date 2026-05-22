@@ -1,0 +1,102 @@
+{
+  "schema_version": "run_state_v1",
+  "run_id": "golden_strict_p2_minimal",
+  "current_phase": "DONE",
+  "previous_phase": "MEMORY_CONSOLIDATING",
+  "phase_history": [
+    {
+      "phase": "NEW",
+      "entered_at": "2026-05-20T11:26:08.358927+00:00",
+      "exited_at": "2026-05-20T11:26:18.534908+00:00"
+    },
+    {
+      "phase": "INTAKE",
+      "entered_at": "2026-05-20T11:26:18.534908+00:00",
+      "exited_at": "2026-05-20T11:26:18.602453+00:00"
+    },
+    {
+      "phase": "QUESTIONING",
+      "entered_at": "2026-05-20T11:26:18.602453+00:00",
+      "exited_at": "2026-05-20T11:26:18.647852+00:00"
+    },
+    {
+      "phase": "RESEARCHING",
+      "entered_at": "2026-05-20T11:26:18.647852+00:00",
+      "exited_at": "2026-05-20T11:26:18.704280+00:00"
+    },
+    {
+      "phase": "DESIGNING",
+      "entered_at": "2026-05-20T11:26:18.704280+00:00",
+      "exited_at": "2026-05-20T11:26:18.771458+00:00"
+    },
+    {
+      "phase": "STRUCTURING",
+      "entered_at": "2026-05-20T11:26:18.771458+00:00",
+      "exited_at": "2026-05-20T11:26:18.827398+00:00"
+    },
+    {
+      "phase": "PLANNING",
+      "entered_at": "2026-05-20T11:26:18.827398+00:00",
+      "exited_at": "2026-05-20T11:26:24.634947+00:00"
+    },
+    {
+      "phase": "WORKTREE_READY",
+      "entered_at": "2026-05-20T11:26:24.634947+00:00",
+      "exited_at": "2026-05-20T11:26:24.859043+00:00"
+    },
+    {
+      "phase": "IMPLEMENTING",
+      "entered_at": "2026-05-20T11:26:24.859043+00:00",
+      "exited_at": "2026-05-20T11:26:26.163925+00:00"
+    },
+    {
+      "phase": "VALIDATOR_BUILDING",
+      "entered_at": "2026-05-20T11:26:26.163925+00:00",
+      "exited_at": "2026-05-20T11:26:27.357829+00:00"
+    },
+    {
+      "phase": "VALIDATING",
+      "entered_at": "2026-05-20T11:26:27.357829+00:00",
+      "exited_at": "2026-05-20T11:26:27.409334+00:00"
+    },
+    {
+      "phase": "EVIDENCE_INDEXING",
+      "entered_at": "2026-05-20T11:26:27.409334+00:00",
+      "exited_at": "2026-05-20T11:26:27.441877+00:00"
+    },
+    {
+      "phase": "POLICY_DECIDING",
+      "entered_at": "2026-05-20T11:26:27.441877+00:00",
+      "exited_at": "2026-05-20T11:26:27.472004+00:00"
+    },
+    {
+      "phase": "REPLAYING",
+      "entered_at": "2026-05-20T11:26:27.472004+00:00",
+      "exited_at": "2026-05-20T11:26:27.502003+00:00"
+    },
+    {
+      "phase": "CERTIFYING",
+      "entered_at": "2026-05-20T11:26:27.502003+00:00",
+      "exited_at": "2026-05-20T11:26:35.042571+00:00"
+    },
+    {
+      "phase": "REPORTING",
+      "entered_at": "2026-05-20T11:26:35.042571+00:00",
+      "exited_at": "2026-05-20T11:26:35.071235+00:00"
+    },
+    {
+      "phase": "MEMORY_CONSOLIDATING",
+      "entered_at": "2026-05-20T11:26:35.071235+00:00",
+      "exited_at": "2026-05-20T11:26:36.150810+00:00"
+    },
+    {
+      "phase": "DONE",
+      "entered_at": "2026-05-20T11:26:36.150810+00:00",
+      "exited_at": null
+    }
+  ],
+  "overall_status": "DONE",
+  "created_at": "2026-05-20T11:26:08.358927+00:00",
+  "updated_at": "2026-05-20T11:26:36.150810+00:00",
+  "kernel_version": "rpg_harness_v5_kernel_v1"
+}

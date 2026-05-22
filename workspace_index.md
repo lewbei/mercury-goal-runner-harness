@@ -20,5 +20,6 @@ Compatibility index terms retained for deterministic structure checks:
 - real Pi behavior evaluation boundary
 - `.agentic-pi/prompts/real_behavior_matrix/`
 - `.agentic-pi/README.md`
+- `docs/V3_5_TO_V4_0_AUTHORITY_EVIDENCE_MEMORY_PLAN.md`
 
 Authority reminder: this document does not certify DONE. Final status comes only from `certify_run.py` / `policy_engine.py` and their owned status artifacts.

@@ -3,7 +3,7 @@
 
 Proves that:
 1. A run with consistent replay (REPLAY_MATCH) passes certification
-2. A run with tampered evidence (REPLAY_MISMATCH) has certification blocked to NOT_DONE
+2. A legacy run with tampered evidence (REPLAY_MISMATCH) has certification blocked to DONE_FAIL
 3. The replay gate in certify_run.py reads replay_report.json and acts on it
 """
 
@@ -128,7 +128,7 @@ class TestVerticalSlice005_ReplayMismatch(unittest.TestCase):
     # ── Test 2: Replay MISMATCH blocks certification ──────────────────────
 
     def test_replay_mismatch_blocks_certification(self):
-        """When replay says MISMATCH, certifier must return NOT_DONE."""
+        """When replay says MISMATCH, legacy certifier must return DONE_FAIL."""
         self._create_minimal_certifiable_run()
 
         # Freeze evidence
@@ -152,17 +152,17 @@ class TestVerticalSlice005_ReplayMismatch(unittest.TestCase):
         # Certify
         result = run_certify(self.run_dir)
         cert = load_json(self.run_dir / "certification.json")
-        self.assertEqual(cert["status"], "NOT_DONE",
-                        "Replay MISMATCH must force NOT_DONE")
+        self.assertEqual(cert["status"], "DONE_FAIL",
+                        "Replay MISMATCH must force DONE_FAIL in legacy mode")
 
         # The failed check must mention replay
         replay_failures = [c for c in cert["failed_checks"] if "replay" in c.lower()]
         self.assertGreater(len(replay_failures), 0,
                           "Replay MISMATCH must appear in failed_checks")
 
-        # final_status.json must also say NOT_DONE
+        # final_status.json must also say DONE_FAIL in legacy mode.
         final = load_json(self.run_dir / "final_status.json")
-        self.assertEqual(final["status"], "NOT_DONE")
+        self.assertEqual(final["status"], "DONE_FAIL")
 
     # ── Test 3: No replay_report.json = no gate ───────────────────────────
 

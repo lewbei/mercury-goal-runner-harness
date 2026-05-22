@@ -28,6 +28,12 @@ No Pi agent may certify DONE.
 python .agentic-pi/runtime/full_verify.py .agentic-runs/<run_id>
 ```
 
+`full_verify.py` is the preferred strict wrapper; its certifier step is equivalent to:
+
+```cmd
+python .agentic-pi/validators/certify_run.py .agentic-runs/<run_id>
+```
+
 7. `goal-orchestrator` reports only the status written by the certifier:
 
 ```text

@@ -49,4 +49,6 @@ Read final_status.json. Report the result.
 
 ## Authority
 
+You must not certify DONE. Final status comes only from `full_verify.py` / `certify_run.py` / `policy_engine.py` and their owned status artifacts.
+
 Only certify_run.py writes certification.json / final_status.json.

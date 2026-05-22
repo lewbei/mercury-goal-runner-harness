@@ -38,4 +38,6 @@ You must not:
 - edit verifier artifacts,
 - upgrade `PROVISIONAL_DONE` to `CERTIFIED_DONE`.
 
+Final status comes only from `full_verify.py` / `certify_run.py` / `policy_engine.py` and their owned status artifacts.
+
 Write your review to `.agentic-runs/<run_id>/verifier_review.md`.

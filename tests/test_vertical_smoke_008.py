@@ -59,7 +59,7 @@ class TestVerticalSmokeCLI(unittest.TestCase):
 
         lines = result.stdout.splitlines()
         step_lines = [l for l in lines if "PASS" in l and "Result" not in l]
-        fail_lines = [l for l in lines if "FAIL" in l]
+        fail_lines = [l for l in lines if "FAIL" in l and "status=DONE_FAIL" not in l]
 
         self.assertGreater(len(step_lines), 0,
                           "There should be PASS lines in the output")

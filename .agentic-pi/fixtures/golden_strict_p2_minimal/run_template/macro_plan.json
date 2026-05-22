@@ -1,0 +1,26 @@
+{
+  "schema_version": "macro_plan_v1",
+  "run_id": "golden_strict_p2_minimal",
+  "generated_by": "roadmap_planner.py",
+  "generated_at": "2026-05-20T11:26:23.023922+00:00",
+  "authority": {
+    "authority_level": "planning_only",
+    "final_status_authority": "certifier_only",
+    "can_certify_done": false
+  },
+  "source": "local_step_plan.json",
+  "selected_strategy": "S.WRITE_SIMPLE",
+  "milestone_ids": [
+    "M.WRITING_OUTLINE",
+    "M.WRITING_DRAFT",
+    "M.WRITING_VERIFY_CONSTRAINTS",
+    "M.WRITING_FINALIZE"
+  ],
+  "expected_artifact_paths": [
+    "artifacts/milestones/m_writing_outline.md",
+    "artifacts/milestones/m_writing_draft.md",
+    "artifacts/milestones/m_writing_verify_constraints.md",
+    "README.md"
+  ],
+  "kernel_gate": "WORKTREE_READY_to_IMPLEMENTING"
+}

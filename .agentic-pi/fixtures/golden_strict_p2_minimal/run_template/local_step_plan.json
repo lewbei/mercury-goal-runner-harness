@@ -1,0 +1,76 @@
+{
+  "run_id": "golden_strict_p2_minimal",
+  "generated_by": "local-step-planner-v1.4",
+  "selected_strategy": "S.WRITE_SIMPLE",
+  "task_type": "writing",
+  "source_milestone_plan": "milestone_plan.json",
+  "final_status_authority": "certifier_only",
+  "local_steps": [
+    {
+      "local_step_id": "LS001",
+      "milestone_id": "M.WRITING_OUTLINE",
+      "task_id": "T.M.WRITING_OUTLINE",
+      "action": "create_file",
+      "path": "artifacts/milestones/m_writing_outline.md",
+      "content": "# outline\n\nMilestone ID: M.WRITING_OUTLINE\n\nSelected strategy: S.WRITE_SIMPLE\n\nPurpose: Create the structure before drafting.\n\nThis milestone is planning evidence only. It cannot certify DONE.\n",
+      "requires": [],
+      "produces": [
+        {
+          "artifact_id": "A.M.WRITING_OUTLINE",
+          "path": "artifacts/milestones/m_writing_outline.md"
+        }
+      ]
+    },
+    {
+      "local_step_id": "LS002",
+      "milestone_id": "M.WRITING_DRAFT",
+      "task_id": "T.M.WRITING_DRAFT",
+      "action": "create_file",
+      "path": "artifacts/milestones/m_writing_draft.md",
+      "content": "# draft\n\nMilestone ID: M.WRITING_DRAFT\n\nSelected strategy: S.WRITE_SIMPLE\n\nPurpose: Draft the requested artifact.\n\nThis milestone is planning evidence only. It cannot certify DONE.\n",
+      "requires": [
+        "A.M.WRITING_OUTLINE"
+      ],
+      "produces": [
+        {
+          "artifact_id": "A.M.WRITING_DRAFT",
+          "path": "artifacts/milestones/m_writing_draft.md"
+        }
+      ]
+    },
+    {
+      "local_step_id": "LS003",
+      "milestone_id": "M.WRITING_VERIFY_CONSTRAINTS",
+      "task_id": "T.M.WRITING_VERIFY_CONSTRAINTS",
+      "action": "create_file",
+      "path": "artifacts/milestones/m_writing_verify_constraints.md",
+      "content": "# verify constraints\n\nMilestone ID: M.WRITING_VERIFY_CONSTRAINTS\n\nSelected strategy: S.WRITE_SIMPLE\n\nPurpose: Check required wording, scope, and output path.\n\nThis milestone is planning evidence only. It cannot certify DONE.\n",
+      "requires": [
+        "A.M.WRITING_DRAFT"
+      ],
+      "produces": [
+        {
+          "artifact_id": "A.M.WRITING_VERIFY_CONSTRAINTS",
+          "path": "artifacts/milestones/m_writing_verify_constraints.md"
+        }
+      ]
+    },
+    {
+      "local_step_id": "LS004",
+      "milestone_id": "M.WRITING_FINALIZE",
+      "task_id": "T.M.WRITING_FINALIZE",
+      "action": "create_file",
+      "path": "README.md",
+      "content": "# Harness Milestone Output\n\nThis artifact explains the harness and preserves verifier provenance.\n",
+      "requires": [
+        "A.M.WRITING_VERIFY_CONSTRAINTS"
+      ],
+      "produces": [
+        {
+          "artifact_id": "A.FINAL_OUTPUT",
+          "path": "README.md"
+        }
+      ]
+    }
+  ]
+}

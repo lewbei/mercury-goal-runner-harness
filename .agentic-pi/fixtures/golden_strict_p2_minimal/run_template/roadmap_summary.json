@@ -1,0 +1,305 @@
+{
+  "schema_version": "roadmap_summary_v1",
+  "run_id": "golden_strict_p2_minimal",
+  "generated_at": "2026-05-20T11:26:24.441845+00:00",
+  "status": "PLAN_GRAPH_READY",
+  "authority": {
+    "authority_level": "planning_only",
+    "can_certify_done": false,
+    "final_status_authority": "certifier_only"
+  },
+  "run_dir": ".agentic-runs/golden_strict_p2_minimal",
+  "steps": [
+    {
+      "label": "task type routed",
+      "outputs": [
+        "task_type_decision.json"
+      ],
+      "command": [
+        "python",
+        ".agentic-pi/runtime/task_type_router.py",
+        "C:\\Users\\lewka\\deep_learning\\mercury-goal-runner-harness\\.agentic-runs\\golden_strict_p2_minimal"
+      ],
+      "exit_code": 0,
+      "stdout_tail": "{\n  \"run_id\": \"golden_strict_p2_minimal\",\n  \"task_type\": \"writing\",\n  \"confidence\": \"deterministic\",\n  \"matched_signals\": [\n    \"writing:readme\",\n    \"writing:.md\"\n  ],\n  \"notes\": [\n    \"Task type is selected by deterministic keyword and output-path rules.\",\n    \"This is not model confidence.\"\n  ]\n}"
+    },
+    {
+      "label": "domain pack selected",
+      "outputs": [
+        "domain_pack_selection.json"
+      ],
+      "command": [
+        "python",
+        ".agentic-pi/runtime/domain_pack_selector.py",
+        "C:\\Users\\lewka\\deep_learning\\mercury-goal-runner-harness\\.agentic-runs\\golden_strict_p2_minimal"
+      ],
+      "exit_code": 0,
+      "stdout_tail": "{\n  \"run_id\": \"golden_strict_p2_minimal\",\n  \"task_type\": \"writing\",\n  \"selection_status\": \"SELECTED\",\n  \"selected_domain_pack\": \"writing\",\n  \"reason\": \"Selected deterministic domain pack from task type.\",\n  \"domain_pack_path\": \".agentic-pi/domain_packs/writing.json\",\n  \"final_status_authority\": \"certifier_only\",\n  \"can_certify_done\": false\n}"
+    },
+    {
+      "label": "capability inventory written",
+      "outputs": [
+        "capability_inventory.json"
+      ],
+      "command": [
+        "python",
+        ".agentic-pi/runtime/capability_inventory.py",
+        "C:\\Users\\lewka\\deep_learning\\mercury-goal-runner-harness\\.agentic-runs\\golden_strict_p2_minimal"
+      ],
+      "exit_code": 0,
+      "stdout_tail": "      \"risk_level\": \"MEDIUM\"\n    },\n    {\n      \"capability_id\": \"pi_status_report\",\n      \"description\": \"Pi may report status artifacts but cannot certify DONE.\",\n      \"allowed_for_task_types\": [\n        \"*\"\n      ],\n      \"writes_run_folder\": false,\n      \"writes_status_artifacts\": false,\n      \"certifier_owned\": false,\n      \"requires_verifier_contract\": false,\n      \"risk_level\": \"LOW\"\n    }\n  ],\n  \"notes\": [\n    \"Static deterministic local capability inventory.\",\n    \"Strategy artifacts cannot use certifier-owned capabilities to self-certify.\"\n  ]\n}"
+    },
+    {
+      "label": "strategy candidates generated",
+      "outputs": [
+        "strategy_candidates.json"
+      ],
+      "command": [
+        "python",
+        ".agentic-pi/runtime/strategy_generator.py",
+        "C:\\Users\\lewka\\deep_learning\\mercury-goal-runner-harness\\.agentic-runs\\golden_strict_p2_minimal"
+      ],
+      "exit_code": 0,
+      "stdout_tail": "      ],\n      \"verifier_requirements\": [\n        \"P2/P3 verifier evidence required when provenance mode is active\",\n        \"independent review required for high-stakes factual claims\"\n      ],\n      \"risk_notes\": [\n        \"simple writing strategy is not semantic proof\",\n        \"polished but wrong\",\n        \"unsupported claims\"\n      ],\n      \"can_reach_certifying_evidence\": true,\n      \"uses_artifact_tests\": false,\n      \"needs_executable_behavior\": false,\n      \"attempts_status_write\": false,\n      \"attempts_verifier_forgery\": false,\n      \"status_authority\": \"none\",\n      \"risk_level\": \"LOW\"\n    }\n  ]\n}"
+    },
+    {
+      "label": "strategy applicability gated",
+      "outputs": [
+        "strategy_applicability.json"
+      ],
+      "command": [
+        "python",
+        ".agentic-pi/runtime/strategy_applicability_gate.py",
+        "C:\\Users\\lewka\\deep_learning\\mercury-goal-runner-harness\\.agentic-runs\\golden_strict_p2_minimal"
+      ],
+      "exit_code": 0,
+      "stdout_tail": "      \"verifier_requirements\": [\n        \"P2/P3 verifier evidence required when provenance mode is active\",\n        \"independent review required for high-stakes factual claims\"\n      ],\n      \"risk_notes\": [\n        \"simple writing strategy is not semantic proof\",\n        \"polished but wrong\",\n        \"unsupported claims\"\n      ],\n      \"can_reach_certifying_evidence\": true,\n      \"uses_artifact_tests\": false,\n      \"needs_executable_behavior\": false,\n      \"attempts_status_write\": false,\n      \"attempts_verifier_forgery\": false,\n      \"status_authority\": \"none\",\n      \"risk_level\": \"LOW\"\n    }\n  ],\n  \"blocked_strategies\": []\n}"
+    },
+    {
+      "label": "advisory experience retrieved",
+      "outputs": [
+        "retrieved_experience.json"
+      ],
+      "command": [
+        "python",
+        ".agentic-pi/runtime/experience_retriever.py",
+        "C:\\Users\\lewka\\deep_learning\\mercury-goal-runner-harness\\.agentic-runs\\golden_strict_p2_minimal"
+      ],
+      "exit_code": 0,
+      "stdout_tail": "{\n  \"run_id\": \"golden_strict_p2_minimal\",\n  \"generated_by\": \"experience-retriever-v1.7\",\n  \"generated_at\": \"2026-05-20T11:26:20.894919+00:00\",\n  \"task_type\": \"writing\",\n  \"matched_learning_ids\": [],\n  \"ignored_learning_ids\": [],\n  \"strategy_adjustments\": [],\n  \"final_status_authority\": \"certifier_only\",\n  \"can_certify_done\": false\n}"
+    },
+    {
+      "label": "adaptive research inputs recorded",
+      "outputs": [
+        "adaptive_research_inputs.json"
+      ],
+      "command": [
+        "python",
+        ".agentic-pi/runtime/adaptive_research_inputs.py",
+        "C:\\Users\\lewka\\deep_learning\\mercury-goal-runner-harness\\.agentic-runs\\golden_strict_p2_minimal"
+      ],
+      "exit_code": 0,
+      "stdout_tail": "  \"integration_contract\": {\n    \"consumed_by\": [\n      \"planning_search_tree.py\",\n      \"planning_coverage.py\",\n      \"full_verify.py\"\n    ],\n    \"must_not_be_consumed_by\": [\n      \"policy_engine.py as final-status authority\",\n      \"certify_run.py as final-status authority\"\n    ],\n    \"required_before_certification\": [\n      \"validate_adaptive_research_inputs.py passes\",\n      \"validate_planning_search_tree.py passes\",\n      \"validate_planning_coverage.py passes\",\n      \"verifier_contract.json exists\",\n      \"verifier_artifacts/*.json exist\"\n    ],\n    \"authority_boundary\": \"Adaptive research can change planning questions, risks, and verifier follow-up; it cannot certify DONE.\"\n  }\n}"
+    },
+    {
+      "label": "adaptive research inputs validated",
+      "outputs": [
+        "adaptive_research_inputs.json"
+      ],
+      "command": [
+        "python",
+        ".agentic-pi/validators/validate_adaptive_research_inputs.py",
+        "C:\\Users\\lewka\\deep_learning\\mercury-goal-runner-harness\\.agentic-runs\\golden_strict_p2_minimal"
+      ],
+      "exit_code": 0,
+      "stdout_tail": "ADAPTIVE_RESEARCH_INPUTS_VALID"
+    },
+    {
+      "label": "strategy scores recorded",
+      "outputs": [
+        "strategy_scores.json"
+      ],
+      "command": [
+        "python",
+        ".agentic-pi/runtime/strategy_scorer.py",
+        "C:\\Users\\lewka\\deep_learning\\mercury-goal-runner-harness\\.agentic-runs\\golden_strict_p2_minimal"
+      ],
+      "exit_code": 0,
+      "stdout_tail": "{\n  \"run_id\": \"golden_strict_p2_minimal\",\n  \"task_type\": \"writing\",\n  \"experience_memory_used\": false,\n  \"scores\": [\n    {\n      \"strategy_id\": \"S.WRITE_SIMPLE\",\n      \"score\": 7,\n      \"score_level\": \"preferred\",\n      \"positive_factors\": [\n        \"can_reach_certifying_evidence\",\n        \"produces_expected_artifacts\",\n        \"low_risk\",\n        \"small_capability_surface\"\n      ],\n      \"penalties\": []\n    }\n  ]\n}"
+    },
+    {
+      "label": "strategy selected",
+      "outputs": [
+        "strategy_decision.json",
+        "selected_strategy.json",
+        "rejected_strategies.json"
+      ],
+      "command": [
+        "python",
+        ".agentic-pi/runtime/strategy_selector.py",
+        "C:\\Users\\lewka\\deep_learning\\mercury-goal-runner-harness\\.agentic-runs\\golden_strict_p2_minimal"
+      ],
+      "exit_code": 0,
+      "stdout_tail": "{\n  \"run_id\": \"golden_strict_p2_minimal\",\n  \"decision_status\": \"SELECTED\",\n  \"selected_strategy\": \"S.WRITE_SIMPLE\",\n  \"reason\": \"Selected strategy has the best deterministic score and passed applicability checks.\",\n  \"rejected_strategies\": [],\n  \"selector_checks\": [\n    \"selected score level: preferred\",\n    \"strategy selector did not write certification status artifacts\"\n  ],\n  \"status_artifacts_absent_before_selection\": true,\n  \"advisory_memory_used\": false,\n  \"advisory_memory_learning_ids\": [],\n  \"advisory_memory_authority\": \"advisory_only\",\n  \"advisory_memory_can_certify_done\": false\n}"
+    },
+    {
+      "label": "bounded planning search tree written",
+      "outputs": [
+        "planning_search_tree.json"
+      ],
+      "command": [
+        "python",
+        ".agentic-pi/runtime/planning_search_tree.py",
+        "C:\\Users\\lewka\\deep_learning\\mercury-goal-runner-harness\\.agentic-runs\\golden_strict_p2_minimal"
+      ],
+      "exit_code": 0,
+      "stdout_tail": "        \"adaptive_research_inputs.json with source URLs, queries/prompts, hashes, and model/request metadata\",\n        \"validator proving research inputs cannot write authority artifacts or certify DONE\",\n        \"verifier follow-up for any research-backed plan change\"\n      ],\n      \"authority_boundary\": \"planning-only; cannot certify DONE\"\n    }\n  ],\n  \"coverage_metrics\": {\n    \"nodes_expanded\": 8,\n    \"edges_expanded\": 7,\n    \"max_depth_reached\": 5,\n    \"selected_path_length\": 6,\n    \"candidate_strategy_count\": 1,\n    \"candidate_evaluation_count\": 1,\n    \"selected_strategy_branch_count\": 1,\n    \"pruned_or_deferred_count\": 2,\n    \"iterations_recorded\": 4,\n    \"deferred_expansion_method_count\": 4\n  }\n}"
+    },
+    {
+      "label": "bounded planning search tree validated",
+      "outputs": [
+        "planning_search_tree.json"
+      ],
+      "command": [
+        "python",
+        ".agentic-pi/validators/validate_planning_search_tree.py",
+        "C:\\Users\\lewka\\deep_learning\\mercury-goal-runner-harness\\.agentic-runs\\golden_strict_p2_minimal"
+      ],
+      "exit_code": 0,
+      "stdout_tail": "PLANNING_SEARCH_TREE_VALID"
+    },
+    {
+      "label": "milestone plan built",
+      "outputs": [
+        "milestone_plan.json"
+      ],
+      "command": [
+        "python",
+        ".agentic-pi/runtime/milestone_builder.py",
+        "C:\\Users\\lewka\\deep_learning\\mercury-goal-runner-harness\\.agentic-runs\\golden_strict_p2_minimal"
+      ],
+      "exit_code": 0,
+      "stdout_tail": "      \"milestone_id\": \"M.WRITING_VERIFY_CONSTRAINTS\",\n      \"title\": \"verify constraints\",\n      \"purpose\": \"Check required wording, scope, and output path.\",\n      \"expected_artifacts\": [\n        \"artifacts/milestones/m_writing_verify_constraints.md\"\n      ],\n      \"verifier_relevance\": \"Advisory planning evidence only; cannot certify DONE.\"\n    },\n    {\n      \"order\": 4,\n      \"milestone_id\": \"M.WRITING_FINALIZE\",\n      \"title\": \"finalize\",\n      \"purpose\": \"Write the final output artifact.\",\n      \"expected_artifacts\": [\n        \"README.md\"\n      ],\n      \"verifier_relevance\": \"Final output must still be judged by verifier provenance and certifier policy.\"\n    }\n  ]\n}"
+    },
+    {
+      "label": "milestone status recorded",
+      "outputs": [
+        "milestone_status.json"
+      ],
+      "command": [
+        "python",
+        ".agentic-pi/runtime/milestone_tracker.py",
+        "C:\\Users\\lewka\\deep_learning\\mercury-goal-runner-harness\\.agentic-runs\\golden_strict_p2_minimal"
+      ],
+      "exit_code": 0,
+      "stdout_tail": "    {\n      \"order\": 2,\n      \"milestone_id\": \"M.WRITING_DRAFT\",\n      \"status\": \"planned\",\n      \"status_reason\": \"Milestone is planned; execution and certification have not changed this status.\"\n    },\n    {\n      \"order\": 3,\n      \"milestone_id\": \"M.WRITING_VERIFY_CONSTRAINTS\",\n      \"status\": \"planned\",\n      \"status_reason\": \"Milestone is planned; execution and certification have not changed this status.\"\n    },\n    {\n      \"order\": 4,\n      \"milestone_id\": \"M.WRITING_FINALIZE\",\n      \"status\": \"planned\",\n      \"status_reason\": \"Milestone is planned; execution and certification have not changed this status.\"\n    }\n  ]\n}"
+    },
+    {
+      "label": "local step plan built",
+      "outputs": [
+        "local_step_plan.json"
+      ],
+      "command": [
+        "python",
+        ".agentic-pi/runtime/local_step_planner.py",
+        "C:\\Users\\lewka\\deep_learning\\mercury-goal-runner-harness\\.agentic-runs\\golden_strict_p2_minimal"
+      ],
+      "exit_code": 0,
+      "stdout_tail": "    },\n    {\n      \"local_step_id\": \"LS004\",\n      \"milestone_id\": \"M.WRITING_FINALIZE\",\n      \"task_id\": \"T.M.WRITING_FINALIZE\",\n      \"action\": \"create_file\",\n      \"path\": \"README.md\",\n      \"content\": \"# Harness Milestone Output\\n\\nThis artifact explains the harness and preserves verifier provenance.\\n\",\n      \"requires\": [\n        \"A.M.WRITING_VERIFY_CONSTRAINTS\"\n      ],\n      \"produces\": [\n        {\n          \"artifact_id\": \"A.FINAL_OUTPUT\",\n          \"path\": \"README.md\"\n        }\n      ]\n    }\n  ]\n}"
+    },
+    {
+      "label": "expected artifacts written",
+      "outputs": [
+        "expected_artifacts.json"
+      ]
+    },
+    {
+      "label": "vertical slice gate inputs written",
+      "outputs": [
+        "macro_plan.json",
+        "vertical_slice_candidates.json"
+      ]
+    },
+    {
+      "label": "planner-owned plan candidate written",
+      "outputs": [
+        "plans/roadmap_planner_plan.json"
+      ]
+    },
+    {
+      "label": "strict plan selected",
+      "outputs": [
+        "selected_plan.json"
+      ],
+      "command": [
+        "python",
+        ".agentic-pi/runtime/plan_selector.py",
+        "--run-id",
+        "golden_strict_p2_minimal"
+      ],
+      "exit_code": 0,
+      "stdout_tail": "Selected plan written to .agentic-runs\\golden_strict_p2_minimal\\selected_plan.json"
+    },
+    {
+      "label": "strict plan merged",
+      "outputs": [
+        "merged_plan.json"
+      ],
+      "command": [
+        "python",
+        ".agentic-pi/runtime/plan_merger.py",
+        "--run-id",
+        "golden_strict_p2_minimal"
+      ],
+      "exit_code": 0,
+      "stdout_tail": "Merged plan written to .agentic-runs\\golden_strict_p2_minimal\\merged_plan.json\nMerged plan contains 4 executable step(s)."
+    },
+    {
+      "label": "plan graph built",
+      "outputs": [
+        "plan_graph.json"
+      ],
+      "command": [
+        "python",
+        ".agentic-pi/runtime/plan_graph_builder.py",
+        "golden_strict_p2_minimal"
+      ],
+      "exit_code": 0,
+      "stdout_tail": "Wrote .agentic-runs\\golden_strict_p2_minimal\\plan_graph.json"
+    },
+    {
+      "label": "planning coverage written",
+      "outputs": [
+        "planning_coverage.json"
+      ],
+      "command": [
+        "python",
+        ".agentic-pi/runtime/planning_coverage.py",
+        "C:\\Users\\lewka\\deep_learning\\mercury-goal-runner-harness\\.agentic-runs\\golden_strict_p2_minimal"
+      ],
+      "exit_code": 0,
+      "stdout_tail": "      \"status\": \"PASS\",\n      \"evidence\": \"Recorded 12 planning risks.\"\n    },\n    {\n      \"check_id\": \"C.VERIFIER_HANDOFF_RECORDED\",\n      \"status\": \"PASS\",\n      \"evidence\": \"Verifier requirements and expected artifacts are present.\"\n    },\n    {\n      \"check_id\": \"C.FALSE_DONE_TRAPS_RECORDED\",\n      \"status\": \"PASS\",\n      \"evidence\": \"False-DONE traps are explicitly listed.\"\n    },\n    {\n      \"check_id\": \"C.ASK_USER_TRIGGERS_RECORDED\",\n      \"status\": \"PASS\",\n      \"evidence\": \"Ask-user or stop conditions are explicitly listed.\"\n    }\n  ]\n}"
+    },
+    {
+      "label": "planning coverage validated",
+      "outputs": [
+        "planning_coverage.json"
+      ],
+      "command": [
+        "python",
+        ".agentic-pi/validators/validate_planning_coverage.py",
+        "C:\\Users\\lewka\\deep_learning\\mercury-goal-runner-harness\\.agentic-runs\\golden_strict_p2_minimal"
+      ],
+      "exit_code": 0,
+      "stdout_tail": "PLANNING_COVERAGE_VALID"
+    }
+  ],
+  "next_steps": [
+    "Review planning_coverage.json to see selected, rejected, and deferred planning branches.",
+    "Run guarded_worker.py only after reviewing merged_plan.json and expected_artifacts.json.",
+    "Add verifier_contract.json and verifier_artifacts/*.json before full_verify.py.",
+    "Run full_verify.py for certifier-owned status; roadmap_summary.json cannot certify DONE."
+  ],
+  "expected_artifact_count": 4,
+  "vertical_slice_candidate_count": 1
+}

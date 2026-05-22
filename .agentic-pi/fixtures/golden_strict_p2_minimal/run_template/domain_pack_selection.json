@@ -1,0 +1,10 @@
+{
+  "run_id": "golden_strict_p2_minimal",
+  "task_type": "writing",
+  "selection_status": "SELECTED",
+  "selected_domain_pack": "writing",
+  "reason": "Selected deterministic domain pack from task type.",
+  "domain_pack_path": ".agentic-pi/domain_packs/writing.json",
+  "final_status_authority": "certifier_only",
+  "can_certify_done": false
+}

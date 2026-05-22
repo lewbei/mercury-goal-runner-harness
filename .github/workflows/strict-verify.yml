@@ -1,0 +1,49 @@
+name: strict-verify
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  deterministic-validators:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run focused planning and certifier tests
+        run: |
+          python tests/test_planning_coordination_v1_1_quality.py -v
+          python tests/test_planning_coordination_v1.py -v
+          python tests/test_guarded_execution_v2.py -v
+          python tests/test_certifier_golden_behavior_lock.py -v
+          python tests/test_certifier_artifact_command_extraction.py -v
+
+      - name: Materialize canonical strict golden run
+        run: python .agentic-pi/fixtures/golden_strict_p2_minimal/materialize.py
+
+      - name: Verify canonical strict golden run
+        run: python .agentic-pi/runtime/full_verify.py .agentic-runs/golden_strict_p2_minimal --skip-memory-consolidation
+
+      - name: Run proof matrix quick mode
+        run: python .agentic-pi/runtime/run_proof_matrix.py --mode quick
+
+      - name: Run full unittest discovery
+        run: python -m unittest discover tests -v
+
+      - name: Check Pi CLI help
+        run: python .agentic-pi/runtime/pi_cli.py --help
+
+      - name: Check repository cleanup
+        run: python tests/test_repo_structure_cleanup.py -v
+
+      - name: Check whitespace and generated tracked diffs
+        run: |
+          git diff --check
+          git status -sb
+          test -z "$(git status --porcelain)"

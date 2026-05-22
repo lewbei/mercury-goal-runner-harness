@@ -1,0 +1,16 @@
+{
+  "run_id": "golden_strict_p2_minimal",
+  "decision_status": "SELECTED",
+  "selected_strategy": "S.WRITE_SIMPLE",
+  "reason": "Selected strategy has the best deterministic score and passed applicability checks.",
+  "rejected_strategies": [],
+  "selector_checks": [
+    "selected score level: preferred",
+    "strategy selector did not write certification status artifacts"
+  ],
+  "status_artifacts_absent_before_selection": true,
+  "advisory_memory_used": false,
+  "advisory_memory_learning_ids": [],
+  "advisory_memory_authority": "advisory_only",
+  "advisory_memory_can_certify_done": false
+}

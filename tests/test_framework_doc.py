@@ -3,11 +3,16 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+FRAMEWORK_DOC = ROOT / "docs" / "FRAMEWORK.md"
+
+
+def read_framework_doc() -> str:
+    return FRAMEWORK_DOC.read_text(encoding="utf-8")
 
 
 class FrameworkDocTests(unittest.TestCase):
     def test_framework_doc_exists_and_locks_core_question(self):
-        doc = (ROOT / "FRAMEWORK.md").read_text(encoding="utf-8")
+        doc = read_framework_doc()
 
         self.assertIn("Who is allowed to certify DONE?", doc)
         self.assertIn("Agents do work.", doc)
@@ -16,9 +21,9 @@ class FrameworkDocTests(unittest.TestCase):
         self.assertIn("Pi only reports what the certifier wrote.", doc)
 
     def test_framework_doc_records_current_state(self):
-        doc = (ROOT / "FRAMEWORK.md").read_text(encoding="utf-8")
+        doc = read_framework_doc()
 
-        self.assertIn("v3.7 MemPalace + ACE Memory Governance", doc)
+        self.assertIn("v3.7 = MemPalace + ACE memory governance", doc)
         self.assertIn("Real Pi Agentic Autonomy Probe Layer", doc)
         self.assertIn("Agentic Negative-Probe Hardening Layer", doc)
         self.assertIn("Live Negative Prompt Capture Layer", doc)
@@ -27,7 +32,7 @@ class FrameworkDocTests(unittest.TestCase):
         self.assertIn("Runtime Enforcement Proof Layer", doc)
         self.assertIn("RPG Harness Test Record Layer", doc)
         self.assertIn("RPG Test Aggregation Layer", doc)
-        self.assertIn("raw_simple_legacy -> DONE_PASS", doc)
+        self.assertIn("raw_simple_historical_compatibility -> DONE_PASS", doc)
         self.assertIn("raw_p2_provenance -> CERTIFIED_DONE", doc)
         self.assertIn("raw_missing_verifier -> NOT_DONE", doc)
         self.assertIn("raw goal -> branch candidates -> selected branch -> merged_plan.json", doc)
@@ -58,7 +63,7 @@ class FrameworkDocTests(unittest.TestCase):
         self.assertIn("MemPalace durable card -> context_pack.json -> ACE reflection -> curator delta -> memory_write_gate.py", doc)
 
     def test_framework_doc_uses_actual_current_paths(self):
-        doc = (ROOT / "FRAMEWORK.md").read_text(encoding="utf-8")
+        doc = read_framework_doc()
 
         for path in [
             ".agentic-pi/runtime/compile_raw_goal.py",
@@ -161,11 +166,11 @@ class FrameworkDocTests(unittest.TestCase):
                 self.assertTrue((ROOT / path).exists())
 
     def test_framework_doc_separates_proven_from_not_proven(self):
-        doc = (ROOT / "FRAMEWORK.md").read_text(encoding="utf-8")
+        doc = read_framework_doc()
 
         self.assertIn("## Proven Behavior", doc)
         self.assertIn("## Not Proven", doc)
-        self.assertIn("prepared legacy full run through Pi -> DONE_PASS", doc)
+        self.assertIn("prepared historical-compatibility full run through Pi -> DONE_PASS", doc)
         self.assertIn("prepared provenance full run through Pi -> CERTIFIED_DONE", doc)
         self.assertIn("arbitrary raw natural-language autonomy", doc)
         self.assertIn("full goal-runner.chain.md autonomous runtime", doc)

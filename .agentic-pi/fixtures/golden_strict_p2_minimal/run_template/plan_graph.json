@@ -1,0 +1,89 @@
+{
+  "nodes": [
+    {
+      "node_id": "T.M.WRITING_OUTLINE",
+      "type": "task",
+      "task_id": "T.M.WRITING_OUTLINE",
+      "description": "create_file"
+    },
+    {
+      "node_id": "A.M.WRITING_OUTLINE",
+      "type": "artifact",
+      "artifact_id": "A.M.WRITING_OUTLINE",
+      "path": "artifacts/milestones/m_writing_outline.md"
+    },
+    {
+      "node_id": "T.M.WRITING_DRAFT",
+      "type": "task",
+      "task_id": "T.M.WRITING_DRAFT",
+      "description": "create_file"
+    },
+    {
+      "node_id": "A.M.WRITING_DRAFT",
+      "type": "artifact",
+      "artifact_id": "A.M.WRITING_DRAFT",
+      "path": "artifacts/milestones/m_writing_draft.md"
+    },
+    {
+      "node_id": "T.M.WRITING_VERIFY_CONSTRAINTS",
+      "type": "task",
+      "task_id": "T.M.WRITING_VERIFY_CONSTRAINTS",
+      "description": "create_file"
+    },
+    {
+      "node_id": "A.M.WRITING_VERIFY_CONSTRAINTS",
+      "type": "artifact",
+      "artifact_id": "A.M.WRITING_VERIFY_CONSTRAINTS",
+      "path": "artifacts/milestones/m_writing_verify_constraints.md"
+    },
+    {
+      "node_id": "T.M.WRITING_FINALIZE",
+      "type": "task",
+      "task_id": "T.M.WRITING_FINALIZE",
+      "description": "create_file"
+    },
+    {
+      "node_id": "A.FINAL_OUTPUT",
+      "type": "artifact",
+      "artifact_id": "A.FINAL_OUTPUT",
+      "path": "README.md"
+    }
+  ],
+  "edges": [
+    {
+      "source": "T.M.WRITING_OUTLINE",
+      "target": "A.M.WRITING_OUTLINE",
+      "type": "produces"
+    },
+    {
+      "source": "T.M.WRITING_DRAFT",
+      "target": "A.M.WRITING_DRAFT",
+      "type": "produces"
+    },
+    {
+      "source": "A.M.WRITING_OUTLINE",
+      "target": "T.M.WRITING_DRAFT",
+      "type": "requires"
+    },
+    {
+      "source": "T.M.WRITING_VERIFY_CONSTRAINTS",
+      "target": "A.M.WRITING_VERIFY_CONSTRAINTS",
+      "type": "produces"
+    },
+    {
+      "source": "A.M.WRITING_DRAFT",
+      "target": "T.M.WRITING_VERIFY_CONSTRAINTS",
+      "type": "requires"
+    },
+    {
+      "source": "T.M.WRITING_FINALIZE",
+      "target": "A.FINAL_OUTPUT",
+      "type": "produces"
+    },
+    {
+      "source": "A.M.WRITING_VERIFY_CONSTRAINTS",
+      "target": "T.M.WRITING_FINALIZE",
+      "type": "requires"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "reasons": [
+    "Candidate passed all validation checks.",
+    "Score breakdown: end_to_end_coverage=5, fake_done_risk=1, authority_boundary_value=10, validator_availability=8, low_implementation_cost=8, replay_certification_impact=8"
+  ],
+  "score": 48.0,
+  "selected_slice_id": "VS.ROADMAP.PRIMARY"
+}

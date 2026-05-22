@@ -4,7 +4,7 @@
 Proves that:
 1. A clean memory artifact (no authority-leak fields) does NOT block certification
 2. A memory artifact with authority-leak fields (final_status, certified_done, policy_override)
-   triggers FAILED_AUTHORITY_VIOLATION and certifier returns NOT_DONE
+   triggers FAILED_AUTHORITY_VIOLATION and legacy certifier returns DONE_FAIL
 """
 
 import json
@@ -101,7 +101,7 @@ class TestVerticalSlice006_MemoryAuthority(unittest.TestCase):
     # ── Test 2: Memory with final_status field blocks certification ────────
 
     def test_memory_with_final_status_blocks(self):
-        """Memory artifact claiming final_status blocks certification with NOT_DONE."""
+        """Memory artifact claiming final_status blocks certification with DONE_FAIL in legacy mode."""
         self._create_base_run()
 
         # Write memory artifact with authority-leak field
@@ -114,8 +114,8 @@ class TestVerticalSlice006_MemoryAuthority(unittest.TestCase):
         result = run_certify(self.run_dir)
         cert = load_json(self.run_dir / "certification.json")
 
-        self.assertEqual(cert["status"], "NOT_DONE",
-                        "Memory with final_status must yield NOT_DONE")
+        self.assertEqual(cert["status"], "DONE_FAIL",
+                        "Memory with final_status must yield DONE_FAIL in legacy mode")
 
         memory_leak = any("MEMORY_AUTHORITY_VIOLATION" in c or "memory" in c.lower()
                          for c in cert["failed_checks"])
@@ -128,7 +128,7 @@ class TestVerticalSlice006_MemoryAuthority(unittest.TestCase):
         """Memory artifact claiming certified_done triggers violation."""
         self._create_base_run()
 
-        make_file(self.run_dir / "run_local_memory/note.json", json.dumps({
+        make_file(self.run_dir / "memory/note.json", json.dumps({
             "memory_id": "M.CERTCLAIM",
             "observation": "This run is complete",
             "certified_done": True,
@@ -137,7 +137,7 @@ class TestVerticalSlice006_MemoryAuthority(unittest.TestCase):
         result = run_certify(self.run_dir)
         cert = load_json(self.run_dir / "certification.json")
 
-        self.assertEqual(cert["status"], "NOT_DONE")
+        self.assertEqual(cert["status"], "DONE_FAIL")
         memory_leak = any("MEMORY_AUTHORITY_VIOLATION" in c for c in cert["failed_checks"])
         self.assertTrue(memory_leak)
 
@@ -156,7 +156,7 @@ class TestVerticalSlice006_MemoryAuthority(unittest.TestCase):
         result = run_certify(self.run_dir)
         cert = load_json(self.run_dir / "certification.json")
 
-        self.assertEqual(cert["status"], "NOT_DONE")
+        self.assertEqual(cert["status"], "DONE_FAIL")
 
     # ── Test 5: Multiple memory artifacts all checked ─────────────────────
 
@@ -167,14 +167,14 @@ class TestVerticalSlice006_MemoryAuthority(unittest.TestCase):
         make_file(self.run_dir / "memory_journal.json", json.dumps({
             "memory_id": "M.LEAK1", "final_status": "DONE",
         }))
-        make_file(self.run_dir / "run_local_memory/note.json", json.dumps({
+        make_file(self.run_dir / "memory/note.json", json.dumps({
             "memory_id": "M.LEAK2", "certified_done": True,
         }))
 
         result = run_certify(self.run_dir)
         cert = load_json(self.run_dir / "certification.json")
 
-        self.assertEqual(cert["status"], "NOT_DONE")
+        self.assertEqual(cert["status"], "DONE_FAIL")
         # Should have at least 2 memory-related failures
         memory_failures = [c for c in cert["failed_checks"] if "memory" in c.lower() or "MEMORY" in c]
         self.assertGreaterEqual(len(memory_failures), 2,

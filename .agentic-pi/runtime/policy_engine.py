@@ -255,17 +255,17 @@ def decide_run_policy(run_dir: Path, hard_failures=None) -> dict:
         )
     policy_checks.append("target artifact exists")
 
-    if hard_failures:
+    try:
+        artifacts = load_verifier_artifacts(run_dir)
+    except Exception as exc:
         return policy_decision(
             run_id=run_id,
             status="NOT_DONE",
-            reason="Hard validation failure exists before policy decision.",
+            reason="Verifier artifact could not be loaded.",
             required_verifier_level=required_level,
-            rejected_artifacts=[str(item) for item in hard_failures],
-            policy_checks=policy_checks + ["hard validation failure blocks certification"],
+            rejected_artifacts=[f"invalid verifier artifact: {exc}"],
+            policy_checks=policy_checks + ["verifier artifact invalid"],
         )
-
-    artifacts = load_verifier_artifacts(run_dir)
     if not artifacts:
         return policy_decision(
             run_id=run_id,
@@ -276,6 +276,16 @@ def decide_run_policy(run_dir: Path, hard_failures=None) -> dict:
             policy_checks=policy_checks + ["verifier artifact missing"],
         )
     policy_checks.append("verifier artifact exists")
+
+    if hard_failures:
+        return policy_decision(
+            run_id=run_id,
+            status="NOT_DONE",
+            reason="Hard validation failure exists before policy decision.",
+            required_verifier_level=required_level,
+            rejected_artifacts=[str(item) for item in hard_failures],
+            policy_checks=policy_checks + ["hard validation failure blocks certification"],
+        )
 
     smell_reports = load_reports_by_artifact_id(run_dir, "verifier_smell_reports")
     strength_reports = load_reports_by_artifact_id(run_dir, "verifier_strength_reports")

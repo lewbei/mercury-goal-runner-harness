@@ -1,0 +1,11 @@
+{
+  "run_id": "golden_strict_p2_minimal",
+  "generated_by": "experience-retriever-v1.7",
+  "generated_at": "2026-05-20T11:26:20.894919+00:00",
+  "task_type": "writing",
+  "matched_learning_ids": [],
+  "ignored_learning_ids": [],
+  "strategy_adjustments": [],
+  "final_status_authority": "certifier_only",
+  "can_certify_done": false
+}

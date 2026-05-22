@@ -10,8 +10,15 @@ class AuthorityEvidenceMemoryPlanTests(unittest.TestCase):
     def test_reference_modules_are_ignored(self):
         gitignore = (ROOT / ".gitignore").read_text(encoding="utf-8")
 
-        self.assertIn("modules/ace-main/", gitignore)
-        self.assertIn("modules/mempalace-develop/", gitignore)
+        ignored_paths = {line.strip() for line in gitignore.splitlines()}
+        self.assertTrue(
+            "modules/" in ignored_paths or "modules/ace-main/" in ignored_paths,
+            gitignore,
+        )
+        self.assertTrue(
+            "modules/" in ignored_paths or "modules/mempalace-develop/" in ignored_paths,
+            gitignore,
+        )
 
     def test_plan_preserves_current_version_history(self):
         doc = PLAN_PATH.read_text(encoding="utf-8")

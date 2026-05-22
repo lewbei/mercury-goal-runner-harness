@@ -98,7 +98,7 @@ class VerifierProvenanceDesignTests(unittest.TestCase):
 
         errors = validate(artifact, "verifier_artifact.schema.json")
 
-        self.assertTrue(any("missing required field provenance_level" in error for error in errors), errors)
+        self.assertTrue(any("missing required field 'provenance_level'" in error for error in errors), errors)
 
     def test_unknown_verifier_artifact_field_fails(self):
         artifact = valid_verifier_artifact()
@@ -106,7 +106,7 @@ class VerifierProvenanceDesignTests(unittest.TestCase):
 
         errors = validate(artifact, "verifier_artifact.schema.json")
 
-        self.assertTrue(any("unexpected field unexpected" in error for error in errors), errors)
+        self.assertTrue(any("unexpected field 'unexpected'" in error for error in errors), errors)
 
     def test_invalid_provenance_level_fails(self):
         artifact = valid_verifier_artifact()
@@ -141,16 +141,16 @@ class VerifierProvenanceDesignTests(unittest.TestCase):
         self.assertTrue(any("SELF_CERTIFIED_DONE" in error for error in errors), errors)
 
     def test_cross_field_policy_rule_is_documented_as_deferred(self):
-        design = (ROOT / "VERIFIER_PROVENANCE_DESIGN.md").read_text(encoding="utf-8")
-        policy = (ROOT / "certification_policy.yaml").read_text(encoding="utf-8")
+        design = (ROOT / "docs" / "VERIFIER_PROVENANCE_DESIGN.md").read_text(encoding="utf-8")
+        policy = (ROOT / ".agentic-pi" / "runtime" / "policy_engine.py").read_text(encoding="utf-8")
 
         self.assertIn("allow_self_generated_only must be false", design)
-        self.assertIn("P2_P3_REQUIRE_NOT_SELF_GENERATED_ONLY", policy)
+        self.assertIn("allow_self_generated_only must be false", policy)
 
     def test_docs_lock_current_direction_without_overclaim(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        status = (ROOT / "PROJECT_STATUS.md").read_text(encoding="utf-8")
-        problem = (ROOT / "PROBLEM_AND_GAP.md").read_text(encoding="utf-8")
+        status = (ROOT / "docs" / "PROJECT_STATUS.md").read_text(encoding="utf-8")
+        problem = (ROOT / "docs" / "PROBLEM_AND_GAP.md").read_text(encoding="utf-8")
 
         self.assertIn("Verifier-Provenance Goal Runner Harness", readme)
         self.assertIn("RPG-Harness v5", status)

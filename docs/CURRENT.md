@@ -58,6 +58,21 @@ can_certify_done: false
 
 Use checks as evidence, not as self-certification.
 
+Canonical strict reviewer fixture:
+
+```cmd
+python .agentic-pi\fixtures\golden_strict_p2_minimal\materialize.py
+python .agentic-pi\runtime\full_verify.py .agentic-runs\golden_strict_p2_minimal --skip-memory-consolidation
+```
+
+Full repository discovery is now expected to pass locally and in CI:
+
+```cmd
+python -m unittest discover tests -v
+```
+
+Focused commands:
+
 ```cmd
 python tests\test_planning_coordination_v1_1_quality.py -v
 python tests\test_planning_coordination_v1.py -v

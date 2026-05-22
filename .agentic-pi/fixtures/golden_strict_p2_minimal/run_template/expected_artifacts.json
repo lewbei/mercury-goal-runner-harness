@@ -1,0 +1,85 @@
+{
+  "schema_version": "expected_artifacts_v1",
+  "run_id": "golden_strict_p2_minimal",
+  "phase": "PLANNING",
+  "artifacts": [
+    {
+      "artifact_id": "A.M.WRITING_OUTLINE",
+      "expected_path": "artifacts/milestones/m_writing_outline.md",
+      "description": "Roadmap-planned artifact; execution still requires worker evidence and certifier checks.",
+      "required": true,
+      "allowed_writers": [
+        "Engineer"
+      ],
+      "forbidden_writers": [
+        "Reporter",
+        "Critic",
+        "Certifier"
+      ],
+      "success_criteria": [
+        "README.md exists.",
+        "README.md contains the word 'harness'."
+      ],
+      "min_size_bytes": 1
+    },
+    {
+      "artifact_id": "A.M.WRITING_DRAFT",
+      "expected_path": "artifacts/milestones/m_writing_draft.md",
+      "description": "Roadmap-planned artifact; execution still requires worker evidence and certifier checks.",
+      "required": true,
+      "allowed_writers": [
+        "Engineer"
+      ],
+      "forbidden_writers": [
+        "Reporter",
+        "Critic",
+        "Certifier"
+      ],
+      "success_criteria": [
+        "README.md exists.",
+        "README.md contains the word 'harness'."
+      ],
+      "min_size_bytes": 1
+    },
+    {
+      "artifact_id": "A.M.WRITING_VERIFY_CONSTRAINTS",
+      "expected_path": "artifacts/milestones/m_writing_verify_constraints.md",
+      "description": "Roadmap-planned artifact; execution still requires worker evidence and certifier checks.",
+      "required": true,
+      "allowed_writers": [
+        "Engineer"
+      ],
+      "forbidden_writers": [
+        "Reporter",
+        "Critic",
+        "Certifier"
+      ],
+      "success_criteria": [
+        "README.md exists.",
+        "README.md contains the word 'harness'."
+      ],
+      "min_size_bytes": 1
+    },
+    {
+      "artifact_id": "A.FINAL_OUTPUT",
+      "expected_path": "README.md",
+      "description": "Roadmap-planned artifact; execution still requires worker evidence and certifier checks.",
+      "required": true,
+      "allowed_writers": [
+        "Engineer"
+      ],
+      "forbidden_writers": [
+        "Reporter",
+        "Critic",
+        "Certifier"
+      ],
+      "success_criteria": [
+        "README.md exists.",
+        "README.md contains the word 'harness'."
+      ],
+      "min_size_bytes": 1
+    }
+  ],
+  "created_at": "2026-05-20T11:26:23.017396+00:00",
+  "updated_at": "2026-05-20T11:26:23.017422+00:00"
+}

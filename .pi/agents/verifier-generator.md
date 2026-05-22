@@ -92,7 +92,10 @@ Do NOT claim files are written unless you executed the read tool and saw the con
 
 ## DO NOT
 
+- certify DONE; you must not claim final authority
 - Say files exist without executing the read tool
 - Use forbidden_patterns instead of forbidden_verifier_patterns
 - Set minimum_strength_level to "P2" — use "gating" or "certifying"
 - Touch certification.json, final_status.json, final_status.md
+
+Final status comes only from `full_verify.py` / `certify_run.py` / `policy_engine.py` and their owned status artifacts.

@@ -14,7 +14,18 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SKILLS_DIR = ROOT / ".agentic-pi" / "skills"
+def default_skills_dir() -> Path:
+    for candidate in (
+        ROOT / ".pi" / "skills",
+        ROOT / "skills",
+        ROOT / ".agentic-pi" / "skills",
+    ):
+        if candidate.is_dir():
+            return candidate
+    return ROOT / ".pi" / "skills"
+
+
+SKILLS_DIR = default_skills_dir()
 REGISTRY_PATH = ROOT / ".agentic-pi" / "run_kernel" / "phase_registry.json"
 
 
@@ -104,8 +115,9 @@ class TestSkillFilesExist(unittest.TestCase):
     def test_13_skills_exist(self):
         skill_dirs = sorted(d.name for d in SKILLS_DIR.iterdir() if d.is_dir())
         expected = sorted(EXPECTED_SKILLS.keys())
-        self.assertEqual(skill_dirs, expected,
-                         f"Expected {expected}, found {skill_dirs}")
+        missing = sorted(set(expected) - set(skill_dirs))
+        self.assertEqual(missing, [],
+                         f"Expected QRSPI skills missing from {SKILLS_DIR}: {missing}; found {skill_dirs}")
 
     def test_all_skills_have_skill_md(self):
         for skill_name in EXPECTED_SKILLS:

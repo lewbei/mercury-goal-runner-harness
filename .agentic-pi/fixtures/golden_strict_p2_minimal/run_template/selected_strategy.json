@@ -1,0 +1,23 @@
+{
+  "run_id": "golden_strict_p2_minimal",
+  "strategy_id": "S.WRITE_SIMPLE",
+  "task_type": "writing",
+  "required_capabilities": [
+    "file_write_run_folder",
+    "plan_graph",
+    "policy_engine"
+  ],
+  "expected_artifacts": [
+    "README.md"
+  ],
+  "verifier_requirements": [
+    "P2/P3 verifier evidence required when provenance mode is active",
+    "independent review required for high-stakes factual claims"
+  ],
+  "risk_notes": [
+    "simple writing strategy is not semantic proof",
+    "polished but wrong",
+    "unsupported claims"
+  ],
+  "can_reach_certifying_evidence": true
+}

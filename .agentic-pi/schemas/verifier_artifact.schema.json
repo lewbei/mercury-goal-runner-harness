@@ -81,11 +81,15 @@
       "type": "array",
       "items": { "type": "string" }
     },
+    "covered_criteria": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
     "authority": {
       "type": "string",
       "enum": ["advisory", "gating", "certifying", "disqualified"]
     },
     "solution_exists_at_creation": { "type": "boolean" }
   },
-  "additionalProperties": true
+  "additionalProperties": false
 }

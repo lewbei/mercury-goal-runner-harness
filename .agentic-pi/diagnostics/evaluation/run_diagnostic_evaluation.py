@@ -183,6 +183,22 @@ def provenance_gate_mode(run_dir: Path, case: dict) -> str:
 
 
 def run_policy_engine_mode(run_dir: Path) -> str:
+    verifier_dir = run_dir / "verifier_artifacts"
+    if verifier_dir.is_dir() and any(verifier_dir.glob("*.json")):
+        validator_result = subprocess.run(
+            [sys.executable, ".agentic-pi/validators/validator_factory.py", str(run_dir)],
+            cwd=ROOT,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            timeout=15,
+        )
+        if validator_result.returncode != 0:
+            raise RuntimeError(
+                "validator factory did not produce validator_certification.json: "
+                f"exit={validator_result.returncode}, output={validator_result.stdout}"
+            )
+
     result = subprocess.run(
         [sys.executable, ".agentic-pi/validators/certify_run.py", str(run_dir)],
         cwd=ROOT,
