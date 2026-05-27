@@ -463,7 +463,7 @@ Already implemented:
 └── run_meta_harness.py                  ✅
 
 .agentic-pi/proof_matrix/proof_matrix.json        ✅ (28 entries)
-.agentic-pi/runtime/run_proxy_matrix.py           ✅
+.agentic-pi/runtime/run_proof_matrix.py            ✅
 .agentic-pi/diagnostics/evaluation/               ✅
 .agentic-pi/diagnostics/trajectory_evaluation/    ✅
 ```
@@ -584,7 +584,7 @@ Verify: `python tests/test_memory_write_gate.py -v`
 | Selected branch without oracle mapping blocked | Medium |
 | Always-pass generated validator untrusted | Low (exists in factory tests) |
 
-Verify: `python .agentic-pi/runtime/run_proxy_matrix.py --mode quick`
+Verify: `python .agentic-pi/runtime/run_proof_matrix.py --mode quick`
 
 ### Phase 9 — QRSPI skill integration ✅ (DONE)
 
@@ -684,7 +684,7 @@ assignments, and authority boundaries are all correct.
 ## How to verify this document against the harness
 
 ```cmd
-python .agentic-pi/runtime/run_proxy_matrix.py --mode quick
+python .agentic-pi/runtime/run_proof_matrix.py --mode quick
 python tests/test_raw_goal_chain.py -v
 python tests/test_final_status_json_authority.py -v
 python tests/test_runtime_enforcement.py -v
