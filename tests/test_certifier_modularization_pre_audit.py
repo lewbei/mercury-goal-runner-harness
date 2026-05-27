@@ -9,6 +9,7 @@ CERTIFIER = ROOT / ".agentic-pi" / "validators" / "certify_run.py"
 CERTIFIER_IO = ROOT / ".agentic-pi" / "validators" / "certifier_io.py"
 CERTIFIER_PATHS = ROOT / ".agentic-pi" / "validators" / "certifier_paths.py"
 CERTIFIER_ARTIFACT_COMMANDS = ROOT / ".agentic-pi" / "validators" / "certifier_artifact_commands.py"
+CERTIFIER_GATES = ROOT / ".agentic-pi" / "validators" / "certifier_gates.py"
 PROOF_MATRIX = ROOT / ".agentic-pi" / "proof_matrix" / "proof_matrix.json"
 
 
@@ -17,7 +18,7 @@ class CertifierModularizationPreAuditTests(unittest.TestCase):
     def setUpClass(cls):
         cls.doc = DOC.read_text(encoding="utf-8")
         cls.mapped_functions = set()
-        for path in (CERTIFIER, CERTIFIER_IO, CERTIFIER_PATHS, CERTIFIER_ARTIFACT_COMMANDS):
+        for path in (CERTIFIER, CERTIFIER_IO, CERTIFIER_PATHS, CERTIFIER_ARTIFACT_COMMANDS, CERTIFIER_GATES):
             cls.mapped_functions.update(
                 node.name
                 for node in ast.parse(path.read_text(encoding="utf-8")).body

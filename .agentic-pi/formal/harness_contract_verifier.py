@@ -39,6 +39,16 @@ def _has_none_guard(source: str) -> bool:
     ]
     return any(patterns)
 
+
+def _has_type_guard(source: str) -> bool:
+    """Check if source code has isinstance/type guard pattern."""
+    patterns = [
+        "isinstance" in source and ("raise" in source or "return" in source),
+        "assert " in source and "isinstance" in source,
+        "type(" in source and ("raise" in source or "return" in source),
+    ]
+    return any(patterns)
+
 ANNOTATION_MARKER = "#@"
 REQUIRES = "Requires"
 ENSURES = "Ensures"
@@ -116,125 +126,90 @@ def verify_contracts(run_dir: Path, target_file: str) -> dict:
         "detail": f"Found {sum(len(v) for v in contracts.values())} annotations"
     })
 
-    # Check 2: Verify function exists and is importable
+    # Check 2: Verify function exists via AST (no code execution)
     try:
-        import importlib.util
-        spec = importlib.util.spec_from_file_location("target_mod", target_path)
-        mod = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(mod)
-
-        # Find the main function
-        func_names = [n for n in dir(mod) if callable(getattr(mod, n)) 
-                      and not n.startswith("_")]
+        tree = ast.parse(source, filename=str(target_path))
+        func_names = [
+            node.name for node in ast.walk(tree)
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+            and not node.name.startswith("_")
+        ]
         checks.append({
             "check_id": "F2",
             "name": "module_importable",
             "passed": True,
-            "detail": f"Module loaded, functions: {func_names}"
+            "detail": f"AST parsed, functions: {func_names}"
         })
-    except Exception as e:
+    except SyntaxError as e:
         checks.append({
             "check_id": "F2",
             "name": "module_importable",
             "passed": False,
-            "detail": f"Import failed: {e}"
+            "detail": f"Syntax error: {e}"
         })
         all_passed = False
 
-    # Check 3: Test with edge cases if Requires or Ensures annotations exist
+    # Check 3: AST-based contract guard analysis (no code execution)
+    # Instead of importing and calling the function with test inputs,
+    # we analyze the source AST for guard patterns. This avoids executing
+    # untrusted code during verification.
     if contracts["requires"] or contracts["ensures"]:
         try:
-            spec = importlib.util.spec_from_file_location("target_mod", target_path)
-            mod = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(mod)
+            tree = ast.parse(source, filename=str(target_path))
 
-            main_func = None
-            func_name = ""
-            for n in dir(mod):
-                obj = getattr(mod, n)
-                if callable(obj) and not n.startswith("_"):
-                    main_func = obj
-                    func_name = n
-                    break
+            # Find the main function's AST node
+            main_func_node = None
+            for node in ast.walk(tree):
+                if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                    if not node.name.startswith("_"):
+                        main_func_node = node
+                        break
 
-            if main_func:
-                import inspect
-                sig = inspect.signature(main_func)
-                params = list(sig.parameters.keys())
-                
-                # Build contract tests: check each Requires/Ensures with edge values
+            if main_func_node:
                 contract_checks = 0
+
                 for req in contracts["requires"]:
-                    # Test None for string/not-None params
-                    should_test_none = any(w in req.lower() for w in 
+                    should_test_none = any(w in req.lower() for w in
                         ["str", "string", "isinstance", "not none", "not be none", "non-null", "nonnull"])
                     should_test_empty = any(w in req.lower() for w in ["str", "string", "isinstance"])
-                    
+
                     if should_test_none:
-                        # Check source for explicit None guard pattern
                         has_explicit_guard = _has_none_guard(source)
-                        try:
-                            result = main_func(None)
-                            contract_checks += 1
-                            if has_explicit_guard:
-                                checks.append({
-                                    "check_id": f"F3_{len(checks)}",
-                                    "name": "requires_none_input",
-                                    "passed": isinstance(result, (int, str, list, float)),
-                                    "detail": "None input produced valid result"
-                                })
-                            else:
-                                all_passed = False
-                                checks.append({
-                                    "check_id": f"F3_{len(checks)}",
-                                    "name": "requires_none_input",
-                                    "passed": False,
-                                    "detail": "None input accepted without guard — contract violated"
-                                })
-                        except Exception as exc:
-                            contract_checks += 1
-                            if has_explicit_guard:
-                                checks.append({
-                                    "check_id": f"F3_{len(checks)}",
-                                    "name": "requires_none_input",
-                                    "passed": True,
-                                    "detail": f"Explicit guard rejects None: {type(exc).__name__}"
-                                })
-                            else:
-                                all_passed = False
-                                checks.append({
-                                    "check_id": f"F3_{len(checks)}",
-                                    "name": "requires_none_input",
-                                    "passed": False,
-                                    "detail": f"Crashes on None (no guard) — contract violated: {type(exc).__name__}"
-                                })
-                    
-                    # Test empty string for string params
-                    if should_test_empty:
-                        try:
-                            result = main_func("")
-                            contract_checks += 1
-                            # Verify result satisfies Ensures if available
-                            passed = False
-                            if contracts["ensures"]:
-                                for ens in contracts["ensures"]:
-                                    if "isinstance" in ens and "int" in ens:
-                                        passed = isinstance(result, int)
-                                    elif "is not None" in ens:
-                                        passed = result is not None
-                                    else:
-                                        passed = isinstance(result, (int, str, list, dict, float))
-                            else:
-                                passed = True  # No Ensures to check against
+                        contract_checks += 1
+                        if has_explicit_guard:
                             checks.append({
                                 "check_id": f"F3_{len(checks)}",
-                                "name": f"ensures_empty_input",
-                                "passed": passed,
-                                "detail": f"Empty input result={result!r} satisfies Ensures"
+                                "name": "requires_none_guard",
+                                "passed": True,
+                                "detail": "AST detects explicit None guard pattern"
                             })
-                        except Exception:
-                            pass
-                
+                        else:
+                            all_passed = False
+                            checks.append({
+                                "check_id": f"F3_{len(checks)}",
+                                "name": "requires_none_guard",
+                                "passed": False,
+                                "detail": "No None guard detected — contract may be violated at runtime"
+                            })
+
+                    if should_test_empty:
+                        has_type_guard = _has_type_guard(source)
+                        contract_checks += 1
+                        if has_type_guard:
+                            checks.append({
+                                "check_id": f"F3_{len(checks)}",
+                                "name": "requires_type_guard",
+                                "passed": True,
+                                "detail": "AST detects isinstance/type guard pattern"
+                            })
+                        else:
+                            checks.append({
+                                "check_id": f"F3_{len(checks)}",
+                                "name": "requires_type_guard",
+                                "passed": False,
+                                "detail": "No isinstance guard detected — type safety not verified"
+                            })
+
                 if contract_checks == 0:
                     checks.append({
                         "check_id": "F3",
@@ -242,12 +217,19 @@ def verify_contracts(run_dir: Path, target_file: str) -> dict:
                         "passed": True,
                         "detail": "No contract edge tests applicable"
                     })
+            else:
+                checks.append({
+                    "check_id": "F3",
+                    "name": "contract_edge_tests",
+                    "passed": True,
+                    "detail": "No public function found to test"
+                })
         except Exception as e:
             checks.append({
                 "check_id": "F3",
                 "name": "contract_edge_tests",
                 "passed": False,
-                "detail": f"Contract test execution error: {e}"
+                "detail": f"Contract analysis error: {e}"
             })
             all_passed = False
 

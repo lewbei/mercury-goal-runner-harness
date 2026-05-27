@@ -68,6 +68,23 @@ def verify(run_dir: Path, *, skip_memory_consolidation: bool = False) -> str:
     deterministic_layers_ok &= run_tool(f"{VALIDATORS}/validate_planning_search_tree.py", [str(run_dir)], "validate_planning_search_tree")
     deterministic_layers_ok &= run_tool(f"{VALIDATORS}/validate_planning_coverage.py", [str(run_dir)], "validate_planning_coverage")
 
+    # Layer 0B: Planning quality gate (optional, advisory)
+    # The v1.1 quality gate includes skeptic/attack review. Its absence is a
+    # warning, not a blocker — the certifier still runs regardless.
+    print("\n[Layer 0B] Planning quality gate (advisory)")
+    quality_report = run_dir / "planning_coordination_v1_1_quality_report.json"
+    if quality_report.is_file():
+        try:
+            qr = json.loads(quality_report.read_text(encoding="utf-8"))
+            if qr.get("quality_gate_passed"):
+                print("  [planning_quality] PASS — skeptic/attack review completed")
+            else:
+                print("  [planning_quality] WARNING — quality gate did not pass")
+        except Exception as exc:
+            print(f"  [planning_quality] WARNING — could not read report: {exc}")
+    else:
+        print("  [planning_quality] SKIP — v1.1 quality report absent (skeptic review not verified)")
+
     # Layer 1: Artifact routing
     print("\n[Layer 1] Artifact routing")
     deterministic_layers_ok &= run_tool(f"{RUNTIME}/artifact_linker.py", [run_id], "artifact_linker")
