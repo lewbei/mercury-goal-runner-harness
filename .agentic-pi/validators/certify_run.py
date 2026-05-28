@@ -666,13 +666,18 @@ def main():
     else:
         status = "DONE_PASS" if not failed else "DONE_FAIL"
 
+    # Layer 1: Basic (file existence, ~5ms total)
     status = apply_artifact_location_gate(run_dir, provenance_mode, failed, passed, status)
     status = apply_replay_gate(run_dir, provenance_mode, failed, passed, status)
     status = apply_audit_report_gate(run_dir, provenance_mode, failed, passed, status)
+
+    # Layer 2: Intermediate (schema validation, ~10ms total)
     status = apply_drift_report_gate(run_dir, provenance_mode, failed, passed, status)
+    status = apply_formal_verification_gate(run_dir, provenance_mode, failed, passed, status)
+
+    # Layer 3: High (module loading + crypto, ~350ms total)
     status = apply_evidence_freeze_gate(run_dir, provenance_mode, failed, passed, status)
     status = apply_memory_authority_gate(run_dir, provenance_mode, failed, passed, status)
-    status = apply_formal_verification_gate(run_dir, provenance_mode, failed, passed, status)
     status = apply_cryptographic_signature_gate(run_dir, provenance_mode, failed, passed, status)
 
     status = status_after_failures(status, provenance_mode, failed)
