@@ -276,7 +276,10 @@ def check_gate_coverage():
 
 
 def check_doc_freshness():
-    """Check which docs reference files that don't exist."""
+    """Check which docs reference files that don't exist.
+
+    References in sections marked [PLANNED] are skipped.
+    """
     issues = []
     if not DOCS.exists():
         return {"issues": [], "total_checked": 0}
@@ -288,18 +291,33 @@ def check_doc_freshness():
         except Exception:
             continue
 
-        # Check for references to .agentic-pi/ files
+        doc_lines = content.splitlines()
+
+        # Track which lines are in a [PLANNED] section
+        planned_lines = set()
+        in_planned = False
+        for i, line in enumerate(doc_lines):
+            if "[PLANNED" in line.upper():
+                in_planned = True
+            elif line.startswith("###") or line.startswith("## "):
+                in_planned = False
+            if in_planned:
+                planned_lines.add(i)
+
         import re
-        refs = re.findall(r'\.agentic-pi/[^\s`"\']+\.py', content)
-        for ref in refs:
-            ref_clean = ref.rstrip("`\"',;:)")
-            full_path = ROOT / ref_clean
-            if not full_path.exists():
-                issues.append({
-                    "doc": doc.name,
-                    "references": ref_clean,
-                    "status": "MISSING",
-                })
+        for i, line in enumerate(doc_lines):
+            refs = re.findall(r'\.agentic-pi/[^\s`"\']+\.py', line)
+            for ref in refs:
+                ref_clean = ref.rstrip("`\"',;:)")
+                full_path = ROOT / ref_clean
+                if not full_path.exists():
+                    if i in planned_lines:
+                        continue
+                    issues.append({
+                        "doc": doc.name,
+                        "references": ref_clean,
+                        "status": "MISSING",
+                    })
 
     return {
         "total_docs": len(doc_files),
