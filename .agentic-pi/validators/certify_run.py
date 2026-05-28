@@ -680,6 +680,22 @@ def main():
     status = apply_memory_authority_gate(run_dir, provenance_mode, failed, passed, status)
     status = apply_cryptographic_signature_gate(run_dir, provenance_mode, failed, passed, status)
 
+    # Observability: record which gates caught failures for cross-run learning
+    try:
+        gate_feedback = {
+            "run_id": run_id,
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "final_status": status,
+            "gates_passed": [p for p in passed if ":" in p],
+            "gates_failed": [f for f in failed if ":" in f],
+            "failure_count": len(failed),
+            "pass_count": len(passed),
+        }
+        feedback_path = run_dir / "gate_feedback.json"
+        write_json(feedback_path, gate_feedback)
+    except Exception:
+        pass  # Feedback is advisory, not blocking
+
     status = status_after_failures(status, provenance_mode, failed)
     certification = {
         "run_id": run_id,

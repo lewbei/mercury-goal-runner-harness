@@ -299,6 +299,19 @@ def main():
 
     # ── Phase: RESEARCHING / DESIGNING / STRUCTURING (planning chain) ─────
     _maybe_transition(rk, args.run_id, "RESEARCHING")
+
+    # Cross-run learning: update patterns from past runs and inject context
+    try:
+        from cross_run_learner import update_cross_run_patterns, pre_run_inject
+        update_cross_run_patterns()
+        cross_run_context = pre_run_inject(args.run_id)
+        if cross_run_context:
+            print(f"  cross-run context: {cross_run_context[:200]}")
+            # Write to run dir for planning phase to consume
+            (run_dir / "cross_run_context.txt").write_text(cross_run_context, encoding="utf-8")
+    except Exception as e:
+        print(f"  cross-run learning unavailable: {e}")
+
     _maybe_transition(rk, args.run_id, "DESIGNING")
     _maybe_transition(rk, args.run_id, "STRUCTURING")
     _maybe_transition(rk, args.run_id, "PLANNING")

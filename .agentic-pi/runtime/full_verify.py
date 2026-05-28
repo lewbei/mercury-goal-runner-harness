@@ -68,10 +68,10 @@ def verify(run_dir: Path, *, skip_memory_consolidation: bool = False) -> str:
     deterministic_layers_ok &= run_tool(f"{VALIDATORS}/validate_planning_search_tree.py", [str(run_dir)], "validate_planning_search_tree")
     deterministic_layers_ok &= run_tool(f"{VALIDATORS}/validate_planning_coverage.py", [str(run_dir)], "validate_planning_coverage")
 
-    # Layer 0B: Planning quality gate (optional, advisory)
-    # The v1.1 quality gate includes skeptic/attack review. Its absence is a
-    # warning, not a blocker — the certifier still runs regardless.
-    print("\n[Layer 0B] Planning quality gate (advisory)")
+    # Layer 0B: Planning quality gate (mandatory skeptic review)
+    # The v1.1 quality gate includes skeptic/attack review. If the report
+    # exists, it must show PASS. If absent, check for skeptic evidence.
+    print("\n[Layer 0B] Planning quality gate (mandatory)")
     quality_report = run_dir / "planning_coordination_v1_1_quality_report.json"
     if quality_report.is_file():
         try:
@@ -79,11 +79,22 @@ def verify(run_dir: Path, *, skip_memory_consolidation: bool = False) -> str:
             if qr.get("quality_gate_passed"):
                 print("  [planning_quality] PASS — skeptic/attack review completed")
             else:
-                print("  [planning_quality] WARNING — quality gate did not pass")
+                print("  [planning_quality] FAIL — quality gate did not pass")
+                deterministic_layers_ok = False
         except Exception as exc:
-            print(f"  [planning_quality] WARNING — could not read report: {exc}")
+            print(f"  [planning_quality] FAIL — could not read report: {exc}")
+            deterministic_layers_ok = False
     else:
-        print("  [planning_quality] SKIP — v1.1 quality report absent (skeptic review not verified)")
+        # Check for skeptic review evidence in the run directory
+        skeptic_evidence = [
+            run_dir / "planning_skeptic_review_report.json",
+            run_dir / "planning_attack_resolution_report.json",
+        ]
+        has_skeptic = any(f.is_file() for f in skeptic_evidence)
+        if has_skeptic:
+            print("  [planning_quality] PASS — skeptic review evidence found")
+        else:
+            print("  [planning_quality] WARNING — no skeptic review evidence (legacy path)")
 
     # Layer 1: Artifact routing
     print("\n[Layer 1] Artifact routing")
