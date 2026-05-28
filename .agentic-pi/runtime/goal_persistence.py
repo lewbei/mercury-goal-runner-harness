@@ -43,10 +43,6 @@ class Attempt:
             timestamp=data.get("timestamp", ""),
         )
 
-    def to_json_line(self) -> str:
-        return json.dumps(asdict(self), ensure_ascii=False) + "\n"
-
-
 @dataclass
 class GoalState:
     """Tracks high-level execution state for a goal."""
@@ -151,116 +147,9 @@ class GoalPersistence:
     # ---------------------------------------------------------------------
     # Public API - attempt log
     # ---------------------------------------------------------------------
-    def log_attempt(
-        self,
-        approach: str,
-        failure_reason: str,
-        what_was_tried: str,
-        timestamp: Optional[datetime] = None,
-    ) -> None:
-        """Append a new attempt record to ``attempt_log.jsonl``.
-
-        Parameters
-        ----------
-        approach:
-            Identifier of the approach that was tried (e.g. a prompt name).
-        failure_reason:
-            Human-readable reason why the attempt failed.
-        what_was_tried:
-            A short description of the concrete action taken.
-        timestamp:
-            Optional ``datetime``; if omitted the current UTC time is used.
-        """
-        ts = (timestamp or datetime.now(timezone.utc)).isoformat()
-        attempt = Attempt(
-            approach=approach,
-            failure_reason=failure_reason,
-            what_was_tried=what_was_tried,
-            timestamp=ts,
-        )
-        try:
-            with self._locked_open(self.attempt_log_path, "a") as f:
-                f.write(attempt.to_json_line())
-        except Exception as exc:  # pragma: no cover
-            raise AttemptLogError(f"Failed to write attempt log: {exc}")
-
-    def load_attempts(self) -> List[Attempt]:
-        """Read all attempt records from ``attempt_log.jsonl``.
-
-        Malformed lines are skipped with a warning written to ``stderr``.
-        """
-        attempts: List[Attempt] = []
-        try:
-            with open(self.attempt_log_path, "r", encoding="utf-8") as f:
-                for line_number, line in enumerate(f, start=1):
-                    line = line.strip()
-                    if not line:
-                        continue
-                    try:
-                        data = json.loads(line)
-                        attempts.append(Attempt.from_dict(data))
-                    except json.JSONDecodeError as exc:
-                        print(
-                            f"[AttemptLog] Skipping malformed line {line_number}: {exc}",
-                            file=sys.stderr,
-                        )
-        except Exception as exc:  # pragma: no cover
-            raise AttemptLogError(f"Failed to read attempt log: {exc}")
-        return attempts
-
     # ---------------------------------------------------------------------
     # Public API - retry prompt
     # ---------------------------------------------------------------------
-    def build_retry_prompt(self, subgoal_id: str) -> str:
-        """Construct a retry prompt that lists *all* failed approaches for ``subgoal_id``.
-
-        The prompt ends with an explicit instruction **"do NOT try these again"**.
-        The function assumes that the ``approach`` field is prefixed with the sub-goal
-        identifier in the form ``"subgoal:{subgoal_id}:{approach_name}"``.
-        """
-        attempts = self.load_attempts()
-        # Filter attempts that belong to the sub-goal.
-        relevant = [
-            a
-            for a in attempts
-            if a.approach.startswith(f"subgoal:{subgoal_id}:")
-        ]
-        if not relevant:
-            return f"Retry for sub-goal {subgoal_id}: No previous failures recorded."
-        lines = [
-            f"- Approach: {a.approach.split(':')[-1]}\n  Reason: {a.failure_reason}\n  Details: {a.what_was_tried}"
-            for a in relevant
-        ]
-        prompt = (
-            f"You have previously attempted the sub-goal '{subgoal_id}' and failed.\n"
-            "The failed attempts are listed below:\n\n"
-            + "\n".join(lines)
-            + "\n\nPlease propose a new approach, **do NOT try these again**."
-        )
-        return prompt
-
-    # ---------------------------------------------------------------------
-    # Public API - dead-end detection
-    # ---------------------------------------------------------------------
-    def detect_dead_end(self, subgoal_id: str, threshold: int = 3) -> bool:
-        """Return ``True`` if the same ``failure_reason`` has occurred ``threshold`` times for ``subgoal_id``.
-
-        The function updates the goal state by marking the sub-goal as stuck when the
-        condition is met.
-        """
-        attempts = self.load_attempts()
-        # Gather failure reasons for the sub-goal.
-        reasons: Dict[str, int] = {}
-        for a in attempts:
-            if a.approach.startswith(f"subgoal:{subgoal_id}:"):
-                reasons[a.failure_reason] = reasons.get(a.failure_reason, 0) + 1
-        for reason, count in reasons.items():
-            if count >= threshold:
-                # Mark sub-goal as stuck.
-                self.mark_subgoal_stuck(subgoal_id)
-                return True
-        return False
-
     # ---------------------------------------------------------------------
     # Public API - goal state
     # ---------------------------------------------------------------------
@@ -295,46 +184,6 @@ class GoalPersistence:
         except Exception as exc:  # pragma: no cover
             raise GoalStateError(f"Failed to save goal state: {exc}")
 
-    def mark_subgoal_stuck(self, subgoal_id: str) -> None:
-        """Add ``subgoal_id`` to the ``stuck_subgoals`` list in the state file.
-        """
-        state = self.load_state()
-        if subgoal_id not in state.stuck_subgoals:
-            state.stuck_subgoals.append(subgoal_id)
-            self.save_state(state)
-
-    def update_phase(self, new_phase: str) -> None:
-        """Set the current execution phase and persist the change."""
-        state = self.load_state()
-        state.phase = new_phase
-        self.save_state(state)
-
-    def add_approach(self, approach: str) -> None:
-        """Record a new approach in the state (used for quick lookup)."""
-        state = self.load_state()
-        if approach not in state.approaches_tried:
-            state.approaches_tried.append(approach)
-            state.attempts_count += 1
-            self.save_state(state)
-
     # ---------------------------------------------------------------------
     # Convenience wrappers used by the orchestrator
     # ---------------------------------------------------------------------
-    def record_failure(
-        self,
-        subgoal_id: str,
-        approach_name: str,
-        failure_reason: str,
-        what_was_tried: str,
-    ) -> None:
-        """High-level helper that logs a failure and updates the state.
-
-        ``approach_name`` is automatically prefixed with the sub-goal identifier.
-        """
-        full_approach = f"subgoal:{subgoal_id}:{approach_name}"
-        self.log_attempt(full_approach, failure_reason, what_was_tried)
-        self.add_approach(full_approach)
-
-    def maybe_mark_stuck(self, subgoal_id: str, threshold: int = 3) -> bool:
-        """Convenient wrapper that checks for dead-end and returns ``True`` if stuck."""
-        return self.detect_dead_end(subgoal_id, threshold)

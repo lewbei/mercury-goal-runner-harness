@@ -738,11 +738,6 @@ def get_run_dir(run_id: str) -> Path:
     return _get_run_dir(run_id)
 
 
-def get_runs_dir() -> Path:
-    """Return the runs root directory."""
-    return _RUNS_DIR
-
-
 # ─── CLI entry point ──────────────────────────────────────────────────────────
 
 

@@ -30,18 +30,4 @@ class PlanGraphV1Builder:
                 return n
         return None
 
-    def outgoing_edges(self, node_id: str):
-        return [e for e in self.graph["edges"] if e["source"] == node_id]
-
-    def incoming_edges(self, node_id: str):
-        return [e for e in self.graph["edges"] if e["target"] == node_id]
-
-    def all_nodes(self):
-        return self.graph["nodes"]
-
-    def all_edges(self):
-        return self.graph["edges"]
-
     # Convenience for validators
-    def node_types(self):
-        return {n["type"] for n in self.graph["nodes"]}

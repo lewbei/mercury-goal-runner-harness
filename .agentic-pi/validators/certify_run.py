@@ -424,29 +424,6 @@ def check_contract_target_artifacts(run_dir: Path, contract: dict, passed: list,
             failed.append(f"verifier target artifact missing: {target}")
 
 
-def artifact_is_certifying_for_contract(artifact: dict, contract: dict) -> bool:
-    level = artifact.get("provenance_level")
-    target = artifact.get("target_artifact")
-    required_level = contract.get("required_verifier_level", "P2")
-    certifying_levels = set(contract.get("certifying_authority_levels", ["P2", "P3"]))
-
-    if target not in set(contract.get("target_artifacts", [])):
-        return False
-    if artifact.get("authority") != "certifying":
-        return False
-    if artifact.get("same_worker_as_solution") is True:
-        return False
-    if artifact.get("executes_code") is not True:
-        return False
-    if not isinstance(artifact.get("assertion_count"), int) or artifact["assertion_count"] <= 0:
-        return False
-    if level not in certifying_levels:
-        return False
-    return PROVENANCE_ORDER.get(level, -1) >= PROVENANCE_ORDER.get(required_level, 99)
-
-
-
-
 def run_policy_engine(run_dir: Path, failed: list, passed: list) -> str:
     decision = decide_run_policy(run_dir, hard_failures=list(failed))
     decision_path = write_policy_decision(run_dir, decision)

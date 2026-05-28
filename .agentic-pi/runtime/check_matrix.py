@@ -45,13 +45,6 @@ class Check:
         check_dir.mkdir(exist_ok=True)
         return check_dir / f"{self.name}.json"
     
-    def load_result(self, run_dir: Path) -> dict | None:
-        """Load a previous result if it exists."""
-        path = self.result_path(run_dir)
-        if path.exists():
-            return json.loads(path.read_text(encoding="utf-8"))
-        return None
-    
     def save_result(self, run_dir: Path, result: dict):
         """Save check result."""
         result["check_name"] = self.name

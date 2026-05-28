@@ -195,6 +195,3 @@ def build_metrics(events: list[dict], audit_result: dict, allowed_command: str) 
     metrics["policy_checks"] = metric_summary(metrics)
     return metrics
 
-
-def path_for_display(path: Path) -> str:
-    return str(path)

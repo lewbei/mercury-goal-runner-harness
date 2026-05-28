@@ -200,10 +200,18 @@ def check_dead_code():
         except Exception:
             pass
 
+    # Also collect test file content
+    test_content = ""
+    for tf in _iter_test_files():
+        try:
+            test_content += tf.read_text(encoding="utf-8")
+        except Exception:
+            pass
+
     # Check which functions are referenced nowhere
     dead = []
     for func_name, source_files in all_funcs.items():
-        # Check if referenced in any other file
+        # Check if referenced in any other source file
         referenced_elsewhere = False
         for rel, content in all_source_content.items():
             if rel in source_files:
@@ -211,6 +219,9 @@ def check_dead_code():
             if func_name in content:
                 referenced_elsewhere = True
                 break
+
+        # Check if referenced in test files
+        referenced_in_tests = func_name in test_content
 
         # Check if called within its own file (not just defined)
         referenced_locally = False
@@ -222,7 +233,7 @@ def check_dead_code():
                 break
 
         # Only flag as dead if not referenced anywhere
-        if not referenced_elsewhere and not referenced_locally:
+        if not referenced_elsewhere and not referenced_locally and not referenced_in_tests:
             dead.append({"function": func_name, "defined_in": source_files})
 
     return {
