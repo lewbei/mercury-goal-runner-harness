@@ -172,7 +172,12 @@ def check_critical_path_gaps():
 
 
 def check_dead_code():
-    """Find functions defined in .agentic-pi/ but never referenced elsewhere."""
+    """Find functions defined in .agentic-pi/ but never referenced anywhere.
+
+    A function is considered "possibly dead" only if:
+    1. It is not referenced in any OTHER file, AND
+    2. It is not called within its OWN file (only defined, never used)
+    """
     # Collect all function definitions
     all_funcs = {}  # name -> [file1, file2, ...]
     for src in _iter_source_files():
@@ -195,17 +200,29 @@ def check_dead_code():
         except Exception:
             pass
 
-    # Check which functions are referenced in other files
+    # Check which functions are referenced nowhere
     dead = []
     for func_name, source_files in all_funcs.items():
-        referenced = False
+        # Check if referenced in any other file
+        referenced_elsewhere = False
         for rel, content in all_source_content.items():
             if rel in source_files:
                 continue  # Skip the defining file
             if func_name in content:
-                referenced = True
+                referenced_elsewhere = True
                 break
-        if not referenced:
+
+        # Check if called within its own file (not just defined)
+        referenced_locally = False
+        for rel in source_files:
+            content = all_source_content.get(rel, "")
+            # Count occurrences - if > 1, it's used (defined + called)
+            if content.count(func_name) > 1:
+                referenced_locally = True
+                break
+
+        # Only flag as dead if not referenced anywhere
+        if not referenced_elsewhere and not referenced_locally:
             dead.append({"function": func_name, "defined_in": source_files})
 
     return {
