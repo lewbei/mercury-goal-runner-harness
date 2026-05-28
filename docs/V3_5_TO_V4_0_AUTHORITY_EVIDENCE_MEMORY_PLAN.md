@@ -490,6 +490,7 @@ Let many agents coordinate through structured artifacts, not raw context dumps.
 ### Files
 
 ```text
+[PLANNED - not yet implemented]
 .agentic-pi/runtime/context_board.py
 .agentic-pi/runtime/worker_report_writer.py
 .agentic-pi/runtime/finding_card_writer.py
@@ -556,6 +557,7 @@ generic CLI agent adapter
 ### Files
 
 ```text
+[PLANNED - not yet implemented]
 .agentic-pi/adapters/agent_adapter.schema.json
 .agentic-pi/adapters/generic_cli_adapter.py
 .agentic-pi/adapters/claude_code_adapter.py

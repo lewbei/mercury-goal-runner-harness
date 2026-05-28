@@ -84,14 +84,14 @@ Policy responsibilities:
 These are future seams only. They are not implemented by this audit.
 
 ```text
-.agentic-pi/validators/certifier_io.py
-.agentic-pi/validators/certifier_paths.py
-.agentic-pi/validators/certifier_step_logs.py
-.agentic-pi/validators/certifier_artifact_commands.py
-.agentic-pi/validators/certifier_goal_outputs.py
-.agentic-pi/validators/certifier_verifier_pipeline.py
-.agentic-pi/validators/certifier_gates/
-.agentic-pi/validators/certifier_final_status.py
+.agentic-pi/validators/certifier_io.py             [DONE]
+.agentic-pi/validators/certifier_paths.py           [DONE]
+.agentic-pi/validators/certifier_step_logs.py       [PLANNED - not yet implemented]
+.agentic-pi/validators/certifier_artifact_commands.py [DONE]
+.agentic-pi/validators/certifier_goal_outputs.py    [PLANNED - not yet implemented]
+.agentic-pi/validators/certifier_verifier_pipeline.py [PLANNED - not yet implemented]
+.agentic-pi/validators/certifier_gates.py           [DONE]
+.agentic-pi/validators/certifier_final_status.py    [PLANNED - not yet implemented]
 ```
 
 Suggested seam contract:

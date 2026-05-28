@@ -445,20 +445,6 @@ def artifact_is_certifying_for_contract(artifact: dict, contract: dict) -> bool:
     return PROVENANCE_ORDER.get(level, -1) >= PROVENANCE_ORDER.get(required_level, 99)
 
 
-def decide_provenance_status(contract: dict, artifacts: list, failed: list, passed: list) -> str:
-    if failed:
-        return "NOT_DONE"
-    if not artifacts:
-        failed.append("verifier_artifacts missing for verifier_contract")
-        return "NOT_DONE"
-
-    if any(artifact_is_certifying_for_contract(artifact, contract) for artifact in artifacts):
-        passed.append("certifying verifier provenance satisfied")
-        return "CERTIFIED_DONE"
-
-    levels = sorted({artifact.get("provenance_level") for artifact in artifacts})
-    passed.append(f"verifier provenance is insufficient for CERTIFIED_DONE: {levels}")
-    return "PROVISIONAL_DONE"
 
 
 def run_policy_engine(run_dir: Path, failed: list, passed: list) -> str:
