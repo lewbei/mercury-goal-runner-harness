@@ -312,6 +312,15 @@ def main():
     except Exception as e:
         print(f"  cross-run learning unavailable: {e}")
 
+    # Research module: fetch latest information
+    print("Running research module...")
+    try:
+        _run_tool(rk, args.run_id, "research_module",
+                  ["python", ".agentic-pi/runtime/research_module.py", "--run-id", args.run_id])
+    except RuntimeError as e:
+        print(f"  research module failed: {e}")
+        # Continue even if research fails (non-blocking)
+
     _maybe_transition(rk, args.run_id, "DESIGNING")
     _maybe_transition(rk, args.run_id, "STRUCTURING")
     _maybe_transition(rk, args.run_id, "PLANNING")

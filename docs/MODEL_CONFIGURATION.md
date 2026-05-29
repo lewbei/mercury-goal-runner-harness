@@ -139,3 +139,20 @@ The AI model landscape changes fast. To stay current:
 3. Update your model configuration as new models are released
 
 The harness will use whatever model you configure. Update your configuration to use the latest models.
+
+## Research Module
+
+The harness includes a research module that fetches the latest information about models, technologies, and best practices. This ensures the harness always uses up-to-date information.
+
+The research module runs during the RESEARCHING phase and:
+
+1. Fetches current date and time
+2. Generates search queries for latest models and technologies
+3. Provides research context to agents
+4. Recommends sources for up-to-date information
+
+To run the research module manually:
+
+```bash
+python .agentic-pi/runtime/research_module.py --run-id <run_id>
+```
