@@ -103,6 +103,33 @@ Final level:
     formal_verification, evidence_freeze, memory_authority, crypto_signature
 ```
 
+## Model Configuration
+
+The harness inherits the model from the parent agent by default. No configuration needed.
+
+- If Pi uses `claude-opus-4.7`, the harness uses `claude-opus-4.7`
+- If Claude Code uses `claude-sonnet-4.6`, the harness uses `claude-sonnet-4.6`
+- If Cursor uses `gpt-5.5`, the harness uses `gpt-5.5`
+
+Override with `MERCURY_MODEL` environment variable if needed.
+
+See [docs/MODEL_CONFIGURATION.md](docs/MODEL_CONFIGURATION.md) for details.
+
+## Resuming After /new
+
+If you clear context with `/new` and want to resume:
+
+```bash
+# List incomplete runs
+python .agentic-pi/runtime/resume_module.py --incomplete
+
+# Resume the latest incomplete run
+python .agentic-pi/runtime/resume_module.py
+
+# Resume a specific run
+python .agentic-pi/runtime/resume_module.py --run-id <run_id>
+```
+
 ## Directory structure
 
 ```
@@ -122,18 +149,6 @@ mercury-goal-runner-harness/
 ├── tests/                  ← harness tests
 └── docs/                   ← documentation
 ```
-
-## Model Configuration
-
-The harness inherits the model from the parent agent by default. No configuration needed.
-
-- If Pi uses `claude-opus-4.7`, the harness uses `claude-opus-4.7`
-- If Claude Code uses `claude-sonnet-4.6`, the harness uses `claude-sonnet-4.6`
-- If Cursor uses `gpt-5.5`, the harness uses `gpt-5.5`
-
-Override with `MERCURY_MODEL` environment variable if needed.
-
-See [docs/MODEL_CONFIGURATION.md](docs/MODEL_CONFIGURATION.md) for details.
 
 ## Rules
 
@@ -173,6 +188,15 @@ A: You can edit docs. Don't edit `.agentic-pi/` or `.agentic-runs/`.
 **Q: How do I know it's working?**
 A: Run `python .agentic-pi/runtime/harness_health.py`. It should say `HEALTHY - no gaps detected`.
 
+**Q: What if I clear context with /new?**
+A: Use the resume module to find and resume incomplete runs.
+
 ## License
 
 MIT
+
+## Contributing
+
+This is a personal project. Contributions are not accepted.
+
+For questions or issues, please open an issue on GitHub.
