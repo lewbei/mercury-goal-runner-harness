@@ -127,9 +127,9 @@ mercury-goal-runner-harness/
 
 The harness inherits the model from the parent agent by default. No configuration needed.
 
-- If Pi uses `mimo-v2.5-pro`, the harness uses `mimo-v2.5-pro`
-- If Claude Code uses `claude-sonnet-4`, the harness uses `claude-sonnet-4`
-- If Cursor uses `gpt-4o`, the harness uses `gpt-4o`
+- If Pi uses `claude-opus-4.7`, the harness uses `claude-opus-4.7`
+- If Claude Code uses `claude-sonnet-4.6`, the harness uses `claude-sonnet-4.6`
+- If Cursor uses `gpt-5.5`, the harness uses `gpt-5.5`
 
 Override with `MERCURY_MODEL` environment variable if needed.
 

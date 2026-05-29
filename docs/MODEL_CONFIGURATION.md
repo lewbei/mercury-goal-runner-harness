@@ -7,8 +7,8 @@ The harness inherits the model from the parent agent by default. You can overrid
 **The harness uses the same model as the parent agent.**
 
 - If Pi uses `mimo-v2.5-pro`, the harness uses `mimo-v2.5-pro`
-- If Claude Code uses `claude-sonnet-4`, the harness uses `claude-sonnet-4`
-- If Cursor uses `gpt-4o`, the harness uses `gpt-4o`
+- If Claude Code uses `claude-sonnet-4.6`, the harness uses `claude-sonnet-4.6`
+- If Cursor uses `gpt-5.5`, the harness uses `gpt-5.5`
 
 No configuration needed. The harness automatically inherits the model.
 
@@ -22,10 +22,10 @@ Set `MERCURY_MODEL` to override:
 
 ```bash
 # Windows
-set MERCURY_MODEL=inception/mercury-2
+set MERCURY_MODEL=claude-opus-4.7
 
 # Linux/Mac
-export MERCURY_MODEL=inception/mercury-2
+export MERCURY_MODEL=claude-opus-4.7
 ```
 
 ### Configuration File
@@ -34,20 +34,24 @@ Create `.agentic-pi/config.json`:
 
 ```json
 {
-  "model": "inception/mercury-2",
+  "model": "claude-opus-4.7",
   "thinking": "xhigh"
 }
 ```
 
-## Supported Models
+## Current Models (2026)
 
 ### Cloud Models (require API keys)
 
-- `inception/mercury-2` — Mercury model (fast, good for coding)
-- `deepseek/deepseek-v4-flash` — DeepSeek Flash (fast, cheap)
-- `anthropic/claude-sonnet-4` — Claude Sonnet (good for complex tasks)
-- `openai/gpt-4o` — GPT-4o (good for general tasks)
-- `mimo-v2.5-pro` — MiMo (Xiaomi's model)
+- `claude-opus-4.7` — Claude Opus 4.7 (best for coding & thinking)
+- `claude-sonnet-4.6` — Claude Sonnet 4.6 (good balance)
+- `gpt-5.5` — GPT-5.5 (latest OpenAI model)
+- `gpt-5.4` — GPT-5.4 (good for general tasks)
+- `deepseek-v4-pro` — DeepSeek V4 Pro (fast, cheap)
+- `deepseek-v3.2` — DeepSeek V3.2 (good for coding)
+- `gemini-3.1-pro` — Gemini 3.1 Pro (Google's latest)
+- `kimi-k2.6` — Kimi K2.6 (Moonshot AI)
+- `minimax-m2.5` — MiniMax M2.5 (good for coding)
 
 ### Local Models (no API key needed)
 
@@ -59,11 +63,12 @@ Create `.agentic-pi/config.json`:
 
 ### Required for Cloud Models
 
-- **Mercury**: Get API key from https://inception.xyz
+- **Claude**: Get API key from https://anthropic.com
+- **GPT**: Get API key from https://openai.com
 - **DeepSeek**: Get API key from https://deepseek.com
-- **Anthropic**: Get API key from https://anthropic.com
-- **OpenAI**: Get API key from https://openai.com
-- **MiMo**: Get API key from https://xiaomi.com
+- **Gemini**: Get API key from https://ai.google.dev
+- **Kimi**: Get API key from https://moonshot.cn
+- **MiniMax**: Get API key from https://minimaxi.com
 
 ### Not Required for Local Models
 
@@ -90,7 +95,7 @@ Pi automatically uses its configured model. The harness inherits it.
 pi --model
 
 # Set Pi's model
-pi --model mimo-v2.5-pro
+pi --model claude-opus-4.7
 ```
 
 ### Claude Code
@@ -104,7 +109,7 @@ cat ~/.claude/settings.json
 # Set Claude Code's model
 # Edit ~/.claude/settings.json
 {
-  "model": "claude-sonnet-4"
+  "model": "claude-opus-4.7"
 }
 ```
 
@@ -124,3 +129,13 @@ Codex automatically uses its configured model. The harness inherits it.
 - **Cloud**: Use cloud models (require API key)
 
 The harness automatically uses whatever model the parent agent is using. No configuration needed unless you want to override.
+
+## Keeping Up-to-Date
+
+The AI model landscape changes fast. To stay current:
+
+1. Check https://www.faros.ai/blog/best-ai-model-for-coding-2026 for latest rankings
+2. Check https://www.morphllm.com/best-ai-model-for-coding for benchmarks
+3. Update your model configuration as new models are released
+
+The harness will use whatever model you configure. Update your configuration to use the latest models.
