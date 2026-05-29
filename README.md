@@ -48,44 +48,25 @@ git clone https://github.com/lewbei/mercury-goal-runner-harness
 cd mercury-goal-runner-harness
 ```
 
-## Quick start
+## How agents use it
 
-```bash
-# Run a goal
-python mercury.py run "Create a hello world script"
+Each agent uses the harness through its own mechanism:
 
-# Check status
-python mercury.py status <run_id>
+### Pi
 
-# Health check
-python mercury.py health
-```
+Pi uses QRSPI skills automatically. Just describe the goal.
 
-## Examples
+### Claude Code
 
-```bash
-# Build a web app
-python mercury.py run "Build a todo app with React"
+Reads `CLAUDE.md` and uses the harness directly.
 
-# Build an API
-python mercury.py run "Create a REST API for user management"
+### Cursor
 
-# Build a CLI tool
-python mercury.py run "Create a CLI tool that converts CSV to JSON"
+Reads `.cursorrules` and uses the harness directly.
 
-# Build a library
-python mercury.py run "Create a Python library for date parsing"
-```
+### Codex
 
-Product goes to `output/<app-name>/`:
-
-```
-output/
-├── todo-app/
-├── user-api/
-├── csv-to-json/
-└── date-parser/
-```
+Reads `AGENTS.md` and uses the harness directly.
 
 ## How it works
 
@@ -105,31 +86,27 @@ Each phase produces artifacts. The certifier verifies all artifacts before certi
 
 ## Verification
 
-The certifier runs 8 gates:
+The harness has multi-level verification:
 
 ```
-Layer 1 (basic):
-  - artifact_location: output files exist
-  - replay: artifacts are reproducible
-  - audit: audit report is valid
+Planning level:
+  - verification_checkpoint.py runs verifier during planning
+  - replanning_loop.py adjusts plan based on feedback
 
-Layer 2 (intermediate):
-  - drift_report: no drift from expected behavior
-  - formal_verification: contract annotations hold
+Step level:
+  - step_verifier.py verifies each step after execution
+  - Checks file exists, Python syntax, JSON validity
 
-Layer 3 (high rigor):
-  - evidence_freeze: evidence is immutable
-  - memory_authority: memory doesn't claim certification
-  - crypto_signature: artifacts aren't tampered
+Final level:
+  - certifier gates verify all artifacts
+  - 8 gates: artifact_location, replay, audit, drift_report,
+    formal_verification, evidence_freeze, memory_authority, crypto_signature
 ```
-
-All 8 gates must pass for CERTIFIED_DONE.
 
 ## Directory structure
 
 ```
 mercury-goal-runner-harness/
-├── mercury.py              ← simple CLI (start here)
 ├── README.md               ← main docs
 ├── AGENTS.md               ← agent instructions (Codex, generic)
 ├── CLAUDE.md               ← Claude Code instructions
@@ -156,7 +133,7 @@ mercury-goal-runner-harness/
 ## Health check
 
 ```bash
-python mercury.py health
+python .agentic-pi/runtime/harness_health.py
 ```
 
 Expected output:
@@ -164,31 +141,25 @@ Expected output:
 HEALTHY - no gaps detected
 ```
 
-Checks:
-- Module coverage: 229/229
-- Critical path gaps: 0
-- Dead code: 0
-- Gate coverage: 10/10
-
 ## FAQ
 
 **Q: What agents does it work with?**
 A: Pi, Claude Code, Cursor, Windsurf, Codex, and any agent that can run shell commands.
 
-**Q: Do I need to know the file formats?**
-A: No. Just run `python mercury.py run "goal"`.
+**Q: Do I need a CLI?**
+A: No. Each agent uses the harness through its own mechanism (skills, CLAUDE.md, .cursorrules, AGENTS.md).
 
 **Q: Where does the product go?**
 A: `output/<app-name>/`. The app name comes from the goal.
 
 **Q: What if the run fails?**
-A: Check `python mercury.py status <run_id>` for details. Check step logs in `.agentic-runs/<run_id>/step_logs/`.
+A: Check the step logs in `.agentic-runs/<run_id>/step_logs/`.
 
 **Q: Can I edit the harness?**
-A: You can edit `mercury.py` and docs. Don't edit `.agentic-pi/` or `.agentic-runs/`.
+A: You can edit docs. Don't edit `.agentic-pi/` or `.agentic-runs/`.
 
 **Q: How do I know it's working?**
-A: Run `python mercury.py health`. It should say `HEALTHY - no gaps detected`.
+A: Run `python .agentic-pi/runtime/harness_health.py`. It should say `HEALTHY - no gaps detected`.
 
 ## License
 

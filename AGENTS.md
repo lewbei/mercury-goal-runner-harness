@@ -5,17 +5,17 @@
 When the user asks you to build something, use the Mercury harness:
 
 ```bash
-python mercury.py run "what the user wants to build"
+python .agentic-pi/runtime/run_goal.py --run-id <run_id> --command "what the user wants to build"
 ```
 
 Check status:
 ```bash
-python mercury.py status <run_id>
+python .agentic-pi/runtime/pi_cli.py goal-status <run_id>
 ```
 
 Health check:
 ```bash
-python mercury.py health
+python .agentic-pi/runtime/harness_health.py
 ```
 
 ## Rules

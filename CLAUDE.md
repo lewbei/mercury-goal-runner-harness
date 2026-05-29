@@ -7,7 +7,7 @@ This project uses the Mercury Goal Runner Harness for goal execution and verific
 When the user asks you to build something, use the harness:
 
 ```bash
-python mercury.py run "what the user wants to build"
+python .agentic-pi/runtime/run_goal.py --run-id <run_id> --command "what the user wants to build"
 ```
 
 The harness handles:
@@ -25,13 +25,13 @@ Product files go to `output/<app-name>/`. Harness files stay in `.agentic-pi/`.
 
 Check status with:
 ```bash
-python mercury.py status <run_id>
+python .agentic-pi/runtime/pi_cli.py goal-status <run_id>
 ```
 
 ## Health check
 
 ```bash
-python mercury.py health
+python .agentic-pi/runtime/harness_health.py
 ```
 
 ## Rules

@@ -3,7 +3,7 @@
 When the user asks you to build something, use the Mercury harness:
 
 ```bash
-python mercury.py run "what the user wants to build"
+python .agentic-pi/runtime/run_goal.py --run-id <run_id> --command "what the user wants to build"
 ```
 
 ## Rules
@@ -11,5 +11,5 @@ python mercury.py run "what the user wants to build"
 1. Product files go to `output/<app-name>/`
 2. Do NOT edit `.agentic-pi/` or `.agentic-runs/`
 3. Do NOT claim DONE — the certifier decides
-4. Check status: `python mercury.py status <run_id>`
-5. Health check: `python mercury.py health`
+4. Check status: `python .agentic-pi/runtime/pi_cli.py goal-status <run_id>`
+5. Health check: `python .agentic-pi/runtime/harness_health.py`
