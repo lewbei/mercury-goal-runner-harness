@@ -17,13 +17,40 @@ Harness does:
 Agent sees: CERTIFIED_DONE or FAILED
 ```
 
+## Install
+
+### Pi
+
+```bash
+pi install git:github.com/lewbei/mercury-goal-runner-harness
+```
+
+### Claude Code
+
+Clone the repo. Claude Code reads `CLAUDE.md` automatically.
+
+### Cursor
+
+Clone the repo. Cursor reads `.cursorrules` automatically.
+
+### Windsurf
+
+Clone the repo. Windsurf reads `.windsurfrules` automatically.
+
+### Codex
+
+Clone the repo. Codex reads `AGENTS.md` automatically.
+
+### Any other agent
+
+```bash
+git clone https://github.com/lewbei/mercury-goal-runner-harness
+cd mercury-goal-runner-harness
+```
+
 ## Quick start
 
 ```bash
-# Clone
-git clone https://github.com/lewbei/mercury-goal-runner-harness
-cd mercury-goal-runner-harness
-
 # Run a goal
 python mercury.py run "Create a hello world script"
 
@@ -32,6 +59,32 @@ python mercury.py status <run_id>
 
 # Health check
 python mercury.py health
+```
+
+## Examples
+
+```bash
+# Build a web app
+python mercury.py run "Build a todo app with React"
+
+# Build an API
+python mercury.py run "Create a REST API for user management"
+
+# Build a CLI tool
+python mercury.py run "Create a CLI tool that converts CSV to JSON"
+
+# Build a library
+python mercury.py run "Create a Python library for date parsing"
+```
+
+Product goes to `output/<app-name>/`:
+
+```
+output/
+├── todo-app/
+├── user-api/
+├── csv-to-json/
+└── date-parser/
 ```
 
 ## How it works
@@ -50,6 +103,28 @@ REPORTING → MEMORY_CONSOLIDATING → DONE
 
 Each phase produces artifacts. The certifier verifies all artifacts before certifying DONE.
 
+## Verification
+
+The certifier runs 8 gates:
+
+```
+Layer 1 (basic):
+  - artifact_location: output files exist
+  - replay: artifacts are reproducible
+  - audit: audit report is valid
+
+Layer 2 (intermediate):
+  - drift_report: no drift from expected behavior
+  - formal_verification: contract annotations hold
+
+Layer 3 (high rigor):
+  - evidence_freeze: evidence is immutable
+  - memory_authority: memory doesn't claim certification
+  - crypto_signature: artifacts aren't tampered
+```
+
+All 8 gates must pass for CERTIFIED_DONE.
+
 ## Directory structure
 
 ```
@@ -67,23 +142,6 @@ mercury-goal-runner-harness/
 └── docs/                   ← documentation
 ```
 
-## For agents
-
-Any agent can use the harness:
-
-```bash
-# One command
-python mercury.py run "what the user wants to build"
-```
-
-The agent doesn't need to know file formats, protocols, or harness internals. Just describe the goal.
-
-See [docs/AGENT_GUIDE.md](docs/AGENT_GUIDE.md) for details.
-
-## For developers
-
-See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for how the harness works internally.
-
 ## Rules
 
 1. Product files go to `output/<app-name>/`
@@ -91,9 +149,7 @@ See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for how the harness works inter
 3. Don't claim DONE — the certifier decides
 4. Trust evidence, not vibes
 
-## Status
-
-Check harness health:
+## Health check
 
 ```bash
 python mercury.py health
@@ -103,6 +159,32 @@ Expected output:
 ```
 HEALTHY - no gaps detected
 ```
+
+Checks:
+- Module coverage: 229/229
+- Critical path gaps: 0
+- Dead code: 0
+- Gate coverage: 10/10
+
+## FAQ
+
+**Q: What agents does it work with?**
+A: Pi, Claude Code, Cursor, Windsurf, Codex, and any agent that can run shell commands.
+
+**Q: Do I need to know the file formats?**
+A: No. Just run `python mercury.py run "goal"`.
+
+**Q: Where does the product go?**
+A: `output/<app-name>/`. The app name comes from the goal.
+
+**Q: What if the run fails?**
+A: Check `python mercury.py status <run_id>` for details. Check step logs in `.agentic-runs/<run_id>/step_logs/`.
+
+**Q: Can I edit the harness?**
+A: You can edit `mercury.py` and docs. Don't edit `.agentic-pi/` or `.agentic-runs/`.
+
+**Q: How do I know it's working?**
+A: Run `python mercury.py health`. It should say `HEALTHY - no gaps detected`.
 
 ## License
 
