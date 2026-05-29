@@ -197,6 +197,6 @@ MIT
 
 ## Contributing
 
-This is a personal project. Contributions are not accepted.
+This is a personal project maintained by [lewbei](https://github.com/lewbei). Thank you for your interest!
 
-For questions or issues, please open an issue on GitHub.
+While I appreciate feedback and suggestions, I'm not accepting contributions at this time. If you encounter any issues or have questions, feel free to open an issue on GitHub.
