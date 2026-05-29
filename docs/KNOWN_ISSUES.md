@@ -6,17 +6,7 @@ None
 
 ## Medium Issues
 
-### 1. Cross-run learning unavailable
-
-**Description:** Cross-run learning fails with error: `<lambda>() missing 1 required positional argument: 'base_dir'`
-
-**Impact:** Cross-run learning doesn't work, but the harness still functions.
-
-**Workaround:** None needed - the harness works without cross-run learning.
-
-**Status:** Under investigation
-
-### 2. Audit run fails with missing outputs
+### 1. Audit run fails with missing outputs
 
 **Description:** Audit run fails when expected outputs are missing (e.g., KNOWN_ISSUES.md, TROUBLESHOOTING.md).
 
@@ -47,6 +37,18 @@ None
 **Workaround:** Run `python .agentic-pi/runtime/resume_module.py` to find incomplete runs.
 
 **Status:** Expected behavior - resume is manual.
+
+## Fixed Issues
+
+### 1. Cross-run learning unavailable ✅
+
+**Description:** Cross-run learning fails with error: `<lambda>() missing 1 required positional argument: 'base_dir'`
+
+**Impact:** Cross-run learning doesn't work, but the harness still functions.
+
+**Fix:** Updated lambda in @Requires decorator to handle optional base_dir parameter.
+
+**Status:** Fixed
 
 ## Notes
 
