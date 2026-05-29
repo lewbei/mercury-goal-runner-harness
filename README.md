@@ -130,14 +130,18 @@ All 8 gates must pass for CERTIFIED_DONE.
 ```
 mercury-goal-runner-harness/
 ├── mercury.py              ← simple CLI (start here)
+├── README.md               ← main docs
 ├── AGENTS.md               ← agent instructions (Codex, generic)
 ├── CLAUDE.md               ← Claude Code instructions
 ├── .cursorrules            ← Cursor instructions
 ├── .windsurfrules          ← Windsurf instructions
+├── package.json            ← Pi package config
+├── extensions/             ← Pi extension (TypeScript)
+├── .pi/                    ← Pi skills (for Pi agent)
 ├── .agentic-pi/            ← harness internals (don't edit)
-├── .agentic-runs/          ← run artifacts (don't edit)
-├── output/                 ← product output (clean)
-│   └── <app-name>/         ← e.g. todo-app, weather-dashboard
+├── .agentic-runs/          ← run artifacts (gitignored)
+├── output/                 ← product output (gitignored)
+├── modules/                ← reference material (gitignored)
 ├── tests/                  ← harness tests
 └── docs/                   ← documentation
 ```
