@@ -72,8 +72,8 @@ def Ensures(condition, message=""):
 # Core functionality
 # ---------------------------------------------------------------------------
 
-@Requires(lambda base_dir: isinstance(base_dir, (str, Path)), "base_dir must be a string or Path")
-@Ensures(lambda result, base_dir: isinstance(result, list), "Result must be a list of tuples")
+@Requires(lambda base_dir=None: isinstance(base_dir, (str, Path)) or base_dir is None, "base_dir must be a string or Path")
+@Ensures(lambda result, base_dir=None: isinstance(result, list), "Result must be a list of tuples")
 def scan_runs(base_dir: str | Path = ".agentic-runs") -> List[Tuple[str, str]]:
     """Scan all run directories and return a list of (run_id, goal_type).
 
