@@ -54,6 +54,14 @@ git clone https://github.com/lewbei/mercury-goal-runner-harness
 cd mercury-goal-runner-harness
 ```
 
+## Tested Agents
+
+This harness has been tested with:
+
+- **Pi** — fully tested, works with QRSPI skills
+
+Other agents (Claude Code, Cursor, Codex, Windsurf) should work in theory, but haven't been tested yet. If you try them, I'd love to hear how it goes!
+
 ## How agents use it
 
 Each agent uses the harness through its own mechanism:
