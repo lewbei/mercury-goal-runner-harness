@@ -167,16 +167,16 @@ The certifier checks:
 # 1. Init
 python .agentic-pi/runtime/init_run.py --run-id my_goal
 
-# 2. Write goal contract (specify output directory)
+# 2. Write goal contract (specify app name and output directory)
 cat > .agentic-runs/my_goal/goal_contract.json << 'EOF'
 {
   "run_id": "my_goal",
   "goal_type": "coding",
-  "raw_user_prompt": "Create a hello world script",
-  "execution_prompt": "Create hello.py that prints 'Hello, World!'",
-  "final_outputs": ["hello.py"],
-  "done_criteria": ["hello.py exists", "hello.py prints Hello"],
-  "output_directory": "output/my_goal"
+  "raw_user_prompt": "Build a todo app",
+  "execution_prompt": "Build a todo app with React and TypeScript",
+  "final_outputs": ["src/App.tsx", "package.json"],
+  "done_criteria": ["App.tsx exists", "package.json exists"],
+  "output_directory": "output/todo-app"
 }
 EOF
 
@@ -185,6 +185,9 @@ python .agentic-pi/runtime/pi_cli.py goal-run my_goal
 
 # 4. Check
 python .agentic-pi/runtime/pi_cli.py goal-status my_goal
+
+# 5. Product is at output/todo-app/
+ls output/todo-app/
 ```
 
 ## Directory structure
@@ -200,11 +203,13 @@ my-project/
 │       ├── step_logs/
 │       └── verifier_artifacts/
 ├── output/                   ← product output (clean)
-│   └── <run_id>/
-│       ├── hello.py
+│   └── <app-name>/           ← e.g. todo-app, weather-dashboard
+│       ├── src/
+│       ├── tests/
 │       └── README.md
 └── docs/                     ← harness docs
 ```
 
-The agent writes product files to `output/<run_id>/`, not to the root.
+The agent writes product files to `output/<app-name>/`, not to the root.
+The app name comes from the user's goal, not the run_id.
 This keeps harness files and product files separate.
