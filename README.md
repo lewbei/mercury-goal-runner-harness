@@ -2,6 +2,12 @@
 
 A goal execution harness for AI coding agents. The agent says what it wants to build. The harness handles planning, execution, verification, and certification.
 
+## Origin
+
+This project started as a way to get better results from Mercury v2 (Inception Labs' coding model). I wanted to make sure the model was actually doing what it claimed — not just saying "DONE" without proof.
+
+It evolved into Mercury Goal Runner Harness — a verification system that works with any AI coding agent.
+
 ## What it does
 
 ```
