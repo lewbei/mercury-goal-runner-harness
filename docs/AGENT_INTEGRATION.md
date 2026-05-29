@@ -167,7 +167,7 @@ The certifier checks:
 # 1. Init
 python .agentic-pi/runtime/init_run.py --run-id my_goal
 
-# 2. Write goal contract
+# 2. Write goal contract (specify output directory)
 cat > .agentic-runs/my_goal/goal_contract.json << 'EOF'
 {
   "run_id": "my_goal",
@@ -175,7 +175,8 @@ cat > .agentic-runs/my_goal/goal_contract.json << 'EOF'
   "raw_user_prompt": "Create a hello world script",
   "execution_prompt": "Create hello.py that prints 'Hello, World!'",
   "final_outputs": ["hello.py"],
-  "done_criteria": ["hello.py exists", "hello.py prints Hello"]
+  "done_criteria": ["hello.py exists", "hello.py prints Hello"],
+  "output_directory": "output/my_goal"
 }
 EOF
 
@@ -185,3 +186,25 @@ python .agentic-pi/runtime/pi_cli.py goal-run my_goal
 # 4. Check
 python .agentic-pi/runtime/pi_cli.py goal-status my_goal
 ```
+
+## Directory structure
+
+The harness keeps infrastructure and product output separate:
+
+```
+my-project/
+├── .agentic-pi/              ← harness (don't touch)
+├── .agentic-runs/            ← run artifacts (don't touch)
+│   └── <run_id>/
+│       ├── goal_contract.json
+│       ├── step_logs/
+│       └── verifier_artifacts/
+├── output/                   ← product output (clean)
+│   └── <run_id>/
+│       ├── hello.py
+│       └── README.md
+└── docs/                     ← harness docs
+```
+
+The agent writes product files to `output/<run_id>/`, not to the root.
+This keeps harness files and product files separate.
