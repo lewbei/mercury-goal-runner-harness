@@ -1,209 +1,109 @@
 # Mercury Goal Runner Harness
 
-QRSPI-phased goal execution harness for Pi coding agent. Planner designs, worker codes, verifier proves, certifier decides. Every step produces evidence. Final status comes only from deterministic checks.
+A goal execution harness for AI coding agents. The agent says what it wants to build. The harness handles planning, execution, verification, and certification.
 
-Verifier-Provenance Goal Runner Harness is the current authority model: verifiers produce evidence, policy decides, and the certifier writes final status.
+## What it does
 
-## Core Question
-
-```text
-Who is allowed to certify DONE?
-Pi orchestrates. Agents plan, code, verify.
-Policy decides. Certifier writes final status.
-Pi only reports what the certifier wrote.
+```
+Agent says: "Build a todo app"
+    ↓
+Harness does:
+    1. Compile goal → goal_contract.json
+    2. Plan steps → step_logs/
+    3. Execute → output/todo-app/
+    4. Verify → certifier gates
+    5. Certify → final_status.json
+    ↓
+Agent sees: CERTIFIED_DONE or FAILED
 ```
 
-## Install
-
-This repository is the harness repo. If installing this harness with Pi, use:
+## Quick start
 
 ```bash
-pi install git:github.com/lewbei/mercury-goal-runner-harness
+# Clone
+git clone https://github.com/lewbei/mercury-goal-runner-harness
+cd mercury-goal-runner-harness
+
+# Run a goal
+python mercury.py run "Create a hello world script"
+
+# Check status
+python mercury.py status <run_id>
+
+# Health check
+python mercury.py health
 ```
 
-Or locally:
-```bash
-pi install .
-```
+## How it works
 
-If you meant a separate package named `mercury-goal-runner`, treat that as a different install target. This repo does not currently claim polished Python package metadata such as `pyproject.toml` or `setup.py`.
-
-## Quick Start
-
-This is a prepared-run harness. The runtime is strict: it does not create missing planner or verifier proof artifacts for you. For the current bounded planning-quality proof path, start with `docs/CURRENT.md` and `docs/CURRENT_RUNTIME_PATH.md`.
-
-Legacy raw-goal mode (`pi_cli.py goal-compile --mode legacy`) is deprecated compatibility coverage only. Use strict verifier-provenance runs (`--mode p2` / `--mode planning_p2`, or prepared runs with `verifier_contract.json` and `verifier_artifacts/*.json`) for current architecture work.
-
-Canonical strict reviewer fixture:
-
-```bash
-python .agentic-pi/fixtures/golden_strict_p2_minimal/materialize.py
-python .agentic-pi/runtime/full_verify.py .agentic-runs/golden_strict_p2_minimal --skip-memory-consolidation
-python -m unittest discover tests -v
-```
-
-Strict raw-goal fixture smoke:
-
-```bash
-python .agentic-pi/runtime/pi_cli.py goal-compile strict_mock_goal --goal "Create README.md explaining the harness" --mode p2
-python .agentic-pi/runtime/pi_cli.py goal-run strict_mock_goal --skip-memory-update
-python .agentic-pi/runtime/pi_cli.py goal-status strict_mock_goal --fail-on-missing
-```
-
-```bash
-# 1. Init a run
-python .agentic-pi/runtime/init_run.py --run-id my_goal
-
-# 2. Create goal_contract.json and expected_artifacts.json under .agentic-runs/my_goal/
-#    If prompt-compiler creates goal_contract.json, also record prompt provenance:
-python .agentic-pi/runtime/prompt_provenance.py .agentic-runs/my_goal
-python .agentic-pi/validators/validate_prompt_provenance.py .agentic-runs/my_goal
-
-# 3. Create planner-owned plan JSON at .agentic-runs/my_goal/plans/<planner>_plan.json
-# 4. Select and merge the plan
-python .agentic-pi/runtime/plan_selector.py --run-id my_goal
-python .agentic-pi/runtime/plan_merger.py --run-id my_goal
-python .agentic-pi/runtime/plan_graph_builder.py my_goal
-
-# 5. Execute approved create_file steps and write evidence
-python .agentic-pi/runtime/guarded_worker.py --run-id my_goal
-
-# 6. Add verifier_contract.json and verifier_artifacts/*.json
-# 7. Run the strict proof-artifact verifier and certifier path
-python .agentic-pi/runtime/full_verify.py .agentic-runs/my_goal
-
-# 8. Read certifier-owned final_status.json; do not self-certify DONE
-```
-
-## Architecture
+The harness follows the QRSPI pipeline:
 
 ```
-QRSPI Phases:
-  Q: Question  → question-contract skill → understand goal
-  R: Research  → research-pack skill → explore approaches
-  S: Structure → design-options + structure-outline → planner-owned plan JSON
-  P: Plan      → selected_plan.json + merged_plan.json + plan_graph.json
-  I: Implement → guarded-worker → code + step_logs + trace
-
-Gates:
-  PlanGraph          → validates node/edge structure
-  Step Logs          → validates evidence format
-  Code Execution     → runs output, checks 2+ lines
-  Formal Verification → #@ Requires/Ensures contract compliance
-  Cryptographic      → Ed25519 artifact signing, tamper detection
-  Verifier Evidence  → P2 independent attestation
-  Policy Engine      → decides between PROVISIONAL/CERTIFIED/NOT_DONE
-
-Prompt provenance:
-  .agentic-runs/<run_id>/prompt_provenance/prompt_compiler.prompt.json
-  Records raw_user_prompt -> execution_prompt hashes and prompt-compiler file hashes
-  Provenance only; cannot certify DONE or replace verifier evidence
-
-Memory:
-  Project-local (.agentic-pi/memory/durable/)
-  Advisory only; memory cannot certify DONE
-  Worker may read memory before coding
-  Run-local and quarantine memory are validated under .agentic-runs/<run_id>/memory/
-  Durable memory promotion goes through memory_write_gate.py after certifier lock
-  Learning records stay outside final-status authority
+INTAKE → RESEARCHING → DESIGNING → STRUCTURING → PLANNING
+    ↓
+IMPLEMENTING → VALIDATOR_BUILDING → VALIDATING
+    ↓
+EVIDENCE_INDEXING → POLICY_DECIDING → REPLAYING → CERTIFYING
+    ↓
+REPORTING → MEMORY_CONSOLIDATING → DONE
 ```
 
-## Agents
+Each phase produces artifacts. The certifier verifies all artifacts before certifying DONE.
 
-| Agent | Model | Role |
-|-------|-------|------|
-| `prompt-compiler` | mercury-2 | Converts raw prompt into measurable goal contract + execution prompt |
-| `planner-minimal` | merc-2 | Q→R→S→P design with code templates |
-| `planner-robust` | merc-2 | Thorough plan with validation strategy |
-| `guarded-worker` | ds-flash | Codes from template, writes step logs |
-| `verifier-generator` | ds-flash | Independent P2 verifier evidence |
-| `skeptic-planner` | merc-2 | Finds failure modes, critiques plans |
-| `plan-selector` | ds-flash | Picks best plan from debate |
-| `verifier-reviewer` | ds-flash | Reviews verifier evidence quality |
-
-## Python Backend
+## Directory structure
 
 ```
-.agentic-pi/
-├── validators/
-│   ├── certify_run.py                 Deterministic certifier
-│   ├── validate_schema.py             JSON schema validator
-│   ├── validate_plan_graph.py         Plan graph structure
-│   ├── validate_prompt_eval_case.py   Prompt compiler seed eval fixtures
-│   └── validate_prompt_provenance.py  Prompt provenance authority boundary
-├── runtime/
-│   ├── full_verify.py                 Strict verifier requiring planning search/coverage + proof artifacts; validates adaptive research if present
-│   ├── adaptive_research_inputs.py    Records optional adaptive/autoresearch findings as planning-only provenance
-│   ├── prompt_provenance.py           Records raw prompt -> execution_prompt provenance
-│   ├── run_prompt_compiler_eval.py    Scores prompt-compiler seed eval cases
-│   ├── orchestrate_pipeline.py        Lower-level deterministic phase runner; fails on phase failure
-│   ├── plan_router.py          Requires existing plans/*_plan.json
-│   ├── plan_merger.py          Writes merged_plan.json from selected_plan.json
-│   ├── check_matrix.py         Horizontal check matrix (each independent)
-│   ├── adversarial_loop.py     Diagnostic repair loop tool; not certification authority
-│   ├── build_repair_prompt.py  Memory-aware repair prompt builder
-│   ├── run_subagent_memory.py  Capture advisory learnings per subagent
-│   └── project_adapter.py      Map project structure for harness
-├── formal/
-│   ├── harness_contract_verifier.py  #@ Requires/Ensures runtime check
-│   └── harness_signing.py           Ed25519 signing + verification
-└── memory/
-    └── durable/                 Project-local learning store
+mercury-goal-runner-harness/
+├── mercury.py              ← simple CLI (start here)
+├── AGENTS.md               ← agent instructions (Codex, generic)
+├── CLAUDE.md               ← Claude Code instructions
+├── .cursorrules            ← Cursor instructions
+├── .windsurfrules          ← Windsurf instructions
+├── .agentic-pi/            ← harness internals (don't edit)
+├── .agentic-runs/          ← run artifacts (don't edit)
+├── output/                 ← product output (clean)
+│   └── <app-name>/         ← e.g. todo-app, weather-dashboard
+├── tests/                  ← harness tests
+└── docs/                   ← documentation
 ```
 
-## Checks
+## For agents
 
-Use checks as evidence, not as self-certification. Final status still comes from certifier-owned artifacts.
+Any agent can use the harness:
 
 ```bash
-python .agentic-pi/runtime/check_matrix.py <run_dir> --all
-python .agentic-pi/runtime/full_verify.py <run_dir>
-python .agentic-pi/validators/certify_run.py <run_dir>
+# One command
+python mercury.py run "what the user wants to build"
 ```
 
-## Design Principles
+The agent doesn't need to know file formats, protocols, or harness internals. Just describe the goal.
 
-```text
-Vertical first, horizontal later.
-Prove one slice end-to-end before expanding.
-One failure mode → one fixture → one implementation → one validator → one test.
-Agents do the work. Pi orchestrates. No manual edits to final status artifacts.
-Memory can advise worker/repair, but cannot certify DONE.
+See [docs/AGENT_GUIDE.md](docs/AGENT_GUIDE.md) for details.
+
+## For developers
+
+See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for how the harness works internally.
+
+## Rules
+
+1. Product files go to `output/<app-name>/`
+2. Don't edit `.agentic-pi/` or `.agentic-runs/`
+3. Don't claim DONE — the certifier decides
+4. Trust evidence, not vibes
+
+## Status
+
+Check harness health:
+
+```bash
+python mercury.py health
 ```
 
-## Docs
+Expected output:
+```
+HEALTHY - no gaps detected
+```
 
-- `AGENTS.md` — Agent instructions and rules
-- `docs/CURRENT.md` — canonical current-state pointer, latest certified planning milestones, and package boundary
-- `docs/CURRENT_RUNTIME_PATH.md` — current strict runtime boundary and compatibility map
-- `docs/PLAN_ROUTER.md` — current plan-router boundary; no generated substitute planning
-- `docs/FRAMEWORK.md` — conceptual architecture and file map
-- `docs/CERTIFIER_MODULARIZATION_PRE_AUDIT_V1.md` — pre-refactor certifier authority/module-seam audit
-- `docs/CERTIFIER_GOLDEN_BEHAVIOR_LOCK_V1.md` — pre-refactor certifier golden behavior regression lock
-- `docs/CERTIFIER_IO_PATHS_EXTRACTION_V1.md` — first behavior-preserving certifier helper extraction
-- `docs/CERTIFIER_ARTIFACT_COMMAND_EXTRACTION_V1.md` — behavior-preserving artifact command helper extraction
-- `docs/V1_2_PLANNING_PROOF_HARDENING.md` — deterministic planning proof hardening boundary
-- `docs/V1_3_STRATEGY_PLANNER.md` — deterministic strategy planner boundary
-- `docs/V1_4_MILESTONE_PLANNING.md` — deterministic milestone planning boundary
-- `docs/V1_5_DRIFT_AWARE_REPLANNING.md` — drift-aware replanning boundary
-- `docs/V1_6_TRAJECTORY_LEVEL_EVALUATION.md` — trajectory-level evaluation boundary
-- `docs/V1_7_EXPERIENCE_MEMORY.md` — advisory experience memory boundary
-- `docs/V1_8_DOMAIN_PACKS.md` — deterministic domain pack boundary
-- `docs/V1_9_STRATEGY_SEARCH.md` — workflow-search boundary
-- `docs/V2_0_INTEGRATED_HARNESS_PROOF_PACKAGE.md` — integrated proof package boundary
-- `docs/V2_0_EXAMPLES.md` — V2 example commands
-- `docs/V2_1_CONTROLLED_PI_CHAIN_RUNTIME_PROOF.md` — controlled Pi chain proof boundary
-- `docs/V2_2_DIRECT_PI_MERCURY_BEHAVIOR_AUDIT.md` — direct Pi/Mercury audit boundary
-- `docs/V2_3_REAL_PI_INTERACTIVE_SMOKE.md` — real Pi interactive smoke boundary
-- `docs/V2_4_REAL_PI_RUN_MONITOR.md` — real Pi run monitor boundary
-- `docs/V3_0_REAL_PI_BEHAVIOR_EVALUATION.md` — real Pi behavior evaluation boundary
-- `docs/V3_1_REAL_PI_PROMPT_COVERAGE.md` — prompt coverage boundary
-- `docs/V3_2_RUNTIME_ENFORCEMENT_PROOF.md` — runtime enforcement proof boundary
-- `docs/RPG_HARNESS_TEST_FORM.md` — RPG harness test record form
-- `docs/V3_4_RPG_TEST_AGGREGATION.md` — RPG test aggregation boundary
-- `docs/V3_5_0_AUTHORITY_ARTIFACT_PREREQUISITE.md` — authority artifact prerequisite
-- `docs/V1_ROADMAP_STRATEGY_REPLANNING_MEMORY.md` — strategy/replanning/memory roadmap
-- `docs/PROJECT_STATUS.md` — version history, local status, and proof-slice limits
-- `docs/V3_5_TO_V4_0_AUTHORITY_EVIDENCE_MEMORY_PLAN.md` — authority, evidence, and memory roadmap
-- `docs/workspace_index.md` — source-of-truth file map and cleanup debt
-- `docs/` — versioned historical records plus current architecture docs; old V0/V1 docs are not the default runtime contract
+## License
+
+MIT
