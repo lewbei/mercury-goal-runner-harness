@@ -334,6 +334,39 @@ def main():
         print(f"  roadmap_planner failed: {e}")
         return 1
 
+    # ── Verification checkpoint (verification-driven replanning) ────────
+    print("Running verification checkpoint...")
+    try:
+        _run_tool(rk, args.run_id, "verification_checkpoint",
+                  ["python", ".agentic-pi/runtime/verification_checkpoint.py", "--run-id", args.run_id])
+    except RuntimeError as e:
+        print(f"  verification checkpoint failed: {e}")
+        # Continue even if checkpoint fails (non-blocking)
+
+    # Check if replanning is needed
+    print("Checking replanning needs...")
+    try:
+        _run_tool(rk, args.run_id, "replanning_loop",
+                  ["python", ".agentic-pi/runtime/replanning_loop.py", "--run-id", args.run_id])
+        
+        # Read replanning suggestions
+        replanning_path = run_dir / "replanning_suggestions.json"
+        if replanning_path.exists():
+            import json
+            replanning = json.loads(replanning_path.read_text(encoding="utf-8-sig"))
+            if replanning.get("needs_replanning"):
+                print(f"  Replanning needed: {replanning['reason']}")
+                for action in replanning.get("actions", []):
+                    print(f"    [{action['priority']}] {action['action']}: {action['suggestion']}")
+                # Note: In a full implementation, we would re-run roadmap_planner
+                # with the replanning suggestions. For now, we log the suggestions.
+                print("  Note: Replanning suggestions logged. Manual review recommended.")
+            else:
+                print(f"  No replanning needed: {replanning.get('reason', 'unknown')}")
+    except RuntimeError as e:
+        print(f"  replanning loop failed: {e}")
+        # Continue even if replanning fails (non-blocking)
+
     # ── Phase: IMPLEMENTING ───────────────────────────────────────────────
     _maybe_transition(rk, args.run_id, "WORKTREE_READY")
     _maybe_transition(rk, args.run_id, "IMPLEMENTING")
