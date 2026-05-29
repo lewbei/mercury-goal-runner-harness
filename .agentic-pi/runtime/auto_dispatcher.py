@@ -13,6 +13,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 
+# Model configuration
+# Can be overridden via environment variable: MERCURY_MODEL
+DEFAULT_MODEL = os.environ.get("MERCURY_MODEL", "deepseek/deepseek-v4-flash")
+
 # Configure logger
 logging.basicConfig(
     level=logging.INFO,
@@ -335,7 +339,7 @@ def _post_certify_check(run_dir: Path) -> None:
         "role": "repair",
         "task": f"Repair after certification failure: {error_msg}",
         "subagent_type": "guarded-worker",
-        "model": "deepseek/deepseek-v4-flash",
+        "model": DEFAULT_MODEL,
         "thinking": "xhigh",
         "prompt": f"run_id={run_dir.name}. Repair: {error_msg}. Read the existing files first, then fix the issue. Write step_logs and trace.jsonl.",
         "input_artifacts": [],
