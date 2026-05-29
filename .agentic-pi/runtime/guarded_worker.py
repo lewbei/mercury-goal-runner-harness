@@ -175,6 +175,25 @@ def main():
             "pass_condition_satisfied": True,
             "remaining_work": []
         }
+
+        # ── Step-level verification ─────────────────────────────────────
+        try:
+            from step_verifier import run_step_verification
+            verification = run_step_verification(run_dir, idx)
+            if verification.get("needs_replanning")):
+                print(f"  Step {idx} verification: replanning needed")
+                for suggestion in verification.get("suggestions", []):
+                    print(f"    [{suggestion['priority']}] {suggestion['action']}: {suggestion['suggestion']}")
+                # Update step result with verification info
+                step_result["verification"] = verification["verification"]
+                step_result["replanning_suggestions"] = verification["suggestions"]
+            else:
+                print(f"  Step {idx} verification: OK")
+                step_result["verification"] = verification["verification"]
+        except Exception as e:
+            print(f"  Step {idx} verification failed: {e}")
+            # Continue even if verification fails (non-blocking)
+
         # Write step result JSON
         step_file = step_logs_dir / f"{idx}.json"
         step_file.write_text(json.dumps(step_result, indent=2, ensure_ascii=False), encoding="utf-8")
