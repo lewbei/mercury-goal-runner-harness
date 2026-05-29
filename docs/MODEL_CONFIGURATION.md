@@ -140,6 +140,26 @@ The AI model landscape changes fast. To stay current:
 
 The harness will use whatever model you configure. Update your configuration to use the latest models.
 
+## Resuming After /new
+
+If you clear context with `/new` and want to resume:
+
+```bash
+# List incomplete runs
+python .agentic-pi/runtime/resume_module.py --incomplete
+
+# Resume the latest incomplete run
+python .agentic-pi/runtime/resume_module.py
+
+# Resume a specific run
+python .agentic-pi/runtime/resume_module.py --run-id <run_id>
+```
+
+The resume module will:
+1. Find the incomplete run
+2. Show the current phase
+3. Provide the command to resume
+
 ## Research Module
 
 The harness includes a research module that fetches the latest information about models, technologies, and best practices. This ensures the harness always uses up-to-date information.
