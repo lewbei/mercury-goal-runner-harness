@@ -125,34 +125,15 @@ mercury-goal-runner-harness/
 
 ## Model Configuration
 
-The harness supports configurable models. See [docs/MODEL_CONFIGURATION.md](docs/MODEL_CONFIGURATION.md) for details.
+The harness inherits the model from the parent agent by default. No configuration needed.
 
-### Quick Setup
+- If Pi uses `mimo-v2.5-pro`, the harness uses `mimo-v2.5-pro`
+- If Claude Code uses `claude-sonnet-4`, the harness uses `claude-sonnet-4`
+- If Cursor uses `gpt-4o`, the harness uses `gpt-4o`
 
-```bash
-# Set model via environment variable
-export MERCURY_MODEL=inception/mercury-2
+Override with `MERCURY_MODEL` environment variable if needed.
 
-# Or create .agentic-pi/config.json
-{
-  "model": "inception/mercury-2",
-  "thinking": "xhigh"
-}
-```
-
-### Supported Models
-
-- `inception/mercury-2` — Mercury (fast, good for coding)
-- `deepseek/deepseek-v4-flash` — DeepSeek Flash (fast, cheap)
-- `anthropic/claude-sonnet-4` — Claude Sonnet (complex tasks)
-- `openai/gpt-4o` — GPT-4o (general tasks)
-- `ollama/codellama` — CodeLlama (local, no API key)
-
-### API Keys
-
-Cloud models require API keys. Local models (Ollama) don't.
-
-See [docs/MODEL_CONFIGURATION.md](docs/MODEL_CONFIGURATION.md) for API key setup.
+See [docs/MODEL_CONFIGURATION.md](docs/MODEL_CONFIGURATION.md) for details.
 
 ## Rules
 

@@ -15,7 +15,8 @@ from typing import List, Dict, Any, Optional
 
 # Model configuration
 # Can be overridden via environment variable: MERCURY_MODEL
-DEFAULT_MODEL = os.environ.get("MERCURY_MODEL", "deepseek/deepseek-v4-flash")
+# Default: inherit from parent agent (Pi, Claude Code, etc.)
+DEFAULT_MODEL = os.environ.get("MERCURY_MODEL", None)  # None = inherit from parent
 
 # Configure logger
 logging.basicConfig(
@@ -339,7 +340,7 @@ def _post_certify_check(run_dir: Path) -> None:
         "role": "repair",
         "task": f"Repair after certification failure: {error_msg}",
         "subagent_type": "guarded-worker",
-        "model": DEFAULT_MODEL,
+        "model": DEFAULT_MODEL,  # None = inherit from parent agent
         "thinking": "xhigh",
         "prompt": f"run_id={run_dir.name}. Repair: {error_msg}. Read the existing files first, then fix the issue. Write step_logs and trace.jsonl.",
         "input_artifacts": [],

@@ -1,10 +1,24 @@
 # Model Configuration
 
-The harness supports configurable models. You can set the model via environment variable or configuration file.
+The harness inherits the model from the parent agent by default. You can override this via environment variable or configuration file.
 
-## Environment Variable
+## Default Behavior
 
-Set `MERCURY_MODEL` to override the default model:
+**The harness uses the same model as the parent agent.**
+
+- If Pi uses `mimo-v2.5-pro`, the harness uses `mimo-v2.5-pro`
+- If Claude Code uses `claude-sonnet-4`, the harness uses `claude-sonnet-4`
+- If Cursor uses `gpt-4o`, the harness uses `gpt-4o`
+
+No configuration needed. The harness automatically inherits the model.
+
+## Override Model
+
+If you want to use a different model than the parent agent:
+
+### Environment Variable
+
+Set `MERCURY_MODEL` to override:
 
 ```bash
 # Windows
@@ -14,15 +28,14 @@ set MERCURY_MODEL=inception/mercury-2
 export MERCURY_MODEL=inception/mercury-2
 ```
 
-## Configuration File
+### Configuration File
 
-Create `.agentic-pi/config.json` with your model configuration:
+Create `.agentic-pi/config.json`:
 
 ```json
 {
   "model": "inception/mercury-2",
-  "thinking": "xhigh",
-  "max_model_calls": 3
+  "thinking": "xhigh"
 }
 ```
 
@@ -34,6 +47,7 @@ Create `.agentic-pi/config.json` with your model configuration:
 - `deepseek/deepseek-v4-flash` — DeepSeek Flash (fast, cheap)
 - `anthropic/claude-sonnet-4` — Claude Sonnet (good for complex tasks)
 - `openai/gpt-4o` — GPT-4o (good for general tasks)
+- `mimo-v2.5-pro` — MiMo (Xiaomi's model)
 
 ### Local Models (no API key needed)
 
@@ -49,6 +63,7 @@ Create `.agentic-pi/config.json` with your model configuration:
 - **DeepSeek**: Get API key from https://deepseek.com
 - **Anthropic**: Get API key from https://anthropic.com
 - **OpenAI**: Get API key from https://openai.com
+- **MiMo**: Get API key from https://xiaomi.com
 
 ### Not Required for Local Models
 
@@ -68,42 +83,44 @@ ollama pull llama3
 
 ### Pi
 
+Pi automatically uses its configured model. The harness inherits it.
+
 ```bash
-# Set model in Pi CLI
-pi --model inception/mercury-2
-# or
-pi --model deepseek/deepseek-v4-flash
+# Check Pi's model
+pi --model
+
+# Set Pi's model
+pi --model mimo-v2.5-pro
 ```
 
 ### Claude Code
 
+Claude Code automatically uses its configured model. The harness inherits it.
+
 ```bash
-# Set model in Claude Code settings
-# ~/.claude/settings.json
+# Check Claude Code's model
+cat ~/.claude/settings.json
+
+# Set Claude Code's model
+# Edit ~/.claude/settings.json
 {
-  "model": "inception/mercury-2"
+  "model": "claude-sonnet-4"
 }
 ```
 
 ### Cursor
 
-```
-# Set model in Cursor settings
-# Cursor Settings > Model > Custom Model
-```
+Cursor automatically uses its configured model. The harness inherits it.
 
 ### Codex
 
-```bash
-# Set model in Codex settings
-# ~/.codex/settings.json
-{
-  "model": "inception/mercury-2"
-}
-```
+Codex automatically uses its configured model. The harness inherits it.
 
-## Default Model
+## Summary
 
-If no model is configured, the harness uses `deepseek/deepseek-v4-flash` by default.
+- **Default**: Harness inherits model from parent agent
+- **Override**: Set `MERCURY_MODEL` environment variable
+- **Local**: Use Ollama for local models (no API key)
+- **Cloud**: Use cloud models (require API key)
 
-To change the default, set `MERCURY_MODEL` environment variable or update `.agentic-pi/config.json`.
+The harness automatically uses whatever model the parent agent is using. No configuration needed unless you want to override.
