@@ -352,7 +352,6 @@ def main():
         # Read replanning suggestions
         replanning_path = run_dir / "replanning_suggestions.json"
         if replanning_path.exists():
-            import json
             replanning = json.loads(replanning_path.read_text(encoding="utf-8-sig"))
             if replanning.get("needs_replanning"):
                 print(f"  Replanning needed: {replanning['reason']}")

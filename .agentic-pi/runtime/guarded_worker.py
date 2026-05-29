@@ -180,7 +180,7 @@ def main():
         try:
             from step_verifier import run_step_verification
             verification = run_step_verification(run_dir, idx)
-            if verification.get("needs_replanning")):
+            if verification.get("needs_replanning"):
                 print(f"  Step {idx} verification: replanning needed")
                 for suggestion in verification.get("suggestions", []):
                     print(f"    [{suggestion['priority']}] {suggestion['action']}: {suggestion['suggestion']}")

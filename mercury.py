@@ -45,17 +45,24 @@ def goal_to_contract(goal: str, run_id: str, output_dir: str = None) -> dict:
 
     return {
         "run_id": run_id,
-        "goal_type": "coding",
         "raw_user_prompt": goal,
-        "execution_prompt": goal,
-        "final_outputs": [],
+        "intent": goal,
+        "cleaned_goal": goal,
+        "final_outputs": [f"output/{app_name}/main.py"],
+        "explicit_constraints": [],
+        "inferred_constraints": [],
+        "forbidden_actions": [],
+        "ambiguities": [],
+        "risk_level": "LOW",
+        "complexity_level": "SIMPLE",
         "done_criteria": [
             f"Output files exist in output/{app_name}/",
             "Code is syntactically valid",
         ],
-        "constraints": [],
-        "output_directory": f"output/{app_name}",
-        "app_name": app_name,
+        "failure_criteria": ["Code does not run", "Output files missing"],
+        "ask_user_conditions": [],
+        "max_steps": 10,
+        "execution_prompt": goal,
     }
 
 
@@ -74,16 +81,26 @@ def cmd_run(args):
     # 1. Init run
     print("[1/4] Initializing run...")
     run_dir = RUNS_DIR / run_id
-    run_dir.mkdir(parents=True, exist_ok=True)
-    (run_dir / "step_logs").mkdir(exist_ok=True)
 
-    # Write run_state.json
-    run_state = {
-        "run_id": run_id,
-        "current_phase": "NEW",
-        "created_at": datetime.now(timezone.utc).isoformat(),
-    }
-    (run_dir / "run_state.json").write_text(json.dumps(run_state, indent=2))
+    # Write run_state.json using run_kernel
+    try:
+        sys.path.insert(0, str(RUNTIME.parent / "run_kernel"))
+        from run_kernel import create_run
+        create_run(run_id)
+    except FileExistsError:
+        # Run already exists, that's fine
+        pass
+    except Exception as e:
+        # Fallback: write minimal run_state.json
+        run_dir.mkdir(parents=True, exist_ok=True)
+        (run_dir / "step_logs").mkdir(exist_ok=True)
+        run_state = {
+            "run_id": run_id,
+            "current_phase": "NEW",
+            "phase_history": [{"phase": "NEW", "entered_at": datetime.now(timezone.utc).isoformat(), "exited_at": None}],
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        }
+        (run_dir / "run_state.json").write_text(json.dumps(run_state, indent=2))
 
     # 2. Write goal contract
     print("[2/4] Writing goal contract...")
