@@ -1,5 +1,30 @@
 # Agent Instructions
 
+## Quick Start (any agent)
+
+When the user asks you to build something, use the Mercury harness:
+
+```bash
+python mercury.py run "what the user wants to build"
+```
+
+Check status:
+```bash
+python mercury.py status <run_id>
+```
+
+Health check:
+```bash
+python mercury.py health
+```
+
+## Rules
+
+1. Product files go to `output/<app-name>/`
+2. Do NOT edit `.agentic-pi/` or `.agentic-runs/`
+3. Do NOT claim DONE — the certifier decides
+4. Trust evidence, not vibes
+
 ## User Operating Rules
 
 Do not simplified the code. Always be honest. You must always use my sentences
