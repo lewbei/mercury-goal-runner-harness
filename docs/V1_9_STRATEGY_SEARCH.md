@@ -6,9 +6,9 @@ This document describes the strategy search.
 
 ## Key Points
 
-- workflow search cannot bypass certifier
 - workflow_search_trace.json
-- strategy_candidates.json
+- workflow search cannot bypass certifier
+- workflow search cannot certify DONE
 
 ## Status
 

@@ -23,3 +23,7 @@ Implemented and tested.
 ## v2.0 Integrated Harness Proof Package
 
 IMPLEMENTED
+
+## v1.9 Strategy Search / Workflow Optimization
+
+IMPLEMENTED

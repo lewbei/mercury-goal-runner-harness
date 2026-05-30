@@ -1,8 +1,12 @@
 # Project Status
 
+Also known as: Verifier-Provenance Goal Runner Harness
+
 ## Current Version
 
 v1.0.0 - Production Ready
+
+Based on RPG-Harness v5 architecture.
 
 ## Status
 

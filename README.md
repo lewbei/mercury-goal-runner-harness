@@ -1,5 +1,7 @@
 # Mercury Goal Runner Harness
 
+Also known as: Verifier-Provenance Goal Runner Harness
+
 A goal execution harness for AI coding agents. The agent says what it wants to build. The harness handles planning, execution, verification, and certification.
 
 ## Origin

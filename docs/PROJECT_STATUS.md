@@ -1,5 +1,7 @@
 # Project Status
 
+Also known as: Verifier-Provenance Goal Runner Harness
+
 ## Current Version
 
 v1.0.0 - Production Ready
@@ -91,3 +93,6 @@ HEALTHY - no gaps detected
 ## Related Documents
 
 - [V3.5 to V4.0 Authority Evidence Memory Plan](V3_5_TO_V4_0_AUTHORITY_EVIDENCE_MEMORY_PLAN.md)
+
+## Architecture
+Based on RPG-Harness v5.
