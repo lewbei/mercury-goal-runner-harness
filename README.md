@@ -214,3 +214,7 @@ MIT
 This is a personal project maintained by [lewbei](https://github.com/lewbei). Thank you for your interest!
 
 While I appreciate feedback and suggestions, I'm not accepting contributions at this time. If you encounter any issues or have questions, feel free to open an issue on GitHub.
+
+## Related Documents
+
+- [V3.5 to V4.0 Authority Evidence Memory Plan](docs/V3_5_TO_V4_0_AUTHORITY_EVIDENCE_MEMORY_PLAN.md)
