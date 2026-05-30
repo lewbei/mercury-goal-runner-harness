@@ -132,6 +132,9 @@ Override with `MERCURY_MODEL` environment variable if needed.
 See [docs/MODEL_CONFIGURATION.md](docs/MODEL_CONFIGURATION.md) for details.
 
 ## Resuming After /new
+n## Legacy Raw-Goal Mode
+
+Legacy raw-goal mode is deprecated. Use strict mode instead.
 
 If you clear context with `/new` and want to resume:
 

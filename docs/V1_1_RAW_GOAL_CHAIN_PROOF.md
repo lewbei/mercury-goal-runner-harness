@@ -1,8 +1,15 @@
-# V1 1 RAW GOAL CHAIN PROOF
+# V1.1 Raw Goal Chain Proof
 
-## Overview
+## RAW GOAL CHAIN PROOF IMPLEMENTED
 
-This document describes the v1 1 raw goal chain proof.
+This document describes the raw goal chain proof.
+
+## Key Points
+
+- raw goal -> goal_contract.json -> full harness run -> certifier status
+- general natural-language goal compilation
+- certify_run.py` / `policy_engine.py` decide final status
+- Do not use it as the recommended walkthrough or authority path
 
 ## Status
 
