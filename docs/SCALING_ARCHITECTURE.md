@@ -1,4 +1,4 @@
-# Scaling Architecture Plan
+# Scaling Architecture Plan (Updated)
 
 ## Goal
 
@@ -6,104 +6,117 @@ Scale the Mercury Goal Runner Harness to support multiple agents working in para
 
 ## Research Findings
 
-### How Antigravity 2.0 works
+### How Antigravity 2.0 actually works
 
-- **Agent Manager**: Dashboard to orchestrate multiple agents
-- **Workspace Isolation**: Each agent gets its own workspace (directory)
-- **Parallel Execution**: Multiple agents work simultaneously
-- **Token Management**: Track usage across agents
+```
+ANTIGRAVITY STRUCTURE:
+  /your-manager-base-path/
+  ├── workspace-manager.py     ← CLI
+  ├── .agent/
+  │   └── skills/              ← Central skills library
+  │       ├── public/          ← Official skills
+  │       ├── private/         ← Your private skills
+  │       └── user/            ← Local skills
+  └── workspaces/              ← Each project is isolated
+      ├── my-project/
+      │   ├── .agent/
+      │   │   └── skills       ← Symlink to central library
+      │   └── skill-config.json ← Project-specific config
+      └── another-project/
+          ├── .agent/
+          │   └── skills       ← Symlink to central library
+          └── skill-config.json
+```
 
 ### Key insight
 
-Antigravity runs agents in **separate workspaces** (isolated directories). No shared state between agents.
+**Workspace isolation = each project has its own `.agent/` directory with symlinked skills.**
 
-## Current Harness Architecture
-
-```
-mercury-goal-runner-harness/
-├── .agentic-runs/
-│   ├── run_001/          ← isolated run
-│   ├── run_002/          ← isolated run
-│   └── run_003/          ← isolated run
-└── output/
-    └── todo-app/         ← shared output (problem!)
-```
-
-**Problem:** Output goes to `output/<app-name>/`, which is shared. If two agents build a "todo-app", they conflict.
+This is different from my original plan:
+- ❌ Not: each agent gets its own output directory
+- ✅ Yes: each project gets its own `.agent/` directory with symlinked skills
 
 ## Proposed Architecture
 
 ```
 mercury-goal-runner-harness/
-├── .agentic-runs/
-│   ├── run_001/
-│   ├── run_002/
-│   └── run_003/
-├── output/
-│   ├── run_001/          ← isolated output
-│   ├── run_002/          ← isolated output
-│   └── run_003/          ← isolated output
-└── .agentic-pi/
-    └── runtime/
-        ├── agent_manager.py      ← orchestration dashboard
-        ├── parallel_runner.py    ← parallel execution
-        └── token_tracker.py      ← token usage tracking
+├── .agentic-pi/                ← Central harness (shared)
+├── workspaces/                 ← Each goal is isolated
+│   ├── goal-001/
+│   │   ├── .agentic-pi/       ← Symlink to central
+│   │   ├── .agentic-runs/     ← Isolated runs
+│   │   └── output/            ← Isolated output
+│   └── goal-002/
+│       ├── .agentic-pi/       ← Symlink to central
+│       ├── .agentic-runs/     ← Isolated runs
+│       └── output/            ← Isolated output
+├── agent_manager.py           ← Orchestration dashboard
+└── workspace_manager.py       ← Workspace management
 ```
 
 ## Implementation Plan
 
-### Phase 1: Isolated Output (1 week)
+### Phase 1: Workspace Isolation (1 week)
 
-1. Change output path: `output/<run_id>/` instead of `output/<app-name>/`
-2. Update `guarded_worker.py` to write to `output/<run_id>/`
-3. Update `mercury.py` to use `output/<run_id>/`
-4. Update documentation
+1. Create `workspace_manager.py`
+   - Create workspaces: `workspace_manager.py create <goal-name>`
+   - List workspaces: `workspace_manager.py list`
+   - Delete workspaces: `workspace_manager.py delete <goal-name>`
+
+2. Create workspace structure
+   - Each workspace gets its own `.agentic-pi/` symlink
+   - Each workspace gets its own `.agentic-runs/` directory
+   - Each workspace gets its own `output/` directory
+
+3. Update `run_goal.py` to use workspace
+   - Run in workspace directory
+   - Use workspace-specific paths
 
 ### Phase 2: Parallel Execution (2 weeks)
 
 1. Create `parallel_runner.py`
-   - Execute multiple runs simultaneously
-   - Manage run lifecycle
+   - Execute multiple workspaces simultaneously
+   - Manage workspace lifecycle
    - Handle errors and retries
 
 2. Create `token_tracker.py`
-   - Track token usage per run
-   - Aggregate usage across runs
+   - Track token usage per workspace
+   - Aggregate usage across workspaces
    - Report usage statistics
 
 ### Phase 3: Agent Manager (2 weeks)
 
 1. Create `agent_manager.py`
-   - Dashboard to orchestrate multiple agents
-   - Start/stop/pause agents
-   - Monitor agent status
-   - View agent output
+   - Dashboard to orchestrate multiple workspaces
+   - Start/stop/pause workspaces
+   - Monitor workspace status
+   - View workspace output
 
 2. Create CLI commands
-   - `mercury agents list` — list running agents
-   - `mercury agents start <goal>` — start new agent
-   - `mercury agents stop <run_id>` — stop agent
-   - `mercury agents status <run_id>` — check agent status
+   - `mercury agents list` — list running workspaces
+   - `mercury agents start <goal>` — start new workspace
+   - `mercury agents stop <workspace>` — stop workspace
+   - `mercury agents status <workspace>` — check workspace status
 
 ### Phase 4: Integration (1 week)
 
-1. Update `run_goal.py` to support parallel execution
-2. Update `certify_run.py` to handle multiple runs
+1. Update `run_goal.py` to support workspaces
+2. Update `certify_run.py` to handle workspaces
 3. Update tests
 4. Update documentation
 
 ## Success Criteria
 
-1. Multiple agents can run in parallel
-2. Each agent has isolated output
-3. Agent manager can orchestrate multiple runs
+1. Multiple workspaces can run in parallel
+2. Each workspace has isolated output
+3. Agent manager can orchestrate multiple workspaces
 4. Token usage is tracked
 5. Existing tests still pass
 
 ## Risks
 
-1. **File conflicts**: Agents may conflict on shared files
-   - Mitigation: Isolated output directories
+1. **Symlink complexity**: Symlinks may not work on all platforms
+   - Mitigation: Use copies instead of symlinks on Windows
 
 2. **Token usage**: May exceed limits
    - Mitigation: Token tracking and limits
