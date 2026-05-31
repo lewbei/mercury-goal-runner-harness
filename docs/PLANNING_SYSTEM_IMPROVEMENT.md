@@ -1,5 +1,63 @@
 # Planning System Improvement Plan
 
+## Research Findings (Google Antigravity 93 Agents)
+
+### How the 93 agents actually worked
+
+From Google's official blog:
+
+```
+1. SINGLE PROMPT
+   - The OS was built from a single prompt
+   - No manual intervention during execution
+
+2. SPECIALIZED ROLES (7 types)
+   - The Sentinel — front-desk manager (doesn't write code)
+   - The Orchestrator — dispatch-only manager (doesn't write code)
+   - The Explorer — analyzes requirements (doesn't write code)
+   - The Worker — the actual coder
+   - The Reviewer — reviews changes
+   - The Critic — stress-tests
+   - The Auditor — verifies authenticity
+
+3. KEY TECHNIQUES
+   - Self-succession: handles context length limits
+   - Crons: handles stuck/blocked processes
+   - Auditor: combats LLM laziness (cheating)
+
+4. SINGLE WORKSPACE
+   - All agents work on the same project
+   - No isolated workspaces
+   - Agents coordinate through the platform
+
+5. PARALLEL EXECUTION
+   - 93 agents running simultaneously
+   - Each agent has specific role
+   - Agents work on different parts
+```
+
+### Key Insights
+
+1. **Single workspace, not multiple isolated workspaces**
+   - All agents work on the same project
+   - No need for workspace isolation
+   - Agents coordinate through the platform
+
+2. **Specialized roles, not generic agents**
+   - Each agent has a specific role
+   - Roles are complementary
+   - Roles don't overlap
+
+3. **Parallel execution with coordination**
+   - Agents work in parallel
+   - Agents coordinate through the platform
+   - No conflicts between agents
+
+4. **Self-healing mechanisms**
+   - Self-succession for context length
+   - Crons for stuck processes
+   - Auditor for LLM laziness
+
 ## Current Problem
 
 The planning system generates generic plans, not specific ones:
@@ -13,231 +71,273 @@ roadmap_planner.py:
   - Creates generic artifacts, not specific plans
 ```
 
-## What's Needed
-
-1. **Think about the problem** — understand context, reason about solutions
-2. **Iterate until confident** — keep planning until highest probability of success
-3. **Use own knowledge** — leverage what the agent already knows
-4. **Optionally search web** — supplement with web search when needed
-5. **Create specific plans** — plans that address specific needs
-
 ## Proposed Solution
 
-### 1. Iterative Planning Process
+### 1. Multi-Agent Planning with Specialized Roles
+
+```
+PLANNING AGENTS:
+  - Sentinel: manages the planning process
+  - Orchestrator: coordinates planning tasks
+  - Explorer: researches solutions
+  - Worker: creates plan artifacts
+  - Reviewer: reviews plan quality
+  - Critic: stress-tests the plan
+  - Auditor: verifies plan authenticity
+```
+
+### 2. Iterative Planning Process
 
 ```
 PLANNING PROCESS (ITERATIVE):
-  1. Analyze goal
-     ├── What is the user trying to do?
-     ├── What similar problems exist?
-     └── What solutions are known?
+  1. Sentinel receives goal
+     └── Spawns Orchestrator
 
-  2. Reason about solutions
-     ├── What approaches exist?
-     ├── What are the trade-offs?
-     └── What's the best approach?
+  2. Orchestrator decomposes goal
+     ├── Spawns Explorer to research
+     ├── Spawns Worker to create plan
+     ├── Spawns Reviewer to review
+     ├── Spawns Critic to stress-test
+     └── Spawns Auditor to verify
 
-  3. Create plan
-     ├── What steps are needed?
-     ├── What are the dependencies?
-     └── What are the expected outputs?
+  3. Each agent works in parallel
+     ├── Explorer researches solutions
+     ├── Worker creates plan artifacts
+     ├── Reviewer reviews quality
+     ├── Critic stress-tests
+     └── Auditor verifies
 
-  4. Evaluate confidence
-     ├── How confident are we in the plan?
-     ├── What are the uncertainties?
-     └── Do we need more information?
+  4. Orchestrator synthesizes results
+     ├── Combines findings
+     ├── Evaluates confidence
+     └── If confidence is low → iterate
+     └── If confidence is high → finalize
 
-  5. If confidence is low:
-     ├── Think more about the problem
-     ├── Search web for more information
-     ├── Refine plan
-     └── Go back to step 2
-
-  6. If confidence is high:
-     ├── Finalize plan
-     ├── Create specific artifacts
-     └── Proceed with implementation
+  5. Sentinel reports to user
+     └── Final plan ready
 ```
 
-### 2. Create planning_system.py
+### 3. Specialized Planning Agents
 
 ```python
-class PlanningSystem:
-    def __init__(self):
-        self.goal_analyzer = GoalAnalyzer()
-        self.reasoning_engine = ReasoningEngine()
-        self.confidence_evaluator = ConfidenceEvaluator()
-        self.plan_generator = PlanGenerator()
-    
-    def plan(self, goal: str, max_iterations: int = 5) -> dict:
-        """Plan iteratively until confident."""
-        iteration = 0
-        confidence = 0.0
-        plan = None
+class PlanningSentinel:
+    """Manages the planning process."""
+    def plan(self, goal: str) -> dict:
+        # Spawn Orchestrator
+        orchestrator = PlanningOrchestrator()
+        return orchestrator.orchestrate(goal)
+
+class PlanningOrchestrator:
+    """Coordinates planning tasks."""
+    def orchestrate(self, goal: str) -> dict:
+        # Spawn specialized agents
+        explorer = PlanningExplorer()
+        worker = PlanningWorker()
+        reviewer = PlanningReviewer()
+        critic = PlanningCritic()
+        auditor = PlanningAuditor()
         
-        while iteration < max_iterations and confidence < 0.8:
-            iteration += 1
-            
-            # 1. Analyze goal
-            analysis = self.goal_analyzer.analyze(goal, plan)
-            
-            # 2. Reason about solutions
-            reasoning = self.reasoning_engine.reason(analysis)
-            
-            # 3. Create plan
-            plan = self.plan_generator.generate(reasoning)
-            
-            # 4. Evaluate confidence
-            confidence = self.confidence_evaluator.evaluate(plan)
-            
-            # 5. Log iteration
-            self.log_iteration(iteration, confidence, plan)
+        # Run agents in parallel
+        research = explorer.research(goal)
+        plan = worker.create_plan(goal, research)
+        review = reviewer.review(plan)
+        critique = critic.stress_test(plan)
+        verification = auditor.verify(plan)
         
+        # Synthesize results
+        return self.synthesize(plan, review, critique, verification)
+
+class PlanningExplorer:
+    """Researches solutions."""
+    def research(self, goal: str) -> dict:
+        # Analyze goal
+        analysis = self.analyze_goal(goal)
+        
+        # Research solutions
+        solutions = self.research_solutions(analysis)
+        
+        # Return findings
         return {
+            "analysis": analysis,
+            "solutions": solutions,
+        }
+
+class PlanningWorker:
+    """Creates plan artifacts."""
+    def create_plan(self, goal: str, research: dict) -> dict:
+        # Create plan based on research
+        plan = {
             "goal": goal,
-            "iterations": iteration,
+            "steps": self.create_steps(research),
+            "dependencies": self.create_dependencies(research),
+            "expected_outputs": self.create_expected_outputs(research),
+        }
+        return plan
+
+class PlanningReviewer:
+    """Reviews plan quality."""
+    def review(self, plan: dict) -> dict:
+        # Review plan for quality
+        return {
+            "quality_score": self.assess_quality(plan),
+            "issues": self.find_issues(plan),
+            "suggestions": self.suggest_improvements(plan),
+        }
+
+class PlanningCritic:
+    """Stress-tests the plan."""
+    def stress_test(self, plan: dict) -> dict:
+        # Stress-test the plan
+        return {
+            "robustness_score": self.assess_robustness(plan),
+            "failure_modes": self.identify_failure_modes(plan),
+            "mitigations": self.suggest_mitigations(plan),
+        }
+
+class PlanningAuditor:
+    """Verifies plan authenticity."""
+    def verify(self, plan: dict) -> dict:
+        # Verify plan authenticity
+        return {
+            "authenticity_score": self.assess_authenticity(plan),
+            "cheating_signals": self.detect_cheating(plan),
+            "verification": self.verify_plan(plan),
+        }
+```
+
+### 4. Self-Healing Mechanisms
+
+```python
+class SelfHealingPlanner:
+    """Handles planning failures."""
+    
+    def handle_context_length(self, planner, goal):
+        """Handle context length limits."""
+        # Dump state to handoff files
+        state = planner.dump_state()
+        
+        # Spawn successor
+        successor = PlanningOrchestrator()
+        return successor.resume(state, goal)
+    
+    def handle_stuck_process(self, planner, timeout):
+        """Handle stuck processes."""
+        # Check progress files
+        if planner.is_stale(timeout):
+            # Terminate and respawn
+            planner.terminate()
+            return self.respawn(planner)
+    
+    def handle_llm_laziness(self, plan):
+        """Handle LLM laziness (cheating)."""
+        # Run auditor
+        auditor = PlanningAuditor()
+        verification = auditor.verify(plan)
+        
+        if verification["cheating_signals"]:
+            # Force re-planning
+            return self.replan(plan)
+```
+
+### 5. Parallel Execution with Coordination
+
+```python
+class ParallelPlanningExecutor:
+    """Executes planning agents in parallel."""
+    
+    def execute(self, agents: list, goal: str) -> dict:
+        """Execute agents in parallel."""
+        # Create tasks
+        tasks = [agent.plan(goal) for agent in agents]
+        
+        # Run in parallel
+        results = self.run_parallel(tasks)
+        
+        # Coordinate results
+        return self.coordinate(results)
+    
+    def run_parallel(self, tasks: list) -> list:
+        """Run tasks in parallel."""
+        # Use thread pool or async
+        import concurrent.futures
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            results = list(executor.map(lambda t: t(), tasks))
+        return results
+    
+    def coordinate(self, results: list) -> dict:
+        """Coordinate results from parallel agents."""
+        # Combine results
+        combined = {
+            "research": results[0],
+            "plan": results[1],
+            "review": results[2],
+            "critique": results[3],
+            "verification": results[4],
+        }
+        
+        # Evaluate confidence
+        confidence = self.evaluate_confidence(combined)
+        
+        return {
+            "combined": combined,
             "confidence": confidence,
-            "plan": plan,
-        }
-```
-
-### 3. Goal Analyzer
-
-```python
-class GoalAnalyzer:
-    def analyze(self, goal: str, previous_plan: dict = None) -> dict:
-        """Analyze goal to understand what's needed."""
-        # Extract key concepts
-        concepts = self.extract_concepts(goal)
-        
-        # Identify similar problems
-        similar_problems = self.identify_similar_problems(concepts)
-        
-        # Understand context
-        context = self.understand_context(goal, concepts)
-        
-        # Learn from previous plan if available
-        if previous_plan:
-            lessons = self.extract_lessons(previous_plan)
-            context["lessons"] = lessons
-        
-        return {
-            "concepts": concepts,
-            "similar_problems": similar_problems,
-            "context": context,
-        }
-```
-
-### 4. Reasoning Engine
-
-```python
-class ReasoningEngine:
-    def reason(self, analysis: dict) -> dict:
-        """Reason about solutions using own knowledge."""
-        # What approaches exist?
-        approaches = self.identify_approaches(analysis)
-        
-        # What are the trade-offs?
-        trade_offs = self.analyze_trade_offs(approaches)
-        
-        # What's the best approach?
-        best_approach = self.select_best_approach(approaches, trade_offs)
-        
-        return {
-            "approaches": approaches,
-            "trade_offs": trade_offs,
-            "best_approach": best_approach,
-        }
-```
-
-### 5. Confidence Evaluator
-
-```python
-class ConfidenceEvaluator:
-    def evaluate(self, plan: dict) -> float:
-        """Evaluate confidence in the plan."""
-        # How clear is the problem?
-        problem_clarity = self.assess_problem_clarity(plan.analysis)
-        
-        # How well do we understand the solutions?
-        solution_understanding = self.assess_solution_understanding(plan.reasoning)
-        
-        # How confident are we in the plan?
-        plan_confidence = self.assess_plan_confidence(plan)
-        
-        # Overall confidence
-        confidence = (problem_clarity + solution_understanding + plan_confidence) / 3
-        
-        return confidence
-```
-
-### 6. Plan Generator
-
-```python
-class PlanGenerator:
-    def generate(self, reasoning: dict) -> dict:
-        """Generate specific plan based on reasoning."""
-        # Create steps
-        steps = self.create_steps(reasoning.best_approach)
-        
-        # Create dependencies
-        dependencies = self.create_dependencies(steps)
-        
-        # Create expected outputs
-        expected_outputs = self.create_expected_outputs(steps)
-        
-        return {
-            "steps": steps,
-            "dependencies": dependencies,
-            "expected_outputs": expected_outputs,
         }
 ```
 
 ## Implementation Plan
 
-### Phase 1: Goal Analyzer (1 week)
+### Phase 1: Planning Agents (1 week)
 
-1. Create `goal_analyzer.py`
-   - Analyze goal to understand what's needed
-   - Extract key concepts
-   - Identify similar problems
+1. Create `planning_sentinel.py`
+   - Manages the planning process
+   - Spawns Orchestrator
 
-2. Update `roadmap_planner.py`
-   - Use goal analyzer to understand context
-   - Generate targeted analysis
+2. Create `planning_orchestrator.py`
+   - Coordinates planning tasks
+   - Spawns specialized agents
 
-### Phase 2: Reasoning Engine (1 week)
+3. Create `planning_explorer.py`
+   - Researches solutions
+   - Analyzes goal
 
-1. Create `reasoning_engine.py`
-   - Reason about solutions using own knowledge
-   - Identify approaches and trade-offs
-   - Select best approach
+### Phase 2: Specialized Agents (1 week)
 
-2. Update `roadmap_planner.py`
-   - Use reasoning engine to think about solutions
-   - Generate recommendations
+1. Create `planning_worker.py`
+   - Creates plan artifacts
+   - Uses research findings
 
-### Phase 3: Confidence Evaluator (1 week)
+2. Create `planning_reviewer.py`
+   - Reviews plan quality
+   - Finds issues
 
-1. Create `confidence_evaluator.py`
-   - Evaluate confidence in plans
-   - Identify uncertainties
-   - Determine if more planning is needed
+3. Create `planning_critic.py`
+   - Stress-tests the plan
+   - Identifies failure modes
 
-2. Update `roadmap_planner.py`
-   - Use confidence evaluator to iterate
-   - Keep planning until confident
+4. Create `planning_auditor.py`
+   - Verifies plan authenticity
+   - Detects cheating
 
-### Phase 4: Plan Generator (1 week)
+### Phase 3: Self-Healing (1 week)
 
-1. Create `plan_generator.py`
-   - Generate specific plans based on reasoning
-   - Create steps, dependencies, expected outputs
-   - Include research findings
+1. Create `self_healing_planner.py`
+   - Handles context length limits
+   - Handles stuck processes
+   - Handles LLM laziness
 
-2. Update `roadmap_planner.py`
-   - Use plan generator to create specific plans
-   - Include workspace configuration, etc.
+2. Update `planning_orchestrator.py`
+   - Use self-healing mechanisms
+   - Handle failures gracefully
+
+### Phase 4: Parallel Execution (1 week)
+
+1. Create `parallel_planning_executor.py`
+   - Executes agents in parallel
+   - Coordinates results
+
+2. Update `planning_orchestrator.py`
+   - Use parallel execution
+   - Coordinate results
 
 ### Phase 5: Integration (1 week)
 
@@ -251,11 +351,12 @@ class PlanGenerator:
 
 ## Success Criteria
 
-1. Planning system thinks iteratively about the problem
-2. Keeps planning until confidence is high (≥ 0.8)
-3. Uses own knowledge before searching
-4. Plans are specific to the goal, not generic
-5. Example: Scaling feature identifies workspace configuration
+1. Planning system uses specialized agents
+2. Agents work in parallel
+3. Agents coordinate through the platform
+4. Self-healing mechanisms handle failures
+5. Plans are specific to the goal, not generic
+6. Example: Scaling feature identifies workspace configuration
 
 ## Timeline
 
