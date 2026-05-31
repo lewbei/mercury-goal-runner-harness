@@ -9,6 +9,7 @@ research_module.py:
   - Generates search queries: "latest AI coding models 2026"
   - Doesn't think about the problem
   - Doesn't understand context
+  - Doesn't iterate until confident
 
 adaptive_research_inputs.py:
   - Generates template findings: "Planning should record decomposition..."
@@ -18,16 +19,17 @@ adaptive_research_inputs.py:
 ## What's Needed
 
 1. **Think about the problem** — understand context, reason about solutions
-2. **Use own knowledge** — leverage what the agent already knows
-3. **Optionally search web** — supplement with web search when needed
-4. **Include findings in planning** — create specific plans
+2. **Iterate until confident** — keep thinking until highest probability of success
+3. **Use own knowledge** — leverage what the agent already knows
+4. **Optionally search web** — supplement with web search when needed
+5. **Include findings in planning** — create specific plans
 
 ## Proposed Solution
 
-### 1. Think First, Search Second
+### 1. Iterative Thinking Process
 
 ```
-RESEARCH PROCESS:
+RESEARCH PROCESS (ITERATIVE):
   1. Analyze goal
      ├── What is the user trying to do?
      ├── What similar problems exist?
@@ -38,85 +40,95 @@ RESEARCH PROCESS:
      ├── What are the trade-offs?
      └── What's the best approach?
 
-  3. Optionally search web
-     ├── Is web search available?
-     ├── Is more information needed?
-     └── What to search for?
+  3. Evaluate confidence
+     ├── How confident are we in the solution?
+     ├── What are the uncertainties?
+     └── Do we need more information?
 
-  4. Include in planning
-     ├── What did we learn?
-     ├── What's the recommended approach?
-    └── What should the plan include?
+  4. If confidence is low:
+     ├── Think more about the problem
+     ├── Search web for more information
+     ├── Refine reasoning
+     └── Go back to step 2
+
+  5. If confidence is high:
+     ├── Include in planning
+     ├── Create specific plans
+     └── Proceed with implementation
 ```
 
 ### 2. Update research_module.py
 
 ```python
-def run_research(run_dir: Path, goal: str) -> dict:
-    """Run research by thinking about the problem."""
-    # 1. Analyze goal to understand what's needed
-    analysis = analyze_goal(goal)
+def run_research(run_dir: Path, goal: str, max_iterations: int = 5) -> dict:
+    """Run research by thinking iteratively until confident."""
+    iteration = 0
+    confidence = 0.0
+    findings = []
     
-    # 2. Reason about solutions using own knowledge
-    reasoning = reason_about_solutions(analysis)
+    while iteration < max_iterations and confidence < 0.8:
+        iteration += 1
+        
+        # 1. Analyze goal to understand what's needed
+        analysis = analyze_goal(goal, findings)
+        
+        # 2. Reason about solutions using own knowledge
+        reasoning = reason_about_solutions(analysis, findings)
+        
+        # 3. Evaluate confidence
+        confidence = evaluate_confidence(reasoning)
+        
+        # 4. If confidence is low, search for more information
+        if confidence < 0.8:
+            web_findings = search_web(reasoning.queries)
+            findings.extend(web_findings)
+        
+        # 5. Log iteration
+        log_iteration(iteration, confidence, reasoning)
     
-    # 3. Optionally search web for more information
-    web_findings = []
-    if should_search_web(reasoning):
-        web_findings = search_web(reasoning.queries)
+    # 6. Generate final recommendations
+    recommendations = generate_recommendations(reasoning, findings)
     
-    # 4. Combine reasoning and web findings
-    research_context = {
+    return {
         "goal": goal,
+        "iterations": iteration,
+        "confidence": confidence,
         "analysis": analysis,
         "reasoning": reasoning,
-        "web_findings": web_findings,
-        "recommendations": generate_recommendations(reasoning, web_findings),
-    }
-    
-    return research_context
-```
-
-### 3. Goal Analysis
-
-```python
-def analyze_goal(goal: str) -> dict:
-    """Analyze goal to understand what's needed."""
-    # Extract key concepts
-    concepts = extract_concepts(goal)
-    
-    # Identify similar problems
-    similar_problems = identify_similar_problems(concepts)
-    
-    # Understand context
-    context = understand_context(goal, concepts)
-    
-    return {
-        "concepts": concepts,
-        "similar_problems": similar_problems,
-        "context": context,
+        "findings": findings,
+        "recommendations": recommendations,
     }
 ```
 
-### 4. Reasoning
+### 3. Confidence Evaluation
 
 ```python
-def reason_about_solutions(analysis: dict) -> dict:
-    """Reason about solutions using own knowledge."""
-    # What approaches exist?
-    approaches = identify_approaches(analysis)
+def evaluate_confidence(reasoning: dict) -> float:
+    """Evaluate confidence in the solution."""
+    # How clear is the problem?
+    problem_clarity = assess_problem_clarity(reasoning.analysis)
     
-    # What are the trade-offs?
-    trade_offs = analyze_trade_offs(approaches)
+    # How well do we understand the solutions?
+    solution_understanding = assess_solution_understanding(reasoning.approaches)
     
-    # What's the best approach?
-    best_approach = select_best_approach(approaches, trade_offs)
+    # How confident are we in the best approach?
+    approach_confidence = assess_approach_confidence(reasoning.best_approach)
     
-    return {
-        "approaches": approaches,
-        "trade_offs": trade_offs,
-        "best_approach": best_approach,
-    }
+    # Overall confidence
+    confidence = (problem_clarity + solution_understanding + approach_confidence) / 3
+    
+    return confidence
+```
+
+### 4. Iteration Logging
+
+```python
+def log_iteration(iteration: int, confidence: float, reasoning: dict):
+    """Log iteration for transparency."""
+    print(f"Iteration {iteration}: confidence={confidence:.2f}")
+    print(f"  Problem: {reasoning.analysis.summary}")
+    print(f"  Best approach: {reasoning.best_approach.name}")
+    print(f"  Uncertainties: {reasoning.uncertainties}")
 ```
 
 ## Implementation Plan
@@ -143,7 +155,18 @@ def reason_about_solutions(analysis: dict) -> dict:
    - Use reasoning engine to think about solutions
    - Generate recommendations
 
-### Phase 3: Web Search Integration (1 week)
+### Phase 3: Confidence Evaluation (1 week)
+
+1. Create `confidence_evaluator.py`
+   - Evaluate confidence in solutions
+   - Identify uncertainties
+   - Determine if more research is needed
+
+2. Update `research_module.py`
+   - Use confidence evaluator to iterate
+   - Keep thinking until confident
+
+### Phase 4: Web Search Integration (1 week)
 
 1. Create `web_searcher.py`
    - Search the web for solutions
@@ -154,7 +177,7 @@ def reason_about_solutions(analysis: dict) -> dict:
    - Use web searcher to supplement reasoning
    - Include web findings in research context
 
-### Phase 4: Planning Integration (1 week)
+### Phase 5: Planning Integration (1 week)
 
 1. Update `adaptive_research_inputs.py`
    - Include real findings from reasoning
@@ -166,11 +189,12 @@ def reason_about_solutions(analysis: dict) -> dict:
 
 ## Success Criteria
 
-1. Research module thinks about the problem
-2. Uses own knowledge before searching
-3. Web search is supplementary, not primary
-4. Plans are specific to the goal, not generic
-5. Example: Scaling feature identifies workspace configuration
+1. Research module thinks iteratively about the problem
+2. Keeps thinking until confidence is high (≥ 0.8)
+3. Uses own knowledge before searching
+4. Web search is supplementary, not primary
+5. Plans are specific to the goal, not generic
+6. Example: Scaling feature identifies workspace configuration
 
 ## Timeline
 
@@ -178,5 +202,6 @@ def reason_about_solutions(analysis: dict) -> dict:
 - Phase 2: 1 week
 - Phase 3: 1 week
 - Phase 4: 1 week
+- Phase 5: 1 week
 
-**Total: 4 weeks**
+**Total: 5 weeks**
