@@ -54,6 +54,60 @@ mercury-goal-runner-harness/
 └── workspace_manager.py       ← Workspace management
 ```
 
+## Workspace Configuration
+
+Each workspace has a `workspace_config.json` that tells the agent what to do:
+
+```json
+{
+  "goal": "Build a todo app",
+  "skills": ["question-contract", "research-pack", "design-options"],
+  "model": "claude-opus-4.7",
+  "max_steps": 20,
+  "output_dir": "output/todo-app"
+}
+```
+
+### How it works
+
+```
+1. User: "Build a todo app"
+2. workspace_manager.py creates workspace/
+3. workspace_config.json is generated
+4. .agentic-pi/ is symlinked
+5. AGENTS.md is auto-generated with context
+6. Agent runs in workspace/
+7. Agent reads workspace_config.json to know what to do
+```
+
+### Context injection
+
+Each workspace gets:
+
+1. **workspace_config.json** — declares what workspace needs
+2. **.agentic-pi/** — symlinked harness (shared)
+3. **AGENTS.md** — auto-generated with context for the agent
+4. **.agentic-runs/** — isolated runs
+5. **output/** — isolated output
+
+### Skills per workspace
+
+Each workspace can have different skills:
+
+```json
+{
+  "skills": [
+    "question-contract",    ← for goal compilation
+    "research-pack",        ← for research
+    "design-options",       ← for design
+    "structure-outline",    ← for structure
+    "root-plan"             ← for planning
+  ]
+}
+```
+
+The agent reads `workspace_config.json` to know which skills to use.
+
 ## Implementation Plan
 
 ### Phase 1: Workspace Isolation (1 week)
